@@ -1,6 +1,10 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { TopNav } from './components/TopNav';
+import { AmmoPage } from './pages/AmmoPage';
+import { HideoutPage } from './pages/HideoutPage';
 import { HomePage } from './pages/HomePage';
+import { ItemsPage } from './pages/ItemsPage';
+import { MarketPage } from './pages/MarketPage';
 import { PlannerPage } from './pages/PlannerPage';
 import { ProgressPage } from './pages/ProgressPage';
 
@@ -13,6 +17,10 @@ export function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/planner" element={<PlannerPage />} />
           <Route path="/progress" element={<ProgressPage />} />
+          <Route path="/hideout" element={<HideoutPage />} />
+          <Route path="/items" element={<ItemsPage />} />
+          <Route path="/ammo" element={<AmmoPage />} />
+          <Route path="/market" element={<MarketPage />} />
         </Routes>
       </div>
     </BrowserRouter>

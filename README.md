@@ -20,6 +20,11 @@ persisted store are all in place for it).
   the Progress page), grouped by trader, badged as `MAP` (only doable on this
   map) or `MULTI` (also doable elsewhere), with search and a collapsed view of
   still-locked quests.
+- **Hideout tracker** — station levels with next-upgrade requirements.
+- **Items to keep** — aggregated hand-ins from open quests + next hideout levels (FIR-aware).
+- **Ammo chart** — 199 rounds, pen tiers, offline.
+- **Market** — 789 barters and 214 crafts ranked by profit at cached live flea prices (the second runtime network use, user-triggered).
+- **Companion log automation** — entering a raid selects the map; finishing a quest ticks itself off.
 - **PvP / PvE toggle** — separate progress profiles per game mode (as in game);
   the quest set adjusts to mode-exclusive quests automatically.
 - **Progress page** — a built-in quest tracker (like TarkovTracker): set level

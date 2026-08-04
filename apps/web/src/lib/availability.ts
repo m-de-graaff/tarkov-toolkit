@@ -4,6 +4,8 @@ export interface TrackerState {
   level: number;
   faction: 'Any' | 'USEC' | 'BEAR';
   completedTaskIds: string[];
+  /** built hideout station levels, stationId -> level (absent = 0) */
+  hideoutLevels?: Record<string, number>;
 }
 
 // v1 simplification: a requirement whose status does not include 'complete'

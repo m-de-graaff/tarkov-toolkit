@@ -32,7 +32,8 @@ describe('App', () => {
     act(() => root.render(<App />));
     expect(container.textContent).toContain('Plan your raids');
     expect(container.querySelector('a[href="/planner"]')).toBeTruthy();
-    expect(container.textContent).toContain('Coming soon');
+    expect(container.querySelector('a[href="/ammo"]')).toBeTruthy();
+    expect(container.querySelector('a[href="/market"]')).toBeTruthy();
   });
 
   it('shows quests for the selected map and marks selected objectives on it', () => {

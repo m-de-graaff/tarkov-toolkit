@@ -62,6 +62,8 @@ export interface RpObjective {
   /** exact locations, merged from zones[] and possibleLocations[] */
   points: RpZone[];
   count?: number;
+  /** flea/trader items this objective consumes (give/find/plant hand-ins) */
+  neededItems?: NeededItems;
 }
 
 export interface RpTaskRequirement {
@@ -89,9 +91,86 @@ export interface RpTask {
   objectives: RpObjective[];
 }
 
+export interface AmmoRound {
+  id: string;
+  name: string;
+  shortName: string;
+  /** caliber without the "Caliber" prefix, e.g. "556x45NATO" */
+  caliber: string;
+  damage: number;
+  penetrationPower: number;
+  armorDamage: number;
+  fragmentationChance: number;
+  initialSpeed: number;
+  tracer: boolean;
+  projectileCount: number;
+}
+
+export interface ItemLite {
+  name: string;
+  shortName: string;
+  iconLink?: string;
+}
+
+export interface HideoutRequirementItem {
+  itemId: string;
+  count: number;
+  foundInRaid: boolean;
+}
+
+export interface HideoutLevel {
+  level: number;
+  constructionTime: number;
+  itemRequirements: HideoutRequirementItem[];
+  stationLevelRequirements: { stationId: string; level: number }[];
+  traderRequirements: { traderName: string; level: number }[];
+}
+
+export interface HideoutStation {
+  id: string;
+  name: string;
+  normalizedName: string;
+  levels: HideoutLevel[];
+}
+
+export interface TradeItemStack {
+  itemId: string;
+  count: number;
+}
+
+export interface RpBarter {
+  id: string;
+  traderName: string;
+  traderLevel: number;
+  requiredItems: TradeItemStack[];
+  rewardItems: TradeItemStack[];
+}
+
+export interface RpCraft {
+  id: string;
+  stationId: string;
+  stationLevel: number;
+  durationSeconds: number;
+  requiredItems: TradeItemStack[];
+  rewardItems: TradeItemStack[];
+}
+
+export interface NeededItems {
+  /** any one of these satisfies the objective (multi-choice hand-ins) */
+  itemIds: string[];
+  count: number;
+  foundInRaid: boolean;
+}
+
 export interface Snapshot {
   generatedAt: string;
   gameMode: 'regular';
   maps: RpMap[];
   tasks: RpTask[];
+  ammo: AmmoRound[];
+  hideout: HideoutStation[];
+  barters: RpBarter[];
+  crafts: RpCraft[];
+  /** names/icons for every item id referenced by quests, hideout, barters, crafts */
+  itemsLite: Record<string, ItemLite>;
 }

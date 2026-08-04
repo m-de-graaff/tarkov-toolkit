@@ -13,6 +13,7 @@ const freshTracker = (): TrackerState => ({
   level: 15,
   faction: 'Any',
   completedTaskIds: [],
+  hideoutLevels: {},
 });
 
 interface PlannerState {
@@ -39,6 +40,7 @@ interface PlannerState {
   setLevel(n: number): void;
   setFaction(f: TrackerState['faction']): void;
   toggleCompleted(taskId: string): void;
+  setHideoutLevel(stationId: string, level: number): void;
   resetProgress(): void;
   setSearch(s: string): void;
 }
@@ -114,8 +116,15 @@ export const usePlanner = create<PlannerState>()(
               : [...s.tracker.completedTaskIds, taskId],
           },
         })),
+      setHideoutLevel: (stationId, level) =>
+        set((s) => ({
+          tracker: {
+            ...s.tracker,
+            hideoutLevels: { ...(s.tracker.hideoutLevels ?? {}), [stationId]: level },
+          },
+        })),
       resetProgress: () =>
-        set({ tracker: { level: 1, faction: 'Any', completedTaskIds: [] } }),
+        set({ tracker: { level: 1, faction: 'Any', completedTaskIds: [], hideoutLevels: {} } }),
       setSearch: (search) => set({ search }),
     }),
     {

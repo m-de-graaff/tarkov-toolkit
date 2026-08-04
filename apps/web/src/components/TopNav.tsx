@@ -61,10 +61,14 @@ export function TopNav() {
         </Sheet>
       )}
       <span className="text-sm font-semibold">Tarkov Toolkit</span>
-      <nav aria-label="Tools" className="ml-2 flex items-center gap-1">
+      <nav aria-label="Tools" className="ml-2 flex min-w-0 items-center gap-1 overflow-x-auto">
         <NavTab to="/">Home</NavTab>
         <NavTab to="/planner">Raid Planner</NavTab>
         <NavTab to="/progress">Progress</NavTab>
+        <NavTab to="/hideout">Hideout</NavTab>
+        <NavTab to="/items">Items</NavTab>
+        <NavTab to="/ammo">Ammo</NavTab>
+        <NavTab to="/market">Market</NavTab>
       </nav>
       <GameModeToggle />
     </header>
