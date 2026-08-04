@@ -16,9 +16,10 @@ persisted store are all in place for it).
 - **Map browser** — 11 maps rendered offline from calibrated community SVGs
   (Customs, Woods, Shoreline, Interchange, Reserve, Lighthouse, Streets,
   Ground Zero, Factory, Night Factory, Terminal).
-- **Quest sidebar** — quests grouped by trader, badged as `MAP` (only doable on
-  this map) or `MULTI` (also doable elsewhere), with search and an
-  "only available" filter driven by your tracker state.
+- **Quest sidebar** — always shows exactly the quests you have open (driven by
+  the Progress page), grouped by trader, badged as `MAP` (only doable on this
+  map) or `MULTI` (also doable elsewhere), with search and a collapsed view of
+  still-locked quests.
 - **Progress page** — a built-in quest tracker (like TarkovTracker): set level
   and faction, tick off finished quests; the planner sidebar then always shows
   exactly the quests you have open. State
@@ -50,18 +51,14 @@ where you actually are (overriding the spawn as route origin).
 
 How it works: EFT names screenshots
 `YYYY-MM-DD[HH-MM]_x, y, z_qx, qy, qz, qw (0).png` — your coordinates and view
-quaternion are the filename. Click **Connect screenshots folder** in the map
-toolbar and grant read access to
-`Documents\Escape from Tarkov\Screenshots`; the app polls the folder locally
-and parses new filenames (engine in `packages/live`, parsing ported from
-[TarkovMonitor](https://github.com/the-hideout/TarkovMonitor), MIT). Unlike
-tarkov-market-based tools (eftgps, TarkovPilot) there is no companion process
-and nothing is uploaded anywhere — the folder is read in the browser, offline.
+quaternion are the filename. Both transports parse it locally with the engine
+in `packages/live` (ported from
+[TarkovMonitor](https://github.com/the-hideout/TarkovMonitor), MIT); nothing
+is uploaded anywhere.
 
-Notes: needs Chrome or Edge (File System Access API); the map is not
-auto-detected from the screenshot (keep the right map selected — you'll get a
-warning if your position falls outside its bounds); reconnect the folder after
-a page reload.
+Notes: the map is not auto-detected from the screenshot (keep the right map
+selected — you'll get a warning if your position falls outside its bounds);
+with the folder-picker transport, reconnect after a page reload.
 
 ## Getting started
 
