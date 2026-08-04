@@ -60,9 +60,9 @@ export function TopNav() {
           </SheetContent>
         </Sheet>
       )}
-      <span className="text-sm font-semibold">Raid Planner</span>
-      <nav aria-label="Pages" className="ml-2 flex items-center gap-1">
-        <NavTab to="/">Planner</NavTab>
+      <span className="text-sm font-semibold">Tarkov Toolkit</span>
+      <nav aria-label="Tools" className="ml-2 flex items-center gap-1">
+        <NavTab to="/">Raid Planner</NavTab>
         <NavTab to="/progress">Progress</NavTab>
       </nav>
     </header>

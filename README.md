@@ -1,10 +1,17 @@
-# Tarkov Raid Planner
+# Tarkov Toolkit
 
-An **offline-first raid planner for Escape from Tarkov**: pick a map, see every
-quest you can advance there, select the ones you want to run, choose your spawn,
-and get the objectives plus an optimized route drawn on an interactive map.
+An **offline-first toolkit for Escape from Tarkov**. Current tools:
 
-## Features
+- **Raid Planner** — pick a map, see every quest you can advance there, select
+  the ones you want to run, choose your spawn (or use live position), and get
+  the objectives plus an optimized route drawn on an interactive map.
+- **Progress** — a built-in quest tracker driving what the planner shows.
+
+Roadmap: barter calculator, flea market prices, and more — each tool slots in
+as a new page under the shared shell (routing, theme, data pipeline, and the
+persisted store are all in place for it).
+
+## Raid planner features
 
 - **Map browser** — 11 maps rendered offline from calibrated community SVGs
   (Customs, Woods, Shoreline, Interchange, Reserve, Lighthouse, Streets,
@@ -30,6 +37,16 @@ and get the objectives plus an optimized route drawn on an interactive map.
 Take a screenshot in-game (default hotkey) and your position appears on the map
 within ~2 seconds — with a heading arrow — and the quest route re-plans from
 where you actually are (overriding the spawn as route origin).
+
+**Two ways to feed it:**
+
+1. **Companion app (any browser):** run `pnpm watcher` in a terminal and leave
+   the window open. It watches your Screenshots folder and streams positions to
+   the web app over a local-only WebSocket (`127.0.0.1:17520`); the map toolbar
+   shows "Companion app connected" automatically. Packaging this as a
+   double-click `.exe` is future work.
+2. **In-browser folder picker (Chrome/Edge, zero install):** click "Show my
+   position" and grant read access to the Screenshots folder once.
 
 How it works: EFT names screenshots
 `YYYY-MM-DD[HH-MM]_x, y, z_qx, qy, qz, qw (0).png` — your coordinates and view
@@ -75,7 +92,8 @@ contributors (MIT). Escape from Tarkov is a trademark of Battlestate Games.
 ## Repo layout
 
 ```
-apps/web        Vite + React SPA (leaflet map, planner UI)
+apps/web        Vite + React SPA (toolkit shell: raid planner, progress)
+apps/watcher    standalone companion screenshot watcher (local WebSocket)
 packages/data   snapshot script + generated typed dataset
 packages/live   screenshot-filename parsing engine (live mode)
 ```

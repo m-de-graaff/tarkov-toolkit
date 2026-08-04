@@ -64,6 +64,30 @@
     @apply bg-background text-sm text-foreground antialiased;
     font-family: 'Inter Variable', 'Segoe UI', system-ui, -apple-system, sans-serif;
   }
+
+  /* thin, theme-matched scrollbars everywhere */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--input) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: var(--input);
+    border-radius: 4px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: var(--muted-foreground);
+  }
 }
 
 /* --- leaflet map + markers (hand-written layer; not tailwind-able) ------- */
