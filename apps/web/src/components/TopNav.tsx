@@ -44,7 +44,7 @@ export function TopNav() {
 
   return (
     <header className="flex h-12 shrink-0 items-center gap-3 border-b bg-card px-4">
-      {!isDesktop && location.pathname === '/' && (
+      {!isDesktop && location.pathname === '/planner' && (
         <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
           <SheetTrigger asChild>
             <Button type="button" variant="outline" size="sm" className="gap-1.5">
@@ -62,7 +62,8 @@ export function TopNav() {
       )}
       <span className="text-sm font-semibold">Tarkov Toolkit</span>
       <nav aria-label="Tools" className="ml-2 flex items-center gap-1">
-        <NavTab to="/">Raid Planner</NavTab>
+        <NavTab to="/">Home</NavTab>
+        <NavTab to="/planner">Raid Planner</NavTab>
         <NavTab to="/progress">Progress</NavTab>
       </nav>
     </header>
