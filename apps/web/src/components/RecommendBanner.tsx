@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { snapshot } from '@raidplanner/data';
 import { useMemo } from 'react';
+import { snapshotForMode } from '../lib/modeTasks';
 import { recommendMaps } from '../lib/recommend';
 import { usePlanner } from '../store';
 
@@ -9,7 +10,11 @@ export function RecommendBanner() {
   const selectedMapId = usePlanner((s) => s.selectedMapId);
   const selectMap = usePlanner((s) => s.selectMap);
 
-  const top = useMemo(() => recommendMaps(snapshot, tracker).slice(0, 3), [tracker]);
+  const gameMode = usePlanner((s) => s.gameMode);
+  const top = useMemo(
+    () => recommendMaps(snapshotForMode(snapshot, gameMode), tracker).slice(0, 3),
+    [tracker, gameMode],
+  );
 
   if (top.length === 0 || top[0].mapId === selectedMapId) return null;
 

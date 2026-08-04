@@ -40,6 +40,29 @@ describe('planner store', () => {
     expect(tracker).toEqual({ level: 15, faction: 'Any', completedTaskIds: [] });
   });
 
+  it('keeps PvP and PvE progress as separate profiles', () => {
+    usePlanner.getState().setLevel(30);
+    usePlanner.getState().toggleCompleted('t-pvp-quest');
+
+    usePlanner.getState().setGameMode('pve');
+    expect(usePlanner.getState().tracker.level).toBe(15); // fresh profile
+    expect(usePlanner.getState().tracker.completedTaskIds).toEqual([]);
+    usePlanner.getState().setLevel(7);
+
+    usePlanner.getState().setGameMode('pvp');
+    expect(usePlanner.getState().tracker.level).toBe(30);
+    expect(usePlanner.getState().tracker.completedTaskIds).toEqual(['t-pvp-quest']);
+
+    usePlanner.getState().setGameMode('pve');
+    expect(usePlanner.getState().tracker.level).toBe(7);
+  });
+
+  it('switching mode clears the planned quest selection', () => {
+    usePlanner.getState().toggleTask('t-1');
+    usePlanner.getState().setGameMode('pve');
+    expect(usePlanner.getState().selectedTaskIds).toEqual([]);
+  });
+
   it('resetProgress wipes completions and returns to level 1', () => {
     usePlanner.getState().setLevel(42);
     usePlanner.getState().toggleCompleted('t-1');

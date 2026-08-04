@@ -5,6 +5,7 @@ import type { RpTask, Snapshot } from '@raidplanner/data';
 const at = (x: number, z: number) => ({ x, y: 0, z });
 
 const baseTask: Omit<RpTask, 'id' | 'name' | 'normalizedName' | 'objectives'> = {
+  modes: ['pvp', 'pve'],
   trader: { id: 'trader-1', name: 'Prapor' },
   mapId: null,
   minPlayerLevel: 1,

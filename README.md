@@ -20,6 +20,8 @@ persisted store are all in place for it).
   the Progress page), grouped by trader, badged as `MAP` (only doable on this
   map) or `MULTI` (also doable elsewhere), with search and a collapsed view of
   still-locked quests.
+- **PvP / PvE toggle** — separate progress profiles per game mode (as in game);
+  the quest set adjusts to mode-exclusive quests automatically.
 - **Progress page** — a built-in quest tracker (like TarkovTracker): set level
   and faction, tick off finished quests; the planner sidebar then always shows
   exactly the quests you have open. State

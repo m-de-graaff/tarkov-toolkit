@@ -66,6 +66,37 @@ export function TopNav() {
         <NavTab to="/planner">Raid Planner</NavTab>
         <NavTab to="/progress">Progress</NavTab>
       </nav>
+      <GameModeToggle />
     </header>
+  );
+}
+
+function GameModeToggle() {
+  const gameMode = usePlanner((s) => s.gameMode);
+  const setGameMode = usePlanner((s) => s.setGameMode);
+  return (
+    <div
+      role="group"
+      aria-label="Game mode"
+      className="ml-auto flex items-center rounded-md border p-0.5"
+      title="PvP and PvE have separate progress — switching swaps your whole profile"
+    >
+      {(['pvp', 'pve'] as const).map((mode) => (
+        <button
+          key={mode}
+          type="button"
+          aria-pressed={gameMode === mode}
+          onClick={() => setGameMode(mode)}
+          className={cn(
+            'rounded-[5px] px-2.5 py-0.5 text-xs font-medium uppercase transition-colors',
+            gameMode === mode
+              ? 'bg-primary text-primary-foreground'
+              : 'text-muted-foreground hover:text-foreground',
+          )}
+        >
+          {mode}
+        </button>
+      ))}
+    </div>
   );
 }
