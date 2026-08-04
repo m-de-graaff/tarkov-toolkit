@@ -22,11 +22,14 @@ export function useLiveWatcher(): LiveWatcher {
   const [error, setError] = useState<string | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const seenRef = useRef<Set<string>>(new Set());
+  const cleanupListenersRef = useRef<(() => void) | null>(null);
   const setLiveFix = usePlanner((s) => s.setLiveFix);
 
   const disconnect = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = null;
+    cleanupListenersRef.current?.();
+    cleanupListenersRef.current = null;
     seenRef.current = new Set();
     setConnected(false);
     setLiveFix(null);
@@ -53,10 +56,7 @@ export function useLiveWatcher(): LiveWatcher {
       return names;
     };
 
-    // Seed with what's already there — only screenshots taken from now on count.
-    seenRef.current = new Set(await listNames());
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(async () => {
+    const poll = async () => {
       try {
         const newest = pickNewestFix(await listNames(), seenRef.current);
         if (newest) {
@@ -67,7 +67,29 @@ export function useLiveWatcher(): LiveWatcher {
         setError('Lost access to the screenshots folder.');
         disconnect();
       }
-    }, POLL_MS);
+    };
+
+    // The screenshot you already took counts: the newest existing screenshot
+    // becomes the initial fix (its capture time is in the filename, so the UI
+    // can show how old it is). Everything else is just marked as seen.
+    seenRef.current = new Set();
+    await poll();
+
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(poll, POLL_MS);
+
+    // Background tabs get throttled timers; poll immediately when the user
+    // tabs back from the game so the fix appears without waiting.
+    const onVisible = () => {
+      if (!document.hidden) void poll();
+    };
+    document.addEventListener('visibilitychange', onVisible);
+    window.addEventListener('focus', onVisible);
+    cleanupListenersRef.current = () => {
+      document.removeEventListener('visibilitychange', onVisible);
+      window.removeEventListener('focus', onVisible);
+    };
+
     setConnected(true);
   }, [disconnect, setLiveFix]);
 

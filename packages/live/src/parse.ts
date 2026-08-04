@@ -14,7 +14,7 @@ export interface LiveFix {
   raw: string;
 }
 
-const FILENAME_RE = /(?<taken>\d{4}-\d{2}-\d{2}\[\d{2}-\d{2}\])_?(?<position>.+) \(\d\)\.png/;
+const FILENAME_RE = /(?<taken>\d{4}-\d{2}-\d{2}\[\d{2}-\d{2}\])_?(?<position>.+) \(\d+\)\.png/;
 const POSITION_RE =
   /(?<x>-?\d+\.\d{2}), (?<y>-?\d+\.\d{2}), (?<z>-?\d+\.\d{2})_?(?<rx>-?[\d.]\.\d{1,5}), (?<ry>-?[\d.]\.\d{1,5}), (?<rz>-?[\d.]\.\d{1,5}), (?<rw>-?[\d.]\.\d{1,5})/;
 
