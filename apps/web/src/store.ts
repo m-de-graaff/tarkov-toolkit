@@ -2,9 +2,8 @@ import type { GameMode, GamePosition } from '@raidplanner/data';
 import { snapshot } from '@raidplanner/data';
 import type { LiveFix, LogEvent } from '@raidplanner/live';
 import { create } from 'zustand';
-import { createJSONStorage, persist } from 'zustand/middleware';
+import { persist } from 'zustand/middleware';
 import type { TrackerState } from './lib/availability';
-import { progressStorage } from './lib/storage';
 
 export type SpawnChoice =
   | { kind: 'zone'; zoneName: string; position: GamePosition }
@@ -131,7 +130,6 @@ export const usePlanner = create<PlannerState>()(
     {
       name: 'raidplanner-v1',
       version: 1,
-      storage: createJSONStorage(() => progressStorage),
       migrate: (persisted, version) => {
         if (version === 0 && persisted && typeof persisted === 'object') {
           const old = persisted as { tracker?: TrackerState };

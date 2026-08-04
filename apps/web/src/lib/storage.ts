@@ -1,13 +1,16 @@
-// Progress persistence: a proper local database (IndexedDB) instead of
-// localStorage — larger quota, no synchronous main-thread writes, and the same
-// storage shape the hosted sync (docs/auth-design.md) will push to a server DB.
-// Falls back to localStorage where IndexedDB is unavailable (jsdom, ancient
-// browsers). Existing localStorage state is imported once so nobody loses
-// progress.
-import type { StateStorage } from 'zustand/middleware';
+// Progress durability: localStorage stays the synchronous hot store (zustand
+// persist default — proven, no async render races), and IndexedDB mirrors it
+// as the durable database copy. On boot, a missing localStorage key is
+// restored from the mirror — so clearing site data selectively, browser
+// eviction of localStorage, or a future export/import path can't lose
+// progress. The mirrored value is also the sync unit for the hosted version
+// (docs/auth-design.md).
+export const PROGRESS_KEY = 'raidplanner-v1';
 
 const DB_NAME = 'raidplanner-state';
 const STORE = 'kv';
+
+const hasIdb = typeof indexedDB !== 'undefined';
 
 function openDb(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -45,59 +48,40 @@ async function idbSet(key: string, value: string): Promise<void> {
   }
 }
 
-async function idbRemove(key: string): Promise<void> {
-  const db = await openDb();
+/** Boot step: restore localStorage from the mirror when it's missing. */
+export async function restoreProgressFromMirror(): Promise<void> {
+  if (!hasIdb) return;
   try {
-    await new Promise<void>((resolve, reject) => {
-      const tx = db.transaction(STORE, 'readwrite');
-      tx.objectStore(STORE).delete(key);
-      tx.oncomplete = () => resolve();
-      tx.onerror = () => reject(tx.error);
-    });
-  } finally {
-    db.close();
+    if (localStorage.getItem(PROGRESS_KEY) !== null) return;
+    const mirrored = await idbGet(PROGRESS_KEY);
+    if (mirrored !== null) localStorage.setItem(PROGRESS_KEY, mirrored);
+  } catch {
+    /* mirror unavailable — localStorage remains authoritative */
   }
 }
 
-const hasIdb = typeof indexedDB !== 'undefined';
-
-export const progressStorage: StateStorage = {
-  async getItem(key) {
-    if (!hasIdb) return localStorage.getItem(key);
-    try {
-      const stored = await idbGet(key);
-      if (stored !== null) return stored;
-      // one-time import of pre-database progress
-      const legacy = localStorage.getItem(key);
-      if (legacy !== null) {
-        await idbSet(key, legacy);
-        return legacy;
-      }
-      return null;
-    } catch {
-      return localStorage.getItem(key);
-    }
-  },
-  async setItem(key, value) {
-    if (!hasIdb) {
-      localStorage.setItem(key, value);
-      return;
-    }
-    try {
-      await idbSet(key, value);
-    } catch {
-      localStorage.setItem(key, value);
-    }
-  },
-  async removeItem(key) {
-    if (!hasIdb) {
-      localStorage.removeItem(key);
-      return;
-    }
-    try {
-      await idbRemove(key);
-    } catch {
-      localStorage.removeItem(key);
-    }
-  },
-};
+/**
+ * Keep the mirror in sync: debounced write of the persisted value after store
+ * changes. Call once at app start with the store's subscribe function.
+ */
+export function startProgressMirror(subscribe: (listener: () => void) => () => void): () => void {
+  if (!hasIdb) return () => {};
+  let timer: ReturnType<typeof setTimeout> | null = null;
+  const flush = () => {
+    const value = localStorage.getItem(PROGRESS_KEY);
+    if (value !== null) void idbSet(PROGRESS_KEY, value).catch(() => {});
+  };
+  const unsubscribe = subscribe(() => {
+    if (timer) clearTimeout(timer);
+    // zustand persist writes localStorage synchronously in the same tick;
+    // debounce mirrors bursts of changes as one write
+    timer = setTimeout(flush, 1000);
+  });
+  const onUnload = () => flush();
+  window.addEventListener('beforeunload', onUnload);
+  return () => {
+    if (timer) clearTimeout(timer);
+    window.removeEventListener('beforeunload', onUnload);
+    unsubscribe();
+  };
+}

@@ -1,11 +1,17 @@
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import { App } from './App';
 import '@fontsource-variable/inter';
 import './index.css';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { restoreProgressFromMirror, startProgressMirror } from './lib/storage';
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
+// Restore the durable IndexedDB copy into localStorage (if needed) BEFORE the
+// store module loads and hydrates from localStorage.
+void restoreProgressFromMirror().then(async () => {
+  const [{ App }, { usePlanner }] = await Promise.all([import('./App'), import('./store')]);
+  startProgressMirror((listener) => usePlanner.subscribe(listener));
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  );
+});
