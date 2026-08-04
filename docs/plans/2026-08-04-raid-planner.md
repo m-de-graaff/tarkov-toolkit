@@ -307,11 +307,11 @@
 
 **Interfaces:** none new.
 
-- [ ] **Step 1: Load `accessibility` and `make-interfaces-feel-better` skills; apply.** Minimum bar: contrast-check palette combos used for text (fix tokens if any pair < 4.5:1); visible focus states everywhere; quest rows ≥ 32px hit height; map has an aria-label; banner/panel landmarks (`nav`, `main`, `aside`); reduced-motion: no animations added that ignore `prefers-reduced-motion`.
-- [ ] **Step 2: Footer** with attribution (per Global Constraints) + snapshot date from `snapshot.generatedAt` + "refresh: pnpm snapshot".
-- [ ] **Step 3: README**: what it is, screenshot, `pnpm install && pnpm dev`, `pnpm snapshot` to refresh data, offline note, hosting note (static dist), v1 limitations (tile-only maps not rendered, routing is euclidean — ignores walls/terrain, spawn list is zone-level).
-- [ ] **Step 4: Full verification**: `pnpm build`, `pnpm test` (all workspaces), fresh browser pass over the Task 10 checklist, Lighthouse-style sanity on bundle (snapshot.json should be lazy-loadable later — note as future work if > 3MB gzip; do not optimize now).
-- [ ] **Step 5: Commit** (`docs+polish: a11y pass, attribution, README`).
+- [x] **Step 1: Load `accessibility` and `make-interfaces-feel-better` skills; apply.** Minimum bar: contrast-check palette combos used for text (fix tokens if any pair < 4.5:1); visible focus states everywhere; quest rows ≥ 32px hit height; map has an aria-label; banner/panel landmarks (`nav`, `main`, `aside`); reduced-motion: no animations added that ignore `prefers-reduced-motion`.
+- [x] **Step 2: Footer** with attribution (per Global Constraints) + snapshot date from `snapshot.generatedAt` + "refresh: pnpm snapshot".
+- [x] **Step 3: README**: what it is, screenshot, `pnpm install && pnpm dev`, `pnpm snapshot` to refresh data, offline note, hosting note (static dist), v1 limitations (tile-only maps not rendered, routing is euclidean — ignores walls/terrain, spawn list is zone-level).
+- [x] **Step 4: Full verification**: `pnpm build`, `pnpm test` (all workspaces), fresh browser pass over the Task 10 checklist, Lighthouse-style sanity on bundle (snapshot.json should be lazy-loadable later — note as future work if > 3MB gzip; do not optimize now).
+- [x] **Step 5: Commit** (`docs+polish: a11y pass, attribution, README`).
 
 ---
 
