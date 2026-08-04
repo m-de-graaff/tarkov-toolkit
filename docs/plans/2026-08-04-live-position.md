@@ -42,11 +42,11 @@
   ```
 - Package: `"main": "src/index.ts"`, no build step (consumed by Vite), `test`: `vitest run`, `build`: `tsc --noEmit`. Add vitest+typescript devDeps.
 
-- [ ] **Step 1: Failing tests.** Real-shaped cases: `parseScreenshotName('2026-08-04[21-33]_-105.40, 2.80, 116.40_0.0, -0.1, 1.0, -0.1 (0).png')` → position `{x:-105.4, y:2.8, z:116.4}`, finite yawDeg; a name with fov suffix `..._12.20 (0).png` still parses; yaw sanity: quaternion `(0,0,0,1)` → 0°, `(0, 0.7071, 0, 0.7071)` → 90°; garbage (`'inventory.png'`, empty string) → null; `isScreenshotName` true/false accordingly.
-- [ ] **Step 2: Run, confirm fail** (`pnpm --filter @raidplanner/live exec vitest run`).
-- [ ] **Step 3: Implement** `parse.ts` with the exact regexes/math from Global Constraints.
-- [ ] **Step 4: Run, confirm pass.** Also `pnpm install` so the web app's workspace dep resolves.
-- [ ] **Step 5: Commit** (`feat(live): screenshot filename parsing engine`).
+- [x] **Step 1: Failing tests.** Real-shaped cases: `parseScreenshotName('2026-08-04[21-33]_-105.40, 2.80, 116.40_0.0, -0.1, 1.0, -0.1 (0).png')` → position `{x:-105.4, y:2.8, z:116.4}`, finite yawDeg; a name with fov suffix `..._12.20 (0).png` still parses; yaw sanity: quaternion `(0,0,0,1)` → 0°, `(0, 0.7071, 0, 0.7071)` → 90°; garbage (`'inventory.png'`, empty string) → null; `isScreenshotName` true/false accordingly.
+- [x] **Step 2: Run, confirm fail** (`pnpm --filter @raidplanner/live exec vitest run`).
+- [x] **Step 3: Implement** `parse.ts` with the exact regexes/math from Global Constraints.
+- [x] **Step 4: Run, confirm pass.** Also `pnpm install` so the web app's workspace dep resolves.
+- [x] **Step 5: Commit** (`feat(live): screenshot filename parsing engine`).
 
 ---
 
@@ -66,11 +66,11 @@
 - `useLiveWatcher(): { supported: boolean; connected: boolean; connect(): Promise<void>; disconnect(): void; error: string | null }`
   - `connect()` calls `showDirectoryPicker({ mode: 'read' })`, seeds a `seen` set with all current `.png` names (so only *new* screenshots count), then polls every 2000ms via `setInterval`; each poll iterates `handle.values()`, and for any unseen file where `isScreenshotName(name)`, parses and `setLiveFix` for the lexicographically-latest new name; on `NotAllowedError`/`AbortError` sets `error`/stays disconnected. `disconnect()` clears the interval and `setLiveFix(null)`. Interval cleaned up on unmount (hook owns it via refs).
 
-- [ ] **Step 1: Store test additions** (extend `store.test.ts`): `setLiveFix` round-trips; persisted payload contains neither `search` nor `liveFix`.
-- [ ] **Step 2: Run store tests — fail; implement store changes; pass.**
-- [ ] **Step 3: Implement `fsAccess.d.ts` + `useLiveWatcher`** (no direct unit test — jsdom has no FSA API; covered by the Task 3 component test via a stubbed hook seam: export the internal `pickNewestFix(names: string[], seen: Set<string>): string | null` helper and unit-test that in node).
-- [ ] **Step 4: `tsc --noEmit` green.**
-- [ ] **Step 5: Commit** (`feat(web): live-mode store state and folder watcher hook`).
+- [x] **Step 1: Store test additions** (extend `store.test.ts`): `setLiveFix` round-trips; persisted payload contains neither `search` nor `liveFix`.
+- [x] **Step 2: Run store tests — fail; implement store changes; pass.**
+- [x] **Step 3: Implement `fsAccess.d.ts` + `useLiveWatcher`** (no direct unit test — jsdom has no FSA API; covered by the Task 3 component test via a stubbed hook seam: export the internal `pickNewestFix(names: string[], seen: Set<string>): string | null` helper and unit-test that in node).
+- [x] **Step 4: `tsc --noEmit` green.**
+- [x] **Step 5: Commit** (`feat(web): live-mode store state and folder watcher hook`).
 
 ---
 
@@ -85,11 +85,11 @@
 - `LivePanel()` — placed in the map toolbar: unsupported browser → dim note "Live mode needs Chrome/Edge"; otherwise Connect/Disconnect button, status dot (connected/idle), last-fix age text ("fix 12s ago", `tabular-nums`), and the out-of-bounds warning slot.
 - `App.tsx`: `routeOrigin: GamePosition | null = liveFix?.position ?? spawn?.position ?? null`; stops/route/markers derive from `routeOrigin` (nearest-candidate-point selection now keys on it); RoutePanel receives `originLabel: 'live position' | 'spawn'` and renders "From your live position" when live; player marker appended when `liveFix` and map selected; warning computed via calibration bounds containment.
 
-- [ ] **Step 1: Failing integration test** (extend `App.test.tsx`): with customs selected, two located quests toggled, no spawn, `setLiveFix({position: knownCustomsPoint, yawDeg: 90, ...})` → route panel shows steps (live position acts as origin), `.marker.player` exists; then `setSpawn(custom)` → route still originates from live fix (precedence).
-- [ ] **Step 2: Run, confirm fail.**
-- [ ] **Step 3: Implement.**
-- [ ] **Step 4: Run full web suite + `pnpm build` — green.**
-- [ ] **Step 5: Commit** (`feat(web): live player marker and live-origin routing`).
+- [x] **Step 1: Failing integration test** (extend `App.test.tsx`): with customs selected, two located quests toggled, no spawn, `setLiveFix({position: knownCustomsPoint, yawDeg: 90, ...})` → route panel shows steps (live position acts as origin), `.marker.player` exists; then `setSpawn(custom)` → route still originates from live fix (precedence).
+- [x] **Step 2: Run, confirm fail.**
+- [x] **Step 3: Implement.**
+- [x] **Step 4: Run full web suite + `pnpm build` — green.**
+- [x] **Step 5: Commit** (`feat(web): live player marker and live-origin routing`).
 
 ---
 
@@ -98,9 +98,9 @@
 **Files:**
 - Modify: `README.md`, `docs/plans/2026-08-04-live-position.md` (ticks), `apps/web/src/styles.css` (player marker polish: accent ring, reduced-motion-safe pulse)
 
-- [ ] **Step 1: README section "Live raid mode"** — how it works (filename parsing, credit TarkovMonitor MIT), browser support, privacy note (folder read-only, nothing leaves the machine), limitations (map not auto-detected; Firefox unsupported).
-- [ ] **Step 2: Full suite + build green** (`pnpm test`, `pnpm build`).
-- [ ] **Step 3: Commit** (`docs: live raid mode`), merge branch to main after suite passes (user pre-authorized landing this feature: "open pr, merge into main etc.").
+- [x] **Step 1: README section "Live raid mode"** — how it works (filename parsing, credit TarkovMonitor MIT), browser support, privacy note (folder read-only, nothing leaves the machine), limitations (map not auto-detected; Firefox unsupported).
+- [x] **Step 2: Full suite + build green** (`pnpm test`, `pnpm build`).
+- [x] **Step 3: Commit** (`docs: live raid mode`), merge branch to main after suite passes (user pre-authorized landing this feature: "open pr, merge into main etc.").
 
 ## Self-review notes
 
