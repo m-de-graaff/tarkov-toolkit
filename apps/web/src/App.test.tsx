@@ -42,4 +42,26 @@ describe('App', () => {
     act(() => checkbox.click());
     expect(usePlanner.getState().selectedTaskIds).toHaveLength(1);
   });
+
+  it('routes selected objectives from a spawn point', () => {
+    const customs = snapshot.maps.find((m) => m.normalizedName === 'customs')!;
+    const located = snapshot.tasks
+      .filter((t) =>
+        t.objectives.some((o) => o.points.some((p) => p.map === customs.id)),
+      )
+      .slice(0, 2);
+
+    act(() => root.render(<App />));
+    act(() => {
+      usePlanner.getState().selectMap(customs.id);
+      for (const t of located) usePlanner.getState().toggleTask(t.id);
+      usePlanner.getState().setSpawn({ kind: 'custom', position: { x: 0, y: 0, z: 0 } });
+    });
+
+    expect(container.querySelectorAll('.route-steps li').length).toBeGreaterThan(0);
+    expect(container.textContent).toMatch(/Total ≈ \d+m/);
+    expect(container.querySelectorAll('.marker.spawn').length).toBe(1);
+    // numbered objective markers follow the optimized order
+    expect(container.querySelector('.marker.objective')?.textContent).toBe('1');
+  });
 });
