@@ -168,11 +168,11 @@
   ```
 - Algorithm: nearest-neighbour from `start` over `distance2d`, then 2-opt improvement (open path, start fixed, iterate until no improving swap or 200 passes). One stop per objective; when an objective has multiple candidate points the caller passes the point nearest to the running route — v1: caller passes the point nearest to `start` (chosen in Task 8's wiring), documented limitation.
 
-- [ ] **Step 1: Failing tests.** (a) 4 stops on a line `x = 0,10,20,30` shuffled, start at origin → returned in ascending order, totalDistance 30. (b) A crossing configuration nearest-neighbour gets wrong: start (0,0), stops (0,10), (10,0), (10,10), (0,11) — assert 2-opt result ≤ brute-force optimum (compute brute force over all 24 permutations in the test). (c) empty stops → empty route, distance 0.
-- [ ] **Step 2: Run, confirm fail.**
-- [ ] **Step 3: Implement.**
-- [ ] **Step 4: Run, confirm pass.**
-- [ ] **Step 5: Commit** (`feat(web): route optimizer (NN + 2-opt)`).
+- [x] **Step 1: Failing tests.** (a) 4 stops on a line `x = 0,10,20,30` shuffled, start at origin → returned in ascending order, totalDistance 30. (b) A crossing configuration nearest-neighbour gets wrong: start (0,0), stops (0,10), (10,0), (10,10), (0,11) — assert 2-opt result ≤ brute-force optimum (compute brute force over all 24 permutations in the test). (c) empty stops → empty route, distance 0.
+- [x] **Step 2: Run, confirm fail.**
+- [x] **Step 3: Implement.**
+- [x] **Step 4: Run, confirm pass.**
+- [x] **Step 5: Commit** (`feat(web): route optimizer (NN + 2-opt)`).
 
 ---
 
