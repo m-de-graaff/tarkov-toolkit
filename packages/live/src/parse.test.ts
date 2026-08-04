@@ -32,6 +32,21 @@ describe('parseScreenshotName', () => {
     expect(quarter!.yawDeg).toBeCloseTo(90, 0);
   });
 
+  it('parses the real practice-raid filename from 2026-08-05', () => {
+    const fix = parseScreenshotName(
+      '2026-08-05[00-04]_179.37, 18.38, -6.33_-0.03947, 0.18638, 0.05768, -0.97999_13.54 (0).png',
+    );
+    expect(fix).not.toBeNull();
+    expect(fix!.position).toEqual({ x: 179.37, y: 18.38, z: -6.33 });
+  });
+
+  it('accepts multi-digit screenshot counters like (12)', () => {
+    const fix = parseScreenshotName(
+      '2026-08-05[00-09]_1.00, 2.00, 3.00_0.0, 0.0, 0.0, 1.0 (12).png',
+    );
+    expect(fix).not.toBeNull();
+  });
+
   it('rejects non-screenshot names', () => {
     expect(parseScreenshotName('inventory.png')).toBeNull();
     expect(parseScreenshotName('')).toBeNull();

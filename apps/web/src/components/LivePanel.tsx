@@ -20,10 +20,21 @@ function FixAge() {
   }, [receivedAt]);
 
   if (!liveFix || receivedAt === null) {
-    return <span className="text-xs text-muted-foreground">no fix yet</span>;
+    return (
+      <span className="text-xs text-muted-foreground">
+        waiting for a screenshot — press PrtScn in raid
+      </span>
+    );
   }
+  // The capture time lives in the filename ("2026-08-05[00-04]"); show it so a
+  // pre-existing screenshot is honestly labelled rather than "0s ago".
+  const takenClock = liveFix.takenAt?.slice(11, 16).replace('-', ':');
   const seconds = Math.max(0, Math.round((Date.now() - receivedAt) / 1000));
-  return <span className="text-xs text-muted-foreground tabular-nums">fix {seconds}s ago</span>;
+  return (
+    <span className="text-xs text-muted-foreground tabular-nums">
+      {takenClock ? `position from ${takenClock}` : `fix ${seconds}s ago`}
+    </span>
+  );
 }
 
 export function LivePanel({
