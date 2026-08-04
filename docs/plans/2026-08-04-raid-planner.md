@@ -254,10 +254,10 @@
   ```
 - Behaviour: one `L.map` instance per mounted canvas (`useRef`), recreated when `map.id` changes (CRS cannot be swapped live): `L.map(el, { crs: makeCrs(cal), minZoom: -2, maxZoom: 4, zoomSnap: 0.25, attributionControl: false })`, `L.imageOverlay('/maps/' + cal.svgFile, boundsToLatLng(cal.svgBounds ?? cal.bounds))`, `fitBounds` on create. Markers/route sync in a separate effect that clears and redraws two `L.layerGroup`s. Objective markers: `L.divIcon` `<div class="marker objective">N</div>` (orderIndex+1, or •), spawn marker `<div class="marker spawn">S</div>`; tooltip = `taskName — label`. Route: `L.polyline(points, { color: 'var(--route)' resolved to #d4bb70, weight: 2, dashArray: '6 4' })`. Import `leaflet/dist/leaflet.css` in `main.tsx`. Marker CSS in `styles.css` (accent bg, black text, 20px circle, border 1px `--border`).
 
-- [ ] **Step 1: Implement component + harness.** In `App.tsx`, render customs (`snapshot.maps.find(m => m.normalizedName === 'customs')`) with three real objective markers pulled from the snapshot (first task with points on customs) and `route: null`.
-- [ ] **Step 2: Verify manually.** `pnpm dev`, open `http://localhost:5173`, confirm: SVG renders, pan/zoom works, markers sit on plausible locations (compare one against tarkov.dev's own map for the same quest), no console errors. Check via browser tooling; capture screenshot.
-- [ ] **Step 3: `pnpm build` passes** (tsc strict + vite).
-- [ ] **Step 4: Commit** (`feat(web): leaflet map canvas with calibrated SVG overlay`).
+- [x] **Step 1: Implement component + harness.** In `App.tsx`, render customs (`snapshot.maps.find(m => m.normalizedName === 'customs')`) with three real objective markers pulled from the snapshot (first task with points on customs) and `route: null`.
+- [x] **Step 2: Verify manually.** `pnpm dev`, open `http://localhost:5173`, confirm: SVG renders, pan/zoom works, markers sit on plausible locations (compare one against tarkov.dev's own map for the same quest), no console errors. Check via browser tooling; capture screenshot.
+- [x] **Step 3: `pnpm build` passes** (tsc strict + vite).
+- [x] **Step 4: Commit** (`feat(web): leaflet map canvas with calibrated SVG overlay`).
 
 ---
 
