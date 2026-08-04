@@ -23,6 +23,27 @@ and get the objectives plus an optimized route drawn on an interactive map.
 - **Map recommendation** — "best maps for your open quests" banner ranks maps by
   how many available quests you can advance there.
 
+## Live raid mode
+
+Take a screenshot in-game (default hotkey) and your position appears on the map
+within ~2 seconds — with a heading arrow — and the quest route re-plans from
+where you actually are (overriding the spawn as route origin).
+
+How it works: EFT names screenshots
+`YYYY-MM-DD[HH-MM]_x, y, z_qx, qy, qz, qw (0).png` — your coordinates and view
+quaternion are the filename. Click **Connect screenshots folder** in the map
+toolbar and grant read access to
+`Documents\Escape from Tarkov\Screenshots`; the app polls the folder locally
+and parses new filenames (engine in `packages/live`, parsing ported from
+[TarkovMonitor](https://github.com/the-hideout/TarkovMonitor), MIT). Unlike
+tarkov-market-based tools (eftgps, TarkovPilot) there is no companion process
+and nothing is uploaded anywhere — the folder is read in the browser, offline.
+
+Notes: needs Chrome or Edge (File System Access API); the map is not
+auto-detected from the screenshot (keep the right map selected — you'll get a
+warning if your position falls outside its bounds); reconnect the folder after
+a page reload.
+
 ## Getting started
 
 ```sh

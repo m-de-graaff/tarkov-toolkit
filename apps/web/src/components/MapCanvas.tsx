@@ -9,9 +9,11 @@ export interface MapMarker {
   id: string;
   position: GamePosition;
   label: string;
-  kind: 'objective' | 'spawn';
+  kind: 'objective' | 'spawn' | 'player';
   orderIndex?: number;
   taskName?: string;
+  /** heading in degrees for kind 'player' (map rotation added at render) */
+  yawDeg?: number;
 }
 
 export interface MapCanvasProps {
@@ -24,7 +26,16 @@ export interface MapCanvasProps {
 
 const ROUTE_COLOR = '#d4bb70';
 
-function markerIcon(marker: MapMarker): L.DivIcon {
+function markerIcon(marker: MapMarker, mapRotation: number): L.DivIcon {
+  if (marker.kind === 'player') {
+    const heading = (marker.yawDeg ?? 0) + mapRotation;
+    return L.divIcon({
+      className: '',
+      html: `<div class="marker player" style="transform: rotate(${heading}deg)">➤</div>`,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+    });
+  }
   const text = marker.kind === 'spawn' ? 'S' : marker.orderIndex != null ? String(marker.orderIndex + 1) : '•';
   return L.divIcon({
     className: '',
@@ -79,16 +90,18 @@ export function MapCanvas({ map, markers, route, onMapClick }: MapCanvasProps) {
     layer.clearLayers();
 
     for (const marker of markers) {
-      const m = L.marker(gameToLatLng(marker.position), { icon: markerIcon(marker) });
+      const m = L.marker(gameToLatLng(marker.position), {
+        icon: markerIcon(marker, cal?.coordinateRotation ?? 0),
+      });
       const tooltip = marker.taskName ? `${marker.taskName} — ${marker.label}` : marker.label;
       m.bindTooltip(tooltip, { direction: 'top', offset: L.point(0, -10) });
       m.addTo(layer);
     }
 
     if (route && route.stops.length > 0) {
-      const spawn = markers.find((m) => m.kind === 'spawn');
+      const origin = markers.find((m) => m.kind === 'player') ?? markers.find((m) => m.kind === 'spawn');
       const points = [
-        ...(spawn ? [gameToLatLng(spawn.position)] : []),
+        ...(origin ? [gameToLatLng(origin.position)] : []),
         ...route.stops.map((s) => gameToLatLng(s.position)),
       ];
       L.polyline(points, { color: ROUTE_COLOR, weight: 2, dashArray: '6 4' }).addTo(layer);

@@ -64,4 +64,34 @@ describe('App', () => {
     // numbered objective markers follow the optimized order
     expect(container.querySelector('.marker.objective')?.textContent).toBe('1');
   });
+
+  it('routes from the live position, overriding the spawn', () => {
+    const customs = snapshot.maps.find((m) => m.normalizedName === 'customs')!;
+    const located = snapshot.tasks
+      .filter((t) => t.objectives.some((o) => o.points.some((p) => p.map === customs.id)))
+      .slice(0, 2);
+
+    act(() => root.render(<App />));
+    act(() => {
+      usePlanner.getState().selectMap(customs.id);
+      for (const t of located) usePlanner.getState().toggleTask(t.id);
+      usePlanner.getState().setLiveFix({
+        position: { x: 180, y: 0, z: 160 },
+        yawDeg: 90,
+        takenAt: '2026-08-04[21-40]',
+        raw: 'x (0).png',
+      });
+    });
+
+    // route exists without any spawn, marked as originating from the live fix
+    expect(container.querySelectorAll('.route-steps li').length).toBeGreaterThan(0);
+    expect(container.textContent).toContain('live position');
+    expect(container.querySelectorAll('.marker.player').length).toBe(1);
+
+    // spawn set afterwards must not steal the route origin
+    act(() =>
+      usePlanner.getState().setSpawn({ kind: 'custom', position: { x: -300, y: 0, z: -300 } }),
+    );
+    expect(container.textContent).toContain('live position');
+  });
 });
