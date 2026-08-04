@@ -45,8 +45,18 @@ async function fetchTranslated(name) {
 
 // Replace any string value that is a key in the translation dict. Keys whose
 // value is an identifier ('id', 'normalizedName', reference ids) are skipped so
-// cross-references stay intact.
+// cross-references stay intact — but ONLY when the value actually is an id
+// (a string or an array of strings). Objects always recurse: the API's
+// top-level collections share names with reference keys (e.g. data.maps vs
+// objective.maps), and skipping the collection leaves its subtree untranslated.
 const UNTRANSLATED_KEYS = new Set(['id', 'normalizedName', 'map', 'maps', 'task', 'trader']);
+
+function isIdValue(value) {
+  return (
+    typeof value === 'string' ||
+    (Array.isArray(value) && value.every((v) => typeof v === 'string'))
+  );
+}
 
 function applyTranslations(node, dict, parentKey) {
   if (Array.isArray(node)) {
@@ -55,7 +65,10 @@ function applyTranslations(node, dict, parentKey) {
   if (node && typeof node === 'object') {
     const out = {};
     for (const [key, value] of Object.entries(node)) {
-      out[key] = UNTRANSLATED_KEYS.has(key) ? value : applyTranslations(value, dict, key);
+      out[key] =
+        UNTRANSLATED_KEYS.has(key) && isIdValue(value)
+          ? value
+          : applyTranslations(value, dict, key);
     }
     return out;
   }

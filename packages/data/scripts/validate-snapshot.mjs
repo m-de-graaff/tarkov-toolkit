@@ -37,6 +37,15 @@ check(
     .join(', ')}`,
 );
 
+const unresolvedMaps = snapshot.maps.filter((m) => /^[0-9a-f]{20,}/.test(m.name));
+check(
+  unresolvedMaps.length === 0,
+  `unresolved map names (translation merge failed): ${unresolvedMaps
+    .slice(0, 3)
+    .map((m) => m.normalizedName)
+    .join(', ')}`,
+);
+
 const mapIds = new Set(snapshot.maps.map((m) => m.id));
 for (const task of snapshot.tasks) {
   for (const obj of task.objectives) {

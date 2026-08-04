@@ -1,10 +1,10 @@
 {
- "generatedAt": "2026-08-04T21:41:41.374Z",
+ "generatedAt": "2026-08-04T22:04:22.349Z",
  "gameMode": "regular",
  "maps": [
   {
    "id": "55f2d3fd4bdc2d5f408b4567",
-   "name": "55f2d3fd4bdc2d5f408b4567 Name",
+   "name": "Factory",
    "normalizedName": "factory",
    "wiki": "https://escapefromtarkov.fandom.com/wiki/Factory",
    "calibration": {
@@ -97,7 +97,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -112,7 +112,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -155,7 +155,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -170,7 +170,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -241,7 +241,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -256,7 +256,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -285,7 +285,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -300,7 +300,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -371,7 +371,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -456,7 +456,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -527,7 +527,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -570,7 +570,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -627,7 +627,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -684,7 +684,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -699,7 +699,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -771,7 +771,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -786,7 +786,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -815,7 +815,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -886,7 +886,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -957,7 +957,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -1099,7 +1099,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -1254,7 +1254,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -1367,7 +1367,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -1396,7 +1396,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -1425,7 +1425,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -1440,7 +1440,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -1455,7 +1455,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -1512,7 +1512,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -1527,7 +1527,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -1655,7 +1655,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -1670,7 +1670,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -1685,7 +1685,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -1705,7 +1705,7 @@
   },
   {
    "id": "56f40101d2720b2a4d8b45d6",
-   "name": "56f40101d2720b2a4d8b45d6 Name",
+   "name": "Customs",
    "normalizedName": "customs",
    "wiki": "https://escapefromtarkov.fandom.com/wiki/Customs",
    "calibration": {
@@ -1875,7 +1875,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneDormitory"
+     "zoneName": "Dorms"
     },
     {
      "position": {
@@ -1905,7 +1905,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneScavBase"
+     "zoneName": "Stronghold"
     },
     {
      "position": {
@@ -1936,7 +1936,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneGasStation"
+     "zoneName": "New Gas Station"
     },
     {
      "position": {
@@ -2126,7 +2126,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneScavBase"
+     "zoneName": "Stronghold"
     },
     {
      "position": {
@@ -2171,7 +2171,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneDormitory"
+     "zoneName": "Dorms"
     },
     {
      "position": {
@@ -2360,7 +2360,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneScavBase"
+     "zoneName": "Stronghold"
     },
     {
      "position": {
@@ -2376,7 +2376,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneGasStation"
+     "zoneName": "New Gas Station"
     },
     {
      "position": {
@@ -2465,7 +2465,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneGasStation"
+     "zoneName": "New Gas Station"
     },
     {
      "position": {
@@ -2511,7 +2511,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneScavBase"
+     "zoneName": "Stronghold"
     },
     {
      "position": {
@@ -2776,7 +2776,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneScavBase"
+     "zoneName": "Stronghold"
     },
     {
      "position": {
@@ -2820,7 +2820,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneGasStation"
+     "zoneName": "New Gas Station"
     },
     {
      "position": {
@@ -2851,7 +2851,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneScavBase"
+     "zoneName": "Stronghold"
     },
     {
      "position": {
@@ -3099,7 +3099,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneGasStation"
+     "zoneName": "New Gas Station"
     },
     {
      "position": {
@@ -3171,7 +3171,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneScavBase"
+     "zoneName": "Stronghold"
     },
     {
      "position": {
@@ -3229,7 +3229,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneScavBase"
+     "zoneName": "Stronghold"
     },
     {
      "position": {
@@ -3389,7 +3389,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneScavBase"
+     "zoneName": "Stronghold"
     },
     {
      "position": {
@@ -3419,7 +3419,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneGasStation"
+     "zoneName": "New Gas Station"
     },
     {
      "position": {
@@ -3521,7 +3521,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneDormitory"
+     "zoneName": "Dorms"
     },
     {
      "position": {
@@ -3552,7 +3552,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneScavBase"
+     "zoneName": "Stronghold"
     },
     {
      "position": {
@@ -3626,7 +3626,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneScavBase"
+     "zoneName": "Stronghold"
     },
     {
      "position": {
@@ -3698,7 +3698,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneScavBase"
+     "zoneName": "Stronghold"
     },
     {
      "position": {
@@ -3903,7 +3903,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneDormitory"
+     "zoneName": "Dorms"
     },
     {
      "position": {
@@ -3919,7 +3919,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneScavBase"
+     "zoneName": "Stronghold"
     },
     {
      "position": {
@@ -3979,7 +3979,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneDormitory"
+     "zoneName": "Dorms"
     },
     {
      "position": {
@@ -4240,7 +4240,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneGasStation"
+     "zoneName": "New Gas Station"
     },
     {
      "position": {
@@ -4270,7 +4270,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneDormitory"
+     "zoneName": "Dorms"
     },
     {
      "position": {
@@ -4300,7 +4300,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneGasStation"
+     "zoneName": "New Gas Station"
     },
     {
      "position": {
@@ -4359,7 +4359,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneScavBase"
+     "zoneName": "Stronghold"
     },
     {
      "position": {
@@ -4445,7 +4445,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneScavBase"
+     "zoneName": "Stronghold"
     },
     {
      "position": {
@@ -4475,7 +4475,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneDormitory"
+     "zoneName": "Dorms"
     },
     {
      "position": {
@@ -4575,7 +4575,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneScavBase"
+     "zoneName": "Stronghold"
     },
     {
      "position": {
@@ -4652,7 +4652,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneScavBase"
+     "zoneName": "Stronghold"
     },
     {
      "position": {
@@ -4797,7 +4797,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneScavBase"
+     "zoneName": "Stronghold"
     },
     {
      "position": {
@@ -5221,7 +5221,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneDormitory"
+     "zoneName": "Dorms"
     },
     {
      "position": {
@@ -5340,7 +5340,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneGasStation"
+     "zoneName": "New Gas Station"
     },
     {
      "position": {
@@ -5387,7 +5387,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneScavBase"
+     "zoneName": "Stronghold"
     },
     {
      "position": {
@@ -5638,7 +5638,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneScavBase"
+     "zoneName": "Stronghold"
     },
     {
      "position": {
@@ -5748,7 +5748,7 @@
   },
   {
    "id": "5704e3c2d2720bac5b8b4567",
-   "name": "5704e3c2d2720bac5b8b4567 Name",
+   "name": "Woods",
    "normalizedName": "woods",
    "wiki": "https://escapefromtarkov.fandom.com/wiki/Woods",
    "calibration": {
@@ -6016,7 +6016,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneWoodCutter"
+     "zoneName": "Lumber Mill"
     },
     {
      "position": {
@@ -6207,7 +6207,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneBrokenVill"
+     "zoneName": "Rundown Village"
     },
     {
      "position": {
@@ -6250,7 +6250,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneWoodCutter"
+     "zoneName": "Lumber Mill"
     },
     {
      "position": {
@@ -6279,7 +6279,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneBrokenVill"
+     "zoneName": "Rundown Village"
     },
     {
      "position": {
@@ -6323,7 +6323,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneWoodCutter"
+     "zoneName": "Lumber Mill"
     },
     {
      "position": {
@@ -6382,7 +6382,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneScavBase2"
+     "zoneName": "Northwest Scav Bunker"
     },
     {
      "position": {
@@ -6617,7 +6617,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneBrokenVill"
+     "zoneName": "Rundown Village"
     },
     {
      "position": {
@@ -6632,7 +6632,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneBrokenVill"
+     "zoneName": "Rundown Village"
     },
     {
      "position": {
@@ -6704,7 +6704,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneScavBase2"
+     "zoneName": "Northwest Scav Bunker"
     },
     {
      "position": {
@@ -6763,7 +6763,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneBrokenVill"
+     "zoneName": "Rundown Village"
     },
     {
      "position": {
@@ -6792,7 +6792,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneBrokenVill"
+     "zoneName": "Rundown Village"
     },
     {
      "position": {
@@ -6893,7 +6893,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneScavBase2"
+     "zoneName": "Northwest Scav Bunker"
     },
     {
      "position": {
@@ -6951,7 +6951,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneBrokenVill"
+     "zoneName": "Rundown Village"
     },
     {
      "position": {
@@ -6995,7 +6995,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneWoodCutter"
+     "zoneName": "Lumber Mill"
     },
     {
      "position": {
@@ -7082,7 +7082,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneScavBase2"
+     "zoneName": "Northwest Scav Bunker"
     },
     {
      "position": {
@@ -7112,7 +7112,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneMiniHouse"
+     "zoneName": "West of Lumber Mill"
     },
     {
      "position": {
@@ -7171,7 +7171,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneWoodCutter"
+     "zoneName": "Lumber Mill"
     },
     {
      "position": {
@@ -7214,7 +7214,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneBrokenVill"
+     "zoneName": "Rundown Village"
     },
     {
      "position": {
@@ -7303,7 +7303,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneScavBase2"
+     "zoneName": "Northwest Scav Bunker"
     },
     {
      "position": {
@@ -7318,7 +7318,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneMiniHouse"
+     "zoneName": "West of Lumber Mill"
     },
     {
      "position": {
@@ -7614,7 +7614,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneBrokenVill"
+     "zoneName": "Rundown Village"
     },
     {
      "position": {
@@ -7674,7 +7674,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneBrokenVill"
+     "zoneName": "Rundown Village"
     },
     {
      "position": {
@@ -7776,7 +7776,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneScavBase2"
+     "zoneName": "Northwest Scav Bunker"
     },
     {
      "position": {
@@ -7937,7 +7937,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneWoodCutter"
+     "zoneName": "Lumber Mill"
     },
     {
      "position": {
@@ -8041,7 +8041,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneMiniHouse"
+     "zoneName": "West of Lumber Mill"
     },
     {
      "position": {
@@ -8145,7 +8145,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneWoodCutter"
+     "zoneName": "Lumber Mill"
     },
     {
      "position": {
@@ -8217,7 +8217,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneMiniHouse"
+     "zoneName": "West of Lumber Mill"
     },
     {
      "position": {
@@ -8321,7 +8321,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneBrokenVill"
+     "zoneName": "Rundown Village"
     },
     {
      "position": {
@@ -8381,7 +8381,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneBrokenVill"
+     "zoneName": "Rundown Village"
     },
     {
      "position": {
@@ -8396,7 +8396,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneWoodCutter"
+     "zoneName": "Lumber Mill"
     },
     {
      "position": {
@@ -8556,7 +8556,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneWoodCutter"
+     "zoneName": "Lumber Mill"
     },
     {
      "position": {
@@ -8601,7 +8601,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneScavBase2"
+     "zoneName": "Northwest Scav Bunker"
     },
     {
      "position": {
@@ -8645,7 +8645,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneWoodCutter"
+     "zoneName": "Lumber Mill"
     },
     {
      "position": {
@@ -8750,7 +8750,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneBrokenVill"
+     "zoneName": "Rundown Village"
     },
     {
      "position": {
@@ -8810,7 +8810,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneBrokenVill"
+     "zoneName": "Rundown Village"
     },
     {
      "position": {
@@ -8926,7 +8926,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneScavBase2"
+     "zoneName": "Northwest Scav Bunker"
     },
     {
      "position": {
@@ -8999,7 +8999,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneScavBase2"
+     "zoneName": "Northwest Scav Bunker"
     },
     {
      "position": {
@@ -9158,7 +9158,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneMiniHouse"
+     "zoneName": "West of Lumber Mill"
     },
     {
      "position": {
@@ -9188,7 +9188,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneWoodCutter"
+     "zoneName": "Lumber Mill"
     },
     {
      "position": {
@@ -9218,7 +9218,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneScavBase2"
+     "zoneName": "Northwest Scav Bunker"
     },
     {
      "position": {
@@ -9233,7 +9233,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneScavBase2"
+     "zoneName": "Northwest Scav Bunker"
     },
     {
      "position": {
@@ -9352,7 +9352,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneBrokenVill"
+     "zoneName": "Rundown Village"
     },
     {
      "position": {
@@ -9509,7 +9509,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneScavBase2"
+     "zoneName": "Northwest Scav Bunker"
     },
     {
      "position": {
@@ -9525,7 +9525,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneWoodCutter"
+     "zoneName": "Lumber Mill"
     },
     {
      "position": {
@@ -9556,7 +9556,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneWoodCutter"
+     "zoneName": "Lumber Mill"
     },
     {
      "position": {
@@ -9688,7 +9688,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneScavBase2"
+     "zoneName": "Northwest Scav Bunker"
     },
     {
      "position": {
@@ -9820,7 +9820,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneBrokenVill"
+     "zoneName": "Rundown Village"
     },
     {
      "position": {
@@ -9935,7 +9935,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneBrokenVill"
+     "zoneName": "Rundown Village"
     },
     {
      "position": {
@@ -9951,7 +9951,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneMiniHouse"
+     "zoneName": "West of Lumber Mill"
     },
     {
      "position": {
@@ -10127,7 +10127,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneScavBase2"
+     "zoneName": "Northwest Scav Bunker"
     },
     {
      "position": {
@@ -10143,7 +10143,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneMiniHouse"
+     "zoneName": "West of Lumber Mill"
     },
     {
      "position": {
@@ -10205,7 +10205,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneBrokenVill"
+     "zoneName": "Rundown Village"
     },
     {
      "position": {
@@ -10220,13 +10220,13 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneBrokenVill"
+     "zoneName": "Rundown Village"
     }
    ]
   },
   {
    "id": "5704e4dad2720bb55b8b4567",
-   "name": "5704e4dad2720bb55b8b4567 Name",
+   "name": "Lighthouse",
    "normalizedName": "lighthouse",
    "wiki": "https://escapefromtarkov.fandom.com/wiki/Lighthouse",
    "calibration": {
@@ -10277,7 +10277,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "Zone_Chalet"
+     "zoneName": "Chalet"
     },
     {
      "position": {
@@ -10323,7 +10323,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "Zone_Chalet"
+     "zoneName": "Chalet"
     },
     {
      "position": {
@@ -10368,7 +10368,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "Zone_Chalet"
+     "zoneName": "Chalet"
     },
     {
      "position": {
@@ -10572,7 +10572,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "Zone_Chalet"
+     "zoneName": "Chalet"
     },
     {
      "position": {
@@ -10965,7 +10965,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "Zone_Chalet"
+     "zoneName": "Chalet"
     },
     {
      "position": {
@@ -11315,7 +11315,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "Zone_Chalet"
+     "zoneName": "Chalet"
     },
     {
      "position": {
@@ -11389,7 +11389,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "Zone_Chalet"
+     "zoneName": "Chalet"
     },
     {
      "position": {
@@ -11462,7 +11462,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "Zone_Chalet"
+     "zoneName": "Chalet"
     },
     {
      "position": {
@@ -11637,7 +11637,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "Zone_Chalet"
+     "zoneName": "Chalet"
     },
     {
      "position": {
@@ -11896,7 +11896,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "Zone_Chalet"
+     "zoneName": "Chalet"
     },
     {
      "position": {
@@ -12591,7 +12591,7 @@
   },
   {
    "id": "5704e554d2720bac5b8b456e",
-   "name": "5704e554d2720bac5b8b456e Name",
+   "name": "Shoreline",
    "normalizedName": "shoreline",
    "wiki": "https://escapefromtarkov.fandom.com/wiki/Shoreline",
    "calibration": {
@@ -12642,7 +12642,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneGasStation"
+     "zoneName": "New Gas Station"
     },
     {
      "position": {
@@ -12742,7 +12742,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneGasStation"
+     "zoneName": "New Gas Station"
     },
     {
      "position": {
@@ -12771,7 +12771,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZonePort"
+     "zoneName": "Pier"
     },
     {
      "position": {
@@ -12815,7 +12815,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSanatorium2"
+     "zoneName": "East Wing"
     },
     {
      "position": {
@@ -12932,7 +12932,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneGreenHouses"
+     "zoneName": "Greenhouses"
     },
     {
      "position": {
@@ -12961,7 +12961,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneGreenHouses"
+     "zoneName": "Greenhouses"
     },
     {
      "position": {
@@ -13022,7 +13022,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneGreenHouses"
+     "zoneName": "Greenhouses"
     },
     {
      "position": {
@@ -13166,7 +13166,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneGreenHouses"
+     "zoneName": "Greenhouses"
     },
     {
      "position": {
@@ -13181,7 +13181,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneMeteoStation"
+     "zoneName": "Weather Station"
     },
     {
      "position": {
@@ -13285,7 +13285,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneSanatorium1"
+     "zoneName": "West Wing"
     },
     {
      "position": {
@@ -13332,7 +13332,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSanatorium2"
+     "zoneName": "East Wing"
     },
     {
      "position": {
@@ -13419,7 +13419,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZonePort"
+     "zoneName": "Pier"
     },
     {
      "position": {
@@ -13521,7 +13521,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneGreenHouses"
+     "zoneName": "Greenhouses"
     },
     {
      "position": {
@@ -13594,7 +13594,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneMeteoStation"
+     "zoneName": "Weather Station"
     },
     {
      "position": {
@@ -13623,7 +13623,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZonePort"
+     "zoneName": "Pier"
     },
     {
      "position": {
@@ -13727,7 +13727,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSanatorium1"
+     "zoneName": "West Wing"
     },
     {
      "position": {
@@ -13786,7 +13786,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZonePort"
+     "zoneName": "Pier"
     },
     {
      "position": {
@@ -13902,7 +13902,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneMeteoStation"
+     "zoneName": "Weather Station"
     },
     {
      "position": {
@@ -13933,7 +13933,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneForestSpawn"
+     "zoneName": "Northeast of Sunken Village"
     },
     {
      "position": {
@@ -13976,7 +13976,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneForestSpawn"
+     "zoneName": "Northeast of Sunken Village"
     },
     {
      "position": {
@@ -13992,7 +13992,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSanatorium1"
+     "zoneName": "West Wing"
     },
     {
      "position": {
@@ -14195,7 +14195,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneGasStation"
+     "zoneName": "New Gas Station"
     },
     {
      "position": {
@@ -14254,7 +14254,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneSanatorium2"
+     "zoneName": "East Wing"
     },
     {
      "position": {
@@ -14299,7 +14299,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneGreenHouses"
+     "zoneName": "Greenhouses"
     },
     {
      "position": {
@@ -14357,7 +14357,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneGreenHouses"
+     "zoneName": "Greenhouses"
     },
     {
      "position": {
@@ -14386,7 +14386,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneSanatorium1"
+     "zoneName": "West Wing"
     },
     {
      "position": {
@@ -14401,7 +14401,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZonePort"
+     "zoneName": "Pier"
     },
     {
      "position": {
@@ -14547,7 +14547,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSanatorium2"
+     "zoneName": "East Wing"
     },
     {
      "position": {
@@ -14576,7 +14576,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneSanatorium2"
+     "zoneName": "East Wing"
     },
     {
      "position": {
@@ -14662,7 +14662,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZonePort"
+     "zoneName": "Pier"
     },
     {
      "position": {
@@ -14706,7 +14706,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneMeteoStation"
+     "zoneName": "Weather Station"
     },
     {
      "position": {
@@ -14751,7 +14751,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneGreenHouses"
+     "zoneName": "Greenhouses"
     },
     {
      "position": {
@@ -14854,7 +14854,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneMeteoStation"
+     "zoneName": "Weather Station"
     },
     {
      "position": {
@@ -14869,7 +14869,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneGasStation"
+     "zoneName": "New Gas Station"
     },
     {
      "position": {
@@ -14986,7 +14986,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneForestSpawn"
+     "zoneName": "Northeast of Sunken Village"
     },
     {
      "position": {
@@ -15143,7 +15143,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneGreenHouses"
+     "zoneName": "Greenhouses"
     },
     {
      "position": {
@@ -15159,7 +15159,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneGreenHouses"
+     "zoneName": "Greenhouses"
     },
     {
      "position": {
@@ -15346,7 +15346,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneMeteoStation"
+     "zoneName": "Weather Station"
     },
     {
      "position": {
@@ -15408,7 +15408,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSanatorium1"
+     "zoneName": "West Wing"
     },
     {
      "position": {
@@ -15480,7 +15480,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneSanatorium2"
+     "zoneName": "East Wing"
     },
     {
      "position": {
@@ -15496,7 +15496,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneMeteoStation"
+     "zoneName": "Weather Station"
     },
     {
      "position": {
@@ -15511,7 +15511,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneGreenHouses"
+     "zoneName": "Greenhouses"
     },
     {
      "position": {
@@ -15597,7 +15597,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneGasStation"
+     "zoneName": "New Gas Station"
     },
     {
      "position": {
@@ -15656,7 +15656,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSanatorium2"
+     "zoneName": "East Wing"
     },
     {
      "position": {
@@ -15686,7 +15686,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSanatorium1"
+     "zoneName": "West Wing"
     },
     {
      "position": {
@@ -15744,7 +15744,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneSanatorium1"
+     "zoneName": "West Wing"
     },
     {
      "position": {
@@ -15775,7 +15775,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSanatorium2"
+     "zoneName": "East Wing"
     },
     {
      "position": {
@@ -15791,7 +15791,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneForestSpawn"
+     "zoneName": "Northeast of Sunken Village"
     },
     {
      "position": {
@@ -15806,7 +15806,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneSanatorium2"
+     "zoneName": "East Wing"
     },
     {
      "position": {
@@ -15835,7 +15835,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneMeteoStation"
+     "zoneName": "Weather Station"
     },
     {
      "position": {
@@ -15851,7 +15851,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZonePort"
+     "zoneName": "Pier"
     },
     {
      "position": {
@@ -15923,7 +15923,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneGreenHouses"
+     "zoneName": "Greenhouses"
     },
     {
      "position": {
@@ -15939,7 +15939,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSanatorium1"
+     "zoneName": "West Wing"
     },
     {
      "position": {
@@ -15954,7 +15954,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneGreenHouses"
+     "zoneName": "Greenhouses"
     },
     {
      "position": {
@@ -16083,7 +16083,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneGasStation"
+     "zoneName": "New Gas Station"
     },
     {
      "position": {
@@ -16128,7 +16128,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneForestSpawn"
+     "zoneName": "Northeast of Sunken Village"
     },
     {
      "position": {
@@ -16144,7 +16144,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSanatorium1"
+     "zoneName": "West Wing"
     },
     {
      "position": {
@@ -16202,7 +16202,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneSanatorium1"
+     "zoneName": "West Wing"
     },
     {
      "position": {
@@ -16217,7 +16217,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneMeteoStation"
+     "zoneName": "Weather Station"
     },
     {
      "position": {
@@ -16232,7 +16232,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneGreenHouses"
+     "zoneName": "Greenhouses"
     },
     {
      "position": {
@@ -16247,7 +16247,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneSanatorium1"
+     "zoneName": "West Wing"
     },
     {
      "position": {
@@ -16364,7 +16364,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneSanatorium2"
+     "zoneName": "East Wing"
     },
     {
      "position": {
@@ -16485,7 +16485,7 @@
   },
   {
    "id": "5704e5fad2720bc05b8b4567",
-   "name": "5704e5fad2720bc05b8b4567 Name",
+   "name": "Reserve",
    "normalizedName": "reserve",
    "wiki": "https://escapefromtarkov.fandom.com/wiki/Reserve",
    "calibration": {
@@ -16532,7 +16532,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneSubStorage"
+     "zoneName": "Storage Bunker"
     },
     {
      "position": {
@@ -16561,7 +16561,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneBarrack"
+     "zoneName": "Barracks"
     },
     {
      "position": {
@@ -16576,7 +16576,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneRailStrorage"
+     "zoneName": "K Buildings"
     },
     {
      "position": {
@@ -16676,7 +16676,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSubCommand"
+     "zoneName": "Command Bunker"
     },
     {
      "position": {
@@ -16692,7 +16692,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSubCommand"
+     "zoneName": "Command Bunker"
     },
     {
      "position": {
@@ -16721,7 +16721,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneRailStrorage"
+     "zoneName": "K Buildings"
     },
     {
      "position": {
@@ -16764,7 +16764,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZonePTOR2"
+     "zoneName": "White Knight"
     },
     {
      "position": {
@@ -16793,7 +16793,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneSubStorage"
+     "zoneName": "Storage Bunker"
     },
     {
      "position": {
@@ -16823,7 +16823,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSubCommand"
+     "zoneName": "Command Bunker"
     },
     {
      "position": {
@@ -16838,7 +16838,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneBarrack"
+     "zoneName": "Barracks"
     },
     {
      "position": {
@@ -16923,7 +16923,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneBarrack"
+     "zoneName": "Barracks"
     },
     {
      "position": {
@@ -16966,7 +16966,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneRailStrorage"
+     "zoneName": "K Buildings"
     },
     {
      "position": {
@@ -16995,7 +16995,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneBarrack"
+     "zoneName": "Barracks"
     },
     {
      "position": {
@@ -17025,7 +17025,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSubCommand"
+     "zoneName": "Command Bunker"
     },
     {
      "position": {
@@ -17082,7 +17082,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneRailStrorage"
+     "zoneName": "K Buildings"
     },
     {
      "position": {
@@ -17111,7 +17111,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneBarrack"
+     "zoneName": "Barracks"
     },
     {
      "position": {
@@ -17126,7 +17126,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneRailStrorage"
+     "zoneName": "K Buildings"
     },
     {
      "position": {
@@ -17241,7 +17241,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneBarrack"
+     "zoneName": "Barracks"
     },
     {
      "position": {
@@ -17256,7 +17256,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneRailStrorage"
+     "zoneName": "K Buildings"
     },
     {
      "position": {
@@ -17286,7 +17286,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneRailStrorage"
+     "zoneName": "K Buildings"
     },
     {
      "position": {
@@ -17329,7 +17329,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZonePTOR2"
+     "zoneName": "White Knight"
     },
     {
      "position": {
@@ -17344,7 +17344,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneBarrack"
+     "zoneName": "Barracks"
     },
     {
      "position": {
@@ -17404,7 +17404,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSubCommand"
+     "zoneName": "Command Bunker"
     },
     {
      "position": {
@@ -17433,7 +17433,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneBarrack"
+     "zoneName": "Barracks"
     },
     {
      "position": {
@@ -17505,7 +17505,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneBarrack"
+     "zoneName": "Barracks"
     },
     {
      "position": {
@@ -17520,7 +17520,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneBarrack"
+     "zoneName": "Barracks"
     },
     {
      "position": {
@@ -17535,7 +17535,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneSubStorage"
+     "zoneName": "Storage Bunker"
     },
     {
      "position": {
@@ -17606,7 +17606,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneRailStrorage"
+     "zoneName": "K Buildings"
     },
     {
      "position": {
@@ -17621,7 +17621,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneRailStrorage"
+     "zoneName": "K Buildings"
     },
     {
      "position": {
@@ -17650,7 +17650,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneRailStrorage"
+     "zoneName": "K Buildings"
     },
     {
      "position": {
@@ -17679,7 +17679,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZonePTOR2"
+     "zoneName": "White Knight"
     },
     {
      "position": {
@@ -17708,7 +17708,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneBarrack"
+     "zoneName": "Barracks"
     },
     {
      "position": {
@@ -17737,7 +17737,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneBarrack"
+     "zoneName": "Barracks"
     },
     {
      "position": {
@@ -17766,7 +17766,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneSubStorage"
+     "zoneName": "Storage Bunker"
     },
     {
      "position": {
@@ -17880,7 +17880,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneRailStrorage"
+     "zoneName": "K Buildings"
     },
     {
      "position": {
@@ -17895,7 +17895,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneBarrack"
+     "zoneName": "Barracks"
     },
     {
      "position": {
@@ -17910,7 +17910,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneRailStrorage"
+     "zoneName": "K Buildings"
     },
     {
      "position": {
@@ -17925,7 +17925,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneBarrack"
+     "zoneName": "Barracks"
     },
     {
      "position": {
@@ -17969,7 +17969,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneRailStrorage"
+     "zoneName": "K Buildings"
     },
     {
      "position": {
@@ -17998,7 +17998,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZonePTOR2"
+     "zoneName": "White Knight"
     },
     {
      "position": {
@@ -18013,7 +18013,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneRailStrorage"
+     "zoneName": "K Buildings"
     },
     {
      "position": {
@@ -18028,7 +18028,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneRailStrorage"
+     "zoneName": "K Buildings"
     },
     {
      "position": {
@@ -18044,7 +18044,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSubCommand"
+     "zoneName": "Command Bunker"
     },
     {
      "position": {
@@ -18060,7 +18060,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSubCommand"
+     "zoneName": "Command Bunker"
     },
     {
      "position": {
@@ -18103,7 +18103,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneSubStorage"
+     "zoneName": "Storage Bunker"
     },
     {
      "position": {
@@ -18118,7 +18118,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneRailStrorage"
+     "zoneName": "K Buildings"
     },
     {
      "position": {
@@ -18133,7 +18133,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneBarrack"
+     "zoneName": "Barracks"
     },
     {
      "position": {
@@ -18148,7 +18148,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneSubStorage"
+     "zoneName": "Storage Bunker"
     },
     {
      "position": {
@@ -18163,7 +18163,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneRailStrorage"
+     "zoneName": "K Buildings"
     },
     {
      "position": {
@@ -18193,7 +18193,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSubCommand"
+     "zoneName": "Command Bunker"
     },
     {
      "position": {
@@ -18237,7 +18237,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSubCommand"
+     "zoneName": "Command Bunker"
     },
     {
      "position": {
@@ -18282,7 +18282,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSubCommand"
+     "zoneName": "Command Bunker"
     },
     {
      "position": {
@@ -18340,7 +18340,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZonePTOR2"
+     "zoneName": "White Knight"
     },
     {
      "position": {
@@ -18370,7 +18370,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneBarrack"
+     "zoneName": "Barracks"
     },
     {
      "position": {
@@ -18399,7 +18399,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZonePTOR2"
+     "zoneName": "White Knight"
     },
     {
      "position": {
@@ -18442,7 +18442,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneSubStorage"
+     "zoneName": "Storage Bunker"
     },
     {
      "position": {
@@ -18471,7 +18471,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneSubStorage"
+     "zoneName": "Storage Bunker"
     },
     {
      "position": {
@@ -18486,7 +18486,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSubStorage"
+     "zoneName": "Storage Bunker"
     },
     {
      "position": {
@@ -18545,7 +18545,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSubCommand"
+     "zoneName": "Command Bunker"
     },
     {
      "position": {
@@ -18574,7 +18574,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneRailStrorage"
+     "zoneName": "K Buildings"
     },
     {
      "position": {
@@ -18617,7 +18617,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneRailStrorage"
+     "zoneName": "K Buildings"
     },
     {
      "position": {
@@ -18732,7 +18732,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneRailStrorage"
+     "zoneName": "K Buildings"
     },
     {
      "position": {
@@ -18776,7 +18776,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneRailStrorage"
+     "zoneName": "K Buildings"
     },
     {
      "position": {
@@ -18791,7 +18791,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneRailStrorage"
+     "zoneName": "K Buildings"
     },
     {
      "position": {
@@ -18825,7 +18825,7 @@
   },
   {
    "id": "5714dbc024597771384a510d",
-   "name": "5714dbc024597771384a510d Name",
+   "name": "Interchange",
    "normalizedName": "interchange",
    "wiki": "https://escapefromtarkov.fandom.com/wiki/Interchange",
    "calibration": {
@@ -18876,7 +18876,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneGoshan"
+     "zoneName": "Goshan"
     },
     {
      "position": {
@@ -18948,7 +18948,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneGoshan"
+     "zoneName": "Goshan"
     },
     {
      "position": {
@@ -19148,7 +19148,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneCenterBot"
+     "zoneName": "Center"
     },
     {
      "position": {
@@ -19280,7 +19280,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneOLI"
+     "zoneName": "OLI"
     },
     {
      "position": {
@@ -19457,7 +19457,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneIDEA"
+     "zoneName": "IDEA"
     },
     {
      "position": {
@@ -19655,7 +19655,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneOLI"
+     "zoneName": "OLI"
     },
     {
      "position": {
@@ -19698,7 +19698,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneCenterBot"
+     "zoneName": "Center"
     },
     {
      "position": {
@@ -19857,7 +19857,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneIDEA"
+     "zoneName": "IDEA"
     },
     {
      "position": {
@@ -19872,7 +19872,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneGoshan"
+     "zoneName": "Goshan"
     },
     {
      "position": {
@@ -20178,7 +20178,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneGoshan"
+     "zoneName": "Goshan"
     },
     {
      "position": {
@@ -20280,7 +20280,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneCenterBot"
+     "zoneName": "Center"
     },
     {
      "position": {
@@ -20309,7 +20309,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneIDEA"
+     "zoneName": "IDEA"
     },
     {
      "position": {
@@ -20710,7 +20710,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneOLI"
+     "zoneName": "OLI"
     },
     {
      "position": {
@@ -20826,7 +20826,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneOLI"
+     "zoneName": "OLI"
     },
     {
      "position": {
@@ -20842,7 +20842,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneOLI"
+     "zoneName": "OLI"
     },
     {
      "position": {
@@ -20901,7 +20901,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneOLI"
+     "zoneName": "OLI"
     },
     {
      "position": {
@@ -21088,7 +21088,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneCenterBot"
+     "zoneName": "Center"
     },
     {
      "position": {
@@ -21118,7 +21118,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneGoshan"
+     "zoneName": "Goshan"
     },
     {
      "position": {
@@ -21382,7 +21382,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneOLI"
+     "zoneName": "OLI"
     },
     {
      "position": {
@@ -21397,7 +21397,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneGoshan"
+     "zoneName": "Goshan"
     },
     {
      "position": {
@@ -21542,7 +21542,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneOLI"
+     "zoneName": "OLI"
     },
     {
      "position": {
@@ -21571,7 +21571,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneCenterBot"
+     "zoneName": "Center"
     },
     {
      "position": {
@@ -21730,7 +21730,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneIDEA"
+     "zoneName": "IDEA"
     },
     {
      "position": {
@@ -21761,7 +21761,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneGoshan"
+     "zoneName": "Goshan"
     },
     {
      "position": {
@@ -21776,7 +21776,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneIDEA"
+     "zoneName": "IDEA"
     },
     {
      "position": {
@@ -21878,7 +21878,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneGoshan"
+     "zoneName": "Goshan"
     },
     {
      "position": {
@@ -21908,7 +21908,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneIDEA"
+     "zoneName": "IDEA"
     },
     {
      "position": {
@@ -21939,7 +21939,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneOLI"
+     "zoneName": "OLI"
     },
     {
      "position": {
@@ -21954,7 +21954,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "ZoneGoshan"
+     "zoneName": "Goshan"
     },
     {
      "position": {
@@ -22014,7 +22014,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneIDEA"
+     "zoneName": "IDEA"
     },
     {
      "position": {
@@ -22090,7 +22090,7 @@
   },
   {
    "id": "5714dc692459777137212e12",
-   "name": "5714dc692459777137212e12 Name",
+   "name": "Streets of Tarkov",
    "normalizedName": "streets-of-tarkov",
    "wiki": "https://escapefromtarkov.fandom.com/wiki/Streets_of_Tarkov",
    "calibration": {
@@ -22144,7 +22144,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneClimova"
+     "zoneName": "Klimov Shopping Mall"
     },
     {
      "position": {
@@ -22245,7 +22245,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneCarShowroom"
+     "zoneName": "Car Dealership"
     },
     {
      "position": {
@@ -22499,7 +22499,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneCarShowroom"
+     "zoneName": "Car Dealership"
     },
     {
      "position": {
@@ -22558,7 +22558,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneClimova"
+     "zoneName": "Klimov Shopping Mall"
     },
     {
      "position": {
@@ -22590,7 +22590,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneCarShowroom"
+     "zoneName": "Car Dealership"
     },
     {
      "position": {
@@ -22916,7 +22916,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneClimova"
+     "zoneName": "Klimov Shopping Mall"
     },
     {
      "position": {
@@ -23110,7 +23110,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneCarShowroom"
+     "zoneName": "Car Dealership"
     },
     {
      "position": {
@@ -23584,7 +23584,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneCarShowroom"
+     "zoneName": "Car Dealership"
     },
     {
      "position": {
@@ -24486,7 +24486,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneCarShowroom"
+     "zoneName": "Car Dealership"
     },
     {
      "position": {
@@ -24683,7 +24683,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneCarShowroom"
+     "zoneName": "Car Dealership"
     },
     {
      "position": {
@@ -24984,7 +24984,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneCarShowroom"
+     "zoneName": "Car Dealership"
     },
     {
      "position": {
@@ -25345,7 +25345,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneMvd"
+     "zoneName": "Ministry of the Interior Academy"
     },
     {
      "position": {
@@ -25682,7 +25682,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneClimova"
+     "zoneName": "Klimov Shopping Mall"
     },
     {
      "position": {
@@ -25730,7 +25730,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneClimova"
+     "zoneName": "Klimov Shopping Mall"
     },
     {
      "position": {
@@ -26212,7 +26212,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneMvd"
+     "zoneName": "Ministry of the Interior Academy"
     },
     {
      "position": {
@@ -26364,7 +26364,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneMvd"
+     "zoneName": "Ministry of the Interior Academy"
     },
     {
      "position": {
@@ -26561,7 +26561,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneCarShowroom"
+     "zoneName": "Car Dealership"
     },
     {
      "position": {
@@ -27061,7 +27061,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneCarShowroom"
+     "zoneName": "Car Dealership"
     },
     {
      "position": {
@@ -27120,7 +27120,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneClimova"
+     "zoneName": "Klimov Shopping Mall"
     },
     {
      "position": {
@@ -27681,7 +27681,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneClimova"
+     "zoneName": "Klimov Shopping Mall"
     },
     {
      "position": {
@@ -28027,7 +28027,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneCarShowroom"
+     "zoneName": "Car Dealership"
     },
     {
      "position": {
@@ -28105,7 +28105,7 @@
   },
   {
    "id": "59fc81d786f774390775787e",
-   "name": "59fc81d786f774390775787e Name",
+   "name": "Night Factory",
    "normalizedName": "night-factory",
    "wiki": "https://escapefromtarkov.fandom.com/wiki/Factory",
    "calibration": {
@@ -28198,7 +28198,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -28213,7 +28213,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -28256,7 +28256,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -28271,7 +28271,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -28342,7 +28342,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -28357,7 +28357,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -28386,7 +28386,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -28401,7 +28401,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -28472,7 +28472,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -28557,7 +28557,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -28628,7 +28628,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -28671,7 +28671,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -28728,7 +28728,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -28785,7 +28785,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -28800,7 +28800,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -28872,7 +28872,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -28887,7 +28887,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -28916,7 +28916,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -28987,7 +28987,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -29058,7 +29058,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -29200,7 +29200,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -29355,7 +29355,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -29468,7 +29468,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -29497,7 +29497,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -29526,7 +29526,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -29541,7 +29541,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -29556,7 +29556,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -29613,7 +29613,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -29628,7 +29628,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -29756,7 +29756,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -29771,7 +29771,7 @@
       "player",
       "bot"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -29786,7 +29786,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "BotZone"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -29806,7 +29806,7 @@
   },
   {
    "id": "5b0fc42d86f7744a585f9105",
-   "name": "5b0fc42d86f7744a585f9105 Name",
+   "name": "The Lab",
    "normalizedName": "the-lab",
    "wiki": "https://escapefromtarkov.fandom.com/wiki/The_Lab",
    "spawns": [
@@ -30794,7 +30794,7 @@
   },
   {
    "id": "653e6760052c01c1c805532f",
-   "name": "653e6760052c01c1c805532f Name",
+   "name": "Ground Zero",
    "normalizedName": "ground-zero",
    "wiki": "https://escapefromtarkov.fandom.com/wiki/Ground_Zero",
    "calibration": {
@@ -30831,7 +30831,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -30861,7 +30861,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -30890,7 +30890,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -30906,7 +30906,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -30936,7 +30936,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -30952,7 +30952,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -30996,7 +30996,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31012,7 +31012,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31027,7 +31027,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31071,7 +31071,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31087,7 +31087,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31103,7 +31103,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31132,7 +31132,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31190,7 +31190,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31206,7 +31206,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31221,7 +31221,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31251,7 +31251,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31267,7 +31267,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31283,7 +31283,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31298,7 +31298,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31314,7 +31314,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31330,7 +31330,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31360,7 +31360,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31376,7 +31376,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31406,7 +31406,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31436,7 +31436,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31466,7 +31466,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31496,7 +31496,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31596,7 +31596,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31640,7 +31640,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31684,7 +31684,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31700,7 +31700,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31758,7 +31758,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31816,7 +31816,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31846,7 +31846,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31890,7 +31890,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31905,7 +31905,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31920,7 +31920,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31950,7 +31950,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31966,7 +31966,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -31996,7 +31996,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32068,7 +32068,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32083,7 +32083,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32253,7 +32253,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32310,7 +32310,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32325,7 +32325,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32355,7 +32355,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32412,7 +32412,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32428,7 +32428,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32486,7 +32486,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32502,7 +32502,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32518,7 +32518,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32534,7 +32534,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32550,7 +32550,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32580,7 +32580,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32595,7 +32595,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32625,7 +32625,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32641,7 +32641,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32685,7 +32685,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32714,7 +32714,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32730,7 +32730,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32760,7 +32760,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32804,7 +32804,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32820,7 +32820,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32835,7 +32835,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32850,7 +32850,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32866,7 +32866,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32895,7 +32895,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32925,7 +32925,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32954,7 +32954,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -32984,7 +32984,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33000,7 +33000,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33043,7 +33043,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33072,7 +33072,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33158,7 +33158,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33173,7 +33173,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33189,7 +33189,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33219,7 +33219,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33276,7 +33276,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33292,7 +33292,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33322,7 +33322,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33351,7 +33351,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33367,7 +33367,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33383,7 +33383,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33468,7 +33468,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33484,7 +33484,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33527,7 +33527,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33584,7 +33584,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33600,7 +33600,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33629,7 +33629,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33645,13 +33645,13 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     }
    ]
   },
   {
    "id": "65b8d6f5cdde2479cb2a3125",
-   "name": "65b8d6f5cdde2479cb2a3125 Name",
+   "name": "Ground Zero 21+",
    "normalizedName": "ground-zero-21",
    "wiki": "https://escapefromtarkov.fandom.com/wiki/Ground_Zero",
    "calibration": {
@@ -33716,7 +33716,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33732,7 +33732,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33762,7 +33762,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33778,7 +33778,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33807,7 +33807,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33837,7 +33837,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33853,7 +33853,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33868,7 +33868,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33884,7 +33884,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33899,7 +33899,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33928,7 +33928,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -33958,7 +33958,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34002,7 +34002,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34017,7 +34017,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34061,7 +34061,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34091,7 +34091,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34107,7 +34107,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34122,7 +34122,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34137,7 +34137,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34167,7 +34167,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34183,7 +34183,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34213,7 +34213,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34229,7 +34229,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34272,7 +34272,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34288,7 +34288,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34360,7 +34360,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34375,7 +34375,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34433,7 +34433,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34476,7 +34476,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34492,7 +34492,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34536,7 +34536,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34551,7 +34551,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34581,7 +34581,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34611,7 +34611,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34627,7 +34627,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34657,7 +34657,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34729,7 +34729,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34745,7 +34745,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34803,7 +34803,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34861,7 +34861,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34904,7 +34904,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34920,7 +34920,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34936,7 +34936,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -34951,7 +34951,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35093,7 +35093,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35136,7 +35136,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35152,7 +35152,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35182,7 +35182,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35226,7 +35226,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35242,7 +35242,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35257,7 +35257,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35329,7 +35329,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35372,7 +35372,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35401,7 +35401,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35445,7 +35445,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35474,7 +35474,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35518,7 +35518,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35534,7 +35534,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35549,7 +35549,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35565,7 +35565,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35609,7 +35609,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35639,7 +35639,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35655,7 +35655,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35671,7 +35671,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35701,7 +35701,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35787,7 +35787,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35802,7 +35802,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35832,7 +35832,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35876,7 +35876,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35919,7 +35919,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35949,7 +35949,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35964,7 +35964,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -35994,7 +35994,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -36010,7 +36010,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -36026,7 +36026,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -36055,7 +36055,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -36099,7 +36099,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -36143,7 +36143,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -36159,7 +36159,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -36189,7 +36189,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -36219,7 +36219,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -36276,7 +36276,7 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -36292,7 +36292,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -36308,7 +36308,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -36352,7 +36352,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -36396,7 +36396,7 @@
       "bot",
       "boss"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     },
     {
      "position": {
@@ -36425,13 +36425,13 @@
       "player",
       "botpmc"
      ],
-     "zoneName": "ZoneSandbox"
+     "zoneName": "Any scav spawn"
     }
    ]
   },
   {
    "id": "65cc8f81a9aac3e77d0cfd3e",
-   "name": "65cc8f81a9aac3e77d0cfd3e Name",
+   "name": "Terminal",
    "normalizedName": "terminal",
    "wiki": "https://escapefromtarkov.fandom.com/wiki/Terminal",
    "calibration": {
@@ -36529,7 +36529,7 @@
   },
   {
    "id": "6733700029c367a3d40b02af",
-   "name": "6733700029c367a3d40b02af Name",
+   "name": "The Labyrinth",
    "normalizedName": "the-labyrinth",
    "wiki": "https://escapefromtarkov.fandom.com/wiki/The_Labyrinth",
    "spawns": [
@@ -36607,7 +36607,7 @@
   },
   {
    "id": "68236e8153654e8c1200798a",
-   "name": "68236e8153654e8c1200798a Name",
+   "name": "Ground Zero Tutorial",
    "normalizedName": "ground-zero-tutorial",
    "wiki": "https://escapefromtarkov.fandom.com/wiki/Ground_Zero",
    "spawns": [
@@ -36629,7 +36629,7 @@
   },
   {
    "id": "69af492a4819ea4ba10a69c5",
-   "name": "69af492a4819ea4ba10a69c5 Name",
+   "name": "Icebreaker",
    "normalizedName": "icebreaker",
    "wiki": "https://escapefromtarkov.fandom.com/wiki/Icebreaker",
    "spawns": [
@@ -36665,7 +36665,7 @@
   },
   {
    "id": "6a294a5b5eb5f9a1700417b7",
-   "name": "6a294a5b5eb5f9a1700417b7 Name",
+   "name": "The Lab (Dark)",
    "normalizedName": "the-lab-dark",
    "wiki": "https://escapefromtarkov.fandom.com/wiki/The_Lab",
    "spawns": [
