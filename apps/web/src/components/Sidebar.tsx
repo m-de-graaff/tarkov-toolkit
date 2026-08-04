@@ -1,3 +1,7 @@
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 import { snapshot } from '@raidplanner/data';
 import { useMemo } from 'react';
 import { isAvailable } from '../lib/availability';
@@ -39,42 +43,61 @@ export function Sidebar() {
   );
 
   return (
-    <nav className="sidebar" aria-label="Raid planning">
-      <h1>Tarkov Raid Planner</h1>
+    <nav
+      className="sidebar flex h-full min-w-0 flex-col gap-1 overflow-y-auto bg-card p-4"
+      aria-label="Raid planning"
+    >
+      <h1 className="mb-2 text-lg font-bold uppercase tracking-widest text-primary">
+        Tarkov Raid Planner
+      </h1>
       <TrackerBar />
 
-      <h2>Map</h2>
-      <div className="map-picker" role="group" aria-label="Choose a map">
+      <h2 className="mb-2 mt-4 text-xs uppercase tracking-widest text-muted-foreground">Map</h2>
+      <div className="grid min-w-0 grid-cols-2 gap-1.5" role="group" aria-label="Choose a map">
         {renderableMaps.map((map) => (
-          <button
+          <Button
             key={map.id}
             type="button"
-            className={`map-button${map.id === selectedMapId ? ' selected' : ''}`}
+            variant="outline"
+            className={cn(
+              'h-auto min-w-0 justify-between gap-1.5 px-2.5 py-2 text-[13px]',
+              map.id === selectedMapId && 'border-primary bg-accent text-primary',
+            )}
             aria-pressed={map.id === selectedMapId}
             onClick={() => selectMap(map.id)}
           >
-            {map.name}
-            <span className="badge badge-count" title="Open quests on this map">
-              {openCounts.get(map.id) ?? 0}
+            <span className="truncate" title={map.name}>
+              {map.name}
             </span>
-          </button>
+            <Badge
+              variant="outline"
+              className="badge-count shrink-0 border-primary/50 px-1.5 text-primary tabular-nums"
+              title="Open quests on this map"
+            >
+              {openCounts.get(map.id) ?? 0}
+            </Badge>
+          </Button>
         ))}
       </div>
 
-      <h2>Quests</h2>
-      <div className="quest-filters">
-        <input
+      <h2 className="mb-2 mt-4 text-xs uppercase tracking-widest text-muted-foreground">
+        Quests
+      </h2>
+      <div className="mb-2 flex min-w-0 flex-wrap items-center gap-2.5">
+        <Input
           type="search"
           placeholder="Search quests…"
           aria-label="Search quests"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          className="h-8 min-w-32 flex-1"
         />
-        <label className="only-available">
+        <label className="flex shrink-0 items-center gap-1.5 text-xs text-muted-foreground">
           <input
             type="checkbox"
             checked={onlyAvailable}
             onChange={(e) => setOnlyAvailable(e.target.checked)}
+            className="size-4 accent-primary"
           />
           <span>Only available</span>
         </label>
@@ -83,7 +106,9 @@ export function Sidebar() {
       {selectedMapId ? (
         <QuestList entries={entries} />
       ) : (
-        <p className="empty-note">Pick a map to see its quests.</p>
+        <p className="empty-note text-[13px] text-muted-foreground">
+          Pick a map to see its quests.
+        </p>
       )}
 
       <AnywhereQuestList tasks={anywhere} />

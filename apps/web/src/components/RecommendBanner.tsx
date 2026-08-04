@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import { snapshot } from '@raidplanner/data';
 import { useMemo } from 'react';
 import { recommendMaps } from '../lib/recommend';
@@ -13,12 +14,19 @@ export function RecommendBanner() {
   if (top.length === 0 || top[0].mapId === selectedMapId) return null;
 
   return (
-    <div className="recommend-banner">
+    <div className="recommend-banner flex flex-wrap items-center gap-2 text-[13px] text-muted-foreground">
       <span>Best maps for your open quests:</span>
       {top.map((score) => (
-        <button key={score.mapId} type="button" onClick={() => selectMap(score.mapId)}>
+        <Button
+          key={score.mapId}
+          type="button"
+          variant="outline"
+          size="sm"
+          className="h-7 border-primary/50 text-xs text-primary tabular-nums hover:border-primary"
+          onClick={() => selectMap(score.mapId)}
+        >
           {score.mapName} ({score.availableQuestCount})
-        </button>
+        </Button>
       ))}
     </div>
   );

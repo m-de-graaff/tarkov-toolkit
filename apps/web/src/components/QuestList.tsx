@@ -1,4 +1,8 @@
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import type { RpTask } from '@raidplanner/data';
+import { Check } from 'lucide-react';
 import { isAvailable } from '../lib/availability';
 import type { MapQuestEntry } from '../lib/questIndex';
 import { usePlanner } from '../store';
@@ -6,15 +10,19 @@ import { usePlanner } from '../store';
 function RelationBadge({ entry }: { entry: MapQuestEntry }) {
   if (entry.relation === 'map-locked') {
     return (
-      <span className="badge badge-map" title="Can only be done on this map">
+      <Badge className="badge-map shrink-0" title="Can only be done on this map">
         MAP
-      </span>
+      </Badge>
     );
   }
   return (
-    <span className="badge badge-multi" title="Can also be advanced on other maps">
+    <Badge
+      variant="outline"
+      className="badge-multi shrink-0 text-muted-foreground"
+      title="Can also be advanced on other maps"
+    >
       MULTI
-    </span>
+    </Badge>
   );
 }
 
@@ -33,35 +41,63 @@ function QuestRow({
   const toggleCompleted = usePlanner((s) => s.toggleCompleted);
 
   return (
-    <li className={`quest-row${completed ? ' completed' : ''}`}>
+    <li
+      className={cn(
+        'quest-row flex min-h-8 items-center gap-2 rounded-sm px-1 py-1 hover:bg-secondary/60',
+        completed && 'completed',
+      )}
+    >
       {badge ? (
-        <label className="quest-select">
+        <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-2">
           <input
             type="checkbox"
             checked={selected}
             onChange={() => toggleTask(task.id)}
             aria-label={`Plan ${task.name}`}
+            className="size-4 shrink-0 accent-primary"
           />
-          <span className="quest-name">{task.name}</span>
+          <span
+            className={cn(
+              'quest-name truncate text-[13px]',
+              completed && 'text-muted-foreground line-through',
+            )}
+            title={task.name}
+          >
+            {task.name}
+          </span>
         </label>
       ) : (
-        <span className="quest-name quest-select">{task.name}</span>
+        <span
+          className={cn(
+            'quest-name min-w-0 flex-1 truncate text-[13px]',
+            completed && 'text-muted-foreground line-through',
+          )}
+          title={task.name}
+        >
+          {task.name}
+        </span>
       )}
       {badge && <RelationBadge entry={badge} />}
       {locatedCount > 0 && (
-        <span className="badge badge-count" title="Objectives with a known location on this map">
+        <Badge
+          variant="outline"
+          className="badge-count shrink-0 border-primary/50 text-primary tabular-nums"
+          title="Objectives with a known location on this map"
+        >
           {locatedCount}
-        </span>
+        </Badge>
       )}
-      <button
+      <Button
         type="button"
-        className="done-toggle"
+        variant={completed ? 'default' : 'outline'}
+        size="icon"
+        className={cn('size-6 shrink-0', completed && 'bg-ok text-white hover:bg-ok/90')}
         aria-pressed={completed}
         title={completed ? 'Mark as not done' : 'Mark as done'}
         onClick={() => toggleCompleted(task.id)}
       >
-        ✓
-      </button>
+        <Check aria-hidden="true" className="size-3.5" />
+      </Button>
     </li>
   );
 }
@@ -85,15 +121,15 @@ export function QuestList({ entries }: { entries: MapQuestEntry[] }) {
   }
 
   if (visible.length === 0) {
-    return <p className="empty-note">No quests match the current filters.</p>;
+    return <p className="empty-note text-[13px] text-muted-foreground">No quests match the current filters.</p>;
   }
 
   return (
     <div className="quest-list">
       {[...byTrader.entries()].map(([trader, list]) => (
         <section key={trader} aria-label={`${trader} quests`}>
-          <h3>{trader}</h3>
-          <ul>
+          <h3 className="mb-1 mt-3 text-[13px] font-semibold text-primary/70">{trader}</h3>
+          <ul className="m-0 list-none p-0">
             {list.map((entry) => (
               <QuestRow
                 key={entry.task.id}
@@ -124,9 +160,11 @@ export function AnywhereQuestList({ tasks }: { tasks: RpTask[] }) {
   });
 
   return (
-    <details className="anywhere">
-      <summary>Anywhere quests ({visible.length})</summary>
-      <ul>
+    <details className="anywhere mt-4">
+      <summary className="cursor-pointer text-[13px] text-muted-foreground">
+        Anywhere quests ({visible.length})
+      </summary>
+      <ul className="m-0 list-none p-0">
         {visible.map((task) => (
           <QuestRow key={task.id} task={task} locatedCount={0} />
         ))}

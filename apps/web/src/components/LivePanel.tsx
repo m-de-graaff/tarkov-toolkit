@@ -1,3 +1,5 @@
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import type { LiveWatcher } from '../lib/useLiveWatcher';
 import { usePlanner } from '../store';
@@ -17,9 +19,11 @@ function FixAge() {
     return () => clearInterval(id);
   }, [receivedAt]);
 
-  if (!liveFix || receivedAt === null) return <span className="live-age">no fix yet</span>;
+  if (!liveFix || receivedAt === null) {
+    return <span className="text-xs text-muted-foreground">no fix yet</span>;
+  }
   const seconds = Math.max(0, Math.round((Date.now() - receivedAt) / 1000));
-  return <span className="live-age">fix {seconds}s ago</span>;
+  return <span className="text-xs text-muted-foreground tabular-nums">fix {seconds}s ago</span>;
 }
 
 export function LivePanel({
@@ -30,21 +34,34 @@ export function LivePanel({
   outOfBounds: boolean;
 }) {
   if (!watcher.supported) {
-    return <span className="live-unsupported">Live mode needs Chrome or Edge</span>;
+    return (
+      <span className="text-xs text-muted-foreground">Live mode needs Chrome or Edge</span>
+    );
   }
   return (
-    <div className="live-panel">
-      <span className={`live-dot${watcher.connected ? ' on' : ''}`} aria-hidden="true" />
-      <button
+    <div className="live-panel flex flex-wrap items-center gap-2 text-[13px]">
+      <span
+        className={cn(
+          'size-2 shrink-0 rounded-full',
+          watcher.connected ? 'bg-ok' : 'bg-muted-foreground',
+        )}
+        aria-hidden="true"
+      />
+      <Button
         type="button"
+        variant="outline"
+        size="sm"
+        className="h-7 text-xs"
         onClick={() => (watcher.connected ? watcher.disconnect() : void watcher.connect())}
       >
         {watcher.connected ? 'Disconnect live' : 'Connect screenshots folder'}
-      </button>
+      </Button>
       {watcher.connected && <FixAge />}
-      {watcher.error && <span className="live-error">{watcher.error}</span>}
+      {watcher.error && <span className="text-xs text-destructive">{watcher.error}</span>}
       {outOfBounds && (
-        <span className="live-error">Position is outside this map — wrong map selected?</span>
+        <span className="text-xs text-destructive">
+          Position is outside this map — wrong map selected?
+        </span>
       )}
     </div>
   );

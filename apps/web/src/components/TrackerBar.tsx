@@ -1,3 +1,11 @@
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import type { TrackerState } from '../lib/availability';
 import { usePlanner } from '../store';
 
@@ -9,31 +17,40 @@ export function TrackerBar() {
   const setFaction = usePlanner((s) => s.setFaction);
 
   return (
-    <div className="tracker-bar">
-      <label className="field">
+    <div className="flex items-end gap-3">
+      <label className="flex flex-col gap-1 text-xs text-muted-foreground">
         <span>Level</span>
-        <input
+        <Input
           type="number"
           min={1}
           max={79}
           value={tracker.level}
           onChange={(e) => setLevel(Number(e.target.value) || 1)}
+          className="h-8 w-20 tabular-nums"
         />
       </label>
-      <label className="field">
+      <label className="flex flex-col gap-1 text-xs text-muted-foreground">
         <span>Faction</span>
-        <select
+        <Select
           value={tracker.faction}
-          onChange={(e) => setFaction(e.target.value as TrackerState['faction'])}
+          onValueChange={(v) => setFaction(v as TrackerState['faction'])}
         >
-          {FACTIONS.map((f) => (
-            <option key={f} value={f}>
-              {f}
-            </option>
-          ))}
-        </select>
+          <SelectTrigger className="h-8 w-24" aria-label="Faction">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {FACTIONS.map((f) => (
+              <SelectItem key={f} value={f}>
+                {f}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </label>
-      <span className="tracker-count" title="Quests marked as done">
+      <span
+        className="ml-auto pb-1 text-xs text-muted-foreground tabular-nums"
+        title="Quests marked as done"
+      >
         {tracker.completedTaskIds.length} done
       </span>
     </div>

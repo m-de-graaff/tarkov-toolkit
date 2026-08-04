@@ -1,8 +1,16 @@
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import type { GamePosition, RpMap, RpSpawn } from '@raidplanner/data';
 import { useMemo } from 'react';
 import { usePlanner } from '../store';
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}/i;
+const NONE = '__none__';
 
 export interface SpawnOption {
   key: string;
@@ -59,32 +67,37 @@ export function SpawnPicker({ map }: { map: RpMap }) {
   const options = useMemo(() => spawnOptions(map), [map]);
 
   const currentKey =
-    spawn?.kind === 'zone' ? spawn.zoneName : spawn?.kind === 'custom' ? 'custom' : '';
+    spawn?.kind === 'zone' ? spawn.zoneName : spawn?.kind === 'custom' ? 'custom' : NONE;
 
   return (
-    <label className="spawn-picker">
+    <label className="spawn-picker flex items-center gap-2 text-[13px] text-muted-foreground">
       <span>Spawn</span>
-      <select
+      <Select
         value={currentKey}
-        onChange={(e) => {
-          const option = options.find((o) => o.key === e.target.value);
+        onValueChange={(value) => {
+          const option = options.find((o) => o.key === value);
           setSpawn(
             option ? { kind: 'zone', zoneName: option.key, position: option.position } : null,
           );
         }}
       >
-        <option value="">— none (or click the map) —</option>
-        {spawn?.kind === 'custom' && (
-          <option value="custom">
-            Custom ({spawn.position.x.toFixed(0)}, {spawn.position.z.toFixed(0)})
-          </option>
-        )}
-        {options.map((o) => (
-          <option key={o.key} value={o.key}>
-            {o.label}
-          </option>
-        ))}
-      </select>
+        <SelectTrigger className="h-8 max-w-56" aria-label="Spawn point">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value={NONE}>— none (or click the map) —</SelectItem>
+          {spawn?.kind === 'custom' && (
+            <SelectItem value="custom">
+              Custom ({spawn.position.x.toFixed(0)}, {spawn.position.z.toFixed(0)})
+            </SelectItem>
+          )}
+          {options.map((o) => (
+            <SelectItem key={o.key} value={o.key}>
+              {o.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </label>
   );
 }

@@ -99,25 +99,29 @@ export function App() {
   }, [stops, route, spawn, liveFix]);
 
   return (
-    <div className="app">
-      <Sidebar />
-      <main>
+    <div className="app grid h-screen grid-cols-[340px_1fr_auto]">
+      <div className="min-w-0 border-r">
+        <Sidebar />
+      </div>
+      <main className="relative flex min-w-0 flex-col">
         {map?.calibration ? (
           <>
-            <div className="map-toolbar">
+            <div className="flex flex-wrap items-center gap-4 border-b bg-card px-3 py-2">
               <SpawnPicker map={map} />
               <LivePanel watcher={watcher} outOfBounds={outOfBounds} />
               <RecommendBanner />
             </div>
-            <MapCanvas
-              map={map}
-              markers={markers}
-              route={route}
-              onMapClick={(p) => setSpawn({ kind: 'custom', position: p })}
-            />
+            <div className="min-h-0 flex-1">
+              <MapCanvas
+                map={map}
+                markers={markers}
+                route={route}
+                onMapClick={(p) => setSpawn({ kind: 'custom', position: p })}
+              />
+            </div>
           </>
         ) : (
-          <div className="map-placeholder">
+          <div className="flex h-full items-center justify-center text-lg text-muted-foreground">
             {map
               ? 'No offline map is available for this location yet.'
               : 'Select a map to begin planning.'}
@@ -125,12 +129,14 @@ export function App() {
         )}
       </main>
       {map?.calibration && (
-        <RoutePanel
-          route={route}
-          originPosition={routeOrigin}
-          originLabel={liveFix ? 'live position' : 'spawn'}
-          hasSelection={selectedTaskIds.length > 0}
-        />
+        <div className="w-72 border-l">
+          <RoutePanel
+            route={route}
+            originPosition={routeOrigin}
+            originLabel={liveFix ? 'live position' : 'spawn'}
+            hasSelection={selectedTaskIds.length > 0}
+          />
+        </div>
       )}
     </div>
   );
