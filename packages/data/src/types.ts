@@ -173,4 +173,6 @@ export interface Snapshot {
   crafts: RpCraft[];
   /** names/icons for every item id referenced by quests, hideout, barters, crafts */
   itemsLite: Record<string, ItemLite>;
+  /** trader id -> display name */
+  traders: Record<string, string>;
 }

@@ -100,7 +100,7 @@ describe('planner store', () => {
     });
   });
 
-  it('persists state except the search box and live fix', () => {
+  it('persists state except the search box and live fix', async () => {
     usePlanner.getState().setSearch('sniper');
     usePlanner.getState().setLevel(42);
     usePlanner.getState().setLiveFix({
@@ -109,6 +109,8 @@ describe('planner store', () => {
       takenAt: null,
       raw: 'x (0).png',
     });
+    // persistence is async now (IndexedDB adapter; localStorage fallback in jsdom)
+    await new Promise((resolve) => setTimeout(resolve, 0));
     const persisted = JSON.parse(localStorage.getItem('raidplanner-v1') ?? '{}');
     expect(persisted.state.tracker.level).toBe(42);
     expect(persisted.state.search).toBeUndefined();

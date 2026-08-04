@@ -412,6 +412,7 @@ async function main() {
     barters,
     crafts,
     itemsLite,
+    traders: Object.fromEntries(traderNames),
   };
   await mkdir(generatedDir, { recursive: true });
   await writeFile(

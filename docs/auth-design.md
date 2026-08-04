@@ -26,3 +26,20 @@ also keeps the "no account needed" promise on the home page true for local use.
    local-only today) and a Vercel account.
 
 Say the word on 1–3 and the implementation is a normal planned feature.
+
+## Sync contract (implemented client-side already)
+
+Local persistence is layered: zustand persists synchronously to localStorage
+(the hot store), and an IndexedDB mirror (`raidplanner-state`/`kv`) holds the
+durable database copy — restored at boot when localStorage is missing, written
+behind on change (see `apps/web/src/lib/storage.ts`; async-primary persistence
+was tried and reverted — it broke store→React notifications). The mirrored
+JSON value is the sync unit for the hosted version:
+
+- `PUT /api/progress` pushes `{version, state}` (debounced on change);
+  `GET /api/progress` pulls on sign-in.
+- Conflict rule: per game-mode profile, last-write-wins on scalars
+  (level, faction, hideout levels take the newer write), set-union on
+  `completedTaskIds` (a quest completed on either device stays completed).
+- The same zustand `migrate` versioning applies server-side payloads, so old
+  clients can always be upgraded on read.

@@ -111,8 +111,8 @@ export function HomePage() {
           />
           <ToolCard
             to="/market"
-            title="Market"
-            description={`${snapshot.barters.length} barters and ${snapshot.crafts.length} crafts ranked by profit at live flea prices.`}
+            title="Profit"
+            description={`Trader resells, barter flips, and crafts ranked by profit — per PvP/PvE economy.`}
           />
         </section>
 

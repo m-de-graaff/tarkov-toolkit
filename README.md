@@ -23,7 +23,7 @@ persisted store are all in place for it).
 - **Hideout tracker** — station levels with next-upgrade requirements.
 - **Items to keep** — aggregated hand-ins from open quests + next hideout levels (FIR-aware).
 - **Ammo chart** — 199 rounds, pen tiers, offline.
-- **Market** — 789 barters and 214 crafts ranked by profit at cached live flea prices (the second runtime network use, user-triggered).
+- **Profit** — categorized money-makers per PvP/PvE economy: trader resells (buy from Fence & co, sell on flea), barter flips, and crafts by profit/hour — at cached live prices (user-triggered fetch per mode).
 - **Companion log automation** — entering a raid selects the map; finishing a quest ticks itself off.
 - **PvP / PvE toggle** — separate progress profiles per game mode (as in game);
   the quest set adjusts to mode-exclusive quests automatically.

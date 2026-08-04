@@ -121,6 +121,7 @@ export const fixtureSnapshot: Snapshot = {
     'item-wires': { name: 'Bundle of wires', shortName: 'Wires' },
     'item-alt': { name: 'Alternative item', shortName: 'Alt' },
   },
+  traders: { 'trader-1': 'Prapor' },
   maps: [
     {
       id: 'map-a',
