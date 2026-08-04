@@ -41,10 +41,10 @@
 - Modify: `TrackerBar.tsx`, `Sidebar.tsx`, `QuestList.tsx`, `SpawnPicker.tsx`, `LivePanel.tsx`, `RecommendBanner.tsx`, `RoutePanel.tsx`, `Footer.tsx`, `App.tsx`
 - Delete: `styles.css` (leaflet/marker layer moved into `index.css`)
 
-- [ ] **Step 1:** Replace hand-rolled controls: Button (map picker buttons → `variant="outline"` with selected state, done-toggle → icon Button `size="icon-sm"` with Check icon, recommend/live buttons), Input (level, search), shadcn Select (faction, spawn picker), Checkbox (quest select, only-available), Badge (MAP/MULTI/count — keep `.badge-map` class hook). Quest rows keep `.quest-row` class + ellipsis truncation + `title` attr (fixes cut-off names).
-- [ ] **Step 2:** Move surviving custom CSS (markers, `.map-canvas`, leaflet tweaks, reduced-motion block) into `index.css`; delete `styles.css`; remove its import.
-- [ ] **Step 3:** Full test suite + `tsc` + build green (fix any selector drift — tests may need shadcn Checkbox rendering `input[type=checkbox]`? shadcn Checkbox is a Radix button — **keep native checkboxes** for quest rows styled with Tailwind classes instead, to preserve semantics and the test contract).
-- [ ] **Step 4: Commit** (`refactor(web): restyle components on tailwind + shadcn`).
+- [x] **Step 1:** Replace hand-rolled controls: Button (map picker buttons → `variant="outline"` with selected state, done-toggle → icon Button `size="icon-sm"` with Check icon, recommend/live buttons), Input (level, search), shadcn Select (faction, spawn picker), Checkbox (quest select, only-available), Badge (MAP/MULTI/count — keep `.badge-map` class hook). Quest rows keep `.quest-row` class + ellipsis truncation + `title` attr (fixes cut-off names).
+- [x] **Step 2:** Move surviving custom CSS (markers, `.map-canvas`, leaflet tweaks, reduced-motion block) into `index.css`; delete `styles.css`; remove its import.
+- [x] **Step 3:** Full test suite + `tsc` + build green (fix any selector drift — tests may need shadcn Checkbox rendering `input[type=checkbox]`? shadcn Checkbox is a Radix button — **keep native checkboxes** for quest rows styled with Tailwind classes instead, to preserve semantics and the test contract).
+- [x] **Step 4: Commit** (`refactor(web): restyle components on tailwind + shadcn`).
 
 ---
 
