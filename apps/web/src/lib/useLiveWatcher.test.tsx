@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { act } from 'react';
 import { createRoot } from 'react-dom/client';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { usePlanner } from '../store';
 import type { LiveWatcher } from './useLiveWatcher';
 import { useLiveWatcher } from './useLiveWatcher';
@@ -61,6 +61,34 @@ describe('useLiveWatcher', () => {
     expect(fix).not.toBeNull();
     expect(fix!.position).toEqual({ x: 179.37, y: 18.38, z: -6.33 });
     expect(fix!.takenAt).toBe('2026-08-05[00-04]');
+  });
+
+  it('detects a screenshot that appears after connecting (the watch path)', async () => {
+    const names: string[] = ['inventory.png'];
+    (window as { showDirectoryPicker?: unknown }).showDirectoryPicker = async () =>
+      fakeDirectoryHandle(names);
+
+    vi.useFakeTimers();
+    try {
+      act(() => root.render(<HookHarness onReady={(w) => (watcher = w)} />));
+      await act(async () => {
+        await watcher.connect();
+      });
+      expect(usePlanner.getState().liveFix).toBeNull();
+
+      // a screenshot lands in the folder mid-raid…
+      names.push(SHOT_OLD);
+      // …and the next 2s poll must pick it up
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(2100);
+      });
+
+      const fix = usePlanner.getState().liveFix;
+      expect(fix).not.toBeNull();
+      expect(fix!.position).toEqual({ x: 179.37, y: 18.38, z: -6.33 });
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('sets no fix when the folder has no screenshots yet', async () => {

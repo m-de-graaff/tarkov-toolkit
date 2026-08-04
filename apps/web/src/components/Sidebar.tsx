@@ -3,12 +3,13 @@ import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { snapshot } from '@raidplanner/data';
 import { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { isAvailable } from '../lib/availability';
+import type { MapQuestEntry } from '../lib/questIndex';
 import { anywhereQuests, questsForMap } from '../lib/questIndex';
 import { usePlanner } from '../store';
 import { Footer } from './Footer';
-import { AnywhereQuestList, QuestList } from './QuestList';
-import { TrackerBar } from './TrackerBar';
+import { AnywhereQuestList, LockedQuestList, QuestList } from './QuestList';
 
 const renderableMaps = snapshot.maps
   .filter((m) => m.calibration)
@@ -29,8 +30,6 @@ export function Sidebar() {
   const selectMap = usePlanner((s) => s.selectMap);
   const search = usePlanner((s) => s.search);
   const setSearch = usePlanner((s) => s.setSearch);
-  const onlyAvailable = usePlanner((s) => s.onlyAvailable);
-  const setOnlyAvailable = usePlanner((s) => s.setOnlyAvailable);
   const tracker = usePlanner((s) => s.tracker);
 
   const openCounts = useMemo(() => {
@@ -44,9 +43,21 @@ export function Sidebar() {
     return counts;
   }, [tracker]);
 
-  const entries = useMemo(
-    () => (selectedMapId ? questsForMap(snapshot, selectedMapId) : []),
-    [selectedMapId],
+  const { open, locked } = useMemo(() => {
+    if (!selectedMapId) return { open: [] as MapQuestEntry[], locked: [] as MapQuestEntry[] };
+    const entries = questsForMap(snapshot, selectedMapId);
+    return {
+      open: entries.filter((e) => isAvailable(e.task, tracker)),
+      locked: entries.filter(
+        (e) =>
+          !isAvailable(e.task, tracker) && !tracker.completedTaskIds.includes(e.task.id),
+      ),
+    };
+  }, [selectedMapId, tracker]);
+
+  const openAnywhere = useMemo(
+    () => anywhere.filter((t) => isAvailable(t, tracker)),
+    [tracker],
   );
 
   return (
@@ -54,14 +65,6 @@ export function Sidebar() {
       className="sidebar flex h-full min-w-0 flex-col overflow-y-auto bg-card px-4 py-4"
       aria-label="Raid planning"
     >
-      <div className="flex items-baseline gap-2">
-        <h1 className="text-sm font-semibold">Raid Planner</h1>
-        <span className="text-[11px] text-muted-foreground">Escape from Tarkov</span>
-      </div>
-
-      <SectionLabel>Your progress</SectionLabel>
-      <TrackerBar />
-
       <SectionLabel>Maps</SectionLabel>
       <div className="flex flex-col" role="group" aria-label="Choose a map">
         {renderableMaps.map((map) => {
@@ -85,7 +88,7 @@ export function Sidebar() {
               </span>
               <span
                 className="badge-count shrink-0 text-xs text-muted-foreground tabular-nums"
-                title="Open quests on this map"
+                title="Quests you can work on there right now"
               >
                 {openCounts.get(map.id) ?? 0}
               </span>
@@ -94,36 +97,36 @@ export function Sidebar() {
         })}
       </div>
 
-      <SectionLabel>Quests</SectionLabel>
-      <div className="mb-2 flex min-w-0 flex-col gap-2">
-        <Input
-          type="search"
-          placeholder="Search quests…"
-          aria-label="Search quests"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="h-8"
-        />
-        <label className="flex items-center gap-2 text-xs text-muted-foreground">
-          <input
-            type="checkbox"
-            checked={onlyAvailable}
-            onChange={(e) => setOnlyAvailable(e.target.checked)}
-            className="size-4 accent-primary"
-          />
-          <span>Only show quests I can start</span>
-        </label>
-      </div>
+      <SectionLabel>Your open quests</SectionLabel>
+      <p className="mb-2 text-xs text-muted-foreground">
+        Based on your{' '}
+        <Link to="/progress" className="text-primary underline-offset-2 hover:underline">
+          progress
+        </Link>{' '}
+        (level {tracker.level}, {tracker.completedTaskIds.length} finished). Tick quests to plan
+        them on the map.
+      </p>
+      <Input
+        type="search"
+        placeholder="Search quests…"
+        aria-label="Search quests"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="mb-2 h-8"
+      />
 
       {selectedMapId ? (
-        <QuestList entries={entries} />
+        <>
+          <QuestList entries={open} />
+          <LockedQuestList entries={locked} />
+        </>
       ) : (
         <p className="empty-note rounded-md border border-dashed p-3 text-[13px] text-muted-foreground">
           Pick a map above to see every quest you can work on there.
         </p>
       )}
 
-      <AnywhereQuestList tasks={anywhere} />
+      <AnywhereQuestList tasks={openAnywhere} />
       <Separator className="mt-6" />
       <Footer />
     </nav>

@@ -12,7 +12,9 @@ and get the objectives plus an optimized route drawn on an interactive map.
 - **Quest sidebar** — quests grouped by trader, badged as `MAP` (only doable on
   this map) or `MULTI` (also doable elsewhere), with search and an
   "only available" filter driven by your tracker state.
-- **Quest tracker** — set your level and faction, tick quests as done; state
+- **Progress page** — a built-in quest tracker (like TarkovTracker): set level
+  and faction, tick off finished quests; the planner sidebar then always shows
+  exactly the quests you have open. State
   persists in the browser (localStorage). Prerequisite chains and level gates
   determine what counts as *available*.
 - **Objective markers** — selected quests drop markers at the exact objective

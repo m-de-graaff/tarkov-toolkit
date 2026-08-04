@@ -13,7 +13,6 @@ interface PlannerState {
   selectedTaskIds: string[];
   spawn: SpawnChoice | null;
   tracker: TrackerState;
-  onlyAvailable: boolean;
   search: string;
   liveFix: LiveFix | null;
   setLiveFix(f: LiveFix | null): void;
@@ -24,7 +23,7 @@ interface PlannerState {
   setLevel(n: number): void;
   setFaction(f: TrackerState['faction']): void;
   toggleCompleted(taskId: string): void;
-  setOnlyAvailable(b: boolean): void;
+  resetProgress(): void;
   setSearch(s: string): void;
 }
 
@@ -35,7 +34,6 @@ export const usePlanner = create<PlannerState>()(
       selectedTaskIds: [],
       spawn: null,
       tracker: { level: 15, faction: 'Any', completedTaskIds: [] },
-      onlyAvailable: true,
       search: '',
       liveFix: null,
       setLiveFix: (liveFix) => set({ liveFix }),
@@ -59,7 +57,8 @@ export const usePlanner = create<PlannerState>()(
               : [...s.tracker.completedTaskIds, taskId],
           },
         })),
-      setOnlyAvailable: (onlyAvailable) => set({ onlyAvailable }),
+      resetProgress: () =>
+        set({ tracker: { level: 1, faction: 'Any', completedTaskIds: [] } }),
       setSearch: (search) => set({ search }),
     }),
     {

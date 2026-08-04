@@ -60,12 +60,13 @@ export function LivePanel({
       />
       <Button
         type="button"
-        variant="outline"
+        variant={watcher.connected ? 'outline' : 'default'}
         size="sm"
         className="h-7 text-xs"
+        title="Pick your Documents → Escape from Tarkov → Screenshots folder once; after that, pressing PrtScn in raid shows where you are"
         onClick={() => (watcher.connected ? watcher.disconnect() : void watcher.connect())}
       >
-        {watcher.connected ? 'Disconnect live' : 'Connect screenshots folder'}
+        {watcher.connected ? 'Stop showing my position' : 'Show my position'}
       </Button>
       {watcher.connected && <FixAge />}
       {watcher.error && <span className="text-xs text-destructive">{watcher.error}</span>}
