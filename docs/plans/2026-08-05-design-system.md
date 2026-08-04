@@ -27,11 +27,11 @@
 - Create: `apps/web/src/index.css` (tailwind import + `@theme` palette + shadcn vars + trimmed custom layer), `apps/web/components.json`, `apps/web/src/lib/utils.ts` (`cn()`)
 - Delete (end of Task 2): `apps/web/src/styles.css`
 
-- [ ] **Step 1:** `pnpm --filter @raidplanner/web add tailwindcss @tailwindcss/vite tw-animate-css class-variance-authority clsx tailwind-merge lucide-react` and wire `tailwindcss()` into vite plugins; add `resolve.alias { '@': '/src' }` and tsconfig `baseUrl`/`paths`.
-- [ ] **Step 2:** `index.css`: `@import 'tailwindcss'; @import 'tw-animate-css';` + `@theme inline` block mapping shadcn variables to the Tarkov palette hexes (background, foreground, card, popover, primary, secondary, muted, accent, destructive, border, input, ring, radius 0.25rem) + keep leaflet/marker/scroll custom CSS in `@layer components`. Import leaflet CSS stays in MapCanvas.
-- [ ] **Step 3:** `components.json` (style "new-york", rsc false, tsx true, tailwind css `src/index.css`, baseColor neutral, aliases `@/components`, `@/lib/utils`), `src/lib/utils.ts` with `cn()`. Then `pnpm dlx shadcn@latest add -y button input select checkbox badge sheet resizable separator` (fallback: vendor manually).
-- [ ] **Step 4:** Temporarily import `index.css` alongside `styles.css`; `pnpm build` + dev smoke (`curl` 200) green.
-- [ ] **Step 5: Commit** (`feat(web): tailwind v4 + shadcn infrastructure`).
+- [x] **Step 1:** `pnpm --filter @raidplanner/web add tailwindcss @tailwindcss/vite tw-animate-css class-variance-authority clsx tailwind-merge lucide-react` and wire `tailwindcss()` into vite plugins; add `resolve.alias { '@': '/src' }` and tsconfig `baseUrl`/`paths`.
+- [x] **Step 2:** `index.css`: `@import 'tailwindcss'; @import 'tw-animate-css';` + `@theme inline` block mapping shadcn variables to the Tarkov palette hexes (background, foreground, card, popover, primary, secondary, muted, accent, destructive, border, input, ring, radius 0.25rem) + keep leaflet/marker/scroll custom CSS in `@layer components`. Import leaflet CSS stays in MapCanvas.
+- [x] **Step 3:** `components.json` (style "new-york", rsc false, tsx true, tailwind css `src/index.css`, baseColor neutral, aliases `@/components`, `@/lib/utils`), `src/lib/utils.ts` with `cn()`. Then `pnpm dlx shadcn@latest add -y button input select checkbox badge sheet resizable separator` (fallback: vendor manually).
+- [x] **Step 4:** Temporarily import `index.css` alongside `styles.css`; `pnpm build` + dev smoke (`curl` 200) green.
+- [x] **Step 5: Commit** (`feat(web): tailwind v4 + shadcn infrastructure`).
 
 ---
 
