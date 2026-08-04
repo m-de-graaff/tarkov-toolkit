@@ -73,9 +73,9 @@
 
 ### Task 5: Verification & landing
 
-- [ ] **Step 1:** Full `pnpm test` + `pnpm build`; a11y spot-check (focus ring contrast vs palette, hit sizes on new controls, Sheet focus trap comes from Radix).
-- [ ] **Step 2:** README note (design system stack), plan ticks.
-- [ ] **Step 3:** Merge branch `feat/design-system` to main (landing pre-authorized by standing instruction).
+- [x] **Step 1:** Full `pnpm test` + `pnpm build`; a11y spot-check (focus ring contrast vs palette, hit sizes on new controls, Sheet focus trap comes from Radix).
+- [x] **Step 2:** README note (design system stack), plan ticks.
+- [x] **Step 3:** Merge branch `feat/design-system` to main (landing pre-authorized by standing instruction).
 
 ## Self-review notes
 

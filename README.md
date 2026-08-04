@@ -75,7 +75,16 @@ contributors (MIT). Escape from Tarkov is a trademark of Battlestate Games.
 ```
 apps/web        Vite + React SPA (leaflet map, planner UI)
 packages/data   snapshot script + generated typed dataset
+packages/live   screenshot-filename parsing engine (live mode)
 ```
+
+## Design system
+
+Tailwind CSS v4 (CSS-first config in `apps/web/src/index.css`) + shadcn/ui
+components vendored under `apps/web/src/components/ui/`, themed dark-only to
+the Tarkov palette via shadcn's semantic tokens. The sidebar is a draggable
+resizable panel (260–560px, persisted); below `md` the layout switches to a
+top bar with a slide-in sheet and a collapsible bottom route drawer.
 
 ## Hosting
 
