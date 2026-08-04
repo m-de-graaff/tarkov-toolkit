@@ -53,9 +53,9 @@
 **Files:**
 - Modify: `App.tsx` (ResizablePanelGroup horizontal: sidebar panel / handle / main+route), `Sidebar.tsx` (internal scroll, min-w-0 truncation)
 
-- [ ] **Step 1:** Desktop (`md+`): `ResizablePanelGroup direction="horizontal" autoSaveId="raidplanner-layout"`; sidebar `defaultSize` ≈ 25 with `minSize`/`maxSize` clamping to ~260–560px equivalent; visible grip on the handle (`withHandle`); map + route panel in the remaining panel (route as fixed-width aside inside).
-- [ ] **Step 2:** Fix overflow: toolbar `flex-wrap`, sidebar sections `min-w-0`, quest rows `truncate`.
-- [ ] **Step 3:** Suite + build green; commit (`feat(web): draggable resizable sidebar layout`).
+- [x] **Step 1:** Desktop (`md+`): `ResizablePanelGroup direction="horizontal" autoSaveId="raidplanner-layout"`; sidebar `defaultSize` ≈ 25 with `minSize`/`maxSize` clamping to ~260–560px equivalent; visible grip on the handle (`withHandle`); map + route panel in the remaining panel (route as fixed-width aside inside).
+- [x] **Step 2:** Fix overflow: toolbar `flex-wrap`, sidebar sections `min-w-0`, quest rows `truncate`.
+- [x] **Step 3:** Suite + build green; commit (`feat(web): draggable resizable sidebar layout`).
 
 ---
 
