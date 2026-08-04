@@ -225,11 +225,11 @@
   export const usePlanner: UseBoundStore<...>;  // plus vanilla export `plannerStore` for tests
   ```
 
-- [ ] **Step 1: Failing tests** (vanilla store, no React): `selectMap` resets task selection and spawn; `toggleTask` adds then removes; `toggleCompleted` round-trips; persisted partialize includes `tracker` and `selectedMapId` only-if — persist whole state minus `search`.
-- [ ] **Step 2: Run, confirm fail.**
-- [ ] **Step 3: Implement** (add deps `zustand@^4`).
-- [ ] **Step 4: Run, confirm pass.**
-- [ ] **Step 5: Commit** (`feat(web): persisted planner store`).
+- [x] **Step 1: Failing tests** (vanilla store, no React): `selectMap` resets task selection and spawn; `toggleTask` adds then removes; `toggleCompleted` round-trips; persisted partialize includes `tracker` and `selectedMapId` only-if — persist whole state minus `search`.
+- [x] **Step 2: Run, confirm fail.**
+- [x] **Step 3: Implement** (add deps `zustand@^4`).
+- [x] **Step 4: Run, confirm pass.**
+- [x] **Step 5: Commit** (`feat(web): persisted planner store`).
 
 ---
 
