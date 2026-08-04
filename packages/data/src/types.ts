@@ -63,10 +63,14 @@ export interface RpTaskRequirement {
   status: string[];
 }
 
+export type GameMode = 'pvp' | 'pve';
+
 export interface RpTask {
   id: string;
   name: string;
   normalizedName: string;
+  /** which game modes this quest exists in */
+  modes: GameMode[];
   trader: { id: string; name: string };
   /** task.map from the API: quest is locked to this map */
   mapId: string | null;

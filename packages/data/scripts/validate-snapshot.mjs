@@ -26,7 +26,15 @@ const renderable = snapshot.maps.filter(
   (m) => m.calibration && (m.calibration.svgFile || m.calibration.tiles),
 );
 check(renderable.length >= 12, `expected >= 12 renderable maps, got ${renderable.length}`);
-check(snapshot.tasks.length >= 450, `expected >= 450 tasks, got ${snapshot.tasks.length}`);
+check(snapshot.tasks.length >= 520, `expected >= 520 union tasks, got ${snapshot.tasks.length}`);
+const pvpOnly = snapshot.tasks.filter((t) => t.modes.length === 1 && t.modes[0] === 'pvp');
+const pveOnly = snapshot.tasks.filter((t) => t.modes.length === 1 && t.modes[0] === 'pve');
+check(pvpOnly.length >= 15, `expected >= 15 pvp-only tasks, got ${pvpOnly.length}`);
+check(pveOnly.length >= 15, `expected >= 15 pve-only tasks, got ${pveOnly.length}`);
+check(
+  snapshot.tasks.every((t) => Array.isArray(t.modes) && t.modes.length > 0),
+  'every task must carry a modes tag',
+);
 
 const tasksWithPoints = snapshot.tasks.filter((t) =>
   t.objectives.some((o) => o.points.length > 0),
