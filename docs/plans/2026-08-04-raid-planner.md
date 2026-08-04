@@ -273,11 +273,11 @@
 - QuestList behaviour: group by trader name; each row = checkbox (select for planning) + name + relation badge (`MAP` gold / `MULTI` dim / objective count) + "done" toggle button (marks completed in tracker, row gets strikethrough); rows filtered by `search` (case-insensitive substring on name) and `onlyAvailable` toggle; selecting a row with zero points on this map still allowed (it just adds no markers); collapsed `<details>` section "Anywhere quests" at the bottom listing `anywhereQuests` (no checkboxes, informational with done-toggle).
 - All controls keyboard-reachable; checkboxes are real `<input type="checkbox">` with `<label>`; badges have `title` text; focus outline `2px solid var(--accent)`.
 
-- [ ] **Step 1: Implement components + wire layout.** App shell: `<div class="app"><Sidebar/><main><MapCanvas .../></main></div>`, grid `340px 1fr`, sidebar scrolls independently.
-- [ ] **Step 2: Wire markers.** In `App.tsx` derive markers: for each selected task, `objectivePoints(task, selectedMapId)` → one marker per objective using the point nearest spawn (or first point when no spawn); memoized.
-- [ ] **Step 3: Verify manually** in browser: pick Customs → quest list populates with plausible quests (cross-check 2 known Customs quests, e.g. Debut/Checking); select two quests → markers appear; mark one done → disappears from available filter; reload → tracker persisted.
-- [ ] **Step 4: `pnpm build` + `pnpm test` green.**
-- [ ] **Step 5: Commit** (`feat(web): sidebar with map picker, quest list, tracker`).
+- [x] **Step 1: Implement components + wire layout.** App shell: `<div class="app"><Sidebar/><main><MapCanvas .../></main></div>`, grid `340px 1fr`, sidebar scrolls independently.
+- [x] **Step 2: Wire markers.** In `App.tsx` derive markers: for each selected task, `objectivePoints(task, selectedMapId)` → one marker per objective using the point nearest spawn (or first point when no spawn); memoized.
+- [x] **Step 3: Verify manually** in browser: pick Customs → quest list populates with plausible quests (cross-check 2 known Customs quests, e.g. Debut/Checking); select two quests → markers appear; mark one done → disappears from available filter; reload → tracker persisted.
+- [x] **Step 4: `pnpm build` + `pnpm test` green.**
+- [x] **Step 5: Commit** (`feat(web): sidebar with map picker, quest list, tracker`).
 
 ---
 
