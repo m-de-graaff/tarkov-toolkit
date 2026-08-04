@@ -22,3 +22,36 @@ body {
   color: var(--text);
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
+
+.app {
+  display: grid;
+  height: 100vh;
+}
+
+.map-canvas {
+  height: 100%;
+  width: 100%;
+  background: var(--bg);
+}
+
+.marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid var(--bg);
+  font-size: 12px;
+  font-weight: 700;
+  color: #14120f;
+}
+
+.marker.objective {
+  background: var(--accent);
+}
+
+.marker.spawn {
+  background: var(--ok);
+  color: #eef3ee;
+}
