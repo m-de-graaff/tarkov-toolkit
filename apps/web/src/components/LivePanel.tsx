@@ -37,6 +37,15 @@ function FixAge() {
   );
 }
 
+function CompanionStatus() {
+  const lastAutoEvent = usePlanner((s) => s.lastAutoEvent);
+  return (
+    <span className="live-auto text-xs text-muted-foreground">
+      {lastAutoEvent ?? 'Companion connected — raids and quests track themselves'}
+    </span>
+  );
+}
+
 export function LivePanel({
   watcher,
   outOfBounds,
@@ -52,9 +61,7 @@ export function LivePanel({
         aria-hidden="true"
       />
       {watcher.companion ? (
-        <span className="text-xs text-muted-foreground">
-          Companion app connected — screenshots show your position automatically
-        </span>
+        <CompanionStatus />
       ) : watcher.canResume ? (
         <Button
           type="button"

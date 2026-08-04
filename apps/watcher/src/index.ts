@@ -12,7 +12,8 @@ import { homedir } from 'node:os';
 import path from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import { WebSocketServer, type WebSocket } from 'ws';
-import { parseScreenshotName, pickNewestFix, type LiveFix } from '@raidplanner/live';
+import { parseScreenshotName, pickNewestFix, type LiveFix, type LogEvent } from '@raidplanner/live';
+import { detectLogsDir, startLogsWatcher } from './logsWatcher.ts';
 
 const PORT = Number(process.env.RAIDPLANNER_WATCHER_PORT ?? 17520);
 const CONFIG_FILE = path.join(homedir(), '.raidplanner-watcher.json');
@@ -78,14 +79,24 @@ const seen = new Set<string>();
 let latestFix: LiveFix | null = null;
 const clients = new Set<WebSocket>();
 
-function broadcast(fix: LiveFix) {
-  latestFix = fix;
-  const message = JSON.stringify({ type: 'fix', fix });
+function send(payload: object) {
+  const message = JSON.stringify(payload);
   for (const client of clients) {
     if (client.readyState === client.OPEN) client.send(message);
   }
+}
+
+function broadcast(fix: LiveFix) {
+  latestFix = fix;
+  send({ type: 'fix', fix });
   const { x, y, z } = fix.position;
   console.log(`Position sent: ${x}, ${y}, ${z} (${fix.raw})`);
+}
+
+function broadcastLogEvent(event: LogEvent) {
+  send(event);
+  if (event.type === 'map') console.log(`Raid detected on map: ${event.nameId}`);
+  if (event.type === 'task') console.log(`Quest ${event.status}: ${event.taskId}`);
 }
 
 async function scan(initial = false) {
@@ -130,8 +141,21 @@ try {
 }
 const interval = setInterval(() => void scan(), 2000);
 
+// Game-log automation: auto map detection + quest completion events.
+const logsDir = detectLogsDir();
+let stopLogs: (() => void) | null = null;
+if (logsDir) {
+  stopLogs = startLogsWatcher(logsDir, broadcastLogEvent);
+} else {
+  console.log(
+    'Game logs folder not found — auto map/quest detection off. ' +
+      'Set RAIDPLANNER_LOGS_DIR to enable it.',
+  );
+}
+
 process.on('SIGINT', () => {
   watcher?.close();
+  stopLogs?.();
   clearInterval(interval);
   server.close();
   process.exit(0);
