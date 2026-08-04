@@ -1,0 +1,128 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+/* Tarkov palette mapped onto shadcn semantic tokens. Dark-only by design. */
+:root {
+  --background: #0f0e0c;
+  --foreground: #c7c5b3;
+  --card: #1b1917;
+  --card-foreground: #c7c5b3;
+  --popover: #1b1917;
+  --popover-foreground: #c7c5b3;
+  --primary: #c9a96a;
+  --primary-foreground: #14120f;
+  --secondary: #2a2723;
+  --secondary-foreground: #c7c5b3;
+  --muted: #2a2723;
+  --muted-foreground: #9b9884;
+  --accent: #34301f;
+  --accent-foreground: #c9a96a;
+  --destructive: #a7452c;
+  --destructive-foreground: #f1e4dc;
+  --border: #3d382f;
+  --input: #766d5a;
+  --ring: #c9a96a;
+  --ok: #5b7c5b;
+  --route: #d4bb70;
+  --radius: 0.25rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ok: var(--ok);
+  --color-route: var(--route);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 6px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+}
+
+/* --- leaflet map + markers (hand-written layer; not tailwind-able) ------- */
+@layer components {
+  .map-canvas {
+    height: 100%;
+    width: 100%;
+    background: var(--background);
+  }
+
+  .marker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid var(--background);
+    font-size: 12px;
+    font-weight: 700;
+    color: #14120f;
+  }
+
+  .marker.objective {
+    background: var(--primary);
+  }
+
+  .marker.spawn {
+    background: var(--ok);
+    color: #eef3ee;
+  }
+
+  .marker.player {
+    background: none;
+    border: none;
+    color: var(--route);
+    font-size: 20px;
+    text-shadow: 0 0 4px #000;
+    /* glyph ➤ points east; yaw 0 = north */
+    rotate: -90deg;
+  }
+
+  .leaflet-container {
+    background: var(--background);
+    font: inherit;
+  }
+
+  .leaflet-tooltip {
+    background: var(--card);
+    border-color: var(--border);
+    color: var(--foreground);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
