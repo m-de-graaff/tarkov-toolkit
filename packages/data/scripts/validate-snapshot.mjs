@@ -82,6 +82,32 @@ for (const map of snapshot.maps) {
   }
 }
 
+check(snapshot.ammo.length >= 150, `expected >= 150 ammo rounds, got ${snapshot.ammo.length}`);
+check(
+  new Set(snapshot.ammo.map((a) => a.caliber)).size >= 20,
+  'expected >= 20 calibers',
+);
+check(
+  !snapshot.ammo.some((a) => /^[0-9a-f]{20,}/.test(a.name)),
+  'ammo names must be translated',
+);
+check(snapshot.hideout.length >= 20, `expected >= 20 hideout stations, got ${snapshot.hideout.length}`);
+check(snapshot.barters.length >= 100, `expected >= 100 barters, got ${snapshot.barters.length}`);
+check(snapshot.crafts.length >= 100, `expected >= 100 crafts, got ${snapshot.crafts.length}`);
+check(
+  snapshot.barters.filter((b) => b.traderName === 'Unknown').length < snapshot.barters.length / 10,
+  'too many barters with unknown traders',
+);
+const missingLite = [
+  ...snapshot.hideout.flatMap((s) => s.levels.flatMap((l) => l.itemRequirements.map((r) => r.itemId))),
+  ...snapshot.barters.flatMap((b) => b.requiredItems.map((s) => s.itemId)),
+].filter((id) => !snapshot.itemsLite[id]);
+check(missingLite.length === 0, `itemsLite missing ${missingLite.length} referenced items`);
+const neededCount = snapshot.tasks.filter((t) =>
+  t.objectives.some((o) => o.neededItems),
+).length;
+check(neededCount >= 100, `expected >= 100 tasks with needed items, got ${neededCount}`);
+
 if (failures.length > 0) {
   console.error(`snapshot validation FAILED:\n- ${[...new Set(failures)].join('\n- ')}`);
   process.exit(1);

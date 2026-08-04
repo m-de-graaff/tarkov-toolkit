@@ -44,9 +44,10 @@ async function fetchJson(url) {
 async function fetchTranslated(name, prefix = 'regular') {
   const [payload, en] = await Promise.all([
     fetchJson(`${JSON_BASE}${prefix}/${name}`),
-    fetchJson(`${JSON_BASE}${prefix}/${name}_en`),
+    // some datasets (barters, crafts) are pure id references with no dict
+    fetchJson(`${JSON_BASE}${prefix}/${name}_en`).catch(() => null),
   ]);
-  return applyTranslations(payload.data, en.data);
+  return en ? applyTranslations(payload.data, en.data) : payload.data;
 }
 
 // Replace any string value that is a key in the translation dict. Keys whose
@@ -216,16 +217,116 @@ function buildTasks(rawTasks, traderNames, idRemap) {
     })),
     objectives: (raw.objectives ?? [])
       .filter((obj) => !DROPPED_OBJECTIVE_TYPES.has(obj.type))
-      .map((obj) => ({
-        id: obj.id,
-        type: obj.type,
-        description: obj.description ?? '',
-        optional: obj.optional ?? false,
-        maps: [...new Set((obj.maps ?? []).map(remapId))],
-        points: buildObjectivePoints(obj, remapId),
-        ...(obj.count !== undefined ? { count: obj.count } : {}),
-      })),
+      .map((obj) => {
+        const handIn = ['giveItem', 'findItem', 'plantItem'].includes(obj.type);
+        const itemIds = handIn
+          ? (obj.items ?? (obj.item ? [obj.item] : [])).filter(Boolean)
+          : [];
+        return {
+          id: obj.id,
+          type: obj.type,
+          description: obj.description ?? '',
+          optional: obj.optional ?? false,
+          maps: [...new Set((obj.maps ?? []).map(remapId))],
+          points: buildObjectivePoints(obj, remapId),
+          ...(obj.count !== undefined ? { count: obj.count } : {}),
+          ...(itemIds.length > 0
+            ? {
+                neededItems: {
+                  itemIds,
+                  count: obj.count ?? 1,
+                  foundInRaid: obj.foundInRaid ?? false,
+                },
+              }
+            : {}),
+        };
+      }),
   }));
+}
+
+function buildAmmo(itemsData) {
+  return Object.values(itemsData.items)
+    .filter((item) => item.properties?.propertiesType === 'ItemPropertiesAmmo')
+    .map((item) => ({
+      id: item.id,
+      name: item.name,
+      shortName: item.shortName,
+      caliber: (item.properties.caliber ?? '').replace(/^Caliber/, ''),
+      damage: item.properties.damage ?? 0,
+      penetrationPower: item.properties.penetrationPower ?? 0,
+      armorDamage: item.properties.armorDamage ?? 0,
+      fragmentationChance: item.properties.fragmentationChance ?? 0,
+      initialSpeed: item.properties.initialSpeed ?? 0,
+      tracer: item.properties.tracer ?? false,
+      projectileCount: item.properties.projectileCount ?? 1,
+    }))
+    .filter((round) => round.caliber && round.damage > 0)
+    .sort((a, b) => a.caliber.localeCompare(b.caliber) || b.penetrationPower - a.penetrationPower);
+}
+
+function buildHideout(hideoutData, traderNames) {
+  return Object.values(hideoutData.hideoutStations ?? hideoutData).map((station) => ({
+    id: station.id,
+    name: station.name,
+    normalizedName: station.normalizedName,
+    levels: (station.levels ?? []).map((level) => ({
+      level: level.level,
+      constructionTime: level.constructionTime ?? 0,
+      itemRequirements: (level.itemRequirements ?? []).map((req) => ({
+        itemId: req.item,
+        count: req.count ?? 1,
+        foundInRaid: req.attributes?.foundInRaid ?? false,
+      })),
+      stationLevelRequirements: (level.stationLevelRequirements ?? []).map((req) => ({
+        stationId: req.station,
+        level: req.level,
+      })),
+      traderRequirements: (level.traderRequirements ?? []).map((req) => ({
+        traderName: traderNames.get(req.trader) ?? 'Unknown',
+        level: req.level ?? req.value ?? 1,
+      })),
+    })),
+  }));
+}
+
+const stacks = (list) =>
+  (list ?? [])
+    .filter((entry) => entry.item)
+    .map((entry) => ({ itemId: entry.item, count: entry.count ?? 1 }));
+
+function buildBarters(bartersData, traderNames) {
+  return Object.values(bartersData.barters ?? bartersData).map((barter) => ({
+    id: barter.id,
+    traderName: traderNames.get(barter.trader) ?? 'Unknown',
+    traderLevel: barter.level ?? 1,
+    requiredItems: stacks(barter.requiredItems),
+    rewardItems: stacks(barter.rewardItems),
+  }));
+}
+
+function buildCrafts(craftsData) {
+  return Object.values(craftsData.crafts ?? craftsData).map((craft) => ({
+    id: craft.id,
+    stationId: craft.station,
+    stationLevel: craft.level ?? 1,
+    durationSeconds: craft.duration ?? 0,
+    requiredItems: stacks(craft.requiredItems),
+    rewardItems: stacks(craft.rewardItems),
+  }));
+}
+
+function buildItemsLite(itemsData, referencedIds) {
+  const lite = {};
+  for (const id of referencedIds) {
+    const item = itemsData.items[id];
+    if (!item) continue;
+    lite[id] = {
+      name: item.name,
+      shortName: item.shortName,
+      ...(item.iconLink ? { iconLink: item.iconLink } : {}),
+    };
+  }
+  return lite;
 }
 
 async function downloadSvgs(svgDownloads) {
@@ -250,6 +351,13 @@ async function main() {
     fetchTranslated('maps'),
     fetchTranslated('traders'),
     fetchJson(CALIBRATION_URL),
+  ]);
+  console.log('Fetching items/hideout/barters/crafts...');
+  const [itemsData, hideoutData, bartersData, craftsData] = await Promise.all([
+    fetchTranslated('items'),
+    fetchTranslated('hideout'),
+    fetchTranslated('barters'),
+    fetchTranslated('crafts'),
   ]);
 
   const traderNames = new Map(
@@ -279,11 +387,31 @@ async function main() {
   console.log(`Downloading ${svgDownloads.length} map SVGs...`);
   await downloadSvgs(svgDownloads);
 
+  const ammo = buildAmmo(itemsData);
+  const hideout = buildHideout(hideoutData, traderNames);
+  const barters = buildBarters(bartersData, traderNames);
+  const crafts = buildCrafts(craftsData);
+
+  const referencedIds = new Set([
+    ...tasks.flatMap((t) => t.objectives.flatMap((o) => o.neededItems?.itemIds ?? [])),
+    ...hideout.flatMap((s) =>
+      s.levels.flatMap((l) => l.itemRequirements.map((r) => r.itemId)),
+    ),
+    ...barters.flatMap((b) => [...b.requiredItems, ...b.rewardItems].map((s) => s.itemId)),
+    ...crafts.flatMap((c) => [...c.requiredItems, ...c.rewardItems].map((s) => s.itemId)),
+  ]);
+  const itemsLite = buildItemsLite(itemsData, referencedIds);
+
   const snapshot = {
     generatedAt: new Date().toISOString(),
     gameMode: 'regular',
     maps,
     tasks,
+    ammo,
+    hideout,
+    barters,
+    crafts,
+    itemsLite,
   };
   await mkdir(generatedDir, { recursive: true });
   await writeFile(
@@ -291,7 +419,9 @@ async function main() {
     JSON.stringify(snapshot, null, 1),
   );
   console.log(
-    `Snapshot written: ${maps.length} maps (${maps.filter((m) => m.calibration).length} renderable), ${tasks.length} tasks.`,
+    `Snapshot written: ${maps.length} maps (${maps.filter((m) => m.calibration).length} renderable), ` +
+      `${tasks.length} tasks, ${ammo.length} ammo, ${hideout.length} stations, ` +
+      `${barters.length} barters, ${crafts.length} crafts, ${Object.keys(itemsLite).length} lite items.`,
   );
 }
 
