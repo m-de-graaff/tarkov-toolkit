@@ -1,0 +1,14 @@
+{
+  "name": "raidplanner",
+  "private": true,
+  "packageManager": "pnpm@11.11.0",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "snapshot": "pnpm --filter @raidplanner/data snapshot"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.0"
+  }
+}
