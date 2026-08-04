@@ -11,7 +11,7 @@ const repoRoot = path.join(dataRoot, '..', '..');
 const svgOutDir = path.join(repoRoot, 'apps', 'web', 'public', 'maps');
 const generatedDir = path.join(dataRoot, 'generated');
 
-const JSON_BASE = 'https://json.tarkov.dev/regular/';
+const JSON_BASE = 'https://json.tarkov.dev/';
 const CALIBRATION_URL =
   'https://raw.githubusercontent.com/the-hideout/tarkov-dev/main/src/data/maps.json';
 
@@ -41,10 +41,10 @@ async function fetchJson(url) {
   return res.json();
 }
 
-async function fetchTranslated(name) {
+async function fetchTranslated(name, prefix = 'regular') {
   const [payload, en] = await Promise.all([
-    fetchJson(`${JSON_BASE}${name}`),
-    fetchJson(`${JSON_BASE}${name}_en`),
+    fetchJson(`${JSON_BASE}${prefix}/${name}`),
+    fetchJson(`${JSON_BASE}${prefix}/${name}_en`),
   ]);
   return applyTranslations(payload.data, en.data);
 }
@@ -237,8 +237,9 @@ async function downloadSvgs(svgDownloads) {
 
 async function main() {
   console.log('Fetching tarkov.dev data...');
-  const [tasksData, mapsData, tradersData, calibrationJson] = await Promise.all([
+  const [tasksData, pveTasksData, mapsData, tradersData, calibrationJson] = await Promise.all([
     fetchTranslated('tasks'),
+    fetchTranslated('tasks', 'pve'),
     fetchTranslated('maps'),
     fetchTranslated('traders'),
     fetchJson(CALIBRATION_URL),
@@ -250,7 +251,23 @@ async function main() {
 
   const calibrationIndex = buildCalibrationIndex(calibrationJson);
   const { maps, svgDownloads, idRemap } = buildMaps(mapsData.maps, calibrationIndex);
-  const tasks = buildTasks(tasksData.tasks, traderNames, idRemap);
+
+  // Union of both game modes' quest sets, each task tagged with the modes it
+  // exists in (~95% overlap; PvP-only and PvE-only tails are real).
+  const pveIds = new Set(Object.keys(pveTasksData.tasks));
+  const tasks = buildTasks(tasksData.tasks, traderNames, idRemap).map((task) => ({
+    ...task,
+    modes: pveIds.has(task.id) ? ['pvp', 'pve'] : ['pvp'],
+  }));
+  const pvpIds = new Set(tasks.map((t) => t.id));
+  const pveOnlyRaw = Object.fromEntries(
+    Object.entries(pveTasksData.tasks).filter(([id]) => !pvpIds.has(id)),
+  );
+  const pveOnlyTasks = buildTasks(pveOnlyRaw, traderNames, idRemap).map((task) => ({
+    ...task,
+    modes: ['pve'],
+  }));
+  tasks.push(...pveOnlyTasks);
 
   console.log(`Downloading ${svgDownloads.length} map SVGs...`);
   await downloadSvgs(svgDownloads);

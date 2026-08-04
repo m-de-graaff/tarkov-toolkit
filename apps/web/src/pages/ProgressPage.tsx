@@ -16,6 +16,7 @@ import { Lock } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { TrackerState } from '../lib/availability';
 import { availableQuests, isAvailable } from '../lib/availability';
+import { snapshotForMode } from '../lib/modeTasks';
 import { usePlanner } from '../store';
 
 const FACTIONS: TrackerState['faction'][] = ['Any', 'USEC', 'BEAR'];
@@ -106,15 +107,20 @@ function ResetButton() {
 
 export function ProgressPage() {
   const tracker = usePlanner((s) => s.tracker);
+  const gameMode = usePlanner((s) => s.gameMode);
   const setLevel = usePlanner((s) => s.setLevel);
   const setFaction = usePlanner((s) => s.setFaction);
   const [search, setSearch] = useState('');
 
-  const openCount = useMemo(() => availableQuests(snapshot, tracker).length, [tracker]);
+  const modeSnapshot = useMemo(() => snapshotForMode(snapshot, gameMode), [gameMode]);
+  const openCount = useMemo(
+    () => availableQuests(modeSnapshot, tracker).length,
+    [tracker, modeSnapshot],
+  );
 
   const byTrader = useMemo(() => {
     const groups = new Map<string, RpTask[]>();
-    for (const task of snapshot.tasks) {
+    for (const task of modeSnapshot.tasks) {
       if (search && !task.name.toLowerCase().includes(search.toLowerCase())) continue;
       const list = groups.get(task.trader.name) ?? [];
       list.push(task);
@@ -124,7 +130,7 @@ export function ProgressPage() {
       list.sort((a, b) => a.minPlayerLevel - b.minPlayerLevel || a.name.localeCompare(b.name));
     }
     return groups;
-  }, [search]);
+  }, [search, modeSnapshot]);
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto">
@@ -173,7 +179,7 @@ export function ProgressPage() {
           <div className="flex flex-col gap-0.5 text-sm">
             <span className="tabular-nums">
               <strong className="text-primary">{tracker.completedTaskIds.length}</strong> of{' '}
-              {snapshot.tasks.length} quests finished
+              {modeSnapshot.tasks.length} quests finished
             </span>
             <span className="text-muted-foreground tabular-nums">{openCount} open right now</span>
           </div>

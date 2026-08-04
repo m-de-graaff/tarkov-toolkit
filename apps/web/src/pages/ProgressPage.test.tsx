@@ -27,14 +27,25 @@ describe('ProgressPage', () => {
   });
 
   it('ticking a quest updates the tracker and the finished count', () => {
+    const pvpCount = snapshot.tasks.filter((t) => t.modes.includes('pvp')).length;
     act(() => root.render(<ProgressPage />));
-    expect(container.textContent).toContain(`0 of ${snapshot.tasks.length} quests finished`);
+    expect(container.textContent).toContain(`0 of ${pvpCount} quests finished`);
 
     const checkbox = container.querySelector<HTMLInputElement>('.quest-row input[type=checkbox]')!;
     act(() => checkbox.click());
 
     expect(usePlanner.getState().tracker.completedTaskIds).toHaveLength(1);
-    expect(container.textContent).toContain(`1 of ${snapshot.tasks.length} quests finished`);
+    expect(container.textContent).toContain(`1 of ${pvpCount} quests finished`);
+  });
+
+  it('shows pve-only quests only when the PvE profile is active', () => {
+    const pveOnly = snapshot.tasks.find((t) => t.modes.length === 1 && t.modes[0] === 'pve')!;
+
+    act(() => root.render(<ProgressPage />));
+    expect(container.textContent).not.toContain(pveOnly.name);
+
+    act(() => usePlanner.getState().setGameMode('pve'));
+    expect(container.textContent).toContain(pveOnly.name);
   });
 
   it('reset requires a second, explicit click', () => {

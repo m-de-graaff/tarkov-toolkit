@@ -6,6 +6,7 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { isAvailable } from '../lib/availability';
 import type { MapQuestEntry } from '../lib/questIndex';
+import { snapshotForMode } from '../lib/modeTasks';
 import { anywhereQuests, questsForMap } from '../lib/questIndex';
 import { usePlanner } from '../store';
 import { Footer } from './Footer';
@@ -15,7 +16,6 @@ const renderableMaps = snapshot.maps
   .filter((m) => m.calibration)
   .sort((a, b) => a.name.localeCompare(b.name));
 
-const anywhere = anywhereQuests(snapshot);
 
 function SectionLabel({ children }: { children: string }) {
   return (
@@ -31,21 +31,24 @@ export function Sidebar() {
   const search = usePlanner((s) => s.search);
   const setSearch = usePlanner((s) => s.setSearch);
   const tracker = usePlanner((s) => s.tracker);
+  const gameMode = usePlanner((s) => s.gameMode);
+  const modeSnapshot = useMemo(() => snapshotForMode(snapshot, gameMode), [gameMode]);
+  const anywhere = useMemo(() => anywhereQuests(modeSnapshot), [modeSnapshot]);
 
   const openCounts = useMemo(() => {
     const counts = new Map<string, number>();
     for (const map of renderableMaps) {
       counts.set(
         map.id,
-        questsForMap(snapshot, map.id).filter((e) => isAvailable(e.task, tracker)).length,
+        questsForMap(modeSnapshot, map.id).filter((e) => isAvailable(e.task, tracker)).length,
       );
     }
     return counts;
-  }, [tracker]);
+  }, [tracker, modeSnapshot]);
 
   const { open, locked } = useMemo(() => {
     if (!selectedMapId) return { open: [] as MapQuestEntry[], locked: [] as MapQuestEntry[] };
-    const entries = questsForMap(snapshot, selectedMapId);
+    const entries = questsForMap(modeSnapshot, selectedMapId);
     return {
       open: entries.filter((e) => isAvailable(e.task, tracker)),
       locked: entries.filter(
@@ -53,11 +56,11 @@ export function Sidebar() {
           !isAvailable(e.task, tracker) && !tracker.completedTaskIds.includes(e.task.id),
       ),
     };
-  }, [selectedMapId, tracker]);
+  }, [selectedMapId, tracker, modeSnapshot]);
 
   const openAnywhere = useMemo(
     () => anywhere.filter((t) => isAvailable(t, tracker)),
-    [tracker],
+    [tracker, anywhere],
   );
 
   return (
