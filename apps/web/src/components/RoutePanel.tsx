@@ -12,7 +12,7 @@ export function RoutePanel({
   hasSelection: boolean;
 }) {
   return (
-    <aside className="route-panel" aria-label="Planned route">
+    <aside className="route-panel" aria-label="Planned route" aria-live="polite">
       <h2>Route</h2>
       {!hasSelection ? (
         <p className="empty-note">Select quests to plan a route.</p>

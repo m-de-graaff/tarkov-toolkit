@@ -4,7 +4,8 @@
   --panel-raised: #2a2723;
   --border: #3d382f;
   --text: #c7c5b3;
-  --text-dim: #8a8778;
+  --text-dim: #9b9884;
+  --border-strong: #766d5a;
   --accent: #c9a96a;
   --accent-dim: #9a8866;
   --danger: #a7452c;
@@ -372,6 +373,79 @@ body {
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 1px;
+}
+
+/* --- polish ------------------------------------------------------------- */
+
+/* interactive control boundaries need 3:1 against their surface */
+.field input,
+.field select,
+.spawn-picker select,
+.quest-filters input[type='search'],
+.done-toggle,
+.map-button,
+.recommend-banner button {
+  border-color: var(--border-strong);
+}
+
+.route-leg,
+.route-total,
+.tracker-count,
+.badge-count,
+.field input {
+  font-variant-numeric: tabular-nums;
+}
+
+.route-desc,
+.empty-note {
+  text-wrap: pretty;
+}
+
+.map-button,
+.done-toggle,
+.recommend-banner button {
+  transition-property: transform, border-color, background-color;
+  transition-duration: 120ms;
+  transition-timing-function: ease-out;
+}
+
+.map-button:active,
+.done-toggle:active,
+.recommend-banner button:active {
+  transform: scale(0.96);
+}
+
+/* expand the small done-toggle's hit area without moving it */
+.done-toggle {
+  position: relative;
+}
+
+.done-toggle::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.sidebar-footer {
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.sidebar-footer a {
+  color: var(--accent-dim);
 }
 
 .map-canvas {

@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { isAvailable } from '../lib/availability';
 import { anywhereQuests, questsForMap } from '../lib/questIndex';
 import { usePlanner } from '../store';
+import { Footer } from './Footer';
 import { AnywhereQuestList, QuestList } from './QuestList';
 import { TrackerBar } from './TrackerBar';
 
@@ -86,6 +87,7 @@ export function Sidebar() {
       )}
 
       <AnywhereQuestList tasks={anywhere} />
+      <Footer />
     </nav>
   );
 }
