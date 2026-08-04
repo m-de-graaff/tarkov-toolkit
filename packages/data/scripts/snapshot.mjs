@@ -26,8 +26,14 @@ const DROPPED_OBJECTIVE_TYPES = new Set([
   'globalVariable',
 ]);
 
-// API map normalizedNames that reuse another map's calibration/SVG.
-const CALIBRATION_ALIASES = { 'night-factory': 'factory', 'ground-zero-21': 'ground-zero' };
+// Map variants that are the same place gameplay-wise: fold them into the
+// canonical map (their quests, points, and spawns move over; the variant
+// disappears from the map list).
+const MERGED_INTO = {
+  'night-factory': 'factory',
+  'ground-zero-21': 'ground-zero',
+  'the-lab-dark': 'the-lab',
+};
 
 async function fetchJson(url) {
   const res = await fetch(url, { headers: { Accept: 'application/json' } });
@@ -81,7 +87,9 @@ function applyTranslations(node, dict, parentKey) {
 function buildCalibrationIndex(calibrationJson) {
   const index = new Map();
   for (const entry of calibrationJson) {
-    const variant = (entry.maps ?? []).find((m) => m.svgPath);
+    // The "interactive" variant carries the calibration; it may have an SVG,
+    // a tile pyramid, or both.
+    const variant = (entry.maps ?? []).find((m) => m.svgPath || m.tilePath);
     if (variant) index.set(entry.normalizedName, variant);
   }
   return index;
@@ -90,64 +98,106 @@ function buildCalibrationIndex(calibrationJson) {
 function buildMaps(rawMaps, calibrationIndex) {
   const maps = [];
   const svgDownloads = [];
+  /** merged-variant map id -> canonical map id */
+  const idRemap = new Map();
+  const byNormalized = new Map(
+    Object.values(rawMaps).map((raw) => [raw.normalizedName, raw]),
+  );
+
   for (const raw of Object.values(rawMaps)) {
-    const calKey =
-      CALIBRATION_ALIASES[raw.normalizedName] ??
-      (calibrationIndex.has(raw.normalizedName) ? raw.normalizedName : undefined);
-    const variant = calKey ? calibrationIndex.get(calKey) : undefined;
+    const mergeTarget = MERGED_INTO[raw.normalizedName];
+    if (mergeTarget && byNormalized.has(mergeTarget)) {
+      idRemap.set(raw.id, byNormalized.get(mergeTarget).id);
+      continue;
+    }
+
+    const variant = calibrationIndex.get(raw.normalizedName);
     let calibration;
     if (variant) {
-      const svgFile = `${calKey}.svg`;
       calibration = {
         transform: variant.transform,
         coordinateRotation: variant.coordinateRotation ?? 0,
         bounds: variant.bounds,
         ...(variant.svgBounds ? { svgBounds: variant.svgBounds } : {}),
-        svgFile,
       };
-      svgDownloads.push({ url: variant.svgPath, file: svgFile });
+      if (variant.svgPath) {
+        const svgFile = `${raw.normalizedName}.svg`;
+        calibration.svgFile = svgFile;
+        svgDownloads.push({ url: variant.svgPath, file: svgFile });
+      }
+      if (variant.tilePath) {
+        calibration.tiles = {
+          url: variant.tilePath,
+          tileSize: variant.tileSize ?? 256,
+          minZoom: variant.minZoom ?? 1,
+          maxZoom: variant.maxZoom ?? 6,
+        };
+      }
     }
+
+    const spawnSources = [raw, ...Object.entries(MERGED_INTO)
+      .filter(([, target]) => target === raw.normalizedName)
+      .map(([variantName]) => byNormalized.get(variantName))
+      .filter(Boolean)];
+    const seenSpawns = new Set();
+    const spawns = [];
+    for (const source of spawnSources) {
+      for (const s of (source.spawns ?? []).filter((sp) =>
+        (sp.categories ?? []).includes('player'),
+      )) {
+        const key = s.zoneName || `${s.position.x},${s.position.z}`;
+        if (seenSpawns.has(key)) continue;
+        seenSpawns.add(key);
+        spawns.push({
+          position: s.position,
+          sides: s.sides ?? [],
+          categories: s.categories ?? [],
+          zoneName: s.zoneName ?? '',
+        });
+      }
+    }
+
     maps.push({
       id: raw.id,
       name: raw.name,
       normalizedName: raw.normalizedName,
       ...(raw.wiki ? { wiki: raw.wiki } : {}),
       ...(calibration ? { calibration } : {}),
-      spawns: (raw.spawns ?? [])
-        .filter((s) => (s.categories ?? []).includes('player'))
-        .map((s) => ({
-          position: s.position,
-          sides: s.sides ?? [],
-          categories: s.categories ?? [],
-          zoneName: s.zoneName ?? '',
-        })),
+      spawns,
     });
   }
-  return { maps, svgDownloads };
+  return { maps, svgDownloads, idRemap };
 }
 
-function buildObjectivePoints(obj) {
+function buildObjectivePoints(obj, remapId) {
   const points = [];
+  const seen = new Set();
+  const push = (id, map, position) => {
+    const mapped = remapId(map);
+    const key = `${mapped}:${position.x},${position.y},${position.z}`;
+    if (seen.has(key)) return; // merged map variants often duplicate points
+    seen.add(key);
+    points.push({ id, map: mapped, position });
+  };
   for (const zone of obj.zones ?? []) {
-    if (zone.position && zone.map) {
-      points.push({ id: zone.id, map: zone.map, position: zone.position });
-    }
+    if (zone.position && zone.map) push(zone.id, zone.map, zone.position);
   }
   (obj.possibleLocations ?? []).forEach((loc, locIndex) => {
     (loc.positions ?? []).forEach((position, posIndex) => {
-      points.push({ id: `${obj.id}-loc-${locIndex}-${posIndex}`, map: loc.map, position });
+      push(`${obj.id}-loc-${locIndex}-${posIndex}`, loc.map, position);
     });
   });
   return points;
 }
 
-function buildTasks(rawTasks, traderNames) {
+function buildTasks(rawTasks, traderNames, idRemap) {
+  const remapId = (id) => idRemap.get(id) ?? id;
   return Object.values(rawTasks).map((raw) => ({
     id: raw.id,
     name: raw.name,
     normalizedName: raw.normalizedName,
     trader: { id: raw.trader, name: traderNames.get(raw.trader) ?? 'Unknown' },
-    mapId: raw.map ?? null,
+    mapId: raw.map ? remapId(raw.map) : null,
     minPlayerLevel: raw.minPlayerLevel ?? 1,
     factionName: raw.factionName ?? 'Any',
     kappaRequired: raw.kappaRequired ?? false,
@@ -164,8 +214,8 @@ function buildTasks(rawTasks, traderNames) {
         type: obj.type,
         description: obj.description ?? '',
         optional: obj.optional ?? false,
-        maps: obj.maps ?? [],
-        points: buildObjectivePoints(obj),
+        maps: [...new Set((obj.maps ?? []).map(remapId))],
+        points: buildObjectivePoints(obj, remapId),
         ...(obj.count !== undefined ? { count: obj.count } : {}),
       })),
   }));
@@ -199,8 +249,8 @@ async function main() {
   );
 
   const calibrationIndex = buildCalibrationIndex(calibrationJson);
-  const { maps, svgDownloads } = buildMaps(mapsData.maps, calibrationIndex);
-  const tasks = buildTasks(tasksData.tasks, traderNames);
+  const { maps, svgDownloads, idRemap } = buildMaps(mapsData.maps, calibrationIndex);
+  const tasks = buildTasks(tasksData.tasks, traderNames, idRemap);
 
   console.log(`Downloading ${svgDownloads.length} map SVGs...`);
   await downloadSvgs(svgDownloads);

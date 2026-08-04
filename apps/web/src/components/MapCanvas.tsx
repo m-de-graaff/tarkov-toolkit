@@ -63,12 +63,37 @@ export function MapCanvas({ map, markers, route, onMapClick }: MapCanvasProps) {
     const lMap = L.map(el, {
       crs: makeCrs(cal),
       minZoom: -2,
-      maxZoom: 4,
+      maxZoom: cal.tiles ? cal.tiles.maxZoom : 4,
       zoomSnap: 0.25,
       attributionControl: false,
     });
     const bounds = L.latLngBounds(boundsToLatLng(cal.svgBounds ?? cal.bounds));
-    L.imageOverlay(`/maps/${cal.svgFile}`, bounds).addTo(lMap);
+
+    const addSvgOverlay = () => {
+      if (cal.svgFile) L.imageOverlay(`/maps/${cal.svgFile}`, bounds).addTo(lMap);
+    };
+    if (cal.tiles) {
+      // Pretty baked-3D render from assets.tarkov.dev; if tiles fail to load
+      // (offline), swap once to the bundled SVG fallback.
+      const tileLayer = L.tileLayer(cal.tiles.url, {
+        tileSize: cal.tiles.tileSize,
+        minNativeZoom: cal.tiles.minZoom,
+        maxNativeZoom: cal.tiles.maxZoom,
+        bounds,
+        className: 'map-tiles',
+        keepBuffer: 2,
+      });
+      let fellBack = false;
+      tileLayer.on('tileerror', () => {
+        if (fellBack || !cal.svgFile) return;
+        fellBack = true;
+        lMap.removeLayer(tileLayer);
+        addSvgOverlay();
+      });
+      tileLayer.addTo(lMap);
+    } else {
+      addSvgOverlay();
+    }
     lMap.fitBounds(bounds);
     lMap.on('click', (e: L.LeafletMouseEvent) => {
       clickHandlerRef.current?.({ x: e.latlng.lng, y: 0, z: e.latlng.lat });

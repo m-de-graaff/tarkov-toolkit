@@ -55,6 +55,17 @@ export function LivePanel({
         <span className="text-xs text-muted-foreground">
           Companion app connected — screenshots show your position automatically
         </span>
+      ) : watcher.canResume ? (
+        <Button
+          type="button"
+          variant="default"
+          size="sm"
+          className="h-7 text-xs"
+          title="Continue watching the screenshots folder you picked last time"
+          onClick={() => void watcher.resume()}
+        >
+          Resume showing my position
+        </Button>
       ) : watcher.supported ? (
         <Button
           type="button"

@@ -4,13 +4,23 @@ export interface GamePosition {
   z: number;
 }
 
+export interface MapTiles {
+  /** {z}/{x}/{y} URL template on assets.tarkov.dev (runtime network dependency) */
+  url: string;
+  tileSize: number;
+  minZoom: number;
+  maxZoom: number;
+}
+
 export interface MapCalibration {
   transform: [number, number, number, number];
   coordinateRotation: number;
   bounds: [[number, number], [number, number]];
   svgBounds?: [[number, number], [number, number]];
-  /** filename under apps/web/public/maps/, e.g. "customs.svg" */
-  svgFile: string;
+  /** bundled offline fallback under apps/web/public/maps/, e.g. "customs.svg" */
+  svgFile?: string;
+  /** pretty baked-3D tile render (preferred base layer when online) */
+  tiles?: MapTiles;
 }
 
 export interface RpSpawn {
