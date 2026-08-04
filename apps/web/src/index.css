@@ -1,30 +1,31 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-/* Tarkov palette mapped onto shadcn semantic tokens. Dark-only by design. */
+/* Neutral near-black theme (Vercel/GitHub register); the Tarkov gold survives
+   as the single brand accent. Dark-only by design. */
 :root {
-  --background: #0f0e0c;
-  --foreground: #c7c5b3;
-  --card: #1b1917;
-  --card-foreground: #c7c5b3;
-  --popover: #1b1917;
-  --popover-foreground: #c7c5b3;
+  --background: #0a0a0a;
+  --foreground: #ededec;
+  --card: #111110;
+  --card-foreground: #ededec;
+  --popover: #161615;
+  --popover-foreground: #ededec;
   --primary: #c9a96a;
-  --primary-foreground: #14120f;
-  --secondary: #2a2723;
-  --secondary-foreground: #c7c5b3;
-  --muted: #2a2723;
-  --muted-foreground: #9b9884;
-  --accent: #34301f;
+  --primary-foreground: #0a0a0a;
+  --secondary: #1a1a19;
+  --secondary-foreground: #ededec;
+  --muted: #1a1a19;
+  --muted-foreground: #8f8f8a;
+  --accent: #1f1e1c;
   --accent-foreground: #c9a96a;
-  --destructive: #a7452c;
-  --destructive-foreground: #f1e4dc;
-  --border: #3d382f;
-  --input: #766d5a;
+  --destructive: #e5484d;
+  --destructive-foreground: #ffffff;
+  --border: #262625;
+  --input: #605e56;
   --ring: #c9a96a;
-  --ok: #5b7c5b;
+  --ok: #46a758;
   --route: #d4bb70;
-  --radius: 0.25rem;
+  --radius: 0.375rem;
 }
 
 @theme inline {
@@ -60,8 +61,8 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    @apply bg-background text-sm text-foreground antialiased;
+    font-family: 'Inter Variable', 'Segoe UI', system-ui, -apple-system, sans-serif;
   }
 }
 
