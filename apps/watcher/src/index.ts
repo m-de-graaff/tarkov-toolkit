@@ -5,18 +5,74 @@
 //   pnpm watcher            (from the repo root)
 //
 // The web app auto-detects it at ws://127.0.0.1:17520.
-import { watch, type FSWatcher } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { existsSync, readFileSync, watch, writeFileSync, type FSWatcher } from 'node:fs';
 import { readdir } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import path from 'node:path';
+import { createInterface } from 'node:readline/promises';
 import { WebSocketServer, type WebSocket } from 'ws';
 import { parseScreenshotName, pickNewestFix, type LiveFix } from '@raidplanner/live';
 
 const PORT = Number(process.env.RAIDPLANNER_WATCHER_PORT ?? 17520);
-const screenshotsDir =
-  process.argv[2] ??
-  process.env.RAIDPLANNER_SCREENSHOTS_DIR ??
-  path.join(homedir(), 'Documents', 'Escape from Tarkov', 'Screenshots');
+const CONFIG_FILE = path.join(homedir(), '.raidplanner-watcher.json');
+
+function windowsDocumentsFolder(): string | null {
+  // GetFolderPath respects Documents redirection (OneDrive, custom locations).
+  if (process.platform !== 'win32') return null;
+  const result = spawnSync(
+    'powershell',
+    ['-NoProfile', '-Command', "[Environment]::GetFolderPath('MyDocuments')"],
+    { encoding: 'utf8', timeout: 10_000 },
+  );
+  const out = result.stdout?.trim();
+  return out ? out : null;
+}
+
+function savedDir(): string | null {
+  try {
+    const config = JSON.parse(readFileSync(CONFIG_FILE, 'utf8'));
+    return typeof config.screenshotsDir === 'string' ? config.screenshotsDir : null;
+  } catch {
+    return null;
+  }
+}
+
+async function detectScreenshotsDir(): Promise<string> {
+  const explicit = process.argv[2] ?? process.env.RAIDPLANNER_SCREENSHOTS_DIR;
+  if (explicit) return explicit;
+
+  const suffix = path.join('Escape from Tarkov', 'Screenshots');
+  const candidates = [
+    savedDir(),
+    ...[windowsDocumentsFolder(), path.join(homedir(), 'Documents'), path.join(homedir(), 'OneDrive', 'Documents')]
+      .filter((docs): docs is string => docs !== null)
+      .map((docs) => path.join(docs, suffix)),
+  ].filter((dir): dir is string => dir !== null);
+
+  for (const candidate of candidates) {
+    if (existsSync(candidate)) {
+      console.log(`Found your screenshots at: ${candidate}`);
+      return candidate;
+    }
+  }
+
+  console.log("Couldn't find the Escape from Tarkov screenshots folder automatically.");
+  const rl = createInterface({ input: process.stdin, output: process.stdout });
+  const answer = (
+    await rl.question('Paste the full path to your Screenshots folder and press Enter: ')
+  ).trim().replace(/^"|"$/g, '');
+  rl.close();
+  try {
+    writeFileSync(CONFIG_FILE, JSON.stringify({ screenshotsDir: answer }, null, 2));
+    console.log(`Saved — next time this is found automatically (${CONFIG_FILE}).`);
+  } catch {
+    /* not persisted; still usable this run */
+  }
+  return answer;
+}
+
+const screenshotsDir = await detectScreenshotsDir();
 
 const seen = new Set<string>();
 let latestFix: LiveFix | null = null;
