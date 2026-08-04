@@ -1,4 +1,5 @@
 import type { GamePosition } from '@raidplanner/data';
+import type { LiveFix } from '@raidplanner/live';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { TrackerState } from './lib/availability';
@@ -14,6 +15,8 @@ interface PlannerState {
   tracker: TrackerState;
   onlyAvailable: boolean;
   search: string;
+  liveFix: LiveFix | null;
+  setLiveFix(f: LiveFix | null): void;
   selectMap(id: string): void;
   toggleTask(id: string): void;
   clearTasks(): void;
@@ -34,6 +37,8 @@ export const usePlanner = create<PlannerState>()(
       tracker: { level: 15, faction: 'Any', completedTaskIds: [] },
       onlyAvailable: true,
       search: '',
+      liveFix: null,
+      setLiveFix: (liveFix) => set({ liveFix }),
       selectMap: (id) => set({ selectedMapId: id, selectedTaskIds: [], spawn: null }),
       toggleTask: (id) =>
         set((s) => ({
@@ -59,7 +64,7 @@ export const usePlanner = create<PlannerState>()(
     }),
     {
       name: 'raidplanner-v1',
-      partialize: ({ search: _search, ...rest }) => rest,
+      partialize: ({ search: _search, liveFix: _liveFix, ...rest }) => rest,
     },
   ),
 );

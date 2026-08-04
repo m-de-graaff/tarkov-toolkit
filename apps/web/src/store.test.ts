@@ -41,11 +41,26 @@ describe('planner store', () => {
     expect(onlyAvailable).toBe(true);
   });
 
-  it('persists state except the search box', () => {
+  it('persists state except the search box and live fix', () => {
     usePlanner.getState().setSearch('sniper');
     usePlanner.getState().setLevel(42);
+    usePlanner.getState().setLiveFix({
+      position: { x: 1, y: 2, z: 3 },
+      yawDeg: 45,
+      takenAt: null,
+      raw: 'x (0).png',
+    });
     const persisted = JSON.parse(localStorage.getItem('raidplanner-v1') ?? '{}');
     expect(persisted.state.tracker.level).toBe(42);
     expect(persisted.state.search).toBeUndefined();
+    expect(persisted.state.liveFix).toBeUndefined();
+  });
+
+  it('setLiveFix round-trips', () => {
+    const fix = { position: { x: 9, y: 0, z: -4 }, yawDeg: 180, takenAt: null, raw: 'y (0).png' };
+    usePlanner.getState().setLiveFix(fix);
+    expect(usePlanner.getState().liveFix).toEqual(fix);
+    usePlanner.getState().setLiveFix(null);
+    expect(usePlanner.getState().liveFix).toBeNull();
   });
 });
