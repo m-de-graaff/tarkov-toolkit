@@ -24,11 +24,7 @@ function pathLength(start: GamePosition, stops: RouteStop[]): number {
   return total;
 }
 
-function nearestNeighbourFrom(
-  start: GamePosition,
-  first: RouteStop,
-  stops: RouteStop[],
-): RouteStop[] {
+function nearestNeighbourFrom(first: RouteStop, stops: RouteStop[]): RouteStop[] {
   const remaining = stops.filter((s) => s !== first);
   const ordered = [first];
   let current = first.position;
@@ -84,7 +80,7 @@ export function optimizeRoute(start: GamePosition, stops: RouteStop[]): PlannedR
   let best: RouteStop[] | null = null;
   let bestLength = Infinity;
   for (const first of stops) {
-    const candidate = twoOpt(start, nearestNeighbourFrom(start, first, stops));
+    const candidate = twoOpt(start, nearestNeighbourFrom(first, stops));
     const length = pathLength(start, candidate);
     if (length < bestLength) {
       bestLength = length;
