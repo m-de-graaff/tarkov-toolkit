@@ -1,4 +1,4 @@
-import { isScreenshotName } from './parse';
+import { isScreenshotName } from './parse.ts';
 
 /**
  * Of the not-yet-seen names, return the latest screenshot name (EFT filenames
