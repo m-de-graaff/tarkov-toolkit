@@ -116,11 +116,11 @@
   export function distance2d(a: GamePosition, b: GamePosition): number;     // euclidean on (x,z)
   ```
 
-- [ ] **Step 1: Failing tests.** `rotatePoint(1, 0, 180)` ≈ `[-1, 0]`; `rotatePoint(1, 0, 90)` ≈ `[0, 1]`; `gameToLatLng({x: 5, y: 0, z: 7})` = `[7, 5]`; `boundsToLatLng([[323,-295],[-280,532]])` = `[[-295,323],[532,-280]]`; `distance2d({x:0,y:99,z:0},{x:3,y:0,z:4})` = 5; `makeCrs` with transform `[0.38, 0, 0.38, 0]`, rotation 180: `crs.latLngToPoint(L.latLng(10, 20), 0)` equals manually computed `(-20*0.38, -(-10)*0.38)` → assert `x ≈ -7.6, y ≈ -3.8` (compute expected inline via the same formulae as tarkov-dev: project rotates, transformation scales `x' = a*x + b`, `y' = -c*y + d`... derive expected in the test from the ported constants, not by re-implementing).
-- [ ] **Step 2: Run, confirm fail** (`pnpm --filter @raidplanner/web exec vitest run src/lib/tarkovCrs.test.ts` → module not found).
-- [ ] **Step 3: Implement** by porting `getCRS`/`applyRotation`/`pos`/`getBounds` from tarkov-dev `map/index.jsx` (code captured in scratchpad `map-index.jsx:44-137`): `makeCrs` returns `L.extend({}, L.CRS.Simple, { transformation: new L.Transformation(t[0], t[1], -t[2], t[3]), projection: {...L.Projection.LonLat, project/unproject applying ±coordinateRotation} })`.
-- [ ] **Step 4: Run, confirm pass.**
-- [ ] **Step 5: Commit** (`feat(web): tarkov coordinate system (transform+rotation CRS)`).
+- [x] **Step 1: Failing tests.** `rotatePoint(1, 0, 180)` ≈ `[-1, 0]`; `rotatePoint(1, 0, 90)` ≈ `[0, 1]`; `gameToLatLng({x: 5, y: 0, z: 7})` = `[7, 5]`; `boundsToLatLng([[323,-295],[-280,532]])` = `[[-295,323],[532,-280]]`; `distance2d({x:0,y:99,z:0},{x:3,y:0,z:4})` = 5; `makeCrs` with transform `[0.38, 0, 0.38, 0]`, rotation 180: `crs.latLngToPoint(L.latLng(10, 20), 0)` equals manually computed `(-20*0.38, -(-10)*0.38)` → assert `x ≈ -7.6, y ≈ -3.8` (compute expected inline via the same formulae as tarkov-dev: project rotates, transformation scales `x' = a*x + b`, `y' = -c*y + d`... derive expected in the test from the ported constants, not by re-implementing).
+- [x] **Step 2: Run, confirm fail** (`pnpm --filter @raidplanner/web exec vitest run src/lib/tarkovCrs.test.ts` → module not found).
+- [x] **Step 3: Implement** by porting `getCRS`/`applyRotation`/`pos`/`getBounds` from tarkov-dev `map/index.jsx` (code captured in scratchpad `map-index.jsx:44-137`): `makeCrs` returns `L.extend({}, L.CRS.Simple, { transformation: new L.Transformation(t[0], t[1], -t[2], t[3]), projection: {...L.Projection.LonLat, project/unproject applying ±coordinateRotation} })`.
+- [x] **Step 4: Run, confirm pass.**
+- [x] **Step 5: Commit** (`feat(web): tarkov coordinate system (transform+rotation CRS)`).
 
 ---
 
