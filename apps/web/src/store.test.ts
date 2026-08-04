@@ -37,7 +37,12 @@ describe('planner store', () => {
 
   it('has sensible tracker defaults', () => {
     const { tracker } = usePlanner.getState();
-    expect(tracker).toEqual({ level: 15, faction: 'Any', completedTaskIds: [] });
+    expect(tracker).toEqual({
+      level: 15,
+      faction: 'Any',
+      completedTaskIds: [],
+      hideoutLevels: {},
+    });
   });
 
   it('keeps PvP and PvE progress as separate profiles', () => {
@@ -91,6 +96,7 @@ describe('planner store', () => {
       level: 1,
       faction: 'Any',
       completedTaskIds: [],
+      hideoutLevels: {},
     });
   });
 

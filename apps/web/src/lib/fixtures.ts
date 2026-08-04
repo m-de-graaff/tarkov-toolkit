@@ -112,6 +112,15 @@ export const tRequiresLocked: RpTask = {
 export const fixtureSnapshot: Snapshot = {
   generatedAt: '2026-08-04T00:00:00.000Z',
   gameMode: 'regular',
+  ammo: [],
+  hideout: [],
+  barters: [],
+  crafts: [],
+  itemsLite: {
+    'item-bolts': { name: 'Pack of bolts', shortName: 'Bolts' },
+    'item-wires': { name: 'Bundle of wires', shortName: 'Wires' },
+    'item-alt': { name: 'Alternative item', shortName: 'Alt' },
+  },
   maps: [
     {
       id: 'map-a',

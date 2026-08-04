@@ -95,14 +95,24 @@ export function HomePage() {
             description={`Tick off what you've finished across ${snapshot.tasks.length} quests — the planner always shows what you can actually do.`}
           />
           <ToolCard
-            title="Barter Calculator"
-            description="Work out whether a trade is worth it before you make it."
-            soon
+            to="/hideout"
+            title="Hideout"
+            description="Track station levels; upgrade requirements feed your keep-list."
           />
           <ToolCard
-            title="Flea Market Prices"
-            description="Live price checks without alt-tabbing to a wiki."
-            soon
+            to="/items"
+            title="Items to keep"
+            description="One list of everything your open quests and next upgrades consume."
+          />
+          <ToolCard
+            to="/ammo"
+            title="Ammo Chart"
+            description={`${snapshot.ammo.length} rounds with pen tiers, damage, and velocity — offline.`}
+          />
+          <ToolCard
+            to="/market"
+            title="Market"
+            description={`${snapshot.barters.length} barters and ${snapshot.crafts.length} crafts ranked by profit at live flea prices.`}
           />
         </section>
 
