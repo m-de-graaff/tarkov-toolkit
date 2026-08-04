@@ -13,7 +13,9 @@ import { RecommendBanner } from './components/RecommendBanner';
 import { RoutePanel } from './components/RoutePanel';
 import { Sidebar } from './components/Sidebar';
 import { SpawnPicker } from './components/SpawnPicker';
+import { MobileTopBar } from './components/MobileTopBar';
 import { useLiveWatcher } from './lib/useLiveWatcher';
+import { useMediaQuery } from './lib/useMediaQuery';
 import { distance2d } from './lib/geometry';
 import { objectivePoints } from './lib/questIndex';
 import type { RouteStop } from './lib/route';
@@ -40,6 +42,7 @@ export function App() {
   const watcher = useLiveWatcher();
 
   const map = snapshot.maps.find((m) => m.id === selectedMapId);
+  const isDesktop = useMediaQuery('(min-width: 768px)');
 
   // The route starts from where you actually are (live fix) when live mode has
   // one, otherwise from the chosen spawn.
@@ -138,6 +141,30 @@ export function App() {
         : 'Select a map to begin planning.'}
     </div>
   );
+
+  if (!isDesktop) {
+    return (
+      <div className="app flex h-dvh flex-col">
+        <MobileTopBar />
+        <main className="relative flex min-h-0 min-w-0 flex-1 flex-col">{mapArea}</main>
+        {map?.calibration && selectedTaskIds.length > 0 && (
+          <details className="shrink-0 border-t bg-card">
+            <summary className="cursor-pointer px-3 py-2 text-[13px] font-semibold text-primary tabular-nums">
+              Route{route ? ` · ≈ ${Math.round(route.totalDistance)}m` : ''}
+            </summary>
+            <div className="max-h-[40dvh] overflow-y-auto">
+              <RoutePanel
+                route={route}
+                originPosition={routeOrigin}
+                originLabel={liveFix ? 'live position' : 'spawn'}
+                hasSelection={selectedTaskIds.length > 0}
+              />
+            </div>
+          </details>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="app h-dvh">

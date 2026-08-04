@@ -76,7 +76,14 @@ export function MapCanvas({ map, markers, route, onMapClick }: MapCanvasProps) {
 
     leafletRef.current = lMap;
     overlayLayerRef.current = L.layerGroup().addTo(lMap);
+
+    // Track container resizes (draggable sidebar, orientation change) so
+    // leaflet recomputes its viewport.
+    const resizeObserver = new ResizeObserver(() => lMap.invalidateSize());
+    resizeObserver.observe(el);
+
     return () => {
+      resizeObserver.disconnect();
       leafletRef.current = null;
       overlayLayerRef.current = null;
       lMap.remove();
