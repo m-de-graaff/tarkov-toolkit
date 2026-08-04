@@ -145,11 +145,11 @@
   ```
 - Relation rules: `map-locked` iff `task.mapId === mapId`; else `multi-map` iff some objective's `maps` includes mapId (and some other map exists in its union) or task.mapId is null but objectives point here; `anywhere` iff the task has no located/મap-bound objectives at all (`every o.maps.length === 0 && o.points.length === 0`) — these are only included when the caller asks (`questsForMap` takes `includeAnywhere = false` default... **no optional bool** — export `anywhereQuests(snapshot): RpTask[]` separately).
 
-- [ ] **Step 1: Fixture + failing tests** for: map-locked task appears only on its map with relation `map-locked`; task with objectives on maps A and B appears on both as `multi-map`; task with no maps/points appears in `anywhereQuests` and not in `questsForMap`; `objectivePoints` filters points to the map; `isAvailable` respects level, faction, completed prerequisites, excludes already-completed.
-- [ ] **Step 2: Run, confirm fail.**
-- [ ] **Step 3: Implement.**
-- [ ] **Step 4: Run, confirm pass.**
-- [ ] **Step 5: Commit** (`feat(web): quest-map index and availability engine`).
+- [x] **Step 1: Fixture + failing tests** for: map-locked task appears only on its map with relation `map-locked`; task with objectives on maps A and B appears on both as `multi-map`; task with no maps/points appears in `anywhereQuests` and not in `questsForMap`; `objectivePoints` filters points to the map; `isAvailable` respects level, faction, completed prerequisites, excludes already-completed.
+- [x] **Step 2: Run, confirm fail.**
+- [x] **Step 3: Implement.**
+- [x] **Step 4: Run, confirm pass.**
+- [x] **Step 5: Commit** (`feat(web): quest-map index and availability engine`).
 
 ---
 
