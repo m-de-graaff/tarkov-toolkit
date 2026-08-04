@@ -138,6 +138,15 @@ export const fixtureSnapshot: Snapshot = {
       id: 'map-b',
       name: 'Bravo',
       normalizedName: 'bravo',
+      calibration: {
+        transform: [0.5, 0, 0.5, 0],
+        coordinateRotation: 0,
+        bounds: [
+          [50, -50],
+          [-50, 50],
+        ],
+        svgFile: 'bravo.svg',
+      },
       spawns: [],
     },
   ],
