@@ -63,6 +63,8 @@ interface RawTraderOffer {
 
 interface RawItem {
   id: string;
+  name?: string;
+  iconLink?: string;
   avg24hPrice?: number;
   lastLowPrice?: number;
   basePrice?: number;
@@ -72,17 +74,30 @@ interface RawItem {
 
 export async function fetchPrices(mode: GameMode): Promise<CachedPrices> {
   const prefix = mode === 'pve' ? 'pve' : 'regular';
-  const response = await fetch(`https://json.tarkov.dev/${prefix}/items`, {
-    headers: { Accept: 'application/json' },
-  });
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
-  const payload = await response.json();
+  const get = async (path: string) => {
+    const response = await fetch(`https://json.tarkov.dev/${path}`, {
+      headers: { Accept: 'application/json' },
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return response.json();
+  };
+  // names in the items payload are translation keys; the _en dict resolves them
+  const [payload, en] = await Promise.all([
+    get(`${prefix}/items`),
+    get(`${prefix}/items_en`).catch(() => null),
+  ]);
+  const translate = (key: unknown): string | undefined =>
+    typeof key === 'string' ? ((en?.data?.[key] as string | undefined) ?? undefined) : undefined;
   const prices: ItemPrices = {};
   for (const item of Object.values(payload.data.items) as RawItem[]) {
-    const bestTraderSell = Math.max(
-      0,
-      ...(item.sellToTrader ?? []).map((offer) => offer.priceRUB ?? 0),
-    );
+    let bestTraderSell = 0;
+    let bestTraderSellTraderId: string | undefined;
+    for (const offer of item.sellToTrader ?? []) {
+      if ((offer.priceRUB ?? 0) > bestTraderSell) {
+        bestTraderSell = offer.priceRUB ?? 0;
+        bestTraderSellTraderId = offer.trader;
+      }
+    }
     const offers = (item.buyFromTrader ?? [])
       .filter((offer) => (offer.priceRUB ?? 0) > 0)
       .map((offer) => ({
@@ -92,11 +107,15 @@ export async function fetchPrices(mode: GameMode): Promise<CachedPrices> {
         buyLimit: offer.buyLimit ?? 0,
         taskLocked: offer.taskUnlock != null,
       }));
+    const name = translate(item.name);
     prices[item.id] = {
       fleaAvg: item.avg24hPrice ?? 0,
       fleaLow: item.lastLowPrice ?? 0,
       basePrice: item.basePrice ?? 0,
       bestTraderSell,
+      ...(bestTraderSellTraderId ? { bestTraderSellTraderId } : {}),
+      ...(name ? { name } : {}),
+      ...(item.iconLink ? { iconLink: item.iconLink } : {}),
       ...(offers.length > 0 ? { offers } : {}),
     };
   }

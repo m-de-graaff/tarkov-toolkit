@@ -15,6 +15,11 @@ export interface ItemPriceEntry {
   basePrice: number;
   /** best sell-to-trader price in RUB */
   bestTraderSell: number;
+  /** who pays bestTraderSell (absent in caches from before this field) */
+  bestTraderSellTraderId?: string;
+  /** display info for items outside the offline itemsLite set */
+  name?: string;
+  iconLink?: string;
   /** trader cash offers to BUY this item */
   offers?: TraderOffer[];
 }
@@ -116,6 +121,37 @@ export interface ResellRow {
  * excluded; spreads are gross (flea fee not modelled — it depends on the
  * user's Intelligence Center).
  */
+export interface FleaToTraderRow {
+  itemId: string;
+  /** flea acquisition price (24h average) */
+  buyFlea: number;
+  sellTrader: number;
+  sellTraderId?: string;
+  /** spread — fee-free, since selling to traders has no listing fee */
+  spread: number;
+}
+
+/**
+ * Buy on flea, sell to a trader — the fee-free direction: trader sells have
+ * no flea listing fee, so the spread is what you pocket.
+ */
+export function fleaToTrader(prices: ItemPrices): FleaToTraderRow[] {
+  const rows: FleaToTraderRow[] = [];
+  for (const [itemId, entry] of Object.entries(prices)) {
+    if (!entry.fleaAvg || !entry.bestTraderSell) continue;
+    const spread = entry.bestTraderSell - entry.fleaAvg;
+    if (spread <= 0) continue;
+    rows.push({
+      itemId,
+      buyFlea: entry.fleaAvg,
+      sellTrader: entry.bestTraderSell,
+      sellTraderId: entry.bestTraderSellTraderId,
+      spread,
+    });
+  }
+  return rows.sort((a, b) => b.spread - a.spread);
+}
+
 export function traderResells(prices: ItemPrices): ResellRow[] {
   const rows: ResellRow[] = [];
   for (const [itemId, entry] of Object.entries(prices)) {
