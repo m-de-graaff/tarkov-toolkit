@@ -1,6 +1,6 @@
 import type { RpBarter, RpCraft } from '@raidplanner/data';
 import { describe, expect, it } from 'vitest';
-import { barterProfit, craftProfit, traderResells, type ItemPrices } from './profit';
+import { barterProfit, craftProfit, fleaToTrader, traderResells, type ItemPrices } from './profit';
 
 const prices: ItemPrices = {
   'item-a': { fleaAvg: 10_000, fleaLow: 9_000, basePrice: 5_000, bestTraderSell: 4_000 },
@@ -111,6 +111,31 @@ describe('craftProfit', () => {
     const result = craftProfit(craft, prices);
     expect(result.profit).toBe(50_000); // 60k trader sell − 10k flea cost
     expect(result.profitPerHour).toBe(25_000);
+  });
+});
+
+describe('fleaToTrader', () => {
+  it('finds items a trader pays more for than flea asks', () => {
+    const rows = fleaToTrader({
+      'good-flip': {
+        fleaAvg: 40_000,
+        fleaLow: 0,
+        basePrice: 0,
+        bestTraderSell: 55_000,
+        bestTraderSellTraderId: 'therapist',
+      },
+      'bad-flip': { fleaAvg: 40_000, fleaLow: 0, basePrice: 0, bestTraderSell: 30_000 },
+      'no-flea': { fleaAvg: 0, fleaLow: 0, basePrice: 0, bestTraderSell: 10_000 },
+    });
+    expect(rows).toEqual([
+      {
+        itemId: 'good-flip',
+        buyFlea: 40_000,
+        sellTrader: 55_000,
+        sellTraderId: 'therapist',
+        spread: 15_000,
+      },
+    ]);
   });
 });
 

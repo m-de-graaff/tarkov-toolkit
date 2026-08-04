@@ -13,7 +13,7 @@ import { snapshot } from '@raidplanner/data';
 import { RefreshCw } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { fetchPrices, loadCachedPrices, type CachedPrices } from '../lib/prices';
-import { barterProfit, craftProfit, traderResells } from '../lib/profit';
+import { barterProfit, craftProfit, fleaToTrader, traderResells } from '../lib/profit';
 import { usePlanner } from '../store';
 
 const STALE_MS = 30 * 60 * 1000; // auto-refresh cadence
@@ -22,12 +22,11 @@ const rub = (n: number) => `₽${Math.round(n).toLocaleString()}`;
 
 function ItemCell({ stacks, bold }: { stacks: TradeItemStack[]; bold?: boolean }) {
   return (
-    <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-0.5">
+    <span className="flex w-full min-w-0 flex-col gap-0.5">
       {stacks.map((stack, i) => {
         const item = snapshot.itemsLite[stack.itemId];
         return (
-          <span key={`${stack.itemId}-${i}`} className="flex min-w-0 items-center gap-1.5">
-            {i > 0 && <span className="text-muted-foreground">+</span>}
+          <span key={`${stack.itemId}-${i}`} className="flex w-full min-w-0 items-center gap-1.5">
             {item?.iconLink && (
               <img
                 src={item.iconLink}
@@ -36,7 +35,10 @@ function ItemCell({ stacks, bold }: { stacks: TradeItemStack[]; bold?: boolean }
                 className="size-6 shrink-0 rounded-sm border bg-black/40 object-contain"
               />
             )}
-            <span className={cn('truncate text-[13px]', bold && 'font-medium')} title={item?.name}>
+            <span
+              className={cn('min-w-0 flex-1 truncate text-[13px]', bold && 'font-medium')}
+              title={item?.name}
+            >
               {item?.name ?? 'Unknown item'}
               {stack.count > 1 && (
                 <span className="text-muted-foreground tabular-nums"> ×{Math.round(stack.count * 10) / 10}</span>
@@ -51,6 +53,45 @@ function ItemCell({ stacks, bold }: { stacks: TradeItemStack[]; bold?: boolean }
         );
       })}
     </span>
+  );
+}
+
+/** name/icon for any item: offline itemsLite first, then the price payload */
+function SingleItemCell({
+  itemId,
+  prices,
+}: {
+  itemId: string;
+  prices: Record<string, { name?: string; iconLink?: string }>;
+}) {
+  const lite = snapshot.itemsLite[itemId];
+  const name = lite?.name ?? prices[itemId]?.name ?? 'Unknown item';
+  const icon = lite?.iconLink ?? prices[itemId]?.iconLink;
+  return (
+    <span className="flex w-full min-w-0 items-center gap-1.5">
+      {icon && (
+        <img
+          src={icon}
+          alt=""
+          loading="lazy"
+          className="size-6 shrink-0 rounded-sm border bg-black/40 object-contain"
+        />
+      )}
+      <span className="min-w-0 flex-1 truncate text-[13px] font-medium" title={name}>
+        {name}
+      </span>
+    </span>
+  );
+}
+
+/** column widths per tab — table-fixed keeps every table inside the viewport */
+function Cols({ widths }: { widths: number[] }) {
+  return (
+    <colgroup>
+      {widths.map((w, i) => (
+        <col key={i} style={{ width: `${w}%` }} />
+      ))}
+    </colgroup>
   );
 }
 
@@ -77,7 +118,7 @@ const TH = ({ children, right }: { children: React.ReactNode; right?: boolean })
   </th>
 );
 
-type Tab = 'resells' | 'barters' | 'crafts';
+type Tab = 'resells' | 'fleaToTrader' | 'barters' | 'crafts';
 
 export function MarketPage() {
   const gameMode = usePlanner((s) => s.gameMode);
@@ -154,6 +195,14 @@ export function MarketPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prices, search, maxLevel]);
 
+  const fleaTraderRows = useMemo(() => {
+    if (!prices) return [];
+    return fleaToTrader(prices).filter((row) =>
+      matchesSearch(snapshot.itemsLite[row.itemId]?.name ?? ''),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prices, search]);
+
   const barterRows = useMemo(() => {
     if (!prices) return [];
     return snapshot.barters
@@ -183,11 +232,13 @@ export function MarketPage() {
 
   const counts: Record<Tab, number> = {
     resells: resellRows.length,
+    fleaToTrader: fleaTraderRows.length,
     barters: barterRows.length,
     crafts: craftRows.length,
   };
   const TAB_LABELS: Record<Tab, string> = {
-    resells: 'Trader resells',
+    resells: 'Trader → Flea',
+    fleaToTrader: 'Flea → Trader',
     barters: 'Barter flips',
     crafts: 'Crafts',
   };
@@ -247,7 +298,7 @@ export function MarketPage() {
             onChange={(e) => setSearch(e.target.value)}
             className="h-8 max-w-52 flex-1"
           />
-          {tab !== 'crafts' && (
+          {(tab === 'resells' || tab === 'barters') && (
             <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <span>Trader level up to</span>
               <Select value={String(maxLevel)} onValueChange={(v) => setMaxLevel(Number(v))}>
@@ -272,9 +323,10 @@ export function MarketPage() {
           </p>
         ) : (
           <div className="overflow-x-auto rounded-lg border">
-            <table className="w-full border-collapse text-[13px]">
+            <table className="w-full table-fixed border-collapse text-[13px]">
               {tab === 'resells' && (
                 <>
+                  <Cols widths={[32, 22, 14, 14, 18]} />
                   <thead>
                     <tr className="border-b bg-card">
                       <TH>Item</TH>
@@ -288,15 +340,44 @@ export function MarketPage() {
                     {resellRows.map((row) => (
                       <tr key={`${row.itemId}-${row.traderId}`} className="border-b last:border-0 hover:bg-secondary/40">
                         <td className="px-3 py-1.5">
-                          <ItemCell stacks={[{ itemId: row.itemId, count: 1 }]} bold />
+                          <SingleItemCell itemId={row.itemId} prices={prices} />
                         </td>
-                        <td className="px-3 py-1.5 text-muted-foreground">
+                        <td className="truncate px-3 py-1.5 text-muted-foreground">
                           {snapshot.traders[row.traderId] ?? 'Trader'} LL{row.minTraderLevel}
                           {row.buyLimit > 0 && <span className="text-xs"> · limit {row.buyLimit}</span>}
                         </td>
-                        <td className="px-3 py-1.5 text-right"><Money value={row.buyPrice} /></td>
-                        <td className="px-3 py-1.5 text-right"><Money value={row.fleaSell} /></td>
-                        <td className="px-3 py-1.5 text-right"><Money value={row.spread} signed /></td>
+                        <td className="whitespace-nowrap px-3 py-1.5 text-right"><Money value={row.buyPrice} /></td>
+                        <td className="whitespace-nowrap px-3 py-1.5 text-right"><Money value={row.fleaSell} /></td>
+                        <td className="whitespace-nowrap px-3 py-1.5 text-right"><Money value={row.spread} signed /></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </>
+              )}
+              {tab === 'fleaToTrader' && (
+                <>
+                  <Cols widths={[36, 22, 14, 14, 14]} />
+                  <thead>
+                    <tr className="border-b bg-card">
+                      <TH>Item</TH>
+                      <TH>Sell to</TH>
+                      <TH right>Buy (flea)</TH>
+                      <TH right>Sell</TH>
+                      <TH right>Profit</TH>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {fleaTraderRows.map((row) => (
+                      <tr key={row.itemId} className="border-b last:border-0 hover:bg-secondary/40">
+                        <td className="px-3 py-1.5">
+                          <SingleItemCell itemId={row.itemId} prices={prices} />
+                        </td>
+                        <td className="truncate px-3 py-1.5 text-muted-foreground">
+                          {(row.sellTraderId && snapshot.traders[row.sellTraderId]) ?? 'Trader'}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-1.5 text-right"><Money value={row.buyFlea} /></td>
+                        <td className="whitespace-nowrap px-3 py-1.5 text-right"><Money value={row.sellTrader} /></td>
+                        <td className="whitespace-nowrap px-3 py-1.5 text-right"><Money value={row.spread} signed /></td>
                       </tr>
                     ))}
                   </tbody>
@@ -304,6 +385,7 @@ export function MarketPage() {
               )}
               {tab === 'barters' && (
                 <>
+                  <Cols widths={[24, 22, 18, 12, 12, 12]} />
                   <thead>
                     <tr className="border-b bg-card">
                       <TH>Give</TH>
@@ -317,15 +399,15 @@ export function MarketPage() {
                   <tbody>
                     {barterRows.map(({ barter, profit }) => (
                       <tr key={barter.id} className="border-b last:border-0 hover:bg-secondary/40">
-                        <td className="max-w-72 px-3 py-1.5"><ItemCell stacks={barter.requiredItems} /></td>
-                        <td className="max-w-72 px-3 py-1.5"><ItemCell stacks={barter.rewardItems} bold /></td>
-                        <td className="px-3 py-1.5 text-muted-foreground">
+                        <td className="px-3 py-1.5"><ItemCell stacks={barter.requiredItems} /></td>
+                        <td className="px-3 py-1.5"><ItemCell stacks={barter.rewardItems} bold /></td>
+                        <td className="truncate px-3 py-1.5 text-muted-foreground">
                           {barter.traderName} LL{barter.traderLevel}
                           {barter.buyLimit > 0 && <span className="text-xs"> · limit {barter.buyLimit}</span>}
                         </td>
-                        <td className="px-3 py-1.5 text-right"><Money value={profit.cost} /></td>
-                        <td className="px-3 py-1.5 text-right"><Money value={profit.revenue} /></td>
-                        <td className="px-3 py-1.5 text-right"><Money value={profit.profit} signed /></td>
+                        <td className="whitespace-nowrap px-3 py-1.5 text-right"><Money value={profit.cost} /></td>
+                        <td className="whitespace-nowrap px-3 py-1.5 text-right"><Money value={profit.revenue} /></td>
+                        <td className="whitespace-nowrap px-3 py-1.5 text-right"><Money value={profit.profit} signed /></td>
                       </tr>
                     ))}
                   </tbody>
@@ -333,6 +415,7 @@ export function MarketPage() {
               )}
               {tab === 'crafts' && (
                 <>
+                  <Cols widths={[21, 19, 18, 10.5, 10.5, 10.5, 10.5]} />
                   <thead>
                     <tr className="border-b bg-card">
                       <TH>Input</TH>
@@ -347,16 +430,16 @@ export function MarketPage() {
                   <tbody>
                     {craftRows.map(({ craft, profit }) => (
                       <tr key={craft.id} className="border-b last:border-0 hover:bg-secondary/40">
-                        <td className="max-w-72 px-3 py-1.5"><ItemCell stacks={craft.requiredItems} /></td>
-                        <td className="max-w-72 px-3 py-1.5"><ItemCell stacks={craft.rewardItems} bold /></td>
-                        <td className="px-3 py-1.5 text-muted-foreground">
+                        <td className="px-3 py-1.5"><ItemCell stacks={craft.requiredItems} /></td>
+                        <td className="px-3 py-1.5"><ItemCell stacks={craft.rewardItems} bold /></td>
+                        <td className="truncate px-3 py-1.5 text-muted-foreground">
                           {snapshot.hideout.find((s) => s.id === craft.stationId)?.name ?? 'Station'} L{craft.stationLevel}
                           <span className="text-xs tabular-nums"> · {(craft.durationSeconds / 3600).toFixed(1)}h</span>
                         </td>
-                        <td className="px-3 py-1.5 text-right"><Money value={profit.cost} /></td>
-                        <td className="px-3 py-1.5 text-right"><Money value={profit.revenue} /></td>
-                        <td className="px-3 py-1.5 text-right"><Money value={profit.profit} signed /></td>
-                        <td className="px-3 py-1.5 text-right">
+                        <td className="whitespace-nowrap px-3 py-1.5 text-right"><Money value={profit.cost} /></td>
+                        <td className="whitespace-nowrap px-3 py-1.5 text-right"><Money value={profit.revenue} /></td>
+                        <td className="whitespace-nowrap px-3 py-1.5 text-right"><Money value={profit.profit} signed /></td>
+                        <td className="whitespace-nowrap px-3 py-1.5 text-right">
                           <Money value={profit.profitPerHour ?? null} signed />
                         </td>
                       </tr>
@@ -369,9 +452,10 @@ export function MarketPage() {
         )}
 
         <p className="text-xs text-muted-foreground">
-          * Resell spreads and profits assume selling the best way (flea 24h average or best
-          trader) and don't include the flea listing fee, which depends on your Intelligence
-          Center. Costs use the cheaper of flea and trader cash offers.
+          * Trader → Flea spreads and barter/craft profits assume selling the best way (flea 24h
+          average or best trader) and don't include the flea listing fee, which depends on your
+          Intelligence Center. Flea → Trader profits are fee-free — traders charge nothing.
+          Costs use the cheaper of flea and trader cash offers.
         </p>
       </div>
     </div>
