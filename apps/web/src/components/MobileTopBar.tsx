@@ -36,9 +36,7 @@ export function MobileTopBar() {
           <Sidebar />
         </SheetContent>
       </Sheet>
-      <span className="truncate text-sm font-bold uppercase tracking-widest text-primary">
-        Raid Planner
-      </span>
+      <span className="truncate text-sm font-semibold">Raid Planner</span>
     </header>
   );
 }

@@ -11,12 +11,12 @@
 - Structure: sidebar sections separated by consistent spacing + Separators; map picker becomes single-column rows (name left, open-count right, selected = gold left-accent) — clearer than the cramped 2-col grid; toolbar groups spawn+live left, recommendation right; route steps numbered with muted connectors; every empty state says what to do next.
 
 ### Task 1: tokens + font
-- [ ] Add `@fontsource-variable/inter`, import in `main.tsx`; retoken `index.css`; base font-size/family in `@layer base`.
-- [ ] Suite + build green, commit.
+- [x] Add `@fontsource-variable/inter`, import in `main.tsx`; retoken `index.css`; base font-size/family in `@layer base`.
+- [x] Suite + build green, commit.
 
 ### Task 2: component structure & copy pass
-- [ ] Sidebar (single-column map rows, separators, spacing), TrackerBar, QuestList rows, toolbar layout in App, RoutePanel numbered steps, LivePanel copy, MobileTopBar, Footer — Tailwind class edits only, test-contract selectors intact.
-- [ ] Suite + build green, commit.
+- [x] Sidebar (single-column map rows, separators, spacing), TrackerBar, QuestList rows, toolbar layout in App, RoutePanel numbered steps, LivePanel copy, MobileTopBar, Footer — Tailwind class edits only, test-contract selectors intact.
+- [x] Suite + build green, commit.
 
 ### Task 3: land
-- [ ] Full verification, README design note update, merge to main (landing pre-authorized).
+- [x] Full verification, README design note update, merge to main (landing pre-authorized).
