@@ -1,0 +1,15 @@
+{
+  "name": "@raidplanner/data",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "test": "node scripts/validate-snapshot.mjs",
+    "snapshot": "node scripts/snapshot.mjs"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0"
+  }
+}

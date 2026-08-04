@@ -1,0 +1,64 @@
+import type { GamePosition } from '@raidplanner/data';
+import { describe, expect, it } from 'vitest';
+import { distance2d } from './geometry';
+import type { RouteStop } from './route';
+import { optimizeRoute } from './route';
+
+const at = (x: number, z: number): GamePosition => ({ x, y: 0, z });
+
+const stop = (id: string, x: number, z: number): RouteStop => ({
+  taskId: `task-${id}`,
+  taskName: `Task ${id}`,
+  objectiveId: id,
+  description: `Objective ${id}`,
+  position: at(x, z),
+});
+
+function pathLength(start: GamePosition, stops: RouteStop[]): number {
+  let total = 0;
+  let prev = start;
+  for (const s of stops) {
+    total += distance2d(prev, s.position);
+    prev = s.position;
+  }
+  return total;
+}
+
+function* permutations<T>(items: T[]): Generator<T[]> {
+  if (items.length <= 1) {
+    yield items;
+    return;
+  }
+  for (let i = 0; i < items.length; i++) {
+    const rest = [...items.slice(0, i), ...items.slice(i + 1)];
+    for (const perm of permutations(rest)) {
+      yield [items[i], ...perm];
+    }
+  }
+}
+
+describe('optimizeRoute', () => {
+  it('orders collinear stops by distance from start', () => {
+    const shuffled = [stop('c', 20, 0), stop('a', 0, 0), stop('d', 30, 0), stop('b', 10, 0)];
+    const route = optimizeRoute(at(0, 0), shuffled);
+    expect(route.stops.map((s) => s.objectiveId)).toEqual(['a', 'b', 'c', 'd']);
+    expect(route.totalDistance).toBeCloseTo(30);
+  });
+
+  it('matches the brute-force optimum on a crossing configuration', () => {
+    const start = at(0, 0);
+    const stops = [stop('n', 0, 10), stop('e', 10, 0), stop('ne', 10, 10), stop('n2', 0, 11)];
+    let best = Infinity;
+    for (const perm of permutations(stops)) {
+      best = Math.min(best, pathLength(start, perm));
+    }
+    const route = optimizeRoute(start, stops);
+    expect(route.totalDistance).toBeCloseTo(best, 5);
+  });
+
+  it('returns an empty route for no stops', () => {
+    const route = optimizeRoute(at(5, 5), []);
+    expect(route.stops).toEqual([]);
+    expect(route.totalDistance).toBe(0);
+  });
+});

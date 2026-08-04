@@ -1,0 +1,477 @@
+:root {
+  --bg: #0f0e0c;
+  --panel: #1b1917;
+  --panel-raised: #2a2723;
+  --border: #3d382f;
+  --text: #c7c5b3;
+  --text-dim: #9b9884;
+  --border-strong: #766d5a;
+  --accent: #c9a96a;
+  --accent-dim: #9a8866;
+  --danger: #a7452c;
+  --ok: #5b7c5b;
+  --route: #d4bb70;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 340px 1fr auto;
+  height: 100vh;
+}
+
+.app > main {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.map-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 12px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+}
+
+.app > main .map-canvas {
+  flex: 1;
+}
+
+.spawn-picker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.spawn-picker select {
+  background: var(--panel-raised);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 5px 8px;
+  border-radius: 3px;
+  max-width: 220px;
+}
+
+.recommend-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-dim);
+  flex-wrap: wrap;
+}
+
+.recommend-banner button {
+  background: var(--panel-raised);
+  border: 1px solid var(--accent-dim);
+  color: var(--accent);
+  padding: 4px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.recommend-banner button:hover {
+  border-color: var(--accent);
+}
+
+/* --- route panel -------------------------------------------------------- */
+
+.route-panel {
+  width: 280px;
+  background: var(--panel);
+  border-left: 1px solid var(--border);
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.route-panel h2 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  margin: 0 0 10px;
+}
+
+.route-steps {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.route-steps li {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.route-task {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.route-desc {
+  color: var(--text);
+}
+
+.route-leg {
+  color: var(--text-dim);
+  font-size: 12px;
+}
+
+.route-total {
+  margin-top: 10px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.map-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-dim);
+  font-size: 18px;
+}
+
+/* --- sidebar ------------------------------------------------------------ */
+
+.sidebar {
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.sidebar h1 {
+  font-size: 18px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 12px;
+}
+
+.sidebar h2 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  margin: 18px 0 8px;
+}
+
+.sidebar h3 {
+  font-size: 13px;
+  color: var(--accent-dim);
+  margin: 12px 0 4px;
+}
+
+.tracker-bar {
+  display: flex;
+  align-items: end;
+  gap: 10px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.field input,
+.field select {
+  background: var(--panel-raised);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 5px 8px;
+  border-radius: 3px;
+  width: 72px;
+}
+
+.field select {
+  width: 84px;
+}
+
+.tracker-count {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.map-picker {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.map-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  background: var(--panel-raised);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 13px;
+  text-align: left;
+}
+
+.map-button:hover {
+  border-color: var(--accent-dim);
+}
+
+.map-button.selected {
+  border-color: var(--accent);
+  background: #34301f;
+  color: var(--accent);
+}
+
+.quest-filters {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.quest-filters input[type='search'] {
+  flex: 1;
+  background: var(--panel-raised);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 6px 8px;
+  border-radius: 3px;
+}
+
+.only-available {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  font-size: 12px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.quest-list ul,
+.anywhere ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.quest-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 4px;
+  min-height: 32px;
+  border-radius: 3px;
+}
+
+.quest-row:hover {
+  background: var(--panel-raised);
+}
+
+.quest-row.completed .quest-name {
+  text-decoration: line-through;
+  color: var(--text-dim);
+}
+
+.quest-select {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.quest-name {
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 2px 5px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.badge-map {
+  background: var(--accent);
+  color: #14120f;
+}
+
+.badge-multi {
+  background: var(--panel-raised);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+
+.badge-count {
+  background: var(--panel-raised);
+  border: 1px solid var(--accent-dim);
+  color: var(--accent);
+}
+
+.done-toggle {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  border-radius: 3px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.done-toggle[aria-pressed='true'] {
+  background: var(--ok);
+  border-color: var(--ok);
+  color: #eef3ee;
+}
+
+.empty-note {
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+.anywhere {
+  margin-top: 14px;
+}
+
+.anywhere summary {
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* --- polish ------------------------------------------------------------- */
+
+/* interactive control boundaries need 3:1 against their surface */
+.field input,
+.field select,
+.spawn-picker select,
+.quest-filters input[type='search'],
+.done-toggle,
+.map-button,
+.recommend-banner button {
+  border-color: var(--border-strong);
+}
+
+.route-leg,
+.route-total,
+.tracker-count,
+.badge-count,
+.field input {
+  font-variant-numeric: tabular-nums;
+}
+
+.route-desc,
+.empty-note {
+  text-wrap: pretty;
+}
+
+.map-button,
+.done-toggle,
+.recommend-banner button {
+  transition-property: transform, border-color, background-color;
+  transition-duration: 120ms;
+  transition-timing-function: ease-out;
+}
+
+.map-button:active,
+.done-toggle:active,
+.recommend-banner button:active {
+  transform: scale(0.96);
+}
+
+/* expand the small done-toggle's hit area without moving it */
+.done-toggle {
+  position: relative;
+}
+
+.done-toggle::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.sidebar-footer {
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.sidebar-footer a {
+  color: var(--accent-dim);
+}
+
+.map-canvas {
+  height: 100%;
+  width: 100%;
+  background: var(--bg);
+}
+
+.marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid var(--bg);
+  font-size: 12px;
+  font-weight: 700;
+  color: #14120f;
+}
+
+.marker.objective {
+  background: var(--accent);
+}
+
+.marker.spawn {
+  background: var(--ok);
+  color: #eef3ee;
+}
