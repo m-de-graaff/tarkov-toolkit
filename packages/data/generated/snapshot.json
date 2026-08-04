@@ -1,12 +1,16 @@
 {
- "generatedAt": "2026-08-04T23:02:15.268Z",
+ "generatedAt": "2026-08-04T23:16:17.662Z",
  "gameMode": "regular",
  "maps": [
   {
    "id": "55f2d3fd4bdc2d5f408b4567",
    "name": "Factory",
    "normalizedName": "factory",
-   "wiki": "https://escapefromtarkov.fandom.com/wiki/Factory",
+   "nameId": "factory4_day",
+   "scenePath": "maps/factory_day_preset.bundle",
+   "altNameIds": [
+    "factory4_night"
+   ],
    "calibration": {
     "transform": [
      1.629,
@@ -1245,7 +1249,8 @@
    "id": "56f40101d2720b2a4d8b45d6",
    "name": "Customs",
    "normalizedName": "customs",
-   "wiki": "https://escapefromtarkov.fandom.com/wiki/Customs",
+   "nameId": "bigmap",
+   "scenePath": "maps/customs_preset.bundle",
    "calibration": {
     "transform": [
      0.239,
@@ -3143,7 +3148,8 @@
    "id": "5704e3c2d2720bac5b8b4567",
    "name": "Woods",
    "normalizedName": "woods",
-   "wiki": "https://escapefromtarkov.fandom.com/wiki/Woods",
+   "nameId": "Woods",
+   "scenePath": "maps/woods_preset.bundle",
    "calibration": {
     "transform": [
      0.1855,
@@ -5304,7 +5310,8 @@
    "id": "5704e4dad2720bb55b8b4567",
    "name": "Lighthouse",
    "normalizedName": "lighthouse",
-   "wiki": "https://escapefromtarkov.fandom.com/wiki/Lighthouse",
+   "nameId": "Lighthouse",
+   "scenePath": "maps/lighthouse_preset.bundle",
    "calibration": {
     "transform": [
      0.2,
@@ -6432,7 +6439,8 @@
    "id": "5704e554d2720bac5b8b456e",
    "name": "Shoreline",
    "normalizedName": "shoreline",
-   "wiki": "https://escapefromtarkov.fandom.com/wiki/Shoreline",
+   "nameId": "Shoreline",
+   "scenePath": "maps/shoreline_preset.bundle",
    "calibration": {
     "transform": [
      0.16,
@@ -8576,7 +8584,8 @@
    "id": "5704e5fad2720bc05b8b4567",
    "name": "Reserve",
    "normalizedName": "reserve",
-   "wiki": "https://escapefromtarkov.fandom.com/wiki/Reserve",
+   "nameId": "RezervBase",
+   "scenePath": "maps/rezerv_base_preset.bundle",
    "calibration": {
     "transform": [
      0.395,
@@ -9832,7 +9841,8 @@
    "id": "5714dbc024597771384a510d",
    "name": "Interchange",
    "normalizedName": "interchange",
-   "wiki": "https://escapefromtarkov.fandom.com/wiki/Interchange",
+   "nameId": "Interchange",
+   "scenePath": "maps/shopping_mall.bundle",
    "calibration": {
     "transform": [
      0.265,
@@ -11853,7 +11863,8 @@
    "id": "5714dc692459777137212e12",
    "name": "Streets of Tarkov",
    "normalizedName": "streets-of-tarkov",
-   "wiki": "https://escapefromtarkov.fandom.com/wiki/Streets_of_Tarkov",
+   "nameId": "TarkovStreets",
+   "scenePath": "maps/city_preset.bundle",
    "calibration": {
     "transform": [
      0.38,
@@ -14864,7 +14875,11 @@
    "id": "5b0fc42d86f7744a585f9105",
    "name": "The Lab",
    "normalizedName": "the-lab",
-   "wiki": "https://escapefromtarkov.fandom.com/wiki/The_Lab",
+   "nameId": "laboratory",
+   "scenePath": "maps/laboratory_preset.bundle",
+   "altNameIds": [
+    "laboratory_dark"
+   ],
    "calibration": {
     "transform": [
      0.575,
@@ -15947,7 +15962,11 @@
    "id": "653e6760052c01c1c805532f",
    "name": "Ground Zero",
    "normalizedName": "ground-zero",
-   "wiki": "https://escapefromtarkov.fandom.com/wiki/Ground_Zero",
+   "nameId": "Sandbox",
+   "scenePath": "maps/sandbox_preset.bundle",
+   "altNameIds": [
+    "Sandbox_high"
+   ],
    "calibration": {
     "transform": [
      0.524,
@@ -17396,7 +17415,8 @@
    "id": "65cc8f81a9aac3e77d0cfd3e",
    "name": "Terminal",
    "normalizedName": "terminal",
-   "wiki": "https://escapefromtarkov.fandom.com/wiki/Terminal",
+   "nameId": "Terminal",
+   "scenePath": "maps/terminal_preset.bundle",
    "calibration": {
     "transform": [
      0.2,
@@ -17494,7 +17514,8 @@
    "id": "6733700029c367a3d40b02af",
    "name": "The Labyrinth",
    "normalizedName": "the-labyrinth",
-   "wiki": "https://escapefromtarkov.fandom.com/wiki/The_Labyrinth",
+   "nameId": "Labyrinth",
+   "scenePath": "maps/labyrinth_preset.bundle",
    "calibration": {
     "transform": [
      2.115,
@@ -17597,7 +17618,8 @@
    "id": "68236e8153654e8c1200798a",
    "name": "Ground Zero Tutorial",
    "normalizedName": "ground-zero-tutorial",
-   "wiki": "https://escapefromtarkov.fandom.com/wiki/Ground_Zero",
+   "nameId": "Sandbox_start",
+   "scenePath": "maps/sandbox_start_preset.bundle",
    "spawns": [
     {
      "position": {
@@ -17619,7 +17641,8 @@
    "id": "69af492a4819ea4ba10a69c5",
    "name": "Icebreaker",
    "normalizedName": "icebreaker",
-   "wiki": "https://escapefromtarkov.fandom.com/wiki/Icebreaker",
+   "nameId": "Icebreaker",
+   "scenePath": "maps/icebreaker.bundle",
    "calibration": {
     "transform": [
      2,

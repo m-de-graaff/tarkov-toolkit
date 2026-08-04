@@ -157,11 +157,18 @@ function buildMaps(rawMaps, calibrationIndex) {
       }
     }
 
+    // Merged variants keep their own nameId/scenePath in the logs — collect
+    // them all so log-based map detection resolves variants to the canonical map.
+    const logSources = spawnSources;
     maps.push({
       id: raw.id,
       name: raw.name,
       normalizedName: raw.normalizedName,
-      ...(raw.wiki ? { wiki: raw.wiki } : {}),
+      ...(raw.nameId ? { nameId: raw.nameId } : {}),
+      ...(raw.scenePath ? { scenePath: raw.scenePath } : {}),
+      ...(logSources.length > 1
+        ? { altNameIds: logSources.slice(1).map((s) => s.nameId).filter(Boolean) }
+        : {}),
       ...(calibration ? { calibration } : {}),
       spawns,
     });

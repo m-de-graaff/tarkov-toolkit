@@ -33,6 +33,7 @@ export function useLiveWatcher(): LiveWatcher {
   const seenRef = useRef<Set<string>>(new Set());
   const cleanupListenersRef = useRef<(() => void) | null>(null);
   const setLiveFix = usePlanner((s) => s.setLiveFix);
+  const applyLogEvent = usePlanner((s) => s.applyLogEvent);
 
   const disconnect = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
@@ -76,6 +77,7 @@ export function useLiveWatcher(): LiveWatcher {
         try {
           const message = JSON.parse(String(event.data));
           if (message.type === 'fix' && message.fix) setLiveFix(message.fix);
+          if (message.type === 'map' || message.type === 'task') applyLogEvent(message);
         } catch {
           /* malformed frame — ignore */
         }
@@ -93,7 +95,7 @@ export function useLiveWatcher(): LiveWatcher {
       if (retry) clearTimeout(retry);
       ws?.close();
     };
-  }, [setLiveFix]);
+  }, [setLiveFix, applyLogEvent]);
 
   const startWatching = useCallback(async (handle: FileSystemDirectoryHandle) => {
     const listNames = async () => {

@@ -34,6 +34,12 @@ export interface RpMap {
   id: string;
   name: string;
   normalizedName: string;
+  /** BSG's internal location id — appears in game logs (e.g. "Sandbox") */
+  nameId?: string;
+  /** scene bundle path — appears in game logs while a map loads */
+  scenePath?: string;
+  /** nameIds of merged variants (e.g. night factory) for log-based detection */
+  altNameIds?: string[];
   wiki?: string;
   /** absent => not renderable in v1 (tile-based or virtual map) */
   calibration?: MapCalibration;

@@ -63,6 +63,26 @@ describe('planner store', () => {
     expect(usePlanner.getState().selectedTaskIds).toEqual([]);
   });
 
+  it('applyLogEvent auto-selects the detected map and completes quests', async () => {
+    const { snapshot } = await import('@raidplanner/data');
+    const withNameId = snapshot.maps.find((m) => m.nameId && m.calibration)!;
+    usePlanner.getState().applyLogEvent({ type: 'map', nameId: withNameId.nameId! });
+    expect(usePlanner.getState().selectedMapId).toBe(withNameId.id);
+    expect(usePlanner.getState().lastAutoEvent).toContain(withNameId.name);
+
+    const task = snapshot.tasks[0];
+    usePlanner.getState().applyLogEvent({ type: 'task', taskId: task.id, status: 'finished' });
+    expect(usePlanner.getState().tracker.completedTaskIds).toContain(task.id);
+    // idempotent
+    usePlanner.getState().applyLogEvent({ type: 'task', taskId: task.id, status: 'finished' });
+    expect(
+      usePlanner.getState().tracker.completedTaskIds.filter((id) => id === task.id),
+    ).toHaveLength(1);
+    // started events change nothing
+    usePlanner.getState().applyLogEvent({ type: 'task', taskId: 'nope', status: 'started' });
+    expect(usePlanner.getState().tracker.completedTaskIds).toHaveLength(1);
+  });
+
   it('resetProgress wipes completions and returns to level 1', () => {
     usePlanner.getState().setLevel(42);
     usePlanner.getState().toggleCompleted('t-1');

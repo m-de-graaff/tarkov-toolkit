@@ -1,5 +1,6 @@
 import type { GameMode, GamePosition } from '@raidplanner/data';
-import type { LiveFix } from '@raidplanner/live';
+import { snapshot } from '@raidplanner/data';
+import type { LiveFix, LogEvent } from '@raidplanner/live';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { TrackerState } from './lib/availability';
@@ -26,7 +27,10 @@ interface PlannerState {
   profiles: Partial<Record<GameMode, TrackerState>>;
   search: string;
   liveFix: LiveFix | null;
+  /** last companion automation event, for the toolbar status line */
+  lastAutoEvent: string | null;
   setLiveFix(f: LiveFix | null): void;
+  applyLogEvent(event: LogEvent): void;
   setGameMode(mode: GameMode): void;
   selectMap(id: string): void;
   toggleTask(id: string): void;
@@ -50,7 +54,34 @@ export const usePlanner = create<PlannerState>()(
       profiles: {},
       search: '',
       liveFix: null,
+      lastAutoEvent: null,
       setLiveFix: (liveFix) => set({ liveFix }),
+      applyLogEvent: (event) =>
+        set((s) => {
+          if (event.type === 'map') {
+            const map = snapshot.maps.find(
+              (m) => m.nameId === event.nameId || m.altNameIds?.includes(event.nameId),
+            );
+            if (!map) return s;
+            const changed = map.id !== s.selectedMapId;
+            return {
+              lastAutoEvent: `Raid detected: ${map.name}`,
+              ...(changed
+                ? { selectedMapId: map.id, selectedTaskIds: [], spawn: null }
+                : {}),
+            };
+          }
+          if (event.status !== 'finished') return s;
+          const task = snapshot.tasks.find((t) => t.id === event.taskId);
+          if (!task || s.tracker.completedTaskIds.includes(task.id)) return s;
+          return {
+            lastAutoEvent: `Quest completed: ${task.name}`,
+            tracker: {
+              ...s.tracker,
+              completedTaskIds: [...s.tracker.completedTaskIds, task.id],
+            },
+          };
+        }),
       setGameMode: (mode) =>
         set((s) => {
           if (mode === s.gameMode) return s;
@@ -102,7 +133,7 @@ export const usePlanner = create<PlannerState>()(
         }
         return persisted;
       },
-      partialize: ({ search: _search, liveFix: _liveFix, ...rest }) => rest,
+      partialize: ({ search: _search, liveFix: _liveFix, lastAutoEvent: _e, ...rest }) => rest,
     },
   ),
 );
