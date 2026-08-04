@@ -17,7 +17,15 @@ const snapshot = JSON.parse(
   await readFile(path.join(dataRoot, 'generated', 'snapshot.json'), 'utf8'),
 );
 
-check(snapshot.maps.length >= 15, `expected >= 15 maps, got ${snapshot.maps.length}`);
+check(snapshot.maps.length >= 13, `expected >= 13 maps, got ${snapshot.maps.length}`);
+check(
+  !snapshot.maps.some((m) => ['night-factory', 'ground-zero-21', 'the-lab-dark'].includes(m.normalizedName)),
+  'merged map variants must not appear in the map list',
+);
+const renderable = snapshot.maps.filter(
+  (m) => m.calibration && (m.calibration.svgFile || m.calibration.tiles),
+);
+check(renderable.length >= 12, `expected >= 12 renderable maps, got ${renderable.length}`);
 check(snapshot.tasks.length >= 450, `expected >= 450 tasks, got ${snapshot.tasks.length}`);
 
 const tasksWithPoints = snapshot.tasks.filter((t) =>
@@ -58,7 +66,7 @@ for (const task of snapshot.tasks) {
 }
 
 for (const map of snapshot.maps) {
-  if (!map.calibration) continue;
+  if (!map.calibration?.svgFile) continue;
   try {
     await access(path.join(svgDir, map.calibration.svgFile));
   } catch {

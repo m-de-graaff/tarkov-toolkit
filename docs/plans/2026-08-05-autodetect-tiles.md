@@ -12,18 +12,18 @@
 - Browser: `FileSystemDirectoryHandle` persisted in IndexedDB; on load `queryPermission({mode:'read'})` — `granted` → resume watching silently, `prompt` → one-click "Resume watching" button (`requestPermission` needs a user gesture), else normal picker. jsdom has no `indexedDB`: the helper no-ops when it's absent.
 
 ### Task 1: companion folder auto-detect
-- [ ] `apps/watcher/src/index.ts`: `detectScreenshotsDir()` per constraints (spawnSync powershell, candidates, saved config, readline fallback); friendly logs ("Found your screenshots at …"). Manual verify against the real machine (folder exists → no prompt).
-- [ ] Commit.
+- [x] `apps/watcher/src/index.ts`: `detectScreenshotsDir()` per constraints (spawnSync powershell, candidates, saved config, readline fallback); friendly logs ("Found your screenshots at …"). Manual verify against the real machine (folder exists → no prompt).
+- [x] Commit.
 
 ### Task 2: browser pick-once persistence
-- [ ] `apps/web/src/lib/handleStore.ts` (raw IndexedDB get/put of the handle, guarded no-op without `indexedDB`); extend `fsAccess.d.ts` with `queryPermission`/`requestPermission`; `useLiveWatcher`: save handle on successful connect, on mount try stored handle (`granted` → start watching, `prompt` → expose `resume()` + `canResume`), refactor watch-start into a shared internal `startWatching(handle)`; `LivePanel`: "Resume watching" button when `canResume`.
-- [ ] Suite + build green (existing FSA tests unchanged), commit.
+- [x] `apps/web/src/lib/handleStore.ts` (raw IndexedDB get/put of the handle, guarded no-op without `indexedDB`); extend `fsAccess.d.ts` with `queryPermission`/`requestPermission`; `useLiveWatcher`: save handle on successful connect, on mount try stored handle (`granted` → start watching, `prompt` → expose `resume()` + `canResume`), refactor watch-start into a shared internal `startWatching(handle)`; `LivePanel`: "Resume watching" button when `canResume`.
+- [x] Suite + build green (existing FSA tests unchanged), commit.
 
 ### Task 3: tile base maps with SVG fallback
-- [ ] Snapshot: calibration gains `tiles?: { url: string; tileSize: number; minZoom: number; maxZoom: number }` from the interactive variant's `tilePath` (prefer variants that have it; svg fields kept when present); renderable = calibration present AND (tiles or svg) — the-lab/the-labyrinth/icebreaker become renderable (aliases untouched); regenerate + validator adjusted (svg check only when svgFile set; require tiles-or-svg).
-- [ ] `MapCanvas`: when `cal.tiles` → `L.tileLayer(url, { tileSize, bounds, maxNativeZoom, minNativeZoom, className: 'map-tiles' })`; first `tileerror` → remove tile layer, add SVG overlay if available (one-way swap per mount); no tiles → SVG overlay as today.
-- [ ] Tests: MapCanvas smoke keeps passing (customs has both svg+tiles — assert tile layer element present instead of img overlay); README (nicer maps + offline exception + newly renderable maps; limitations updated).
-- [ ] Suite + build green, commit.
+- [x] Snapshot: calibration gains `tiles?: { url: string; tileSize: number; minZoom: number; maxZoom: number }` from the interactive variant's `tilePath` (prefer variants that have it; svg fields kept when present); renderable = calibration present AND (tiles or svg) — the-lab/the-labyrinth/icebreaker become renderable (aliases untouched); regenerate + validator adjusted (svg check only when svgFile set; require tiles-or-svg).
+- [x] `MapCanvas`: when `cal.tiles` → `L.tileLayer(url, { tileSize, bounds, maxNativeZoom, minNativeZoom, className: 'map-tiles' })`; first `tileerror` → remove tile layer, add SVG overlay if available (one-way swap per mount); no tiles → SVG overlay as today.
+- [x] Tests: MapCanvas smoke keeps passing (customs has both svg+tiles — assert tile layer element present instead of img overlay); README (nicer maps + offline exception + newly renderable maps; limitations updated).
+- [x] Suite + build green, commit.
 
 ### Task 4: land
-- [ ] Full verification, merge to main (pre-authorized), memory update.
+- [x] Full verification, merge to main (pre-authorized), memory update.

@@ -44,7 +44,18 @@ describe('MapCanvas', () => {
 
     const canvas = container.querySelector('.map-canvas');
     expect(canvas?.classList.contains('leaflet-container')).toBe(true);
-    expect(container.querySelector(`img[src="/maps/${customs.calibration!.svgFile}"]`)).toBeTruthy();
+    // customs has a tile variant — the pretty tile layer is the base
+    expect(container.querySelector('.map-tiles')).toBeTruthy();
     expect(container.querySelectorAll('.marker.objective').length).toBe(markers.length);
+  });
+
+  it('uses the bundled SVG overlay for svg-only maps', () => {
+    const lighthouse = snapshot.maps.find((m) => m.normalizedName === 'lighthouse')!;
+    act(() => {
+      root.render(<MapCanvas map={lighthouse} markers={[]} route={null} />);
+    });
+    expect(
+      container.querySelector(`img[src="/maps/${lighthouse.calibration!.svgFile}"]`),
+    ).toBeTruthy();
   });
 });
