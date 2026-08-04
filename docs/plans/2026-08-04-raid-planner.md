@@ -292,10 +292,10 @@
 - Produces: `SpawnPicker()` — `<select>` of the selected map's PMC spawn zones (spawns where `sides` includes `'pmc'` or `'all'`, deduped by `zoneName`, option label = zoneName, value stores first position of that zone) plus option "Click map…" which arms `onMapClick` to set `{kind:'custom'}` spawn. `RoutePanel()` — right-docked panel (280px) listing ordered stops: `N. taskName — objective description — +Xm` (leg distance, game units ≈ meters, rounded), total at bottom, empty-states ("select quests", "pick a spawn to route"). `RecommendBanner()` — above the map, top-3 from `recommendMaps` for current tracker: "Best maps for your quests: Customs (12) · Woods (8) · …", each a button that switches map; hidden when the selected map is already #1.
 - Route derivation (in `App.tsx`, memoized): when spawn set and ≥1 selected task with points on map → build `RouteStop[]` (per objective, point nearest spawn), `optimizeRoute(spawn.position, stops)`; pass to `MapCanvas` and `RoutePanel`; markers get `orderIndex` from route order.
 
-- [ ] **Step 1: Implement all three + wiring.**
-- [ ] **Step 2: Verify manually**: pick spawn zone → S marker; select 3 quests → numbered markers + dashed polyline in visit order; route order changes sensibly when switching spawn to opposite side of map; custom spawn via map click works; recommendation banner lists plausible counts and switches maps.
-- [ ] **Step 3: `pnpm build` + all tests green.**
-- [ ] **Step 4: Commit** (`feat(web): spawn picker, route planning, map recommendation`).
+- [x] **Step 1: Implement all three + wiring.**
+- [x] **Step 2: Verify manually**: pick spawn zone → S marker; select 3 quests → numbered markers + dashed polyline in visit order; route order changes sensibly when switching spawn to opposite side of map; custom spawn via map click works; recommendation banner lists plausible counts and switches maps.
+- [x] **Step 3: `pnpm build` + all tests green.**
+- [x] **Step 4: Commit** (`feat(web): spawn picker, route planning, map recommendation`).
 
 ---
 
