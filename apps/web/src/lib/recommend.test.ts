@@ -21,7 +21,11 @@ describe('recommendMaps', () => {
   });
 
   it('does not count completed quests', () => {
-    const scores = recommendMaps(fixtureSnapshot, tracker({ completedTaskIds: ['t-locked'] }));
+    // faction BEAR keeps the unlocked USEC follow-up (t-req) out of the count
+    const scores = recommendMaps(
+      fixtureSnapshot,
+      tracker({ completedTaskIds: ['t-locked'], faction: 'BEAR' }),
+    );
     expect(scores.find((s) => s.mapId === 'map-a')?.availableQuestCount).toBe(1);
   });
 
