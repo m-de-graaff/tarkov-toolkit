@@ -17,6 +17,9 @@ importers:
       '@raidplanner/data':
         specifier: workspace:*
         version: link:../../packages/data
+      '@raidplanner/live':
+        specifier: workspace:*
+        version: link:../../packages/live
       leaflet:
         specifier: ^1.9.4
         version: 1.9.4
@@ -60,6 +63,15 @@ importers:
       typescript:
         specifier: ^5.5.0
         version: 5.9.3
+
+  packages/live:
+    devDependencies:
+      typescript:
+        specifier: ^5.5.0
+        version: 5.9.3
+      vitest:
+        specifier: ^2.1.0
+        version: 2.1.9(jsdom@30.0.1)
 
 packages:
 
