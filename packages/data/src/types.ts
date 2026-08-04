@@ -136,12 +136,16 @@ export interface HideoutStation {
 export interface TradeItemStack {
   itemId: string;
   count: number;
+  /** crafts: tools are used but returned — never part of the cost */
+  tool?: boolean;
 }
 
 export interface RpBarter {
   id: string;
   traderName: string;
   traderLevel: number;
+  taskLocked: boolean;
+  buyLimit: number;
   requiredItems: TradeItemStack[];
   rewardItems: TradeItemStack[];
 }

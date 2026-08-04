@@ -28,6 +28,8 @@ const barter: RpBarter = {
   id: 'b1',
   traderName: 'Therapist',
   traderLevel: 2,
+  taskLocked: false,
+  buyLimit: 0,
   requiredItems: [{ itemId: 'item-a', count: 3 }],
   rewardItems: [{ itemId: 'item-b', count: 1 }],
 };
@@ -45,6 +47,54 @@ describe('barterProfit', () => {
     );
     expect(result.cost).toBeNull();
     expect(result.profit).toBeNull();
+  });
+});
+
+describe('acquisition fallback and tools', () => {
+  const fallbackPrices: ItemPrices = {
+    'flea-banned': {
+      fleaAvg: 0,
+      fleaLow: 0,
+      basePrice: 5_000,
+      bestTraderSell: 0,
+      offers: [
+        { traderId: 'peacekeeper', priceRUB: 25_000, minTraderLevel: 2, buyLimit: 0, taskLocked: false },
+      ],
+    },
+    'the-tool': { fleaAvg: 900_000, fleaLow: 0, basePrice: 0, bestTraderSell: 0 },
+    'reward': { fleaAvg: 40_000, fleaLow: 0, basePrice: 0, bestTraderSell: 0 },
+  };
+
+  it('prices flea-banned inputs via the cheapest trader offer', () => {
+    const barter: RpBarter = {
+      id: 'b',
+      traderName: 'Skier',
+      traderLevel: 1,
+      taskLocked: false,
+      buyLimit: 0,
+      requiredItems: [{ itemId: 'flea-banned', count: 1 }],
+      rewardItems: [{ itemId: 'reward', count: 1 }],
+    };
+    expect(barterProfit(barter, fallbackPrices)).toEqual({
+      cost: 25_000,
+      revenue: 40_000,
+      profit: 15_000,
+    });
+  });
+
+  it('excludes tools from craft cost', () => {
+    const craft: RpCraft = {
+      id: 'c',
+      stationId: 'st',
+      stationLevel: 1,
+      durationSeconds: 3600,
+      requiredItems: [
+        { itemId: 'the-tool', count: 1, tool: true },
+        { itemId: 'flea-banned', count: 1 },
+      ],
+      rewardItems: [{ itemId: 'reward', count: 1 }],
+    };
+    expect(craftProfit(craft, fallbackPrices).profit).toBe(15_000);
   });
 });
 

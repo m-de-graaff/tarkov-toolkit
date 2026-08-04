@@ -21,10 +21,21 @@ export interface ItemPriceEntry {
 
 export type ItemPrices = Record<string, ItemPriceEntry>;
 
+/**
+ * Cheapest realistic way to obtain one unit: flea average, or a trader cash
+ * offer when the item is flea-banned (common for barter inputs) or the trader
+ * sells it cheaper.
+ */
 const acquireCost = (prices: ItemPrices, itemId: string): number | null => {
   const p = prices[itemId];
   if (!p) return null;
-  return p.fleaAvg || p.fleaLow || null;
+  const flea = p.fleaAvg || p.fleaLow || 0;
+  const traderBuys = (p.offers ?? [])
+    .filter((offer) => !offer.taskLocked && offer.priceRUB > 0)
+    .map((offer) => offer.priceRUB);
+  const trader = traderBuys.length > 0 ? Math.min(...traderBuys) : 0;
+  const best = flea && trader ? Math.min(flea, trader) : flea || trader;
+  return best > 0 ? best : null;
 };
 
 /** what a stack is worth when sold the best way (flea average vs best trader) */
@@ -38,6 +49,7 @@ const sellValue = (prices: ItemPrices, itemId: string): number | null => {
 const stackCost = (prices: ItemPrices, stacks: TradeItemStack[]): number | null => {
   let total = 0;
   for (const stack of stacks) {
+    if (stack.tool) continue; // tools are returned, not consumed
     const price = acquireCost(prices, stack.itemId);
     if (price === null) return null;
     total += price * stack.count;

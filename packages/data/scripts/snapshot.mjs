@@ -292,15 +292,23 @@ function buildHideout(hideoutData, traderNames) {
 const stacks = (list) =>
   (list ?? [])
     .filter((entry) => entry.item)
-    .map((entry) => ({ itemId: entry.item, count: entry.count ?? 1 }));
+    .map((entry) => ({
+      itemId: entry.item,
+      count: entry.count ?? 1,
+      ...(entry.attributes?.tool ? { tool: true } : {}),
+    }));
 
+// The API gives a single result item per trade: barters have `offeredItem`,
+// crafts have `productItem`.
 function buildBarters(bartersData, traderNames) {
   return Object.values(bartersData.barters ?? bartersData).map((barter) => ({
     id: barter.id,
     traderName: traderNames.get(barter.trader) ?? 'Unknown',
-    traderLevel: barter.level ?? 1,
+    traderLevel: barter.minTraderLevel ?? 1,
+    taskLocked: barter.taskUnlock != null,
+    buyLimit: barter.buyLimit ?? 0,
     requiredItems: stacks(barter.requiredItems),
-    rewardItems: stacks(barter.rewardItems),
+    rewardItems: stacks(barter.offeredItem ? [barter.offeredItem] : []),
   }));
 }
 
@@ -311,7 +319,7 @@ function buildCrafts(craftsData) {
     stationLevel: craft.level ?? 1,
     durationSeconds: craft.duration ?? 0,
     requiredItems: stacks(craft.requiredItems),
-    rewardItems: stacks(craft.rewardItems),
+    rewardItems: stacks(craft.productItem ? [craft.productItem] : []),
   }));
 }
 

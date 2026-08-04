@@ -98,6 +98,18 @@ check(
   snapshot.barters.filter((b) => b.traderName === 'Unknown').length < snapshot.barters.length / 10,
   'too many barters with unknown traders',
 );
+check(
+  snapshot.barters.every((b) => b.rewardItems.length > 0),
+  'every barter must offer a reward item',
+);
+check(
+  snapshot.crafts.every((c) => c.rewardItems.length > 0),
+  'every craft must produce an item',
+);
+check(
+  snapshot.barters.some((b) => b.traderLevel > 1),
+  'barter trader levels must not all be 1 (minTraderLevel parsing)',
+);
 const missingLite = [
   ...snapshot.hideout.flatMap((s) => s.levels.flatMap((l) => l.itemRequirements.map((r) => r.itemId))),
   ...snapshot.barters.flatMap((b) => b.requiredItems.map((s) => s.itemId)),
