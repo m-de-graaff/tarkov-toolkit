@@ -65,9 +65,9 @@
 - Create: `apps/web/src/components/MobileTopBar.tsx`
 - Modify: `App.tsx`, `RoutePanel.tsx`, `LivePanel.tsx`
 
-- [ ] **Step 1:** `< md`: hide the panel group sidebar; MobileTopBar with Sheet trigger ("Maps & Quests") rendering `<Sidebar/>` inside `SheetContent side="left"` (w-[85vw] max-w-[360px], scrollable); map fills below; RoutePanel becomes a collapsible bottom drawer (`<details>`-style summary bar with route total) instead of a right aside.
-- [ ] **Step 2:** Toolbar condenses on mobile (SpawnPicker + LivePanel wrap; RecommendBanner scrollable row).
-- [ ] **Step 3:** Suite + build green; verify 320px layout (no horizontal scroll) via jsdom assertion is meaningless — note as visual-check item; commit (`feat(web): mobile responsive layout with sheet sidebar`).
+- [x] **Step 1:** `< md`: hide the panel group sidebar; MobileTopBar with Sheet trigger ("Maps & Quests") rendering `<Sidebar/>` inside `SheetContent side="left"` (w-[85vw] max-w-[360px], scrollable); map fills below; RoutePanel becomes a collapsible bottom drawer (`<details>`-style summary bar with route total) instead of a right aside.
+- [x] **Step 2:** Toolbar condenses on mobile (SpawnPicker + LivePanel wrap; RecommendBanner scrollable row).
+- [x] **Step 3:** Suite + build green; verify 320px layout (no horizontal scroll) via jsdom assertion is meaningless — note as visual-check item; commit (`feat(web): mobile responsive layout with sheet sidebar`).
 
 ---
 
