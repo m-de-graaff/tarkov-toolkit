@@ -475,3 +475,73 @@ body {
   background: var(--ok);
   color: #eef3ee;
 }
+
+.marker.player {
+  background: none;
+  border: none;
+  color: var(--route);
+  font-size: 20px;
+  text-shadow: 0 0 4px #000;
+  /* glyph ➤ points east; yaw 0 = north */
+  rotate: -90deg;
+}
+
+/* --- live panel --------------------------------------------------------- */
+
+.live-panel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.live-panel button {
+  background: var(--panel-raised);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  padding: 4px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+  transition-property: transform, border-color;
+  transition-duration: 120ms;
+  transition-timing-function: ease-out;
+}
+
+.live-panel button:active {
+  transform: scale(0.96);
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  flex-shrink: 0;
+}
+
+.live-dot.on {
+  background: var(--ok);
+}
+
+.live-age {
+  color: var(--text-dim);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.live-error {
+  color: var(--danger);
+  font-size: 12px;
+}
+
+.live-unsupported {
+  color: var(--text-dim);
+  font-size: 12px;
+}
+
+.route-origin {
+  color: var(--text-dim);
+  font-size: 12px;
+  margin: 0 0 6px;
+}

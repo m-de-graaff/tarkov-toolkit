@@ -1,11 +1,13 @@
 import { snapshot } from '@raidplanner/data';
 import { useMemo } from 'react';
+import { LivePanel } from './components/LivePanel';
 import type { MapMarker } from './components/MapCanvas';
 import { MapCanvas } from './components/MapCanvas';
 import { RecommendBanner } from './components/RecommendBanner';
 import { RoutePanel } from './components/RoutePanel';
 import { Sidebar } from './components/Sidebar';
 import { SpawnPicker } from './components/SpawnPicker';
+import { useLiveWatcher } from './lib/useLiveWatcher';
 import { distance2d } from './lib/geometry';
 import { objectivePoints } from './lib/questIndex';
 import type { RouteStop } from './lib/route';
@@ -17,11 +19,17 @@ export function App() {
   const selectedTaskIds = usePlanner((s) => s.selectedTaskIds);
   const spawn = usePlanner((s) => s.spawn);
   const setSpawn = usePlanner((s) => s.setSpawn);
+  const liveFix = usePlanner((s) => s.liveFix);
+  const watcher = useLiveWatcher();
 
   const map = snapshot.maps.find((m) => m.id === selectedMapId);
 
-  // One stop per selected objective, at its candidate point nearest the spawn
-  // (first point when no spawn is set yet).
+  // The route starts from where you actually are (live fix) when live mode has
+  // one, otherwise from the chosen spawn.
+  const routeOrigin = liveFix?.position ?? spawn?.position ?? null;
+
+  // One stop per selected objective, at its candidate point nearest the route
+  // origin (first point when there is none yet).
   const stops = useMemo(() => {
     if (!map) return [];
     const out: RouteStop[] = [];
@@ -29,10 +37,11 @@ export function App() {
       const task = snapshot.tasks.find((t) => t.id === taskId);
       if (!task) continue;
       for (const { objective, points } of objectivePoints(task, map.id)) {
-        const ref = spawn?.position;
-        const point = ref
+        const point = routeOrigin
           ? points.reduce((a, b) =>
-              distance2d(a.position, ref) <= distance2d(b.position, ref) ? a : b,
+              distance2d(a.position, routeOrigin) <= distance2d(b.position, routeOrigin)
+                ? a
+                : b,
             )
           : points[0];
         out.push({
@@ -45,12 +54,24 @@ export function App() {
       }
     }
     return out;
-  }, [map, selectedTaskIds, spawn]);
+  }, [map, selectedTaskIds, routeOrigin]);
 
   const route = useMemo(
-    () => (spawn && stops.length > 0 ? optimizeRoute(spawn.position, stops) : null),
-    [spawn, stops],
+    () => (routeOrigin && stops.length > 0 ? optimizeRoute(routeOrigin, stops) : null),
+    [routeOrigin, stops],
   );
+
+  const outOfBounds = useMemo(() => {
+    if (!liveFix || !map?.calibration) return false;
+    const [[x1, z1], [x2, z2]] = map.calibration.bounds;
+    const { x, z } = liveFix.position;
+    return (
+      x < Math.min(x1, x2) ||
+      x > Math.max(x1, x2) ||
+      z < Math.min(z1, z2) ||
+      z > Math.max(z1, z2)
+    );
+  }, [liveFix, map]);
 
   const markers = useMemo(() => {
     const orderByObjective = new Map(route?.stops.map((s, i) => [s.objectiveId, i]));
@@ -62,11 +83,20 @@ export function App() {
       orderIndex: orderByObjective.get(stop.objectiveId),
       taskName: stop.taskName,
     }));
-    if (spawn) {
+    if (spawn && !liveFix) {
       out.push({ id: 'spawn', position: spawn.position, label: 'Spawn', kind: 'spawn' });
     }
+    if (liveFix) {
+      out.push({
+        id: 'player',
+        position: liveFix.position,
+        label: 'You are here',
+        kind: 'player',
+        yawDeg: liveFix.yawDeg,
+      });
+    }
     return out;
-  }, [stops, route, spawn]);
+  }, [stops, route, spawn, liveFix]);
 
   return (
     <div className="app">
@@ -76,6 +106,7 @@ export function App() {
           <>
             <div className="map-toolbar">
               <SpawnPicker map={map} />
+              <LivePanel watcher={watcher} outOfBounds={outOfBounds} />
               <RecommendBanner />
             </div>
             <MapCanvas
@@ -96,7 +127,8 @@ export function App() {
       {map?.calibration && (
         <RoutePanel
           route={route}
-          spawnPosition={spawn?.position ?? null}
+          originPosition={routeOrigin}
+          originLabel={liveFix ? 'live position' : 'spawn'}
           hasSelection={selectedTaskIds.length > 0}
         />
       )}
