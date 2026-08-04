@@ -95,8 +95,12 @@ function StationCard({ station }: { station: HideoutStation }) {
   );
 }
 
+// The fallback must be a stable reference: a selector that fabricates a fresh
+// object per read makes useSyncExternalStore re-render forever.
+const NO_LEVELS: Record<string, number> = {};
+
 function usePlannerLevels() {
-  return usePlanner((s) => s.tracker.hideoutLevels ?? {});
+  return usePlanner((s) => s.tracker.hideoutLevels ?? NO_LEVELS);
 }
 
 export function HideoutPage() {
