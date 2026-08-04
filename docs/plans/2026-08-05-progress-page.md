@@ -17,17 +17,17 @@
 - [x] Fake-timer test: file appearing after connect is picked up by the 2s poll. (Done before this plan was written — it passes; the watcher works.)
 
 ### Task 2: routing + top nav
-- [ ] Add `react-router-dom`; `App` = BrowserRouter + TopNav + Routes (`/` PlannerPage, `/progress` ProgressPage). Extract current App body into `pages/PlannerPage.tsx`; new `components/TopNav.tsx` (tabs via NavLink, `aria-current`, mobile sheet trigger for planner); delete MobileTopBar.
-- [ ] Suite + tsc + build green (App tests unaffected: default route renders Planner), commit.
+- [x] Add `react-router-dom`; `App` = BrowserRouter + TopNav + Routes (`/` PlannerPage, `/progress` ProgressPage). Extract current App body into `pages/PlannerPage.tsx`; new `components/TopNav.tsx` (tabs via NavLink, `aria-current`, mobile sheet trigger for planner); delete MobileTopBar.
+- [x] Suite + tsc + build green (App tests unaffected: default route renders Planner), commit.
 
 ### Task 3: Progress page
-- [ ] `pages/ProgressPage.tsx`: centered column; "Your PMC" card (level input, faction select, X of N quests done, Y open now); search; quests grouped by trader — each row: done-checkbox, name, min-level, lock hint when not yet available; two-step "Reset progress" button. New store action `resetProgress()`.
-- [ ] Test: toggling a quest row updates tracker + open counts; reset requires two clicks.
-- [ ] Suite green, commit.
+- [x] `pages/ProgressPage.tsx`: centered column; "Your PMC" card (level input, faction select, X of N quests done, Y open now); search; quests grouped by trader — each row: done-checkbox, name, min-level, lock hint when not yet available; two-step "Reset progress" button. New store action `resetProgress()`.
+- [x] Test: toggling a quest row updates tracker + open counts; reset requires two clicks.
+- [x] Suite green, commit.
 
 ### Task 4: sidebar simplification
-- [ ] Remove TrackerBar + "only available" checkbox from Sidebar; always show open quests; collapsed `<details>` "Locked on this map (N)" (dimmed rows, min-level shown, no plan checkbox); "Update your progress →" link to /progress; store drops `onlyAvailable`; LivePanel copy simplified ("Show my position" + folder hint).
-- [ ] Update affected tests (store, App); suite + build green, commit.
+- [x] Remove TrackerBar + "only available" checkbox from Sidebar; always show open quests; collapsed `<details>` "Locked on this map (N)" (dimmed rows, min-level shown, no plan checkbox); "Update your progress →" link to /progress; store drops `onlyAvailable`; LivePanel copy simplified ("Show my position" + folder hint).
+- [x] Update affected tests (store, App); suite + build green, commit.
 
 ### Task 5: land
-- [ ] Full verification, README update, merge to main (pre-authorized).
+- [x] Full verification, README update, merge to main (pre-authorized).

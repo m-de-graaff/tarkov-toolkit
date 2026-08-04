@@ -36,9 +36,19 @@ describe('planner store', () => {
   });
 
   it('has sensible tracker defaults', () => {
-    const { tracker, onlyAvailable } = usePlanner.getState();
+    const { tracker } = usePlanner.getState();
     expect(tracker).toEqual({ level: 15, faction: 'Any', completedTaskIds: [] });
-    expect(onlyAvailable).toBe(true);
+  });
+
+  it('resetProgress wipes completions and returns to level 1', () => {
+    usePlanner.getState().setLevel(42);
+    usePlanner.getState().toggleCompleted('t-1');
+    usePlanner.getState().resetProgress();
+    expect(usePlanner.getState().tracker).toEqual({
+      level: 1,
+      faction: 'Any',
+      completedTaskIds: [],
+    });
   });
 
   it('persists state except the search box and live fix', () => {
