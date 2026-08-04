@@ -129,18 +129,40 @@ export const usePlanner = create<PlannerState>()(
     }),
     {
       name: 'raidplanner-v1',
-      version: 1,
+      version: 2,
       migrate: (persisted, version) => {
-        if (version === 0 && persisted && typeof persisted === 'object') {
-          const old = persisted as { tracker?: TrackerState };
-          return {
-            ...old,
-            gameMode: 'pvp' as const,
+        if (!persisted || typeof persisted !== 'object') return persisted;
+        let state = persisted as {
+          tracker?: TrackerState;
+          profiles?: Partial<Record<GameMode, TrackerState>>;
+          gameMode?: GameMode;
+        };
+        if (version < 1) {
+          state = {
+            ...state,
+            gameMode: 'pvp',
             profiles: {},
-            tracker: old.tracker ?? freshTracker(),
+            tracker: state.tracker ?? freshTracker(),
           };
         }
-        return persisted;
+        if (version < 2) {
+          // hideoutLevels arrived after v1 states were in the wild
+          const withLevels = (tracker: TrackerState | undefined): TrackerState => ({
+            ...(tracker ?? freshTracker()),
+            hideoutLevels: tracker?.hideoutLevels ?? {},
+          });
+          state = {
+            ...state,
+            tracker: withLevels(state.tracker),
+            profiles: Object.fromEntries(
+              Object.entries(state.profiles ?? {}).map(([mode, tracker]) => [
+                mode,
+                withLevels(tracker),
+              ]),
+            ),
+          };
+        }
+        return state;
       },
       partialize: ({ search: _search, liveFix: _liveFix, lastAutoEvent: _e, ...rest }) => rest,
     },

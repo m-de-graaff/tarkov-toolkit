@@ -88,6 +88,24 @@ describe('planner store', () => {
     expect(usePlanner.getState().tracker.completedTaskIds).toHaveLength(1);
   });
 
+  it('migrates v1 persisted state to include hideoutLevels everywhere', () => {
+    const migrate = usePlanner.persist.getOptions().migrate!;
+    const migrated = migrate(
+      {
+        gameMode: 'pvp',
+        tracker: { level: 33, faction: 'USEC', completedTaskIds: ['t-1'] },
+        profiles: { pve: { level: 9, faction: 'Any', completedTaskIds: [] } },
+      },
+      1,
+    ) as {
+      tracker: { level: number; hideoutLevels?: Record<string, number> };
+      profiles: Record<string, { hideoutLevels?: Record<string, number> }>;
+    };
+    expect(migrated.tracker.level).toBe(33);
+    expect(migrated.tracker.hideoutLevels).toEqual({});
+    expect(migrated.profiles.pve.hideoutLevels).toEqual({});
+  });
+
   it('resetProgress wipes completions and returns to level 1', () => {
     usePlanner.getState().setLevel(42);
     usePlanner.getState().toggleCompleted('t-1');
