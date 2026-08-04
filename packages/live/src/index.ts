@@ -1,3 +1,3 @@
-export type { LiveFix } from './parse';
-export { isScreenshotName, parseScreenshotName } from './parse';
-export { pickNewestFix } from './pick';
+export type { LiveFix } from './parse.ts';
+export { isScreenshotName, parseScreenshotName } from './parse.ts';
+export { pickNewestFix } from './pick.ts';

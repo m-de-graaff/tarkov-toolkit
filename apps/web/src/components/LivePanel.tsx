@@ -44,31 +44,37 @@ export function LivePanel({
   watcher: LiveWatcher;
   outOfBounds: boolean;
 }) {
-  if (!watcher.supported) {
-    return (
-      <span className="text-xs text-muted-foreground">Live mode needs Chrome or Edge</span>
-    );
-  }
+  const active = watcher.companion || watcher.connected;
   return (
     <div className="live-panel flex flex-wrap items-center gap-2 text-[13px]">
       <span
-        className={cn(
-          'size-2 shrink-0 rounded-full',
-          watcher.connected ? 'bg-ok' : 'bg-muted-foreground',
-        )}
+        className={cn('size-2 shrink-0 rounded-full', active ? 'bg-ok' : 'bg-muted-foreground')}
         aria-hidden="true"
       />
-      <Button
-        type="button"
-        variant={watcher.connected ? 'outline' : 'default'}
-        size="sm"
-        className="h-7 text-xs"
-        title="Pick your Documents → Escape from Tarkov → Screenshots folder once; after that, pressing PrtScn in raid shows where you are"
-        onClick={() => (watcher.connected ? watcher.disconnect() : void watcher.connect())}
-      >
-        {watcher.connected ? 'Stop showing my position' : 'Show my position'}
-      </Button>
-      {watcher.connected && <FixAge />}
+      {watcher.companion ? (
+        <span className="text-xs text-muted-foreground">
+          Companion app connected — screenshots show your position automatically
+        </span>
+      ) : watcher.supported ? (
+        <Button
+          type="button"
+          variant={watcher.connected ? 'outline' : 'default'}
+          size="sm"
+          className="h-7 text-xs"
+          title="Pick your Documents → Escape from Tarkov → Screenshots folder once; after that, pressing PrtScn in raid shows where you are. Prefer any browser? Run the companion app instead (see README)."
+          onClick={() => (watcher.connected ? watcher.disconnect() : void watcher.connect())}
+        >
+          {watcher.connected ? 'Stop showing my position' : 'Show my position'}
+        </Button>
+      ) : (
+        <span
+          className="text-xs text-muted-foreground"
+          title="Start it with 'pnpm watcher' — it watches your screenshots and works with every browser"
+        >
+          Run the companion app to see your position (see README)
+        </span>
+      )}
+      {active && <FixAge />}
       {watcher.error && <span className="text-xs text-destructive">{watcher.error}</span>}
       {outOfBounds && (
         <span className="text-xs text-destructive">

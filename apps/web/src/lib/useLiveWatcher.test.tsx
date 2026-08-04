@@ -3,6 +3,7 @@ import { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { usePlanner } from '../store';
+import { WebSocketStub } from '../test/setup';
 import type { LiveWatcher } from './useLiveWatcher';
 import { useLiveWatcher } from './useLiveWatcher';
 
@@ -89,6 +90,35 @@ describe('useLiveWatcher', () => {
     } finally {
       vi.useRealTimers();
     }
+  });
+
+  it('receives fixes from the companion watcher over its websocket', () => {
+    WebSocketStub.instances.length = 0;
+    act(() => root.render(<HookHarness onReady={(w) => (watcher = w)} />));
+
+    const socket = WebSocketStub.instances.find((s) => s.url.includes('17520'))!;
+    expect(socket).toBeTruthy();
+
+    act(() => {
+      socket.onopen?.();
+      socket.onmessage?.({
+        data: JSON.stringify({ type: 'hello', app: 'raidplanner-watcher' }),
+      });
+      socket.onmessage?.({
+        data: JSON.stringify({
+          type: 'fix',
+          fix: {
+            position: { x: 86.19, y: 15.6, z: -16.45 },
+            yawDeg: 35,
+            takenAt: '2026-08-05[00-38]',
+            raw: 'x (0).png',
+          },
+        }),
+      });
+    });
+
+    expect(watcher.companion).toBe(true);
+    expect(usePlanner.getState().liveFix?.position).toEqual({ x: 86.19, y: 15.6, z: -16.45 });
   });
 
   it('sets no fix when the folder has no screenshots yet', async () => {

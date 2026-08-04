@@ -3,10 +3,14 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePlanner } from '../store';
 
 const POLL_MS = 2000;
+const COMPANION_URL = 'ws://127.0.0.1:17520';
+const COMPANION_RETRY_MS = 5000;
 
 export interface LiveWatcher {
   supported: boolean;
   connected: boolean;
+  /** true when the standalone companion watcher is feeding positions */
+  companion: boolean;
   connect(): Promise<void>;
   disconnect(): void;
   error: string | null;
@@ -19,6 +23,7 @@ export interface LiveWatcher {
 export function useLiveWatcher(): LiveWatcher {
   const supported = typeof window !== 'undefined' && 'showDirectoryPicker' in window;
   const [connected, setConnected] = useState(false);
+  const [companion, setCompanion] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const seenRef = useRef<Set<string>>(new Set());
@@ -36,6 +41,55 @@ export function useLiveWatcher(): LiveWatcher {
   }, [setLiveFix]);
 
   useEffect(() => disconnect, [disconnect]);
+
+  // Companion transport: quietly try the standalone watcher and keep retrying;
+  // when it's running, positions arrive with no folder picker at all.
+  useEffect(() => {
+    if (typeof WebSocket === 'undefined') return;
+    let ws: WebSocket | null = null;
+    let retry: ReturnType<typeof setTimeout> | null = null;
+    let disposed = false;
+
+    const scheduleRetry = () => {
+      if (!disposed && retry === null) {
+        retry = setTimeout(() => {
+          retry = null;
+          open();
+        }, COMPANION_RETRY_MS);
+      }
+    };
+
+    const open = () => {
+      if (disposed) return;
+      try {
+        ws = new WebSocket(COMPANION_URL);
+      } catch {
+        scheduleRetry();
+        return;
+      }
+      ws.onopen = () => setCompanion(true);
+      ws.onmessage = (event) => {
+        try {
+          const message = JSON.parse(String(event.data));
+          if (message.type === 'fix' && message.fix) setLiveFix(message.fix);
+        } catch {
+          /* malformed frame — ignore */
+        }
+      };
+      ws.onclose = () => {
+        setCompanion(false);
+        scheduleRetry();
+      };
+      ws.onerror = () => ws?.close();
+    };
+
+    open();
+    return () => {
+      disposed = true;
+      if (retry) clearTimeout(retry);
+      ws?.close();
+    };
+  }, [setLiveFix]);
 
   const connect = useCallback(async () => {
     setError(null);
@@ -93,5 +147,5 @@ export function useLiveWatcher(): LiveWatcher {
     setConnected(true);
   }, [disconnect, setLiveFix]);
 
-  return { supported, connected, connect, disconnect, error };
+  return { supported, connected, companion, connect, disconnect, error };
 }
