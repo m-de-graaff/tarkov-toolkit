@@ -189,11 +189,11 @@
   export function recommendMaps(snapshot: Snapshot, tracker: TrackerState): MapScore[]; // sorted desc by availableQuestCount, ties by mapLockedCount; only renderable+non-virtual maps
   ```
 
-- [ ] **Step 1: Failing test** on the Task 4 fixture: map with 2 available quests ranks above map with 1; completed quests don't count; result excludes maps with zero.
-- [ ] **Step 2: Run, confirm fail.**
-- [ ] **Step 3: Implement.**
-- [ ] **Step 4: Run, confirm pass.**
-- [ ] **Step 5: Commit** (`feat(web): map recommendation scoring`).
+- [x] **Step 1: Failing test** on the Task 4 fixture: map with 2 available quests ranks above map with 1; completed quests don't count; result excludes maps with zero.
+- [x] **Step 2: Run, confirm fail.**
+- [x] **Step 3: Implement.**
+- [x] **Step 4: Run, confirm pass.**
+- [x] **Step 5: Commit** (`feat(web): map recommendation scoring`).
 
 ---
 
