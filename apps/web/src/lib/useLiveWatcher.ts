@@ -1,6 +1,7 @@
 import { parseScreenshotName, pickNewestFix } from '@raidplanner/live';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePlanner } from '../store';
+import { loadHandle, saveHandle } from './handleStore';
 
 const POLL_MS = 2000;
 const COMPANION_URL = 'ws://127.0.0.1:17520';
@@ -11,7 +12,10 @@ export interface LiveWatcher {
   connected: boolean;
   /** true when the standalone companion watcher is feeding positions */
   companion: boolean;
+  /** a previously-picked folder can be resumed with one click */
+  canResume: boolean;
   connect(): Promise<void>;
+  resume(): Promise<void>;
   disconnect(): void;
   error: string | null;
 }
@@ -91,17 +95,7 @@ export function useLiveWatcher(): LiveWatcher {
     };
   }, [setLiveFix]);
 
-  const connect = useCallback(async () => {
-    setError(null);
-    let handle: FileSystemDirectoryHandle;
-    try {
-      handle = await window.showDirectoryPicker({ mode: 'read' });
-    } catch (e) {
-      if (e instanceof DOMException && e.name === 'AbortError') return; // user cancelled
-      setError('Could not open the folder. Grant read access and try again.');
-      return;
-    }
-
+  const startWatching = useCallback(async (handle: FileSystemDirectoryHandle) => {
     const listNames = async () => {
       const names: string[] = [];
       for await (const entry of handle.values()) {
@@ -147,5 +141,63 @@ export function useLiveWatcher(): LiveWatcher {
     setConnected(true);
   }, [disconnect, setLiveFix]);
 
-  return { supported, connected, companion, connect, disconnect, error };
+  const connect = useCallback(async () => {
+    setError(null);
+    let handle: FileSystemDirectoryHandle;
+    try {
+      handle = await window.showDirectoryPicker({ mode: 'read' });
+    } catch (e) {
+      if (e instanceof DOMException && e.name === 'AbortError') return; // user cancelled
+      setError('Could not open the folder. Grant read access and try again.');
+      return;
+    }
+    void saveHandle(handle);
+    setResumeHandle(null);
+    await startWatching(handle);
+  }, [startWatching]);
+
+  // Pick once, ever: a handle stored from a previous visit resumes silently
+  // when the permission is still granted, or with one click when the browser
+  // wants a fresh gesture.
+  const [resumeHandle, setResumeHandle] = useState<FileSystemDirectoryHandle | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      const stored = await loadHandle();
+      if (cancelled || !stored || typeof stored.queryPermission !== 'function') return;
+      const permission = await stored.queryPermission({ mode: 'read' });
+      if (cancelled) return;
+      if (permission === 'granted') {
+        await startWatching(stored);
+      } else if (permission === 'prompt') {
+        setResumeHandle(stored);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [startWatching]);
+
+  const resume = useCallback(async () => {
+    if (!resumeHandle) return;
+    const permission = await resumeHandle.requestPermission({ mode: 'read' });
+    if (permission === 'granted') {
+      setResumeHandle(null);
+      await startWatching(resumeHandle);
+    } else {
+      setError('Access was not granted — pick the folder again.');
+      setResumeHandle(null);
+    }
+  }, [resumeHandle, startWatching]);
+
+  return {
+    supported,
+    connected,
+    companion,
+    canResume: resumeHandle !== null && !connected,
+    connect,
+    resume,
+    disconnect,
+    error,
+  };
 }
