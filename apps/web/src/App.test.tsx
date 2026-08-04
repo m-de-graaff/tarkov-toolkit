@@ -16,6 +16,7 @@ describe('App', () => {
     (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
     localStorage.clear();
     usePlanner.setState(initial, true);
+    window.history.pushState({}, '', '/planner');
     container = document.createElement('div');
     document.body.appendChild(container);
     root = createRoot(container);
@@ -24,6 +25,14 @@ describe('App', () => {
   afterEach(() => {
     act(() => root.unmount());
     container.remove();
+  });
+
+  it('serves the home page at / with a working planner CTA', () => {
+    window.history.pushState({}, '', '/');
+    act(() => root.render(<App />));
+    expect(container.textContent).toContain('Plan your raids');
+    expect(container.querySelector('a[href="/planner"]')).toBeTruthy();
+    expect(container.textContent).toContain('Coming soon');
   });
 
   it('shows quests for the selected map and marks selected objectives on it', () => {

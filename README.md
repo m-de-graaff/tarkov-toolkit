@@ -105,8 +105,15 @@ top bar with a slide-in sheet and a collapsible bottom route drawer.
 
 ## Hosting
 
-`pnpm build` produces a fully static `apps/web/dist` — deployable to any static
-host (GitHub Pages, Cloudflare Pages, Netlify…). No server component.
+`pnpm build` produces a fully static `apps/web/dist`:
+
+- **Self-hosted:** serve `apps/web/dist` from any static host or file server.
+- **Vercel:** the repo ships a `vercel.json` — import the project and deploy;
+  no configuration needed. Accounts/sync via Better Auth are designed but not
+  yet implemented (see `docs/auth-design.md` for the decisions it needs).
+
+Map note: base-map tiles load from `assets.tarkov.dev` at runtime (the one
+network dependency); offline, maps fall back to the bundled SVGs.
 
 ## v1 limitations
 

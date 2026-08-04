@@ -12,7 +12,6 @@ import { MapCanvas } from '../components/MapCanvas';
 import { RecommendBanner } from '../components/RecommendBanner';
 import { RoutePanel } from '../components/RoutePanel';
 import { Sidebar } from '../components/Sidebar';
-import { SpawnPicker } from '../components/SpawnPicker';
 import { distance2d } from '../lib/geometry';
 import { objectivePoints } from '../lib/questIndex';
 import type { RouteStop } from '../lib/route';
@@ -120,7 +119,20 @@ export function PlannerPage() {
   const mapArea = map?.calibration ? (
     <>
       <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 border-b bg-card px-4 py-2">
-        <SpawnPicker map={map} />
+        {routeOrigin === null ? (
+          <span className="text-xs text-muted-foreground">
+            Click the map where you spawn — or take a screenshot in raid
+          </span>
+        ) : spawn && !liveFix ? (
+          <button
+            type="button"
+            className="rounded-md border px-2 py-1 text-xs text-muted-foreground transition-colors hover:border-input hover:text-foreground"
+            title="Remove the spawn point you placed"
+            onClick={() => setSpawn(null)}
+          >
+            Spawn set · clear
+          </button>
+        ) : null}
         <div className="h-5 w-px bg-border" aria-hidden="true" />
         <LivePanel watcher={watcher} outOfBounds={outOfBounds} />
         <div className="ml-auto">
