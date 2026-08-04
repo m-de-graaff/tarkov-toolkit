@@ -1,105 +1,132 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { cn } from '@/lib/utils';
+import type { TradeItemStack } from '@raidplanner/data';
 import { snapshot } from '@raidplanner/data';
 import { RefreshCw } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { fetchPrices, loadCachedPrices, type CachedPrices } from '../lib/prices';
-import { barterProfit, craftProfit, traderResells, type TradeProfit } from '../lib/profit';
+import { barterProfit, craftProfit, traderResells } from '../lib/profit';
 import { usePlanner } from '../store';
+
+const STALE_MS = 30 * 60 * 1000; // auto-refresh cadence
 
 const rub = (n: number) => `₽${Math.round(n).toLocaleString()}`;
 
-function ProfitValue({ profit }: { profit: TradeProfit }) {
-  if (profit.profit === null) {
-    return (
-      <span className="text-xs text-muted-foreground" title="An item in this trade has no price">
-        no price
-      </span>
-    );
-  }
+function ItemCell({ stacks, bold }: { stacks: TradeItemStack[]; bold?: boolean }) {
   return (
-    <span className={cn('font-medium tabular-nums', profit.profit >= 0 ? 'text-ok' : 'text-destructive')}>
-      {profit.profit >= 0 ? '+' : ''}
-      {rub(profit.profit)}
+    <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-0.5">
+      {stacks.map((stack, i) => {
+        const item = snapshot.itemsLite[stack.itemId];
+        return (
+          <span key={`${stack.itemId}-${i}`} className="flex min-w-0 items-center gap-1.5">
+            {i > 0 && <span className="text-muted-foreground">+</span>}
+            {item?.iconLink && (
+              <img
+                src={item.iconLink}
+                alt=""
+                loading="lazy"
+                className="size-6 shrink-0 rounded-sm border bg-black/40 object-contain"
+              />
+            )}
+            <span className={cn('truncate text-[13px]', bold && 'font-medium')} title={item?.name}>
+              {item?.name ?? 'Unknown item'}
+              {stack.count > 1 && (
+                <span className="text-muted-foreground tabular-nums"> ×{Math.round(stack.count * 10) / 10}</span>
+              )}
+              {stack.tool && (
+                <span className="ml-1 text-[10px] uppercase text-muted-foreground" title="Used but returned — not consumed">
+                  tool
+                </span>
+              )}
+            </span>
+          </span>
+        );
+      })}
     </span>
   );
 }
 
-function stacksLabel(stacks: { itemId: string; count: number }[], full = false) {
-  return stacks
-    .map((s) => {
-      const item = snapshot.itemsLite[s.itemId];
-      const name = (full ? item?.name : item?.shortName) ?? '?';
-      return `${name}${s.count > 1 ? ` ×${s.count}` : ''}`;
-    })
-    .join(' + ');
-}
-
-function Category({
-  title,
-  subtitle,
-  count,
-  children,
-}: {
-  title: string;
-  subtitle: string;
-  count: number;
-  children: React.ReactNode;
-}) {
+function Money({ value, signed }: { value: number | null; signed?: boolean }) {
+  if (value === null) {
+    return <span className="text-xs text-muted-foreground">—</span>;
+  }
   return (
-    <details open className="profit-category rounded-lg border bg-card">
-      <summary className="flex cursor-pointer flex-wrap items-baseline gap-x-2.5 px-4 py-3">
-        <h2 className="text-sm font-semibold">{title}</h2>
-        <span className="text-xs text-muted-foreground">{subtitle}</span>
-        <span className="ml-auto text-xs text-muted-foreground tabular-nums">{count}</span>
-      </summary>
-      <div className="border-t px-4 pb-3">{children}</div>
-    </details>
-  );
-}
-
-function TopList<T>({
-  rows,
-  render,
-}: {
-  rows: T[];
-  render: (row: T) => React.ReactNode;
-}) {
-  const [showAll, setShowAll] = useState(false);
-  const visible = showAll ? rows : rows.slice(0, 20);
-  return (
-    <>
-      <ul className="m-0 flex list-none flex-col p-0 text-[13px]">{visible.map(render)}</ul>
-      {rows.length > 20 && (
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          className="mt-1 text-xs text-muted-foreground"
-          onClick={() => setShowAll((v) => !v)}
-        >
-          {showAll ? 'Show top 20' : `Show all ${rows.length}`}
-        </Button>
+    <span
+      className={cn(
+        'tabular-nums',
+        signed && (value >= 0 ? 'font-medium text-ok' : 'font-medium text-destructive'),
       )}
-    </>
+    >
+      {signed && value >= 0 ? '+' : ''}
+      {rub(value)}
+    </span>
   );
 }
+
+const TH = ({ children, right }: { children: React.ReactNode; right?: boolean }) => (
+  <th className={cn('px-3 py-2 text-xs font-medium text-muted-foreground', right ? 'text-right' : 'text-left')}>
+    {children}
+  </th>
+);
+
+type Tab = 'resells' | 'barters' | 'crafts';
 
 export function MarketPage() {
   const gameMode = usePlanner((s) => s.gameMode);
+  const [tab, setTab] = useState<Tab>('barters');
   const [cached, setCached] = useState<CachedPrices | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
+  const [maxLevel, setMaxLevel] = useState<number>(4);
+  const fetchingRef = useRef(false);
 
-  // each mode has its own flea market — load that mode's cache
+  // Prices load themselves: cache first, auto-fetch when missing or stale,
+  // then keep fresh on an interval while the page is open.
   useEffect(() => {
+    let disposed = false;
     setCached(null);
-    void loadCachedPrices(gameMode).then(setCached);
+    setError(null);
+
+    const refresh = async () => {
+      if (fetchingRef.current) return;
+      fetchingRef.current = true;
+      setLoading(true);
+      try {
+        const fresh = await fetchPrices(gameMode);
+        if (!disposed) {
+          setCached(fresh);
+          setError(null);
+        }
+      } catch {
+        if (!disposed) setError("Couldn't fetch prices — retrying in a few minutes.");
+      } finally {
+        fetchingRef.current = false;
+        if (!disposed) setLoading(false);
+      }
+    };
+
+    void loadCachedPrices(gameMode).then((existing) => {
+      if (disposed) return;
+      if (existing) setCached(existing);
+      if (!existing || Date.now() - existing.fetchedAt > STALE_MS) void refresh();
+    });
+    const interval = setInterval(() => void refresh(), STALE_MS);
+    return () => {
+      disposed = true;
+      clearInterval(interval);
+    };
   }, [gameMode]);
 
-  const refresh = async () => {
+  const manualRefresh = async () => {
     setLoading(true);
     setError(null);
     try {
@@ -112,23 +139,34 @@ export function MarketPage() {
   };
 
   const prices = cached?.prices ?? null;
-
   const matchesSearch = (text: string) =>
     !search || text.toLowerCase().includes(search.toLowerCase());
+  const stackNames = (stacks: TradeItemStack[]) =>
+    stacks.map((s) => snapshot.itemsLite[s.itemId]?.name ?? '').join(' ');
+
+  const resellRows = useMemo(() => {
+    if (!prices) return [];
+    return traderResells(prices).filter(
+      (row) =>
+        row.minTraderLevel <= maxLevel &&
+        matchesSearch(`${snapshot.itemsLite[row.itemId]?.name ?? ''} ${snapshot.traders[row.traderId] ?? ''}`),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prices, search, maxLevel]);
 
   const barterRows = useMemo(() => {
     if (!prices) return [];
     return snapshot.barters
+      .filter((b) => !b.taskLocked && b.traderLevel <= maxLevel)
       .map((b) => ({ barter: b, profit: barterProfit(b, prices) }))
       .filter(
         ({ barter, profit }) =>
           profit.profit !== null &&
-          profit.profit > 0 &&
-          matchesSearch(stacksLabel([...barter.requiredItems, ...barter.rewardItems], true)),
+          matchesSearch(stackNames([...barter.requiredItems, ...barter.rewardItems])),
       )
       .sort((a, b) => (b.profit.profit ?? 0) - (a.profit.profit ?? 0));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prices, search]);
+  }, [prices, search, maxLevel]);
 
   const craftRows = useMemo(() => {
     if (!prices) return [];
@@ -137,161 +175,204 @@ export function MarketPage() {
       .filter(
         ({ craft, profit }) =>
           profit.profit !== null &&
-          profit.profit > 0 &&
-          matchesSearch(stacksLabel([...craft.requiredItems, ...craft.rewardItems], true)),
+          matchesSearch(stackNames([...craft.requiredItems, ...craft.rewardItems])),
       )
-      .sort((a, b) => (b.profit.profitPerHour ?? 0) - (a.profit.profitPerHour ?? 0));
+      .sort((a, b) => (b.profit.profitPerHour ?? -Infinity) - (a.profit.profitPerHour ?? -Infinity));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prices, search]);
 
-  const resellRows = useMemo(() => {
-    if (!prices) return [];
-    return traderResells(prices).filter((row) =>
-      matchesSearch(
-        `${snapshot.itemsLite[row.itemId]?.name ?? ''} ${snapshot.traders[row.traderId] ?? ''}`,
-      ),
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prices, search]);
+  const counts: Record<Tab, number> = {
+    resells: resellRows.length,
+    barters: barterRows.length,
+    crafts: craftRows.length,
+  };
+  const TAB_LABELS: Record<Tab, string> = {
+    resells: 'Trader resells',
+    barters: 'Barter flips',
+    crafts: 'Crafts',
+  };
 
   const ageMinutes = cached ? Math.round((Date.now() - cached.fetchedAt) / 60000) : null;
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto">
-      <div className="mx-auto flex max-w-4xl flex-col gap-4 px-4 py-8">
-        <div>
-          <h1 className="text-lg font-semibold">
-            Profit <span className="text-sm font-normal text-muted-foreground uppercase">· {gameMode}</span>
-          </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Quick ways to make roubles, priced with {gameMode.toUpperCase()} flea data — switch
-            the mode toggle up top for the other economy.
-          </p>
+      <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-8">
+        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <h1 className="text-lg font-semibold">Profit</h1>
+          <span className="text-xs uppercase tracking-wider text-primary">{gameMode}</span>
+          <span className="ml-auto flex items-center gap-2 text-xs text-muted-foreground tabular-nums">
+            {loading
+              ? 'updating prices…'
+              : ageMinutes !== null
+                ? `prices updated ${ageMinutes < 1 ? 'just now' : `${ageMinutes}m ago`} · auto-refreshes`
+                : 'loading prices…'}
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="size-6"
+              aria-label="Refresh prices now"
+              disabled={loading}
+              onClick={() => void manualRefresh()}
+            >
+              <RefreshCw aria-hidden="true" className={cn('size-3.5', loading && 'animate-spin')} />
+            </Button>
+          </span>
         </div>
+        {error && <p className="text-[13px] text-destructive">{error}</p>}
 
         <div className="flex flex-wrap items-center gap-2.5">
+          <div role="group" aria-label="Category" className="flex items-center rounded-md border p-0.5">
+            {(Object.keys(TAB_LABELS) as Tab[]).map((t) => (
+              <button
+                key={t}
+                type="button"
+                aria-pressed={tab === t}
+                onClick={() => setTab(t)}
+                className={cn(
+                  'rounded-[5px] px-2.5 py-1 text-xs font-medium transition-colors tabular-nums',
+                  tab === t ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground',
+                )}
+              >
+                {TAB_LABELS[t]}
+                {prices && <span className="ml-1 text-muted-foreground">{counts[t]}</span>}
+              </button>
+            ))}
+          </div>
           <Input
             type="search"
             placeholder="Search items…"
             aria-label="Search trades by item"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="h-9 max-w-56 flex-1"
+            className="h-8 max-w-52 flex-1"
           />
-          <div className="ml-auto flex items-center gap-2">
-            {ageMinutes !== null && (
-              <span className="text-xs text-muted-foreground tabular-nums">
-                {gameMode.toUpperCase()} prices{' '}
-                {ageMinutes < 60 ? `${ageMinutes}m` : `${Math.round(ageMinutes / 60)}h`} old
-              </span>
-            )}
-            <Button
-              type="button"
-              variant={cached ? 'outline' : 'default'}
-              size="sm"
-              className="gap-1.5"
-              disabled={loading}
-              onClick={() => void refresh()}
-            >
-              <RefreshCw aria-hidden="true" className={cn('size-3.5', loading && 'animate-spin')} />
-              {cached ? 'Refresh prices' : `Load ${gameMode.toUpperCase()} prices (~16 MB)`}
-            </Button>
-          </div>
+          {tab !== 'crafts' && (
+            <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <span>Trader level up to</span>
+              <Select value={String(maxLevel)} onValueChange={(v) => setMaxLevel(Number(v))}>
+                <SelectTrigger className="h-8 w-16" aria-label="Maximum trader loyalty level">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {[1, 2, 3, 4].map((l) => (
+                    <SelectItem key={l} value={String(l)}>
+                      LL{l}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </label>
+          )}
         </div>
 
-        {error && <p className="text-[13px] text-destructive">{error}</p>}
-        {!cached && !loading && !error && (
-          <p className="rounded-md border border-dashed p-3 text-[13px] text-muted-foreground">
-            Prices are the one thing that can't ship offline — load them once per mode and
-            they're cached until you refresh.
+        {!prices ? (
+          <p className="rounded-md border border-dashed p-6 text-center text-[13px] text-muted-foreground">
+            Fetching {gameMode.toUpperCase()} flea prices…
           </p>
+        ) : (
+          <div className="overflow-x-auto rounded-lg border">
+            <table className="w-full border-collapse text-[13px]">
+              {tab === 'resells' && (
+                <>
+                  <thead>
+                    <tr className="border-b bg-card">
+                      <TH>Item</TH>
+                      <TH>Buy from</TH>
+                      <TH right>Buy</TH>
+                      <TH right>Flea</TH>
+                      <TH right>Spread*</TH>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {resellRows.map((row) => (
+                      <tr key={`${row.itemId}-${row.traderId}`} className="border-b last:border-0 hover:bg-secondary/40">
+                        <td className="px-3 py-1.5">
+                          <ItemCell stacks={[{ itemId: row.itemId, count: 1 }]} bold />
+                        </td>
+                        <td className="px-3 py-1.5 text-muted-foreground">
+                          {snapshot.traders[row.traderId] ?? 'Trader'} LL{row.minTraderLevel}
+                          {row.buyLimit > 0 && <span className="text-xs"> · limit {row.buyLimit}</span>}
+                        </td>
+                        <td className="px-3 py-1.5 text-right"><Money value={row.buyPrice} /></td>
+                        <td className="px-3 py-1.5 text-right"><Money value={row.fleaSell} /></td>
+                        <td className="px-3 py-1.5 text-right"><Money value={row.spread} signed /></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </>
+              )}
+              {tab === 'barters' && (
+                <>
+                  <thead>
+                    <tr className="border-b bg-card">
+                      <TH>Give</TH>
+                      <TH>Get</TH>
+                      <TH>Trader</TH>
+                      <TH right>Cost</TH>
+                      <TH right>Sell</TH>
+                      <TH right>Profit</TH>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {barterRows.map(({ barter, profit }) => (
+                      <tr key={barter.id} className="border-b last:border-0 hover:bg-secondary/40">
+                        <td className="max-w-72 px-3 py-1.5"><ItemCell stacks={barter.requiredItems} /></td>
+                        <td className="max-w-72 px-3 py-1.5"><ItemCell stacks={barter.rewardItems} bold /></td>
+                        <td className="px-3 py-1.5 text-muted-foreground">
+                          {barter.traderName} LL{barter.traderLevel}
+                          {barter.buyLimit > 0 && <span className="text-xs"> · limit {barter.buyLimit}</span>}
+                        </td>
+                        <td className="px-3 py-1.5 text-right"><Money value={profit.cost} /></td>
+                        <td className="px-3 py-1.5 text-right"><Money value={profit.revenue} /></td>
+                        <td className="px-3 py-1.5 text-right"><Money value={profit.profit} signed /></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </>
+              )}
+              {tab === 'crafts' && (
+                <>
+                  <thead>
+                    <tr className="border-b bg-card">
+                      <TH>Input</TH>
+                      <TH>Output</TH>
+                      <TH>Station</TH>
+                      <TH right>Cost</TH>
+                      <TH right>Sell</TH>
+                      <TH right>Profit</TH>
+                      <TH right>Per hour</TH>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {craftRows.map(({ craft, profit }) => (
+                      <tr key={craft.id} className="border-b last:border-0 hover:bg-secondary/40">
+                        <td className="max-w-72 px-3 py-1.5"><ItemCell stacks={craft.requiredItems} /></td>
+                        <td className="max-w-72 px-3 py-1.5"><ItemCell stacks={craft.rewardItems} bold /></td>
+                        <td className="px-3 py-1.5 text-muted-foreground">
+                          {snapshot.hideout.find((s) => s.id === craft.stationId)?.name ?? 'Station'} L{craft.stationLevel}
+                          <span className="text-xs tabular-nums"> · {(craft.durationSeconds / 3600).toFixed(1)}h</span>
+                        </td>
+                        <td className="px-3 py-1.5 text-right"><Money value={profit.cost} /></td>
+                        <td className="px-3 py-1.5 text-right"><Money value={profit.revenue} /></td>
+                        <td className="px-3 py-1.5 text-right"><Money value={profit.profit} signed /></td>
+                        <td className="px-3 py-1.5 text-right">
+                          <Money value={profit.profitPerHour ?? null} signed />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </>
+              )}
+            </table>
+          </div>
         )}
 
-        {prices && (
-          <>
-            <Category
-              title="Trader resells"
-              subtitle="buy from a trader, sell on flea — spread before flea fee"
-              count={resellRows.length}
-            >
-              <TopList
-                rows={resellRows}
-                render={(row) => (
-                  <li
-                    key={`${row.itemId}-${row.traderId}`}
-                    className="flex flex-wrap items-center gap-x-2.5 border-b py-2 last:border-0"
-                  >
-                    <span className="min-w-0 font-medium">
-                      {snapshot.itemsLite[row.itemId]?.name ?? 'Item'}
-                    </span>
-                    <span className="text-xs text-muted-foreground">
-                      {snapshot.traders[row.traderId] ?? 'Trader'} LL{row.minTraderLevel}
-                      {row.buyLimit > 0 && ` · limit ${row.buyLimit}`}
-                    </span>
-                    <span className="ml-auto flex shrink-0 items-center gap-2 tabular-nums">
-                      <span className="text-xs text-muted-foreground">
-                        {rub(row.buyPrice)} → {rub(row.fleaSell)}
-                      </span>
-                      <span className="font-medium text-ok">+{rub(row.spread)}</span>
-                    </span>
-                  </li>
-                )}
-              />
-            </Category>
-
-            <Category
-              title="Barter flips"
-              subtitle="trade items in, sell the reward the best way"
-              count={barterRows.length}
-            >
-              <TopList
-                rows={barterRows}
-                render={({ barter, profit }) => (
-                  <li key={barter.id} className="flex flex-wrap items-center gap-x-2.5 gap-y-0.5 border-b py-2 last:border-0">
-                    <span className="shrink-0 text-xs text-muted-foreground">
-                      {barter.traderName} LL{barter.traderLevel}
-                    </span>
-                    <span className="text-muted-foreground">{stacksLabel(barter.requiredItems)}</span>
-                    <span aria-hidden="true" className="text-muted-foreground">→</span>
-                    <span className="min-w-0 font-medium">{stacksLabel(barter.rewardItems, true)}</span>
-                    <span className="ml-auto shrink-0">
-                      <ProfitValue profit={profit} />
-                    </span>
-                  </li>
-                )}
-              />
-            </Category>
-
-            <Category
-              title="Profitable crafts"
-              subtitle="hideout production, ranked by profit per hour"
-              count={craftRows.length}
-            >
-              <TopList
-                rows={craftRows}
-                render={({ craft, profit }) => (
-                  <li key={craft.id} className="flex flex-wrap items-center gap-x-2.5 gap-y-0.5 border-b py-2 last:border-0">
-                    <span className="shrink-0 text-xs text-muted-foreground">
-                      {snapshot.hideout.find((s) => s.id === craft.stationId)?.name ?? 'Station'} L
-                      {craft.stationLevel} · {Math.round(craft.durationSeconds / 3600)}h
-                    </span>
-                    <span className="text-muted-foreground">{stacksLabel(craft.requiredItems)}</span>
-                    <span aria-hidden="true" className="text-muted-foreground">→</span>
-                    <span className="min-w-0 font-medium">{stacksLabel(craft.rewardItems, true)}</span>
-                    <span className="ml-auto flex shrink-0 items-center gap-2">
-                      <ProfitValue profit={profit} />
-                      {profit.profitPerHour != null && (
-                        <span className="text-xs text-muted-foreground tabular-nums">
-                          {rub(profit.profitPerHour)}/h
-                        </span>
-                      )}
-                    </span>
-                  </li>
-                )}
-              />
-            </Category>
-          </>
-        )}
+        <p className="text-xs text-muted-foreground">
+          * Resell spreads and profits assume selling the best way (flea 24h average or best
+          trader) and don't include the flea listing fee, which depends on your Intelligence
+          Center. Costs use the cheaper of flea and trader cash offers.
+        </p>
       </div>
     </div>
   );
