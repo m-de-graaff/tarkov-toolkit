@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-04T21:24:53.891Z",
+ "generatedAt": "2026-08-04T21:41:41.374Z",
  "gameMode": "regular",
  "maps": [
   {
@@ -33654,6 +33654,26 @@
    "name": "65b8d6f5cdde2479cb2a3125 Name",
    "normalizedName": "ground-zero-21",
    "wiki": "https://escapefromtarkov.fandom.com/wiki/Ground_Zero",
+   "calibration": {
+    "transform": [
+     0.524,
+     167.3,
+     0.524,
+     65.1
+    ],
+    "coordinateRotation": 180,
+    "bounds": [
+     [
+      249,
+      -124
+     ],
+     [
+      -99,
+      364
+     ]
+    ],
+    "svgFile": "ground-zero.svg"
+   },
    "spawns": [
     {
      "position": {

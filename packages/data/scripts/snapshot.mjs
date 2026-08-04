@@ -27,7 +27,7 @@ const DROPPED_OBJECTIVE_TYPES = new Set([
 ]);
 
 // API map normalizedNames that reuse another map's calibration/SVG.
-const CALIBRATION_ALIASES = { 'night-factory': 'factory' };
+const CALIBRATION_ALIASES = { 'night-factory': 'factory', 'ground-zero-21': 'ground-zero' };
 
 async function fetchJson(url) {
   const res = await fetch(url, { headers: { Accept: 'application/json' } });
