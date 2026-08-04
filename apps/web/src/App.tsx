@@ -1,5 +1,11 @@
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from '@/components/ui/resizable';
 import { snapshot } from '@raidplanner/data';
 import { useMemo } from 'react';
+import type { Layout } from 'react-resizable-panels';
 import { LivePanel } from './components/LivePanel';
 import type { MapMarker } from './components/MapCanvas';
 import { MapCanvas } from './components/MapCanvas';
@@ -7,12 +13,25 @@ import { RecommendBanner } from './components/RecommendBanner';
 import { RoutePanel } from './components/RoutePanel';
 import { Sidebar } from './components/Sidebar';
 import { SpawnPicker } from './components/SpawnPicker';
+import { MobileTopBar } from './components/MobileTopBar';
 import { useLiveWatcher } from './lib/useLiveWatcher';
+import { useMediaQuery } from './lib/useMediaQuery';
 import { distance2d } from './lib/geometry';
 import { objectivePoints } from './lib/questIndex';
 import type { RouteStop } from './lib/route';
 import { optimizeRoute } from './lib/route';
 import { usePlanner } from './store';
+
+const LAYOUT_KEY = 'raidplanner-layout';
+
+function loadSavedLayout(): Layout | undefined {
+  try {
+    const raw = localStorage.getItem(LAYOUT_KEY);
+    return raw ? (JSON.parse(raw) as Layout) : undefined;
+  } catch {
+    return undefined;
+  }
+}
 
 export function App() {
   const selectedMapId = usePlanner((s) => s.selectedMapId);
@@ -23,6 +42,7 @@ export function App() {
   const watcher = useLiveWatcher();
 
   const map = snapshot.maps.find((m) => m.id === selectedMapId);
+  const isDesktop = useMediaQuery('(min-width: 768px)');
 
   // The route starts from where you actually are (live fix) when live mode has
   // one, otherwise from the chosen spawn.
@@ -98,40 +118,88 @@ export function App() {
     return out;
   }, [stops, route, spawn, liveFix]);
 
-  return (
-    <div className="app">
-      <Sidebar />
-      <main>
-        {map?.calibration ? (
-          <>
-            <div className="map-toolbar">
-              <SpawnPicker map={map} />
-              <LivePanel watcher={watcher} outOfBounds={outOfBounds} />
-              <RecommendBanner />
-            </div>
-            <MapCanvas
-              map={map}
-              markers={markers}
-              route={route}
-              onMapClick={(p) => setSpawn({ kind: 'custom', position: p })}
-            />
-          </>
-        ) : (
-          <div className="map-placeholder">
-            {map
-              ? 'No offline map is available for this location yet.'
-              : 'Select a map to begin planning.'}
-          </div>
-        )}
-      </main>
-      {map?.calibration && (
-        <RoutePanel
+  const mapArea = map?.calibration ? (
+    <>
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 border-b bg-card px-3 py-2">
+        <SpawnPicker map={map} />
+        <LivePanel watcher={watcher} outOfBounds={outOfBounds} />
+        <RecommendBanner />
+      </div>
+      <div className="min-h-0 flex-1">
+        <MapCanvas
+          map={map}
+          markers={markers}
           route={route}
-          originPosition={routeOrigin}
-          originLabel={liveFix ? 'live position' : 'spawn'}
-          hasSelection={selectedTaskIds.length > 0}
+          onMapClick={(p) => setSpawn({ kind: 'custom', position: p })}
         />
-      )}
+      </div>
+    </>
+  ) : (
+    <div className="flex h-full items-center justify-center px-6 text-center text-lg text-muted-foreground">
+      {map
+        ? 'No offline map is available for this location yet.'
+        : 'Select a map to begin planning.'}
+    </div>
+  );
+
+  if (!isDesktop) {
+    return (
+      <div className="app flex h-dvh flex-col">
+        <MobileTopBar />
+        <main className="relative flex min-h-0 min-w-0 flex-1 flex-col">{mapArea}</main>
+        {map?.calibration && selectedTaskIds.length > 0 && (
+          <details className="shrink-0 border-t bg-card">
+            <summary className="cursor-pointer px-3 py-2 text-[13px] font-semibold text-primary tabular-nums">
+              Route{route ? ` · ≈ ${Math.round(route.totalDistance)}m` : ''}
+            </summary>
+            <div className="max-h-[40dvh] overflow-y-auto">
+              <RoutePanel
+                route={route}
+                originPosition={routeOrigin}
+                originLabel={liveFix ? 'live position' : 'spawn'}
+                hasSelection={selectedTaskIds.length > 0}
+              />
+            </div>
+          </details>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="app h-dvh">
+      <ResizablePanelGroup
+        orientation="horizontal"
+        defaultLayout={loadSavedLayout()}
+        onLayoutChanged={(layout) => {
+          try {
+            localStorage.setItem(LAYOUT_KEY, JSON.stringify(layout));
+          } catch {
+            /* storage unavailable — layout just won't persist */
+          }
+        }}
+        className="h-full"
+      >
+        <ResizablePanel defaultSize={340} minSize={260} maxSize={560} className="min-w-0">
+          <Sidebar />
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel className="min-w-0">
+          <div className="flex h-full min-w-0">
+            <main className="relative flex min-w-0 flex-1 flex-col">{mapArea}</main>
+            {map?.calibration && (
+              <div className="w-72 shrink-0 border-l">
+                <RoutePanel
+                  route={route}
+                  originPosition={routeOrigin}
+                  originLabel={liveFix ? 'live position' : 'spawn'}
+                  hasSelection={selectedTaskIds.length > 0}
+                />
+              </div>
+            )}
+          </div>
+        </ResizablePanel>
+      </ResizablePanelGroup>
     </div>
   );
 }
