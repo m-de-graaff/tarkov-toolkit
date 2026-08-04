@@ -10,7 +10,11 @@ import { usePlanner } from '../store';
 function RelationBadge({ entry }: { entry: MapQuestEntry }) {
   if (entry.relation === 'map-locked') {
     return (
-      <Badge className="badge-map shrink-0" title="Can only be done on this map">
+      <Badge
+        variant="outline"
+        className="badge-map shrink-0 border-primary/50 px-1.5 text-[10px] text-primary"
+        title="Can only be done on this map"
+      >
         MAP
       </Badge>
     );
@@ -18,7 +22,7 @@ function RelationBadge({ entry }: { entry: MapQuestEntry }) {
   return (
     <Badge
       variant="outline"
-      className="badge-multi shrink-0 text-muted-foreground"
+      className="badge-multi shrink-0 px-1.5 text-[10px] text-muted-foreground"
       title="Can also be advanced on other maps"
     >
       MULTI
@@ -79,13 +83,12 @@ function QuestRow({
       )}
       {badge && <RelationBadge entry={badge} />}
       {locatedCount > 0 && (
-        <Badge
-          variant="outline"
-          className="badge-count shrink-0 border-primary/50 text-primary tabular-nums"
+        <span
+          className="badge-count shrink-0 text-xs text-muted-foreground tabular-nums"
           title="Objectives with a known location on this map"
         >
-          {locatedCount}
-        </Badge>
+          {locatedCount} pin{locatedCount > 1 ? 's' : ''}
+        </span>
       )}
       <Button
         type="button"
@@ -128,7 +131,7 @@ export function QuestList({ entries }: { entries: MapQuestEntry[] }) {
     <div className="quest-list">
       {[...byTrader.entries()].map(([trader, list]) => (
         <section key={trader} aria-label={`${trader} quests`}>
-          <h3 className="mb-1 mt-3 text-[13px] font-semibold text-primary/70">{trader}</h3>
+          <h3 className="mb-1 mt-3 text-xs font-medium text-muted-foreground">{trader}</h3>
           <ul className="m-0 list-none p-0">
             {list.map((entry) => (
               <QuestRow

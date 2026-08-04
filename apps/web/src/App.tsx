@@ -120,10 +120,13 @@ export function App() {
 
   const mapArea = map?.calibration ? (
     <>
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 border-b bg-card px-3 py-2">
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 border-b bg-card px-4 py-2">
         <SpawnPicker map={map} />
+        <div className="h-5 w-px bg-border" aria-hidden="true" />
         <LivePanel watcher={watcher} outOfBounds={outOfBounds} />
-        <RecommendBanner />
+        <div className="ml-auto">
+          <RecommendBanner />
+        </div>
       </div>
       <div className="min-h-0 flex-1">
         <MapCanvas

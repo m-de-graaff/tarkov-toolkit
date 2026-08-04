@@ -17,7 +17,7 @@ export function TrackerBar() {
   const setFaction = usePlanner((s) => s.setFaction);
 
   return (
-    <div className="flex items-end gap-3">
+    <div className="flex items-end gap-2.5">
       <label className="flex flex-col gap-1 text-xs text-muted-foreground">
         <span>Level</span>
         <Input
