@@ -136,6 +136,7 @@ export const fixtureSnapshot: Snapshot = {
         ],
         svgFile: 'alpha.svg',
       },
+      extracts: [],
       spawns: [
         {
           position: at(-90, -90),
@@ -158,6 +159,7 @@ export const fixtureSnapshot: Snapshot = {
         ],
         svgFile: 'bravo.svg',
       },
+      extracts: [],
       spawns: [],
     },
   ],

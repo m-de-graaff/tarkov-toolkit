@@ -95,7 +95,7 @@
   .map-canvas {
     height: 100%;
     width: 100%;
-    background: var(--background);
+    background: #111110;
   }
 
   .marker {
@@ -131,8 +131,16 @@
   }
 
   .leaflet-container {
-    background: var(--background);
+    background: #111110;
     font: inherit;
+  }
+
+  .marker.extract {
+    background: var(--destructive);
+    color: #fff;
+    border-radius: 4px;
+    font-size: 10px;
+    width: 24px;
   }
 
   .leaflet-tooltip {

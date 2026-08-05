@@ -61,4 +61,23 @@ describe('optimizeRoute', () => {
     expect(route.stops).toEqual([]);
     expect(route.totalDistance).toBe(0);
   });
+
+  it('a fixed end point reverses the visiting order when it lies behind the start', () => {
+    const stops = [stop('a', 10, 0), stop('b', 20, 0), stop('c', 30, 0)];
+    // start at 0, extract far right → natural order a b c
+    expect(optimizeRoute(at(0, 0), stops, at(40, 0)).stops.map((s) => s.objectiveId)).toEqual(
+      ['a', 'b', 'c'],
+    );
+    // start at 40, extract at 0 → must sweep back c b a
+    expect(optimizeRoute(at(40, 0), stops, at(0, 0)).stops.map((s) => s.objectiveId)).toEqual(
+      ['c', 'b', 'a'],
+    );
+    // end leg counts toward the total
+    expect(optimizeRoute(at(0, 0), stops, at(40, 0)).totalDistance).toBeCloseTo(40);
+  });
+
+  it('routes to the end even with no stops', () => {
+    const route = optimizeRoute(at(0, 0), [], at(30, 40));
+    expect(route.totalDistance).toBeCloseTo(50);
+  });
 });

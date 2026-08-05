@@ -1,4 +1,4 @@
-import type { GamePosition } from '@raidplanner/data';
+import type { GamePosition, RpExtract } from '@raidplanner/data';
 import { distance2d } from '../lib/geometry';
 import type { PlannedRoute } from '../lib/route';
 
@@ -7,11 +7,13 @@ export function RoutePanel({
   originPosition,
   originLabel,
   hasSelection,
+  extract,
 }: {
   route: PlannedRoute | null;
   originPosition: GamePosition | null;
   originLabel: 'live position' | 'spawn';
   hasSelection: boolean;
+  extract?: RpExtract | null;
 }) {
   return (
     <aside
@@ -59,6 +61,29 @@ export function RoutePanel({
               );
             })}
           </ol>
+          {extract && (
+            <p className="route-extract mt-2 flex items-center gap-2 text-[13px]">
+              <span className="rounded bg-destructive px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                EX
+              </span>
+              <span className="min-w-0 truncate font-medium">{extract.name}</span>
+              {extract.conditional && (
+                <span className="text-xs text-muted-foreground" title="Not always open — check it's active this raid">
+                  conditional
+                </span>
+              )}
+              <span className="ml-auto text-xs text-muted-foreground tabular-nums">
+                +
+                {Math.round(
+                  distance2d(
+                    route.stops.at(-1)?.position ?? originPosition,
+                    extract.position,
+                  ),
+                )}
+                m
+              </span>
+            </p>
+          )}
           <p className="route-total mt-3 border-t pt-3 text-[13px] font-medium tabular-nums">
             Total ≈ {Math.round(route.totalDistance)}m
           </p>

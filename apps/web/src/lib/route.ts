@@ -14,13 +14,14 @@ export interface PlannedRoute {
   totalDistance: number;
 }
 
-function pathLength(start: GamePosition, stops: RouteStop[]): number {
+function pathLength(start: GamePosition, stops: RouteStop[], end?: GamePosition): number {
   let total = 0;
   let prev = start;
   for (const s of stops) {
     total += distance2d(prev, s.position);
     prev = s.position;
   }
+  if (end) total += distance2d(prev, end);
   return total;
 }
 
@@ -45,7 +46,7 @@ function nearestNeighbourFrom(first: RouteStop, stops: RouteStop[]): RouteStop[]
   return ordered;
 }
 
-function twoOpt(start: GamePosition, ordered: RouteStop[]): RouteStop[] {
+function twoOpt(start: GamePosition, ordered: RouteStop[], end?: GamePosition): RouteStop[] {
   const path = [...ordered];
   let improved = true;
   let passes = 0;
@@ -59,7 +60,7 @@ function twoOpt(start: GamePosition, ordered: RouteStop[]): RouteStop[] {
           ...path.slice(i, j + 1).reverse(),
           ...path.slice(j + 1),
         ];
-        if (pathLength(start, candidate) < pathLength(start, path) - 1e-9) {
+        if (pathLength(start, candidate, end) < pathLength(start, path, end) - 1e-9) {
           path.splice(0, path.length, ...candidate);
           improved = true;
         }
@@ -70,18 +71,23 @@ function twoOpt(start: GamePosition, ordered: RouteStop[]): RouteStop[] {
 }
 
 /**
- * Open-path TSP heuristic with a fixed start: multi-start nearest-neighbour
- * (one construction per candidate first stop, which sidesteps tie-induced
- * local optima) followed by 2-opt improvement; best result wins.
+ * Open-path TSP heuristic with a fixed start (and optionally a fixed end —
+ * the extract): multi-start nearest-neighbour followed by 2-opt; best wins.
  */
-export function optimizeRoute(start: GamePosition, stops: RouteStop[]): PlannedRoute {
-  if (stops.length === 0) return { stops: [], totalDistance: 0 };
+export function optimizeRoute(
+  start: GamePosition,
+  stops: RouteStop[],
+  end?: GamePosition,
+): PlannedRoute {
+  if (stops.length === 0) {
+    return { stops: [], totalDistance: end ? distance2d(start, end) : 0 };
+  }
 
   let best: RouteStop[] | null = null;
   let bestLength = Infinity;
   for (const first of stops) {
-    const candidate = twoOpt(start, nearestNeighbourFrom(first, stops));
-    const length = pathLength(start, candidate);
+    const candidate = twoOpt(start, nearestNeighbourFrom(first, stops), end);
+    const length = pathLength(start, candidate, end);
     if (length < bestLength) {
       bestLength = length;
       best = candidate;

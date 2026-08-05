@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-05T00:09:51.232Z",
+ "generatedAt": "2026-08-05T00:34:32.876Z",
  "gameMode": "regular",
  "maps": [
   {
@@ -1242,6 +1242,74 @@
       "player"
      ],
      "zoneName": "feea31cd-8a3f-43a5-839f-fd2276a2cce8"
+    }
+   ],
+   "extracts": [
+    {
+     "id": "ffb8b37a6390d2c3b00baeee3295492ea1e19a93",
+     "name": "Cellars",
+     "faction": "pmc",
+     "position": {
+      "x": 73.89422,
+      "y": -3.2876668,
+      "z": -29.0818882
+     },
+     "conditional": false
+    },
+    {
+     "id": "7ae0a08942ce71d8d713ef3628c86619598160f4",
+     "name": "Gate 3",
+     "faction": "pmc",
+     "position": {
+      "x": 58.43222,
+      "y": 3.17233324,
+      "z": 63.29811
+     },
+     "conditional": false
+    },
+    {
+     "id": "4f953558d3d7bca7bd7b4d40a6429adc34cc1834",
+     "name": "Gate 0",
+     "faction": "pmc",
+     "position": {
+      "x": -63.66578,
+      "y": 2.85233331,
+      "z": 55.8781128
+     },
+     "conditional": false
+    },
+    {
+     "id": "7bb46d641d59983a58440a7a58d65933d981c211",
+     "name": "Med Tent Gate",
+     "faction": "pmc",
+     "position": {
+      "x": -17.5257778,
+      "y": 1.99233329,
+      "z": -61.27189
+     },
+     "conditional": false
+    },
+    {
+     "id": "1846030b40983ab096b3d1e39f72da5697f39154",
+     "name": "Courtyard Gate",
+     "faction": "pmc",
+     "position": {
+      "x": 23.7642212,
+      "y": 1.3623333,
+      "z": 68.93811
+     },
+     "conditional": false
+    },
+    {
+     "id": "3faf0c5c7f9dfe2c4ec9cf029fbe14ede9720cc1",
+     "name": "Smugglers' Passage",
+     "faction": "pmc",
+     "position": {
+      "x": 48.026,
+      "y": -1.61300015,
+      "z": -28.8580017
+     },
+     "conditional": false
     }
    ]
   },
@@ -3141,6 +3209,129 @@
       "player"
      ],
      "zoneName": "fd246e19-a658-4f37-ad29-43b37ca413a1"
+    }
+   ],
+   "extracts": [
+    {
+     "id": "d0781374be523027a2a8e1edf6fe08449c45c382",
+     "name": "ZB-013",
+     "faction": "pmc",
+     "position": {
+      "x": 200.9755,
+      "y": -1.1484108,
+      "z": -153.086456
+     },
+     "conditional": true
+    },
+    {
+     "id": "feafaf9787defedcb6b7ea3da97f342870bc8073",
+     "name": "Dorms V-Ex",
+     "faction": "pmc",
+     "position": {
+      "x": 181.08,
+      "y": -0.71,
+      "z": 213.25
+     },
+     "conditional": false
+    },
+    {
+     "id": "02cdf102e32c481d3b5fabcf1dcf3df3962522bb",
+     "name": "ZB-1011",
+     "faction": "pmc",
+     "position": {
+      "x": 621.4962,
+      "y": -2.07000017,
+      "z": -128.604919
+     },
+     "conditional": false
+    },
+    {
+     "id": "7c993e82fe52ccedbdf9591f92e3bf9fe4352a4e",
+     "name": "Crossroads",
+     "faction": "shared",
+     "position": {
+      "x": -334.804016,
+      "y": 2.19002676,
+      "z": -87.97917
+     },
+     "conditional": false
+    },
+    {
+     "id": "e0e61c2ed23ae5387b02dfc1acb88dab0c83ff95",
+     "name": "Old Gas Station",
+     "faction": "pmc",
+     "position": {
+      "x": 309.499634,
+      "y": -2.182013,
+      "z": -174.320175
+     },
+     "conditional": false
+    },
+    {
+     "id": "0df2e62edcfb6e0f1c36fd7be585a5850dd83eed",
+     "name": "Trailer Park",
+     "faction": "pmc",
+     "position": {
+      "x": -313.720276,
+      "y": -1.72000742,
+      "z": -233.280121
+     },
+     "conditional": false
+    },
+    {
+     "id": "b113904d09c836e3b6fb937ebd1201f30a5900e6",
+     "name": "RUAF Roadblock",
+     "faction": "pmc",
+     "position": {
+      "x": -10.250061,
+      "y": 1.92000723,
+      "z": -138.450043
+     },
+     "conditional": false
+    },
+    {
+     "id": "b051486cb850a811e354ac34b2ec5790bd2a12c5",
+     "name": "Railroad Passage (Flare)",
+     "faction": "pmc",
+     "position": {
+      "x": 139.592712,
+      "y": 3.800012,
+      "z": -324.7145
+     },
+     "conditional": false
+    },
+    {
+     "id": "88192ee8ec04e9844e35f327d441b74987a182bd",
+     "name": "Boiler Room Basement (Co-op)",
+     "faction": "shared",
+     "position": {
+      "x": 100.56,
+      "y": -4.98,
+      "z": -44.42
+     },
+     "conditional": false
+    },
+    {
+     "id": "311ae28f72d9c9fe3be801b2d503088167e325c3",
+     "name": "Smugglers' Boat",
+     "faction": "pmc",
+     "position": {
+      "x": -41.5100021,
+      "y": -12.633,
+      "z": 122.67
+     },
+     "conditional": false
+    },
+    {
+     "id": "908b7d419bb7152858c973b561a1ee7ed5f55a81",
+     "name": "Smugglers' Bunker (ZB-1012)",
+     "faction": "pmc",
+     "position": {
+      "x": 463.18,
+      "y": -1.46,
+      "z": -112.36
+     },
+     "conditional": false
     }
    ]
   },
@@ -5304,6 +5495,118 @@
      ],
      "zoneName": "f6b08d4e-8de0-4922-87b8-546d593d4454"
     }
+   ],
+   "extracts": [
+    {
+     "id": "742010f4b5dde77d692c99991e2576fb6c90f351",
+     "name": "Friendship Bridge (Co-Op)",
+     "faction": "shared",
+     "position": {
+      "x": 93.17,
+      "y": 16.57,
+      "z": -843.98
+     },
+     "conditional": false
+    },
+    {
+     "id": "3f08df8a92b8d58e1011741f86a65c317180fef0",
+     "name": "RUAF Gate",
+     "faction": "pmc",
+     "position": {
+      "x": -141.730011,
+      "y": -2.37,
+      "z": 446.8
+     },
+     "conditional": false
+    },
+    {
+     "id": "3c768283f1012c72aa4140252f44c538448eafa7",
+     "name": "ZB-016",
+     "faction": "pmc",
+     "position": {
+      "x": -389.159973,
+      "y": 4.147001,
+      "z": 11.0449905
+     },
+     "conditional": false
+    },
+    {
+     "id": "96ddc4bf8688f90f215226fd5788e1291ed13bfd",
+     "name": "ZB-014",
+     "faction": "pmc",
+     "position": {
+      "x": 447.24,
+      "y": -13.46346,
+      "z": 57.46
+     },
+     "conditional": false
+    },
+    {
+     "id": "e6fd5a732d1fd0662221d75f31f0e2e8021ef4ca",
+     "name": "UN Roadblock",
+     "faction": "pmc",
+     "position": {
+      "x": -536.1243,
+      "y": 1.68126917,
+      "z": 286.7704
+     },
+     "conditional": false
+    },
+    {
+     "id": "64f88a7c564eb38938c7b679f89ff265dfbf2685",
+     "name": "Bridge V-Ex",
+     "faction": "pmc",
+     "position": {
+      "x": -485.325745,
+      "y": 15.5812693,
+      "z": -504.061432
+     },
+     "conditional": false
+    },
+    {
+     "id": "e70d314d202e673b96671e810e54cef5657c16ca",
+     "name": "Outskirts",
+     "faction": "pmc",
+     "position": {
+      "x": 349.035645,
+      "y": -9.148731,
+      "z": 358.580383
+     },
+     "conditional": false
+    },
+    {
+     "id": "98dfbaebc7bedea817c9ea5ec2e36f42a36b7ebf",
+     "name": "Northern UN Roadblock",
+     "faction": "pmc",
+     "position": {
+      "x": -557.324341,
+      "y": 9.321269,
+      "z": -67.0496
+     },
+     "conditional": false
+    },
+    {
+     "id": "e0dbb9eb8a01eadb9e4610d53ecd65ccd320336c",
+     "name": "Power Line Passage (Flare)",
+     "faction": "pmc",
+     "position": {
+      "x": 573.985657,
+      "y": -1.7487309,
+      "z": -85.2596
+     },
+     "conditional": false
+    },
+    {
+     "id": "6145baca210bf473bb0ce242a54ce1fe82df9bfe",
+     "name": "Railway Bridge to Tarkov",
+     "faction": "pmc",
+     "position": {
+      "x": -730.43,
+      "y": 8.7,
+      "z": 129.32
+     },
+     "conditional": false
+    }
    ]
   },
   {
@@ -6432,6 +6735,96 @@
       "player"
      ],
      "zoneName": "effa74ba-b3ce-4a17-b929-3672ab7f215d"
+    }
+   ],
+   "extracts": [
+    {
+     "id": "3a8cfedc77147d2e438f8a2c55a01ae3d6defb25",
+     "name": "Armored Train",
+     "faction": "shared",
+     "position": {
+      "x": 6.27001953,
+      "y": 14.1133,
+      "z": -873.78
+     },
+     "conditional": false
+    },
+    {
+     "id": "39a8452ee1c2a3b68737781843c98e69ed1a59aa",
+     "name": "Road to Military Base V-Ex",
+     "faction": "pmc",
+     "position": {
+      "x": -328.951263,
+      "y": 16.73,
+      "z": -784.3581
+     },
+     "conditional": false
+    },
+    {
+     "id": "a04ce346b08f0cea9faebb65d86a7b7797e2f25d",
+     "name": "Side Tunnel (Co-Op)",
+     "faction": "shared",
+     "position": {
+      "x": -68.3,
+      "y": 6.83,
+      "z": 318.11
+     },
+     "conditional": false
+    },
+    {
+     "id": "d76677800a142f800df6709b3b22946aeff43253",
+     "name": "Mountain Pass",
+     "faction": "pmc",
+     "position": {
+      "x": -172.35,
+      "y": 41.89,
+      "z": -6.39
+     },
+     "conditional": false
+    },
+    {
+     "id": "2cdd9d1604ebe77b3fa8bf1461530ca5b3551d8f",
+     "name": "Path to Shoreline",
+     "faction": "pmc",
+     "position": {
+      "x": -364.4,
+      "y": 28.758,
+      "z": -121.4
+     },
+     "conditional": false
+    },
+    {
+     "id": "000e0a2d35821648d27c6479d9358b0d227c6804",
+     "name": "Northern Checkpoint",
+     "faction": "pmc",
+     "position": {
+      "x": 113.22,
+      "y": 11.86,
+      "z": -989.23
+     },
+     "conditional": false
+    },
+    {
+     "id": "7d6c864aa862997ba573be0fcf47b118e253d1e1",
+     "name": "Southern Road",
+     "faction": "pmc",
+     "position": {
+      "x": -295.8,
+      "y": 11.86,
+      "z": 420.6
+     },
+     "conditional": false
+    },
+    {
+     "id": "86689a1e06268028c220b923fd7c676d7f9497dd",
+     "name": "Passage by the Lake",
+     "faction": "pmc",
+     "position": {
+      "x": -360,
+      "y": 27.19,
+      "z": -564.87
+     },
+     "conditional": false
     }
    ]
   },
@@ -8578,6 +8971,107 @@
      ],
      "zoneName": "fb7bd71f-8177-4417-8e29-916904ca2d8a"
     }
+   ],
+   "extracts": [
+    {
+     "id": "e95d3547939574dfb73ce20064c5aff811bf02ea",
+     "name": "Road to North V-Ex",
+     "faction": "pmc",
+     "position": {
+      "x": -543.264038,
+      "y": -16.8420162,
+      "z": -379.651367
+     },
+     "conditional": false
+    },
+    {
+     "id": "97440eb4ab5a337942dc616f5dde5905adadd627",
+     "name": "Road to Customs",
+     "faction": "pmc",
+     "position": {
+      "x": -859.05,
+      "y": -42.07,
+      "z": 0.49
+     },
+     "conditional": false
+    },
+    {
+     "id": "57d9c15c96a8221867b52676d889e26a994b9512",
+     "name": "Railway Bridge",
+     "faction": "pmc",
+     "position": {
+      "x": -1029.29,
+      "y": -60.79,
+      "z": 307.59
+     },
+     "conditional": false
+    },
+    {
+     "id": "5c32b0d555293798312b3a4bd805b34987b5f576",
+     "name": "Tunnel",
+     "faction": "pmc",
+     "position": {
+      "x": 376.36,
+      "y": -55.9399757,
+      "z": 319.25
+     },
+     "conditional": false
+    },
+    {
+     "id": "11890c73b821b558b2198881ae9659c426a6b289",
+     "name": "Path to Lighthouse",
+     "faction": "pmc",
+     "position": {
+      "x": 448.9,
+      "y": -44.7,
+      "z": -254.6
+     },
+     "conditional": false
+    },
+    {
+     "id": "c5ae90597356b707d9d1d9522efe7a24fe7d4b71",
+     "name": "Smugglers' Path (Co-op)",
+     "faction": "shared",
+     "position": {
+      "x": -729.4,
+      "y": -26,
+      "z": -255.1
+     },
+     "conditional": false
+    },
+    {
+     "id": "d21fd4e674ea08152c99c97fbe031b71269c58d6",
+     "name": "Pier Boat",
+     "faction": "pmc",
+     "position": {
+      "x": -332.5907,
+      "y": -66.11997,
+      "z": 561.2576
+     },
+     "conditional": false
+    },
+    {
+     "id": "efc0e77c1e0a83ff35aa27d8a091e31e770338ec",
+     "name": "Climber's Trail",
+     "faction": "pmc",
+     "position": {
+      "x": -214.3,
+      "y": -1,
+      "z": -361.8
+     },
+     "conditional": false
+    },
+    {
+     "id": "b4ff87efb1c1450520552d27addab7793688d475",
+     "name": "Mountain Bunker",
+     "faction": "pmc",
+     "position": {
+      "x": -390.956024,
+      "y": -2.55000019,
+      "z": -385.721
+     },
+     "conditional": false
+    }
    ]
   },
   {
@@ -9834,6 +10328,85 @@
       "player"
      ],
      "zoneName": "f82b1195-b8e3-4087-b5af-8bcc78ac506b"
+    }
+   ],
+   "extracts": [
+    {
+     "id": "c5a30892ba8b44107663736aaeca1a3f7ff61391",
+     "name": "Armored Train",
+     "faction": "shared",
+     "position": {
+      "x": 144.986,
+      "y": -3.92,
+      "z": -147.352
+     },
+     "conditional": false
+    },
+    {
+     "id": "6b678e71f8042cf7af291a87bcd1e6b629ff8b5a",
+     "name": "D-2",
+     "faction": "pmc",
+     "position": {
+      "x": -121.479065,
+      "y": -17.0010071,
+      "z": 172.24913
+     },
+     "conditional": true
+    },
+    {
+     "id": "bf8015e63fa543ce72fe16f5c3476be29ba80fcc",
+     "name": "Bunker Hermetic Door",
+     "faction": "shared",
+     "position": {
+      "x": 61.9206619,
+      "y": -5.257,
+      "z": -190.541931
+     },
+     "conditional": true
+    },
+    {
+     "id": "6eb9d336eb71fbf68c7d809b55dec62ec89e7627",
+     "name": "Cliff Descent",
+     "faction": "pmc",
+     "position": {
+      "x": -9.24,
+      "y": 20.93,
+      "z": 208.43
+     },
+     "conditional": false
+    },
+    {
+     "id": "acd6a6b60241f90925084d8f608b89ba7a459fdb",
+     "name": "Scav Lands (Co-Op)",
+     "faction": "shared",
+     "position": {
+      "x": -127.9,
+      "y": -3.28,
+      "z": -142.59
+     },
+     "conditional": false
+    },
+    {
+     "id": "4cd3f8f23a3092756fb509287ccc5332aeea6453",
+     "name": "Sewer Manhole",
+     "faction": "shared",
+     "position": {
+      "x": 40.18,
+      "y": -5.12,
+      "z": 76.45
+     },
+     "conditional": false
+    },
+    {
+     "id": "870fee41d9fe39a659dc9d79008e3965629bbba0",
+     "name": "Exit to Woods",
+     "faction": "pmc",
+     "position": {
+      "x": 36.53,
+      "y": -5.97000027,
+      "z": -221.56
+     },
+     "conditional": false
     }
    ]
   },
@@ -11856,6 +12429,74 @@
       "player"
      ],
      "zoneName": "fc5ce718-9376-43c8-8ac5-336ce18e688d"
+    }
+   ],
+   "extracts": [
+    {
+     "id": "2a589e01386c564a296894e93a3aaf18ec53207d",
+     "name": "Emercom Checkpoint",
+     "faction": "shared",
+     "position": {
+      "x": -321.56,
+      "y": 24.18,
+      "z": 266.74
+     },
+     "conditional": false
+    },
+    {
+     "id": "fdc29c48395f3b30a7b2ba8ed645cbebfe69e539",
+     "name": "Railway Exfil",
+     "faction": "shared",
+     "position": {
+      "x": 472.32,
+      "y": 20.92,
+      "z": -429.74
+     },
+     "conditional": false
+    },
+    {
+     "id": "1abefb699e1a8304defcd8b41dcbbeee14adde52",
+     "name": "Power Station V-Ex",
+     "faction": "pmc",
+     "position": {
+      "x": -251.92,
+      "y": 21.72,
+      "z": -367.13
+     },
+     "conditional": false
+    },
+    {
+     "id": "0c3fb47380ded5e2af6a0fc90611ee0abda60f69",
+     "name": "Scav Camp (Co-Op)",
+     "faction": "shared",
+     "position": {
+      "x": 278.69,
+      "y": 21.94955,
+      "z": -30.97
+     },
+     "conditional": false
+    },
+    {
+     "id": "9685be261b82bedb2d9298cc69cd1f282e250096",
+     "name": "Hole in the Fence",
+     "faction": "pmc",
+     "position": {
+      "x": -219.92,
+      "y": 22.79,
+      "z": -37.02
+     },
+     "conditional": false
+    },
+    {
+     "id": "9570d4e280d97bd1a43756135036f3212eb6d8a8",
+     "name": "Saferoom Exfil",
+     "faction": "pmc",
+     "position": {
+      "x": -47.73,
+      "y": 22.97,
+      "z": 44.055
+     },
+     "conditional": true
     }
    ]
   },
@@ -14869,6 +15510,129 @@
      ],
      "zoneName": "ffcd5d8a-1ef8-4fe0-b0a1-028a196da3e9"
     }
+   ],
+   "extracts": [
+    {
+     "id": "65f6067829924e26e0cb31d4ac24fee1870ec944",
+     "name": "Courtyard",
+     "faction": "pmc",
+     "position": {
+      "x": -148.947,
+      "y": 1.78600025,
+      "z": 500.151978
+     },
+     "conditional": false
+    },
+    {
+     "id": "264ee7ea338658549942113cbbf0a6ea31402975",
+     "name": "Primorsky Ave Taxi V-Ex",
+     "faction": "pmc",
+     "position": {
+      "x": -2.191315,
+      "y": 3.2,
+      "z": 461.232971
+     },
+     "conditional": false
+    },
+    {
+     "id": "cb867ea360a89dbc48694c43d193553d564529f9",
+     "name": "Stylobate Building Elevator",
+     "faction": "pmc",
+     "position": {
+      "x": -44.7435,
+      "y": 11.04,
+      "z": -72.15
+     },
+     "conditional": false
+    },
+    {
+     "id": "99e05bbf5d6f6dad97773774af735e37ae3edd44",
+     "name": "Crash Site",
+     "faction": "pmc",
+     "position": {
+      "x": 312.74,
+      "y": 6.8,
+      "z": 405.96
+     },
+     "conditional": false
+    },
+    {
+     "id": "974e40db5a7ac4d1937688eb6415b2333f9a3766",
+     "name": "Sewer River",
+     "faction": "pmc",
+     "position": {
+      "x": -267.04,
+      "y": -1.535,
+      "z": 219.48
+     },
+     "conditional": false
+    },
+    {
+     "id": "29cd42c5025edb6a619dd961fbc20ad639127189",
+     "name": "Damaged House",
+     "faction": "pmc",
+     "position": {
+      "x": -248.971,
+      "y": 7.195,
+      "z": 344.275
+     },
+     "conditional": false
+    },
+    {
+     "id": "59f13279288d9ac630955c14dc3368b492061e7c",
+     "name": "Collapsed Crane",
+     "faction": "pmc",
+     "position": {
+      "x": 216.12,
+      "y": 3.44,
+      "z": 272.7
+     },
+     "conditional": false
+    },
+    {
+     "id": "19b2c9157d56629da496df0bc42dbe5c49439e4c",
+     "name": "Klimov Street (Flare)",
+     "faction": "pmc",
+     "position": {
+      "x": -263.41,
+      "y": 2.9,
+      "z": 43.19
+     },
+     "conditional": false
+    },
+    {
+     "id": "d830108cdf0fcd33b785ca39d380255658905371",
+     "name": "Pinewood Basement (Co-Op)",
+     "faction": "shared",
+     "position": {
+      "x": -114.28,
+      "y": -2.05,
+      "z": 64.88
+     },
+     "conditional": false
+    },
+    {
+     "id": "b17b3bec8b22bdd99d6e9589ed0d9a41f2f6aac8",
+     "name": "Expo Checkpoint",
+     "faction": "pmc",
+     "position": {
+      "x": 213.12,
+      "y": 0.09,
+      "z": -104.96
+     },
+     "conditional": false
+    },
+    {
+     "id": "787c7f07f2b19b39ad8ba5a14ae69c10088191fd",
+     "name": "Smugglers' Basement",
+     "faction": "pmc",
+     "position": {
+      "x": 75.99,
+      "y": -0.6029999,
+      "z": 50.0100021
+     },
+     "conditional": false
+    }
    ]
   },
   {
@@ -15955,6 +16719,85 @@
       "player"
      ],
      "zoneName": "f86c5106-44cb-4e1e-b346-4df5c817664e"
+    }
+   ],
+   "extracts": [
+    {
+     "id": "ed029f26c9d60bf00d926b4d7e7876b0591b411a",
+     "name": "Medical Block Elevator",
+     "faction": "shared",
+     "position": {
+      "x": -112.423,
+      "y": -3.10999966,
+      "z": -343.986
+     },
+     "conditional": true
+    },
+    {
+     "id": "4cfc8fb5003e428d6cb9f8492690068afba50c71",
+     "name": "Cargo Elevator",
+     "faction": "shared",
+     "position": {
+      "x": -112.152,
+      "y": 5.376,
+      "z": -408.64
+     },
+     "conditional": true
+    },
+    {
+     "id": "1a5ae89d5401d277f8b317c18951dfe0e1bfd695",
+     "name": "Main Elevator",
+     "faction": "shared",
+     "position": {
+      "x": -282.304016,
+      "y": -3.631999,
+      "z": -334.896
+     },
+     "conditional": true
+    },
+    {
+     "id": "761dedf3fefaf3526e0ce19c7d7b1a3d494fce8a",
+     "name": "Ventilation Shaft",
+     "faction": "pmc",
+     "position": {
+      "x": -144.94,
+      "y": -2.37,
+      "z": -396.826
+     },
+     "conditional": false
+    },
+    {
+     "id": "c846e13f4bf7afe28c0cf214bd9e7b4685ba592f",
+     "name": "Sewage Conduit",
+     "faction": "pmc",
+     "position": {
+      "x": -122.889992,
+      "y": -3.65600014,
+      "z": -258.3245
+     },
+     "conditional": true
+    },
+    {
+     "id": "c5c6f818755ac844b4723b1a2cf057569da410ee",
+     "name": "Parking Gate",
+     "faction": "pmc",
+     "position": {
+      "x": -231.73,
+      "y": 0.77356863,
+      "z": -434.816376
+     },
+     "conditional": true
+    },
+    {
+     "id": "6499ac7374cd238366b977944e305a08afd2e9e3",
+     "name": "Hangar Gate",
+     "faction": "pmc",
+     "position": {
+      "x": -170.66,
+      "y": 1.54,
+      "z": -245.94
+     },
+     "conditional": true
     }
    ]
   },
@@ -17409,6 +18252,74 @@
      ],
      "zoneName": "fc1387ee-e540-4433-9022-d3c53a04b8c2"
     }
+   ],
+   "extracts": [
+    {
+     "id": "d6870dda31937ff93662ce903afe1099b24011a1",
+     "name": "Police Cordon V-Ex",
+     "faction": "pmc",
+     "position": {
+      "x": -19.5134068,
+      "y": 23.7110023,
+      "z": 114.942139
+     },
+     "conditional": false
+    },
+    {
+     "id": "549ceec177747468ebe86bcfd5a486d1dce9ed64",
+     "name": "Emercom Checkpoint",
+     "faction": "shared",
+     "position": {
+      "x": 151.625,
+      "y": 24.662056,
+      "z": -97.45658
+     },
+     "conditional": false
+    },
+    {
+     "id": "118fa7e3eae47190871eb4ea20d4f3ca2718b73f",
+     "name": "Scav Checkpoint (Co-op)",
+     "faction": "shared",
+     "position": {
+      "x": 25.2195644,
+      "y": 24.5091858,
+      "z": -79.5413742
+     },
+     "conditional": false
+    },
+    {
+     "id": "ab623005251ffcd3603a5df2610917a998d9a17e",
+     "name": "Nakatani Basement Stairs",
+     "faction": "shared",
+     "position": {
+      "x": -16.1249924,
+      "y": 14.7620564,
+      "z": 335.063416
+     },
+     "conditional": false
+    },
+    {
+     "id": "89ff19116feeafdf4a2b4e538cafb5364ffbe862",
+     "name": "Mira Ave (Flare)",
+     "faction": "pmc",
+     "position": {
+      "x": 218.225,
+      "y": 17.9920559,
+      "z": -38.5065842
+     },
+     "conditional": false
+    },
+    {
+     "id": "122676fe448d426d085e9516114534966a69c3ff",
+     "name": "Tartowers Sales Office",
+     "faction": "pmc",
+     "position": {
+      "x": 190.804,
+      "y": 17.6449986,
+      "z": 133.388992
+     },
+     "conditional": false
+    }
    ]
   },
   {
@@ -17508,7 +18419,8 @@
      ],
      "zoneName": "eb593d7d-ce9c-4a4a-abad-07e66f5204ee"
     }
-   ]
+   ],
+   "extracts": []
   },
   {
    "id": "6733700029c367a3d40b02af",
@@ -17612,6 +18524,30 @@
      ],
      "zoneName": "b776e3ed-a02d-4141-8eba-35d4746547ca"
     }
+   ],
+   "extracts": [
+    {
+     "id": "145db8cb7d81891137f780e183901f601a461127",
+     "name": "The Way Up",
+     "faction": "pmc",
+     "position": {
+      "x": -7.31,
+      "y": -0.0119999647,
+      "z": 40.127
+     },
+     "conditional": false
+    },
+    {
+     "id": "7c1c38af52a07d10fbcbc9a811db636d36e9818b",
+     "name": "Ariadne's Path",
+     "faction": "pmc",
+     "position": {
+      "x": 19.443,
+      "y": 1.07,
+      "z": 0.495
+     },
+     "conditional": false
+    }
    ]
   },
   {
@@ -17635,7 +18571,8 @@
      ],
      "zoneName": "9a35e574-e119-45d6-a760-362d7336f6b0"
     }
-   ]
+   ],
+   "extracts": []
   },
   {
    "id": "69af492a4819ea4ba10a69c5",
@@ -17697,7 +18634,8 @@
      ],
      "zoneName": "deb43977-c795-4dc1-8f5a-d96a0adf133f"
     }
-   ]
+   ],
+   "extracts": []
   }
  ],
  "tasks": [

@@ -21,6 +21,9 @@ interface PlannerState {
   selectedMapId: string | null;
   selectedTaskIds: string[];
   spawn: SpawnChoice | null;
+  /** chosen extract for routing; null = auto (farthest always-open exfil) */
+  targetExtractId: string | null;
+  setTargetExtract(id: string | null): void;
   /** PvP and PvE are separate in-game profiles; progress is tracked per mode */
   gameMode: GameMode;
   /** the active mode's progress */
@@ -55,6 +58,8 @@ export const usePlanner = create<PlannerState>()(
       selectedMapId: null,
       selectedTaskIds: [],
       spawn: null,
+      targetExtractId: null,
+      setTargetExtract: (targetExtractId) => set({ targetExtractId }),
       gameMode: 'pvp',
       tracker: freshTracker(),
       profiles: {},
@@ -100,7 +105,8 @@ export const usePlanner = create<PlannerState>()(
             selectedTaskIds: [],
           };
         }),
-      selectMap: (id) => set({ selectedMapId: id, selectedTaskIds: [], spawn: null }),
+      selectMap: (id) =>
+        set({ selectedMapId: id, selectedTaskIds: [], spawn: null, targetExtractId: null }),
       toggleTask: (id) =>
         set((s) => ({
           selectedTaskIds: s.selectedTaskIds.includes(id)
