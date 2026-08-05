@@ -21,13 +21,12 @@ describe('NotFoundPage', () => {
     container.remove();
   });
 
-  it('renders inside the shell for unknown paths, with a way home', () => {
+  it('renders inside the shell for unknown paths, with a way out', () => {
     window.history.pushState({}, '', '/no-such-page');
     act(() => root.render(<App />));
     expect(container.textContent).toContain('Page not found');
     expect(container.textContent).toContain('/no-such-page');
     // the nav survives so the user isn't stranded
-    expect(container.querySelector('a[href="/"]')).toBeTruthy();
     expect(container.querySelector('a[href="/planner"]')).toBeTruthy();
   });
 });

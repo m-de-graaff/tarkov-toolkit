@@ -72,7 +72,6 @@ export function TopNav() {
         aria-label="Tools"
         className="order-last -mx-4 flex w-[calc(100%+2rem)] min-w-0 items-center gap-1 overflow-x-auto px-4 pt-1 [mask-image:linear-gradient(to_right,transparent,black_16px,black_calc(100%-16px),transparent)] md:order-none md:mx-0 md:ml-2 md:w-auto md:px-0 md:pt-0 md:[mask-image:none]"
       >
-        <NavTab to="/">Home</NavTab>
         <NavTab to="/planner">Raid Planner</NavTab>
         <NavTab to="/progress">Progress</NavTab>
         <NavTab to="/hideout">Hideout</NavTab>

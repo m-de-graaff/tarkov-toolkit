@@ -1,10 +1,9 @@
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { TopNav } from './components/TopNav';
 import { RouteMetaSync } from './lib/routeMeta';
 import { AmmoPage } from './pages/AmmoPage';
 import { HideoutPage } from './pages/HideoutPage';
-import { HomePage } from './pages/HomePage';
 import { ItemsPage } from './pages/ItemsPage';
 import { MarketPage } from './pages/MarketPage';
 import { NotFoundPage } from './pages/NotFoundPage';
@@ -20,7 +19,8 @@ function RoutedPages() {
   return (
     <ErrorBoundary resetKey={location.pathname}>
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        {/* the planner is the product; a separate landing page earned no visits */}
+        <Route path="/" element={<Navigate to="/planner" replace />} />
         <Route path="/planner" element={<PlannerPage />} />
         <Route path="/progress" element={<ProgressPage />} />
         <Route path="/hideout" element={<HideoutPage />} />
