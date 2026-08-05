@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { TrackerState } from './availability';
 import type { SyncedState } from './progressSync';
-import { mergeSyncedState } from './progressSync';
+import { mergeSyncedState, normalizeSynced } from './progressSync';
 
 const tracker = (over: Partial<TrackerState>): TrackerState => ({
   level: 10,
@@ -78,5 +78,26 @@ describe('mergeSyncedState', () => {
     const local = state({ profiles: { pve: tracker({ level: 30 }) } });
     const merged = mergeSyncedState(remote, local);
     expect(merged.profiles.pve?.level).toBe(30);
+  });
+});
+
+describe('normalizeSynced', () => {
+  it('fills schema holes left by pre-v3 remote payloads', () => {
+    const holey = {
+      gameMode: 'pvp',
+      tracker: { level: 10, faction: 'Any' },
+      profiles: { pve: { level: 5, faction: 'Any' } },
+    } as unknown as SyncedState;
+    const out = normalizeSynced(holey);
+    expect(out.tracker.completedTaskIds).toEqual([]);
+    expect(out.tracker.hideoutLevels).toEqual({});
+    expect(out.tracker.itemsHave).toEqual({});
+    expect(out.profiles.pve?.itemsHave).toEqual({});
+    expect(out.craftBlacklist).toEqual([]);
+  });
+
+  it('leaves complete payloads unchanged', () => {
+    const full = state({ craftBlacklist: ['c'] });
+    expect(normalizeSynced(full)).toEqual(full);
   });
 });

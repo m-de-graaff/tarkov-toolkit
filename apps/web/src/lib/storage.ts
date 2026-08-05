@@ -5,6 +5,8 @@
 // eviction of localStorage, or a future export/import path can't lose
 // progress. The mirrored value is also the sync unit for the hosted version
 // (docs/auth-design.md).
+import { isValidPersistedJson } from './safeStorage';
+
 export const PROGRESS_KEY = 'raidplanner-v1';
 
 const DB_NAME = 'raidplanner-state';
@@ -48,13 +50,14 @@ async function idbSet(key: string, value: string): Promise<void> {
   }
 }
 
-/** Boot step: restore localStorage from the mirror when it's missing. */
+/** Boot step: restore localStorage from the mirror when it's missing or corrupt. */
 export async function restoreProgressFromMirror(): Promise<void> {
   if (!hasIdb) return;
   try {
-    if (localStorage.getItem(PROGRESS_KEY) !== null) return;
+    if (isValidPersistedJson(localStorage.getItem(PROGRESS_KEY))) return;
     const mirrored = await idbGet(PROGRESS_KEY);
-    if (mirrored !== null) localStorage.setItem(PROGRESS_KEY, mirrored);
+    // only repair from a mirror copy that is itself intact
+    if (isValidPersistedJson(mirrored)) localStorage.setItem(PROGRESS_KEY, mirrored);
   } catch {
     /* mirror unavailable - localStorage remains authoritative */
   }
@@ -69,7 +72,8 @@ export function startProgressMirror(subscribe: (listener: () => void) => () => v
   let timer: ReturnType<typeof setTimeout> | null = null;
   const flush = () => {
     const value = localStorage.getItem(PROGRESS_KEY);
-    if (value !== null) void idbSet(PROGRESS_KEY, value).catch(() => {});
+    // a torn/corrupt hot copy must never replace the good durable copy
+    if (isValidPersistedJson(value)) void idbSet(PROGRESS_KEY, value).catch(() => {});
   };
   const unsubscribe = subscribe(() => {
     if (timer) clearTimeout(timer);
@@ -77,11 +81,20 @@ export function startProgressMirror(subscribe: (listener: () => void) => () => v
     // debounce mirrors bursts of changes as one write
     timer = setTimeout(flush, 1000);
   });
+  // beforeunload alone is unreliable on mobile; pagehide/hidden are the
+  // events browsers actually fire before killing a background tab
   const onUnload = () => flush();
+  const onVisibility = () => {
+    if (document.visibilityState === 'hidden') flush();
+  };
   window.addEventListener('beforeunload', onUnload);
+  window.addEventListener('pagehide', onUnload);
+  document.addEventListener('visibilitychange', onVisibility);
   return () => {
     if (timer) clearTimeout(timer);
     window.removeEventListener('beforeunload', onUnload);
+    window.removeEventListener('pagehide', onUnload);
+    document.removeEventListener('visibilitychange', onVisibility);
     unsubscribe();
   };
 }
