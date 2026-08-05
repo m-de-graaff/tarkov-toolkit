@@ -10,6 +10,19 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        // the ~1.7MB data snapshot and leaflet dominate the bundle; splitting
+        // them lets the app shell load and cache independently
+        manualChunks(id: string) {
+          if (id.includes('generated/snapshot.json')) return 'snapshot';
+          if (id.includes('node_modules/leaflet')) return 'leaflet';
+          if (id.includes('node_modules/react')) return 'react';
+        },
+      },
+    },
+  },
   test: {
     setupFiles: ['./src/test/setup.ts'],
   },

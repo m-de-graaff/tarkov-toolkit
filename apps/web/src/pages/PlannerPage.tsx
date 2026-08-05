@@ -25,6 +25,7 @@ import type { RouteStop } from '../lib/route';
 import { optimizeRoute } from '../lib/route';
 import { useLiveWatcher } from '../lib/useLiveWatcher';
 import { useMediaQuery } from '../lib/useMediaQuery';
+import { useNavGrid } from '../lib/useNavGrid';
 import { usePlanner } from '../store';
 
 const LAYOUT_KEY = 'raidplanner-layout';
@@ -50,6 +51,7 @@ export function PlannerPage() {
 
   const map = snapshot.maps.find((m) => m.id === selectedMapId);
   const isDesktop = useMediaQuery('(min-width: 768px)');
+  const navigator = useNavGrid(map);
 
   // The route starts from where you actually are (live fix) when live mode has
   // one, otherwise from the chosen spawn.
@@ -77,6 +79,7 @@ export function PlannerPage() {
           objectiveId: objective.id,
           description: objective.description,
           position: point.position,
+          neededItems: objective.neededItems,
         });
       }
     }
@@ -104,9 +107,9 @@ export function PlannerPage() {
   const route = useMemo(
     () =>
       routeOrigin && (stops.length > 0 || chosenExtract)
-        ? optimizeRoute(routeOrigin, stops, chosenExtract?.position)
+        ? optimizeRoute(routeOrigin, stops, chosenExtract?.position, navigator)
         : null,
-    [routeOrigin, stops, chosenExtract],
+    [routeOrigin, stops, chosenExtract, navigator],
   );
 
   const outOfBounds = useMemo(() => {

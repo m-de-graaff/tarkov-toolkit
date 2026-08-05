@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 import type { TradeItemStack } from '@raidplanner/data';
 import { snapshot } from '@raidplanner/data';
 import { RefreshCw } from 'lucide-react';
-import { useMemo, useRef, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { ResizableTH } from '../components/ResizableTH';
 import { usePrices } from '../lib/usePrices';
 import { barterProfit, craftProfit, fleaToTrader, traderResells } from '../lib/profit';
@@ -133,6 +133,13 @@ export function MarketPage() {
   const activeCols =
     tab === 'resells' ? resellCols : tab === 'fleaToTrader' ? fleaCols : tab === 'barters' ? barterCols : craftCols;
   const tableWidth = activeCols.widths.reduce((a, b) => a + b, 0);
+
+  // Column widths follow the content automatically until the user drags a
+  // grip; measure after the rows for the current tab/filter are in the DOM.
+  const { manual: activeManual, fitAll: activeFitAll } = activeCols;
+  useLayoutEffect(() => {
+    if (!activeManual) activeFitAll(tableRef.current);
+  });
 
   const prices = cached?.prices ?? null;
   const matchesSearch = (text: string) =>

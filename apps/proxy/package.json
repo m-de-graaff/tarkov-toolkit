@@ -1,0 +1,12 @@
+{
+  "name": "@raidplanner/proxy",
+  "private": true,
+  "type": "module",
+  "description": "Caching proxy for tarkov.dev price payloads - Redis-backed with in-memory fallback",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "redis": "^4.7.0"
+  }
+}

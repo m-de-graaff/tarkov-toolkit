@@ -79,10 +79,15 @@ export interface RawItem {
   sellToTrader?: { trader: string; priceRUB?: number }[];
 }
 
+/** Deployments point this at a caching proxy (see apps/proxy); default hits
+ * json.tarkov.dev directly, which works for self-hosting and local dev. */
+const PRICES_BASE: string =
+  (import.meta.env?.VITE_PRICES_BASE as string | undefined) || 'https://json.tarkov.dev';
+
 export async function fetchPrices(mode: GameMode): Promise<CachedPrices> {
   const prefix = mode === 'pve' ? 'pve' : 'regular';
   const get = async (path: string) => {
-    const response = await fetch(`https://json.tarkov.dev/${path}`, {
+    const response = await fetch(`${PRICES_BASE}/${path}`, {
       headers: { Accept: 'application/json' },
     });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);

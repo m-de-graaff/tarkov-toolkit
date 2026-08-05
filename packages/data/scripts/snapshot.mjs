@@ -4,6 +4,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { applyDarkStyle } from './svg-dark-style.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const dataRoot = path.join(here, '..');
@@ -134,6 +135,19 @@ function buildMaps(rawMaps, calibrationIndex) {
           maxZoom: variant.maxZoom ?? 6,
         };
       }
+      if (variant.svgLayer) calibration.svgLayer = variant.svgLayer;
+      if (Array.isArray(variant.heightRange)) calibration.heightRange = variant.heightRange;
+      const layers = (variant.layers ?? [])
+        .map((l) => ({
+          name: l.name,
+          ...(l.svgLayer ? { svgLayer: l.svgLayer } : {}),
+          ...(l.tilePath ? { tileUrl: l.tilePath } : {}),
+          ...(Array.isArray(l.extents?.[0]?.height)
+            ? { heightRange: l.extents[0].height }
+            : {}),
+        }))
+        .filter((l) => l.svgLayer || l.tileUrl);
+      if (layers.length > 0) calibration.layers = layers;
     }
 
     const spawnSources = [raw, ...Object.entries(MERGED_INTO)
@@ -357,9 +371,10 @@ async function downloadSvgs(svgDownloads) {
     seen.add(file);
     const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
-    const buf = Buffer.from(await res.arrayBuffer());
-    await writeFile(path.join(svgOutDir, file), buf);
-    console.log(`  svg ${file} (${(buf.length / 1024).toFixed(0)} KB)`);
+    const raw = Buffer.from(await res.arrayBuffer()).toString('utf8');
+    const themed = applyDarkStyle(raw);
+    await writeFile(path.join(svgOutDir, file), themed);
+    console.log(`  svg ${file} (${(themed.length / 1024).toFixed(0)} KB)`);
   }
 }
 

@@ -114,10 +114,23 @@ top bar with a slide-in sheet and a collapsible bottom route drawer.
 
 `pnpm build` produces a fully static `apps/web/dist`:
 
-- **Self-hosted:** serve `apps/web/dist` from any static host or file server.
+- **Docker (recommended for self-hosting):** `docker compose up -d --build`
+  brings up the full stack on `http://localhost:8080` - the app behind nginx
+  (gzip, SPA fallback, immutable asset caching), a price proxy, and Redis.
+  The proxy caches the ~16MB tarkov.dev price payloads (gzipped, 30 min TTL,
+  request deduplication), so flea prices load in a couple of seconds and every
+  user shares one upstream fetch instead of hammering tarkov.dev.
+- **Static only:** serve `apps/web/dist` from any static host or file server.
+  Without a proxy the app fetches prices from `json.tarkov.dev` directly.
 - **Vercel:** the repo ships a `vercel.json` - import the project and deploy;
-  no configuration needed. Accounts/sync via Better Auth are designed but not
-  yet implemented (see `docs/auth-design.md` for the decisions it needs).
+  no configuration needed. To use a price proxy there, host `apps/proxy`
+  anywhere (any Node host + Redis, e.g. Upstash) and set the
+  `VITE_PRICES_BASE` build env to its URL.
+
+Proxy configuration (`apps/proxy`): `REDIS_URL` (optional - falls back to
+in-process memory), `PRICE_TTL_SECONDS` (default 1800), `PORT` (default 8787).
+The web image accepts a `VITE_PRICES_BASE` build arg and a `PROXY_URL`
+runtime env for the nginx upstream.
 
 Map note: base-map tiles load from `assets.tarkov.dev` at runtime (the one
 network dependency); offline, maps fall back to the bundled SVGs.
@@ -125,13 +138,17 @@ network dependency); offline, maps fall back to the bundled SVGs.
 ## v1 limitations
 
 - Tile-based maps (The Lab, The Labyrinth, Icebreaker) list their quests but
-  have no offline map image yet.
-- Routing is straight-line (euclidean) - it ignores walls, terrain, and
-  no-go zones. Treat it as visiting order, not a walking path.
-- Multi-floor maps show all markers on the ground-level SVG layer.
+  have no offline map image and no walkability data - their routes stay
+  straight-line.
+- Routing walks a rasterized walkability grid per floor (water, buildings,
+  minefields and off-map blocked; bridges and swamps walkable; floors joined
+  at stairways). It is still a 2D approximation of real terrain, and legs
+  with no walkable connection render dashed as-the-crow-flies.
+- Lighthouse, Streets of Tarkov and Terminal have no realistic tile render
+  anywhere upstream - they use the bundled dark-styled SVG maps.
 - PMC spawn names come from position (e.g. "Spawn NE") because the game data
   uses opaque zone ids; click-to-place custom spawns are exact.
 - Quest availability treats "active-status" prerequisites as satisfied
   (no recursive chain simulation).
-- The ~1.4 MB quest snapshot ships in the main bundle; lazy-loading it is
-  future work if initial load ever matters.
+- The quest/data snapshot ships as its own cached chunk (split from the app
+  shell along with leaflet and react).

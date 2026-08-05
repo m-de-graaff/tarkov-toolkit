@@ -1,0 +1,37 @@
+# Full self-hosted stack:
+#   docker compose up -d --build   ->  app on http://localhost:8080
+# web    - static app served by nginx, /api/prices proxied to the price proxy
+# proxy  - caches tarkov.dev price payloads (16MB per mode) in redis
+# redis  - shared price cache with persistence
+services:
+  web:
+    build:
+      context: .
+      args:
+        VITE_PRICES_BASE: /api/prices
+    ports:
+      - "8080:80"
+    environment:
+      PROXY_URL: http://proxy:8787
+    depends_on:
+      - proxy
+    restart: unless-stopped
+
+  proxy:
+    build: apps/proxy
+    environment:
+      REDIS_URL: redis://redis:6379
+      PRICE_TTL_SECONDS: "1800"
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--save", "300", "1", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru"]
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+
+volumes:
+  redis-data:
