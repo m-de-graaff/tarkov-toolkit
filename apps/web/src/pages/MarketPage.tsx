@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 import type { TradeItemStack } from '@raidplanner/data';
 import { snapshot } from '@raidplanner/data';
 import { RefreshCw } from 'lucide-react';
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { ResizableTH } from '../components/ResizableTH';
 import { usePrices } from '../lib/usePrices';
 import {
@@ -101,6 +101,17 @@ function Cols({ widths }: { widths: number[] }) {
   );
 }
 
+/** a filter that matches nothing must say so, not render a blank table body */
+function EmptyRow({ colSpan, search }: { colSpan: number; search: string }) {
+  return (
+    <tr>
+      <td colSpan={colSpan} className="p-6 text-center text-[13px] text-muted-foreground">
+        {search ? `No trades match "${search}".` : 'Nothing profitable in this category right now.'}
+      </td>
+    </tr>
+  );
+}
+
 function Money({ value, signed }: { value: number | null; signed?: boolean }) {
   if (value === null) {
     return <span className="text-xs text-muted-foreground">-</span>;
@@ -175,16 +186,11 @@ export function MarketPage() {
     tab === 'resells' ? resellCols : tab === 'fleaToTrader' ? fleaCols : tab === 'barters' ? barterCols : craftCols;
   const tableWidth = activeCols.widths.reduce((a, b) => a + b, 0);
 
-  // Column widths follow the content automatically until the user drags a
-  // grip; measure after the rows for the current tab/filter are in the DOM.
-  const { manual: activeManual, fitAll: activeFitAll } = activeCols;
-  useLayoutEffect(() => {
-    if (!activeManual) activeFitAll(tableRef.current);
-  });
-
   const prices = cached?.prices ?? null;
-  const matchesSearch = (text: string) =>
-    !search || text.toLowerCase().includes(search.toLowerCase());
+  const matchesSearch = useCallback(
+    (text: string) => !search || text.toLowerCase().includes(search.toLowerCase()),
+    [search],
+  );
   const stackNames = (stacks: TradeItemStack[]) =>
     stacks.map((s) => snapshot.itemsLite[s.itemId]?.name ?? '').join(' ');
 
@@ -195,16 +201,14 @@ export function MarketPage() {
         row.minTraderLevel <= maxLevel &&
         matchesSearch(`${snapshot.itemsLite[row.itemId]?.name ?? ''} ${snapshot.traders[row.traderId] ?? ''}`),
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prices, search, maxLevel]);
+  }, [prices, matchesSearch, maxLevel]);
 
   const fleaTraderRows = useMemo(() => {
     if (!prices) return [];
     return fleaToTrader(prices).filter((row) =>
       matchesSearch(snapshot.itemsLite[row.itemId]?.name ?? ''),
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prices, search]);
+  }, [prices, matchesSearch]);
 
   const barterRows = useMemo(() => {
     if (!prices) return [];
@@ -217,8 +221,7 @@ export function MarketPage() {
           matchesSearch(stackNames([...barter.requiredItems, ...barter.rewardItems])),
       )
       .sort((a, b) => (b.profit.profit ?? 0) - (a.profit.profit ?? 0));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prices, search, maxLevel]);
+  }, [prices, matchesSearch, maxLevel]);
 
   const craftRows = useMemo(() => {
     if (!prices) return [];
@@ -230,8 +233,16 @@ export function MarketPage() {
           matchesSearch(stackNames([...craft.requiredItems, ...craft.rewardItems])),
       )
       .sort((a, b) => (b.profit.profitPerHour ?? -Infinity) - (a.profit.profitPerHour ?? -Infinity));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prices, search]);
+  }, [prices, matchesSearch]);
+
+  // Column widths follow the content automatically until the user drags a
+  // grip. Re-measuring reads every cell's box (it flips the table to auto
+  // layout), so it must run only when the rendered rows actually change -
+  // with thousands of rows, running it per keystroke froze the page.
+  const { manual: activeManual, fitAll: activeFitAll } = activeCols;
+  useLayoutEffect(() => {
+    if (!activeManual) activeFitAll(tableRef.current);
+  }, [activeManual, activeFitAll, tab, resellRows, fleaTraderRows, barterRows, craftRows]);
 
   const counts: Record<Tab, number> = {
     resells: resellRows.length,
@@ -258,8 +269,8 @@ export function MarketPage() {
             {loading
               ? 'updating prices…'
               : ageMinutes !== null
-                ? `prices updated ${ageMinutes < 1 ? 'just now' : `${ageMinutes}m ago`} · auto-refreshes`
-                : 'loading prices…'}
+                ? `prices updated ${ageMinutes < 1 ? 'just now' : `${ageMinutes}m ago`}`
+                : 'prices not loaded'}
             <Button
               type="button"
               variant="ghost"
@@ -321,9 +332,19 @@ export function MarketPage() {
         </div>
 
         {!prices ? (
-          <p className="rounded-md border border-dashed p-6 text-center text-[13px] text-muted-foreground">
-            Fetching {gameMode.toUpperCase()} flea prices…
-          </p>
+          <div className="rounded-md border border-dashed p-6 text-center text-[13px] text-muted-foreground">
+            {loading ? (
+              <p>Fetching {gameMode.toUpperCase()} flea prices…</p>
+            ) : (
+              // a hard first-fetch failure used to leave "Fetching…" forever
+              <div className="flex flex-col items-center gap-2">
+                <p>{error ?? `${gameMode.toUpperCase()} flea prices are not loaded yet.`}</p>
+                <Button type="button" variant="outline" size="sm" onClick={() => void priceState.refresh()}>
+                  {error ? 'Try again' : 'Load prices'}
+                </Button>
+              </div>
+            )}
+          </div>
         ) : (
           <div className="overflow-x-auto rounded-lg border">
             <table
@@ -346,6 +367,7 @@ export function MarketPage() {
                     </tr>
                   </thead>
                   <tbody>
+                    {resellRows.length === 0 && <EmptyRow colSpan={5} search={search} />}
                     {resellRows.map((row) => (
                       <tr key={`${row.itemId}-${row.traderId}`} className="border-b last:border-0 hover:bg-secondary/40">
                         <td className="px-3 py-1.5">
@@ -376,6 +398,7 @@ export function MarketPage() {
                     </tr>
                   </thead>
                   <tbody>
+                    {fleaTraderRows.length === 0 && <EmptyRow colSpan={5} search={search} />}
                     {fleaTraderRows.map((row) => (
                       <tr key={row.itemId} className="border-b last:border-0 hover:bg-secondary/40">
                         <td className="px-3 py-1.5">
@@ -405,6 +428,7 @@ export function MarketPage() {
                     </tr>
                   </thead>
                   <tbody>
+                    {barterRows.length === 0 && <EmptyRow colSpan={7} search={search} />}
                     {barterRows.map(({ barter, profit }) => (
                       <tr key={barter.id} className="border-b last:border-0 hover:bg-secondary/40">
                         <td className="px-3 py-1.5"><ItemCell stacks={barter.requiredItems} /></td>
@@ -434,6 +458,7 @@ export function MarketPage() {
                     </tr>
                   </thead>
                   <tbody>
+                    {craftRows.length === 0 && <EmptyRow colSpan={8} search={search} />}
                     {craftRows.map(({ craft, profit }) => (
                       <tr key={craft.id} className="border-b last:border-0 hover:bg-secondary/40">
                         <td className="px-3 py-1.5"><ItemCell stacks={craft.requiredItems} /></td>
