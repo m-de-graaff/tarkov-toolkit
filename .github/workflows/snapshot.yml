@@ -1,0 +1,38 @@
+name: Refresh data snapshot
+
+# Regenerates the tarkov.dev data snapshot (quests, barters, crafts, maps)
+# and commits it when it changed; Vercel redeploys from the push. Flea
+# prices are fetched at runtime and are not part of this snapshot.
+on:
+  schedule:
+    - cron: '17 4 * * *' # daily, off the top of the hour
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm snapshot
+      - run: pnpm --filter @raidplanner/data test
+      - run: pnpm build
+      - name: Commit and push if changed
+        run: |
+          if [ -z "$(git status --porcelain -- packages/data/generated apps/web/public/maps)" ]; then
+            echo "Snapshot unchanged, nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add packages/data/generated apps/web/public/maps
+          git commit -m "chore(data): scheduled snapshot refresh"
+          git push
