@@ -12,6 +12,17 @@ export interface MapTiles {
   maxZoom: number;
 }
 
+export interface MapLayer {
+  /** display name, e.g. "2nd Floor" */
+  name: string;
+  /** matching svg group (data-layer attribute or id) */
+  svgLayer?: string;
+  /** per-floor tile pyramid url template */
+  tileUrl?: string;
+  /** game y range this layer covers, [low, high] */
+  heightRange?: [number, number];
+}
+
 export interface MapCalibration {
   transform: [number, number, number, number];
   coordinateRotation: number;
@@ -21,6 +32,12 @@ export interface MapCalibration {
   svgFile?: string;
   /** pretty baked-3D tile render (preferred base layer when online) */
   tiles?: MapTiles;
+  /** base (ground) svg layer group when the svg is multi-level */
+  svgLayer?: string;
+  /** game y range of the base layer */
+  heightRange?: [number, number];
+  /** additional floors/levels above or below the base layer */
+  layers?: MapLayer[];
 }
 
 export interface RpSpawn {

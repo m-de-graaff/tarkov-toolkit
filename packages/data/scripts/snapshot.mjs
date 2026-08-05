@@ -135,6 +135,19 @@ function buildMaps(rawMaps, calibrationIndex) {
           maxZoom: variant.maxZoom ?? 6,
         };
       }
+      if (variant.svgLayer) calibration.svgLayer = variant.svgLayer;
+      if (Array.isArray(variant.heightRange)) calibration.heightRange = variant.heightRange;
+      const layers = (variant.layers ?? [])
+        .map((l) => ({
+          name: l.name,
+          ...(l.svgLayer ? { svgLayer: l.svgLayer } : {}),
+          ...(l.tilePath ? { tileUrl: l.tilePath } : {}),
+          ...(Array.isArray(l.extents?.[0]?.height)
+            ? { heightRange: l.extents[0].height }
+            : {}),
+        }))
+        .filter((l) => l.svgLayer || l.tileUrl);
+      if (layers.length > 0) calibration.layers = layers;
     }
 
     const spawnSources = [raw, ...Object.entries(MERGED_INTO)

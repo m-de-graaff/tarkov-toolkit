@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-05T00:34:32.876Z",
+ "generatedAt": "2026-08-05T02:01:43.583Z",
  "gameMode": "regular",
  "maps": [
   {
@@ -35,7 +35,41 @@
      "tileSize": 256,
      "minZoom": 1,
      "maxZoom": 6
-    }
+    },
+    "svgLayer": "Ground_Floor",
+    "heightRange": [
+     -1,
+     3
+    ],
+    "layers": [
+     {
+      "name": "2nd Floor",
+      "svgLayer": "Second_Floor",
+      "tileUrl": "https://assets.tarkov.dev/maps/factory/2nd/{z}/{x}/{y}.png",
+      "heightRange": [
+       3,
+       6
+      ]
+     },
+     {
+      "name": "3rd Floor",
+      "svgLayer": "Third_Floor",
+      "tileUrl": "https://assets.tarkov.dev/maps/factory/3rd/{z}/{x}/{y}.png",
+      "heightRange": [
+       6,
+       10000
+      ]
+     },
+     {
+      "name": "Tunnels",
+      "svgLayer": "Basement",
+      "tileUrl": "https://assets.tarkov.dev/maps/factory/tunnels/{z}/{x}/{y}.png",
+      "heightRange": [
+       -10000,
+       -1
+      ]
+     }
+    ]
    },
    "spawns": [
     {
@@ -1343,7 +1377,49 @@
      "tileSize": 256,
      "minZoom": 2,
      "maxZoom": 6
-    }
+    },
+    "svgLayer": "Ground_Level",
+    "heightRange": [
+     -1000,
+     1000
+    ],
+    "layers": [
+     {
+      "name": "2nd Floor",
+      "svgLayer": "Second_Floor",
+      "tileUrl": "https://assets.tarkov.dev/maps/customs_0.16/2nd/{z}/{x}/{y}.png",
+      "heightRange": [
+       2.7,
+       6.5
+      ]
+     },
+     {
+      "name": "3rd Floor",
+      "svgLayer": "Third_Floor",
+      "tileUrl": "https://assets.tarkov.dev/maps/customs_0.16/3rd/{z}/{x}/{y}.png",
+      "heightRange": [
+       5.7,
+       1000
+      ]
+     },
+     {
+      "name": "4th Floor",
+      "tileUrl": "https://assets.tarkov.dev/maps/customs_0.16/4th/{z}/{x}/{y}.png",
+      "heightRange": [
+       11.2,
+       54.7
+      ]
+     },
+     {
+      "name": "Underground",
+      "svgLayer": "Underground_Level",
+      "tileUrl": "https://assets.tarkov.dev/maps/customs_0.16/underground/{z}/{x}/{y}.png",
+      "heightRange": [
+       -1000,
+       0.5
+      ]
+     }
+    ]
    },
    "spawns": [
     {
@@ -3365,7 +3441,8 @@
      "tileSize": 256,
      "minZoom": 2,
      "maxZoom": 6
-    }
+    },
+    "svgLayer": "Ground_Level"
    },
    "spawns": [
     {
@@ -5633,7 +5710,8 @@
       725
      ]
     ],
-    "svgFile": "lighthouse.svg"
+    "svgFile": "lighthouse.svg",
+    "svgLayer": "Ground_Level"
    },
    "spawns": [
     {
@@ -6858,7 +6936,38 @@
      "tileSize": 256,
      "minZoom": 2,
      "maxZoom": 6
-    }
+    },
+    "svgLayer": "Ground_Level",
+    "heightRange": [
+     -1000,
+     -1
+    ],
+    "layers": [
+     {
+      "name": "2nd Floor",
+      "svgLayer": "Second_Floor",
+      "heightRange": [
+       -1,
+       2
+      ]
+     },
+     {
+      "name": "3rd Floor",
+      "svgLayer": "Third_Floor",
+      "heightRange": [
+       2,
+       1000
+      ]
+     },
+     {
+      "name": "Underground",
+      "svgLayer": "Underground_Level",
+      "heightRange": [
+       -1000,
+       -5
+      ]
+     }
+    ]
    },
    "spawns": [
     {
@@ -9114,7 +9223,55 @@
      "tileSize": 256,
      "minZoom": 2,
      "maxZoom": 6
-    }
+    },
+    "svgLayer": "Ground_Level",
+    "heightRange": [
+     -7,
+     10000
+    ],
+    "layers": [
+     {
+      "name": "2nd Floor",
+      "tileUrl": "https://assets.tarkov.dev/maps/reserve/2nd/{z}/{x}/{y}.png",
+      "heightRange": [
+       22.1,
+       25.7
+      ]
+     },
+     {
+      "name": "3rd Floor",
+      "tileUrl": "https://assets.tarkov.dev/maps/reserve/3rd/{z}/{x}/{y}.png",
+      "heightRange": [
+       25.7,
+       29.3
+      ]
+     },
+     {
+      "name": "4th Floor",
+      "tileUrl": "https://assets.tarkov.dev/maps/reserve/4th/{z}/{x}/{y}.png",
+      "heightRange": [
+       29.3,
+       36
+      ]
+     },
+     {
+      "name": "5th Floor",
+      "tileUrl": "https://assets.tarkov.dev/maps/reserve/5th/{z}/{x}/{y}.png",
+      "heightRange": [
+       5,
+       9.5
+      ]
+     },
+     {
+      "name": "Bunkers",
+      "svgLayer": "Bunkers",
+      "tileUrl": "https://assets.tarkov.dev/maps/reserve/bunkers/{z}/{x}/{y}.png",
+      "heightRange": [
+       -10000,
+       -7.27
+      ]
+     }
+    ]
    },
    "spawns": [
     {
@@ -10440,7 +10597,26 @@
      "tileSize": 256,
      "minZoom": 1,
      "maxZoom": 6
-    }
+    },
+    "svgLayer": "Ground_Level",
+    "layers": [
+     {
+      "name": "2nd Floor",
+      "svgLayer": "First_Floor",
+      "heightRange": [
+       25,
+       34
+      ]
+     },
+     {
+      "name": "3rd Floor",
+      "svgLayer": "Second_Floor",
+      "heightRange": [
+       34,
+       1000
+      ]
+     }
+    ]
    },
    "spawns": [
     {
@@ -12524,7 +12700,54 @@
       532
      ]
     ],
-    "svgFile": "streets-of-tarkov.svg"
+    "svgFile": "streets-of-tarkov.svg",
+    "svgLayer": "Ground_Level",
+    "heightRange": [
+     -6,
+     10
+    ],
+    "layers": [
+     {
+      "name": "2nd Floor",
+      "svgLayer": "Second_Floor",
+      "heightRange": [
+       10,
+       15
+      ]
+     },
+     {
+      "name": "3rd Floor",
+      "svgLayer": "Third_Floor",
+      "heightRange": [
+       15,
+       20
+      ]
+     },
+     {
+      "name": "4th Floor",
+      "svgLayer": "Fourth_Floor",
+      "heightRange": [
+       20,
+       25
+      ]
+     },
+     {
+      "name": "5th Floor",
+      "svgLayer": "Fifth_Floor",
+      "heightRange": [
+       25,
+       10000
+      ]
+     },
+     {
+      "name": "Underground",
+      "svgLayer": "Underground_Level",
+      "heightRange": [
+       -10000,
+       -6
+      ]
+     }
+    ]
    },
    "spawns": [
     {
@@ -15667,7 +15890,29 @@
      "tileSize": 175,
      "minZoom": 2,
      "maxZoom": 6
-    }
+    },
+    "heightRange": [
+     -0.9,
+     3
+    ],
+    "layers": [
+     {
+      "name": "Second Level",
+      "tileUrl": "https://assets.tarkov.dev/maps/labs_v4/2nd/{z}/{x}/{y}.png",
+      "heightRange": [
+       3,
+       10000
+      ]
+     },
+     {
+      "name": "Technical",
+      "tileUrl": "https://assets.tarkov.dev/maps/labs_v4/technical/{z}/{x}/{y}.png",
+      "heightRange": [
+       -10000,
+       -0.9
+      ]
+     }
+    ]
    },
    "spawns": [
     {
@@ -16834,7 +17079,41 @@
      "tileSize": 256,
      "minZoom": 1,
      "maxZoom": 6
-    }
+    },
+    "svgLayer": "Ground_Level",
+    "heightRange": [
+     -1000,
+     28
+    ],
+    "layers": [
+     {
+      "name": "2nd Floor",
+      "svgLayer": "Second_Floor",
+      "tileUrl": "https://assets.tarkov.dev/maps/groundzero/2nd/{z}/{x}/{y}.png",
+      "heightRange": [
+       28,
+       32.3
+      ]
+     },
+     {
+      "name": "3rd Floor",
+      "svgLayer": "Third_Floor",
+      "tileUrl": "https://assets.tarkov.dev/maps/groundzero/3rd/{z}/{x}/{y}.png",
+      "heightRange": [
+       32.3,
+       1000
+      ]
+     },
+     {
+      "name": "Garage",
+      "svgLayer": "Underground_Level",
+      "tileUrl": "https://assets.tarkov.dev/maps/groundzero/garage/{z}/{x}/{y}.png",
+      "heightRange": [
+       -1000,
+       21
+      ]
+     }
+    ]
    },
    "spawns": [
     {
@@ -18346,7 +18625,8 @@
       475
      ]
     ],
-    "svgFile": "terminal.svg"
+    "svgFile": "terminal.svg",
+    "svgLayer": "Ground_Level"
    },
    "spawns": [
     {
@@ -18603,7 +18883,141 @@
      "tileSize": 256,
      "minZoom": 1,
      "maxZoom": 5
-    }
+    },
+    "heightRange": [
+     18.92,
+     19.56
+    ],
+    "layers": [
+     {
+      "name": "Infirmary",
+      "tileUrl": "https://assets.tarkov.dev/maps/icebreaker/06_infirmary/{z}/{x}/{y}.png",
+      "heightRange": [
+       18.92,
+       19.56
+      ]
+     },
+     {
+      "name": "Helipad",
+      "tileUrl": "https://assets.tarkov.dev/maps/icebreaker/07_helipad/{z}/{x}/{y}.png",
+      "heightRange": [
+       19.57,
+       22.1
+      ]
+     },
+     {
+      "name": "Gym/Canteen",
+      "tileUrl": "https://assets.tarkov.dev/maps/icebreaker/08_gym-canteen/{z}/{x}/{y}.png",
+      "heightRange": [
+       22.2,
+       25.2
+      ]
+     },
+     {
+      "name": "Accommodation (lower)",
+      "tileUrl": "https://assets.tarkov.dev/maps/icebreaker/09_accommodation_lower/{z}/{x}/{y}.png",
+      "heightRange": [
+       25.3,
+       28.2
+      ]
+     },
+     {
+      "name": "Accommodation (mid)",
+      "tileUrl": "https://assets.tarkov.dev/maps/icebreaker/10_accommodation_mid/{z}/{x}/{y}.png",
+      "heightRange": [
+       28.3,
+       31.3
+      ]
+     },
+     {
+      "name": "Accommodation (upper)",
+      "tileUrl": "https://assets.tarkov.dev/maps/icebreaker/11_accommodation_upper/{z}/{x}/{y}.png",
+      "heightRange": [
+       31.4,
+       34.4
+      ]
+     },
+     {
+      "name": "Officers' Deck",
+      "tileUrl": "https://assets.tarkov.dev/maps/icebreaker/12_officers_deck/{z}/{x}/{y}.png",
+      "heightRange": [
+       34.5,
+       37.5
+      ]
+     },
+     {
+      "name": "Stairs (blocked)",
+      "tileUrl": "https://assets.tarkov.dev/maps/icebreaker/13_stairs_blocked/{z}/{x}/{y}.png",
+      "heightRange": [
+       37.6,
+       40.6
+      ]
+     },
+     {
+      "name": "Bridge",
+      "tileUrl": "https://assets.tarkov.dev/maps/icebreaker/14_bridge/{z}/{x}/{y}.png",
+      "heightRange": [
+       40.7,
+       43.7
+      ]
+     },
+     {
+      "name": "Bridge Roof",
+      "tileUrl": "https://assets.tarkov.dev/maps/icebreaker/15_bridge_roof/{z}/{x}/{y}.png",
+      "heightRange": [
+       43.8,
+       10000
+      ]
+     },
+     {
+      "name": "Control Room",
+      "tileUrl": "https://assets.tarkov.dev/maps/icebreaker/00_control_room/{z}/{x}/{y}.png",
+      "heightRange": [
+       -10000,
+       3.5
+      ]
+     },
+     {
+      "name": "Engine Room",
+      "tileUrl": "https://assets.tarkov.dev/maps/icebreaker/01_engine_room/{z}/{x}/{y}.png",
+      "heightRange": [
+       3.6,
+       5.6
+      ]
+     },
+     {
+      "name": "Engine Room (upper)",
+      "tileUrl": "https://assets.tarkov.dev/maps/icebreaker/02_engine_room_upper/{z}/{x}/{y}.png",
+      "heightRange": [
+       5.7,
+       8.7
+      ]
+     },
+     {
+      "name": "Fuel Pumps (lower)",
+      "tileUrl": "https://assets.tarkov.dev/maps/icebreaker/03_fuel_pumps_lower/{z}/{x}/{y}.png",
+      "heightRange": [
+       8.8,
+       11.8
+      ]
+     },
+     {
+      "name": "Fuel Pumps",
+      "tileUrl": "https://assets.tarkov.dev/maps/icebreaker/04_fuel_pumps/{z}/{x}/{y}.png",
+      "heightRange": [
+       11.9,
+       14.9
+      ]
+     },
+     {
+      "name": "Storage/Security",
+      "tileUrl": "https://assets.tarkov.dev/maps/icebreaker/05_storage_ecurity/{z}/{x}/{y}.png",
+      "heightRange": [
+       15,
+       18.93
+      ]
+     }
+    ]
    },
    "spawns": [
     {
@@ -82371,52 +82785,6 @@
    ]
   },
   {
-   "id": "6a70c20b24dffc5ce90a709a1",
-   "traderName": "Prapor",
-   "traderLevel": 2,
-   "taskLocked": false,
-   "buyLimit": 2,
-   "requiredItems": [
-    {
-     "itemId": "573475fb24597737fb1379e1",
-     "count": 2
-    },
-    {
-     "itemId": "573476d324597737da2adc13",
-     "count": 2
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "58414a16245977599247970a",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c20b24dffc5ce90a706a1",
-   "traderName": "Prapor",
-   "traderLevel": 1,
-   "taskLocked": false,
-   "buyLimit": 1,
-   "requiredItems": [
-    {
-     "itemId": "5672cb304bdc2dc2088b456a",
-     "count": 2
-    },
-    {
-     "itemId": "5672cb124bdc2d1a0f8b4568",
-     "count": 2
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "707265736574000000000017",
-     "count": 1
-    }
-   ]
-  },
-  {
    "id": "6a70c1af24dffc5ce90a45dc1",
    "traderName": "Skier",
    "traderLevel": 4,
@@ -82597,66 +82965,70 @@
    ]
   },
   {
-   "id": "6a70c20b24dffc5ce90a70831",
+   "id": "6a70c20b24dffc5ce90a706a1",
    "traderName": "Prapor",
+   "traderLevel": 1,
+   "taskLocked": false,
+   "buyLimit": 1,
+   "requiredItems": [
+    {
+     "itemId": "5672cb304bdc2dc2088b456a",
+     "count": 2
+    },
+    {
+     "itemId": "5672cb124bdc2d1a0f8b4568",
+     "count": 2
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "707265736574000000000017",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c20b24dffc5ce90a709a1",
+   "traderName": "Prapor",
+   "traderLevel": 2,
+   "taskLocked": false,
+   "buyLimit": 2,
+   "requiredItems": [
+    {
+     "itemId": "573475fb24597737fb1379e1",
+     "count": 2
+    },
+    {
+     "itemId": "573476d324597737da2adc13",
+     "count": 2
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "58414a16245977599247970a",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c1ce24dffc5ce90a543f1",
+   "traderName": "Mechanic",
    "traderLevel": 3,
    "taskLocked": false,
    "buyLimit": 2,
    "requiredItems": [
     {
-     "itemId": "590c5a7286f7747884343aea",
-     "count": 2
+     "itemId": "5c06782b86f77426df5407d2",
+     "count": 8
     },
     {
      "itemId": "5d1c819a86f774771b0acd6c",
-     "count": 3
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "707265736574000000000036",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c20924dffc5ce90a6f331",
-   "traderName": "Prapor",
-   "traderLevel": 2,
-   "taskLocked": true,
-   "buyLimit": 1,
-   "requiredItems": [
-    {
-     "itemId": "5d40407c86f774318526545a",
      "count": 2
-    },
-    {
-     "itemId": "57347d7224597744596b4e72",
-     "count": 3
     }
    ],
    "rewardItems": [
     {
-     "itemId": "70726573657400000000001f",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c1da24dffc5ce90a5a3d1",
-   "traderName": "Mechanic",
-   "traderLevel": 4,
-   "taskLocked": true,
-   "buyLimit": 1,
-   "requiredItems": [
-    {
-     "itemId": "6389c8c5dbfd5e4b95197e6b",
-     "count": 1
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "64cbdff43ccb85468628d5fc",
+     "itemId": "5c0d1ec986f77439512a1a72",
      "count": 1
     }
    ]
@@ -82685,24 +83057,89 @@
    ]
   },
   {
-   "id": "6a70c1ce24dffc5ce90a543f1",
+   "id": "6a70c1da24dffc5ce90a5a3d1",
    "traderName": "Mechanic",
+   "traderLevel": 4,
+   "taskLocked": true,
+   "buyLimit": 1,
+   "requiredItems": [
+    {
+     "itemId": "6389c8c5dbfd5e4b95197e6b",
+     "count": 1
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "64cbdff43ccb85468628d5fc",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c20924dffc5ce90a6f331",
+   "traderName": "Prapor",
+   "traderLevel": 2,
+   "taskLocked": true,
+   "buyLimit": 1,
+   "requiredItems": [
+    {
+     "itemId": "5d40407c86f774318526545a",
+     "count": 2
+    },
+    {
+     "itemId": "57347d7224597744596b4e72",
+     "count": 3
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "70726573657400000000001f",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c20b24dffc5ce90a70831",
+   "traderName": "Prapor",
    "traderLevel": 3,
    "taskLocked": false,
    "buyLimit": 2,
    "requiredItems": [
     {
-     "itemId": "5c06782b86f77426df5407d2",
-     "count": 8
+     "itemId": "590c5a7286f7747884343aea",
+     "count": 2
     },
     {
      "itemId": "5d1c819a86f774771b0acd6c",
-     "count": 2
+     "count": 3
     }
    ],
    "rewardItems": [
     {
-     "itemId": "5c0d1ec986f77439512a1a72",
+     "itemId": "707265736574000000000036",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c19824dffc5ce90a38951",
+   "traderName": "Ref",
+   "traderLevel": 4,
+   "taskLocked": false,
+   "buyLimit": 1,
+   "requiredItems": [
+    {
+     "itemId": "6656560053eaaa7a23349c86",
+     "count": 1
+    },
+    {
+     "itemId": "5d235b4d86f7742e017bc88a",
+     "count": 40
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "5f06d6e1475d472556679d16",
      "count": 1
     }
    ]
@@ -82735,70 +83172,20 @@
    ]
   },
   {
-   "id": "6a70c19824dffc5ce90a38951",
+   "id": "6a70c19a24dffc5ce90a39861",
    "traderName": "Ref",
-   "traderLevel": 4,
+   "traderLevel": 2,
    "taskLocked": false,
-   "buyLimit": 1,
+   "buyLimit": 2,
    "requiredItems": [
-    {
-     "itemId": "6656560053eaaa7a23349c86",
-     "count": 1
-    },
     {
      "itemId": "5d235b4d86f7742e017bc88a",
-     "count": 40
+     "count": 55
     }
    ],
    "rewardItems": [
     {
-     "itemId": "5f06d6e1475d472556679d16",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c1db24dffc5ce90a5aae1",
-   "traderName": "Mechanic",
-   "traderLevel": 2,
-   "taskLocked": true,
-   "buyLimit": 3,
-   "requiredItems": [
-    {
-     "itemId": "619cbfccbedcde2f5b3f7bdd",
-     "count": 1
-    },
-    {
-     "itemId": "66b37f114410565a8f6789e2",
-     "count": 1
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "66d98233302686954b0c6f81",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c1db24dffc5ce90a5a941",
-   "traderName": "Mechanic",
-   "traderLevel": 2,
-   "taskLocked": true,
-   "buyLimit": 3,
-   "requiredItems": [
-    {
-     "itemId": "619cbfccbedcde2f5b3f7bdd",
-     "count": 1
-    },
-    {
-     "itemId": "66b37f114410565a8f6789e2",
-     "count": 1
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "66d98233302686954b0c6f81",
+     "itemId": "620109578d82e67e7911abf2",
      "count": 1
     }
    ]
@@ -82831,143 +83218,93 @@
    ]
   },
   {
-   "id": "6a70c19a24dffc5ce90a39861",
+   "id": "6a70c1db24dffc5ce90a5a941",
+   "traderName": "Mechanic",
+   "traderLevel": 2,
+   "taskLocked": true,
+   "buyLimit": 3,
+   "requiredItems": [
+    {
+     "itemId": "619cbfccbedcde2f5b3f7bdd",
+     "count": 1
+    },
+    {
+     "itemId": "66b37f114410565a8f6789e2",
+     "count": 1
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "66d98233302686954b0c6f81",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c1db24dffc5ce90a5aae1",
+   "traderName": "Mechanic",
+   "traderLevel": 2,
+   "taskLocked": true,
+   "buyLimit": 3,
+   "requiredItems": [
+    {
+     "itemId": "619cbfccbedcde2f5b3f7bdd",
+     "count": 1
+    },
+    {
+     "itemId": "66b37f114410565a8f6789e2",
+     "count": 1
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "66d98233302686954b0c6f81",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c19924dffc5ce90a396b1",
    "traderName": "Ref",
    "traderLevel": 2,
-   "taskLocked": false,
-   "buyLimit": 2,
+   "taskLocked": true,
+   "buyLimit": 1,
    "requiredItems": [
     {
-     "itemId": "5d235b4d86f7742e017bc88a",
-     "count": 55
+     "itemId": "6656560053eaaa7a23349c86",
+     "count": 3
     }
    ],
    "rewardItems": [
     {
-     "itemId": "620109578d82e67e7911abf2",
+     "itemId": "664a5428d5e33a713b622379",
      "count": 1
     }
    ]
   },
   {
-   "id": "6a70c20124dffc5ce90a6b481",
-   "traderName": "Prapor",
-   "traderLevel": 2,
-   "taskLocked": false,
-   "buyLimit": 2,
-   "requiredItems": [
-    {
-     "itemId": "5b4329075acfc400153b78ff",
-     "count": 2
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "5bead2e00db834001c062938",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c1fe24dffc5ce90a69b01",
-   "traderName": "Prapor",
-   "traderLevel": 2,
-   "taskLocked": false,
-   "buyLimit": 2,
-   "requiredItems": [
-    {
-     "itemId": "5c0fa877d174af02a012e1cf",
-     "count": 2
-    },
-    {
-     "itemId": "590c595c86f7747884343ad7",
-     "count": 1
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "5bffdc370db834001d23eca8",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c1c624dffc5ce90a50e41",
-   "traderName": "Jaeger",
+   "id": "6a70c1ac24dffc5ce90a44b91",
+   "traderName": "Ragman",
    "traderLevel": 2,
    "taskLocked": false,
    "buyLimit": 1,
    "requiredItems": [
     {
-     "itemId": "5c010e350db83400232feec7",
+     "itemId": "5780cf7f2459777de4559322",
      "count": 1
     },
     {
-     "itemId": "5bffdc370db834001d23eca8",
+     "itemId": "5a0dc95c86f77452440fc675",
      "count": 1
     },
+    {
+     "itemId": "5c12688486f77426843c7d32",
+     "count": 5
+    }
+   ],
+   "rewardItems": [
     {
      "itemId": "5bffe7930db834001b734a39",
-     "count": 1
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "63920105a83e15700a00f168",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c1c224dffc5ce90a4eed1",
-   "traderName": "Jaeger",
-   "traderLevel": 3,
-   "taskLocked": false,
-   "buyLimit": 1,
-   "requiredItems": [
-    {
-     "itemId": "59fafb5d86f774067a6f2084",
-     "count": 15
-    },
-    {
-     "itemId": "5b43575a86f77424f443fe62",
-     "count": 10
-    },
-    {
-     "itemId": "590a373286f774287540368b",
-     "count": 15
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "5c0126f40db834002a125382",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c1bf24dffc5ce90a4d2f1",
-   "traderName": "Jaeger",
-   "traderLevel": 3,
-   "taskLocked": false,
-   "buyLimit": 1,
-   "requiredItems": [
-    {
-     "itemId": "57347c93245977448d35f6e3",
-     "count": 5
-    },
-    {
-     "itemId": "5c13cef886f774072e618e82",
-     "count": 5
-    },
-    {
-     "itemId": "59e361e886f774176c10a2a5",
-     "count": 2
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "5c012ffc0db834001d23f03f",
      "count": 1
     }
    ]
@@ -83004,123 +83341,124 @@
    ]
   },
   {
-   "id": "6a70c1ac24dffc5ce90a44b91",
-   "traderName": "Ragman",
+   "id": "6a70c1bf24dffc5ce90a4d2f1",
+   "traderName": "Jaeger",
+   "traderLevel": 3,
+   "taskLocked": false,
+   "buyLimit": 1,
+   "requiredItems": [
+    {
+     "itemId": "57347c93245977448d35f6e3",
+     "count": 5
+    },
+    {
+     "itemId": "5c13cef886f774072e618e82",
+     "count": 5
+    },
+    {
+     "itemId": "59e361e886f774176c10a2a5",
+     "count": 2
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "5c012ffc0db834001d23f03f",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c1c224dffc5ce90a4eed1",
+   "traderName": "Jaeger",
+   "traderLevel": 3,
+   "taskLocked": false,
+   "buyLimit": 1,
+   "requiredItems": [
+    {
+     "itemId": "59fafb5d86f774067a6f2084",
+     "count": 15
+    },
+    {
+     "itemId": "5b43575a86f77424f443fe62",
+     "count": 10
+    },
+    {
+     "itemId": "590a373286f774287540368b",
+     "count": 15
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "5c0126f40db834002a125382",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c1c624dffc5ce90a50e41",
+   "traderName": "Jaeger",
    "traderLevel": 2,
    "taskLocked": false,
    "buyLimit": 1,
    "requiredItems": [
     {
-     "itemId": "5780cf7f2459777de4559322",
+     "itemId": "5c010e350db83400232feec7",
      "count": 1
     },
     {
-     "itemId": "5a0dc95c86f77452440fc675",
+     "itemId": "5bffdc370db834001d23eca8",
      "count": 1
     },
-    {
-     "itemId": "5c12688486f77426843c7d32",
-     "count": 5
-    }
-   ],
-   "rewardItems": [
     {
      "itemId": "5bffe7930db834001b734a39",
      "count": 1
     }
-   ]
-  },
-  {
-   "id": "6a70c19924dffc5ce90a396b1",
-   "traderName": "Ref",
-   "traderLevel": 2,
-   "taskLocked": true,
-   "buyLimit": 1,
-   "requiredItems": [
-    {
-     "itemId": "6656560053eaaa7a23349c86",
-     "count": 3
-    }
    ],
    "rewardItems": [
     {
-     "itemId": "664a5428d5e33a713b622379",
+     "itemId": "63920105a83e15700a00f168",
      "count": 1
     }
    ]
   },
   {
-   "id": "6a70c1ff24dffc5ce90a6a6b1",
+   "id": "6a70c1fe24dffc5ce90a69b01",
    "traderName": "Prapor",
    "traderLevel": 2,
-   "taskLocked": false,
-   "buyLimit": 3,
-   "requiredItems": [
-    {
-     "itemId": "590a3cd386f77436f20848cb",
-     "count": 1
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "5448be9a4bdc2dfd2f8b456a",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c1fd24dffc5ce90a699b1",
-   "traderName": "Prapor",
-   "traderLevel": 1,
    "taskLocked": false,
    "buyLimit": 2,
    "requiredItems": [
     {
-     "itemId": "590a3cd386f77436f20848cb",
+     "itemId": "5c0fa877d174af02a012e1cf",
+     "count": 2
+    },
+    {
+     "itemId": "590c595c86f7747884343ad7",
      "count": 1
     }
    ],
    "rewardItems": [
     {
-     "itemId": "5710c24ad2720bc3458b45a3",
+     "itemId": "5bffdc370db834001d23eca8",
      "count": 1
     }
    ]
   },
   {
-   "id": "6a70c1e724dffc5ce90a5fa21",
-   "traderName": "Peacekeeper",
+   "id": "6a70c20124dffc5ce90a6b481",
+   "traderName": "Prapor",
    "traderLevel": 2,
    "taskLocked": false,
-   "buyLimit": 8,
+   "buyLimit": 2,
    "requiredItems": [
     {
-     "itemId": "56742c2e4bdc2d95058b456d",
-     "count": 1
+     "itemId": "5b4329075acfc400153b78ff",
+     "count": 2
     }
    ],
    "rewardItems": [
     {
-     "itemId": "58d3db5386f77426186285a0",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c1d624dffc5ce90a58231",
-   "traderName": "Mechanic",
-   "traderLevel": 2,
-   "taskLocked": false,
-   "buyLimit": 5,
-   "requiredItems": [
-    {
-     "itemId": "5e2af51086f7746d3f3c3402",
-     "count": 1
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "5e32f56fcb6d5863cc5e5ee4",
+     "itemId": "5bead2e00db834001c062938",
      "count": 1
     }
    ]
@@ -83145,381 +83483,77 @@
    ]
   },
   {
-   "id": "6a70c20e24dffc5ce90a7217b",
-   "traderName": "Therapist",
-   "traderLevel": 1,
-   "taskLocked": false,
-   "buyLimit": 1,
-   "requiredItems": [
-    {
-     "itemId": "57513fcc24597720a31c09a6",
-     "count": 1
-    },
-    {
-     "itemId": "575146b724597720a27126d5",
-     "count": 1
-    },
-    {
-     "itemId": "5c13cef886f774072e618e82",
-     "count": 1
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "5938144586f77473c2087145",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c20e24dffc5ce90a7214b",
-   "traderName": "Therapist",
-   "traderLevel": 2,
-   "taskLocked": false,
-   "buyLimit": 1,
-   "requiredItems": [
-    {
-     "itemId": "6389c6463485cf0eeb260715",
-     "count": 1
-    },
-    {
-     "itemId": "6389c6c7dbfd5e4b95197e68",
-     "count": 1
-    },
-    {
-     "itemId": "5d1b3a5d86f774252167ba22",
-     "count": 5
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "5780cfa52459777dfb276eb1",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c20e24dffc5ce90a720bb",
-   "traderName": "Therapist",
-   "traderLevel": 1,
-   "taskLocked": false,
-   "buyLimit": 1,
-   "requiredItems": [
-    {
-     "itemId": "575062b524597720a31c09a1",
-     "count": 1
-    },
-    {
-     "itemId": "5448ff904bdc2d6f028b456e",
-     "count": 2
-    },
-    {
-     "itemId": "57347d8724597744596b4e76",
-     "count": 1
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "5780d0532459777a5108b9a2",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c20e24dffc5ce90a71ffb",
-   "traderName": "Therapist",
-   "traderLevel": 2,
-   "taskLocked": false,
-   "buyLimit": 1,
-   "requiredItems": [
-    {
-     "itemId": "5e2af02c86f7746d420957d4",
-     "count": 8
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "5a0ee37f86f774023657a86f",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c20e24dffc5ce90a71f9b",
-   "traderName": "Therapist",
-   "traderLevel": 1,
-   "taskLocked": false,
-   "buyLimit": 1,
-   "requiredItems": [
-    {
-     "itemId": "5d1b3a5d86f774252167ba22",
-     "count": 7
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "5938603e86f77435642354f4",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c20e24dffc5ce90a71e1b",
-   "traderName": "Therapist",
-   "traderLevel": 3,
-   "taskLocked": false,
-   "buyLimit": 1,
-   "requiredItems": [
-    {
-     "itemId": "5d1b33a686f7742523398398",
-     "count": 2
-    },
-    {
-     "itemId": "5d1b385e86f774252167b98a",
-     "count": 2
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "5d80c78786f774403a401e3e",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c20e24dffc5ce90a71d8b",
-   "traderName": "Therapist",
-   "traderLevel": 1,
-   "taskLocked": false,
-   "buyLimit": 1,
-   "requiredItems": [
-    {
-     "itemId": "57347cd0245977445a2d6ff1",
-     "count": 7
-    },
-    {
-     "itemId": "5734795124597738002c6176",
-     "count": 3
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "593aa4be86f77457f56379f8",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c20d24dffc5ce90a71b4b",
-   "traderName": "Therapist",
-   "traderLevel": 2,
-   "taskLocked": false,
-   "buyLimit": 1,
-   "requiredItems": [
-    {
-     "itemId": "5734758f24597738025ee253",
-     "count": 4
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "5780d0532459777a5108b9a2",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c20d24dffc5ce90a71b1b",
-   "traderName": "Therapist",
-   "traderLevel": 4,
-   "taskLocked": false,
-   "buyLimit": 1,
-   "requiredItems": [
-    {
-     "itemId": "5734773724597737fd047c14",
-     "count": 60
-    },
-    {
-     "itemId": "57347d90245977448f7b7f65",
-     "count": 10
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "5ad5d7d286f77450166e0a89",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c20b24dffc5ce90a7038b",
-   "traderName": "Prapor",
-   "traderLevel": 2,
-   "taskLocked": false,
-   "buyLimit": 1,
-   "requiredItems": [
-    {
-     "itemId": "56742c2e4bdc2d95058b456d",
-     "count": 2
-    },
-    {
-     "itemId": "5672cb304bdc2dc2088b456a",
-     "count": 2
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "593aa4be86f77457f56379f8",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c1f724dffc5ce90a66b0b",
-   "traderName": "Peacekeeper",
-   "traderLevel": 2,
-   "taskLocked": false,
-   "buyLimit": 1,
-   "requiredItems": [
-    {
-     "itemId": "590c37d286f77443be3d7827",
-     "count": 1
-    },
-    {
-     "itemId": "544fb3f34bdc2d03748b456a",
-     "count": 3
-    },
-    {
-     "itemId": "590c645c86f77412b01304d9",
-     "count": 1
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "5a145d4786f7744cbb6f4a12",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c1df24dffc5ce90a5ca7b",
-   "traderName": "Mechanic",
-   "traderLevel": 2,
-   "taskLocked": false,
-   "buyLimit": 1,
-   "requiredItems": [
-    {
-     "itemId": "5734779624597737e04bf329",
-     "count": 2
-    },
-    {
-     "itemId": "590a3b0486f7743954552bdb",
-     "count": 2
-    },
-    {
-     "itemId": "5672cb124bdc2d1a0f8b4568",
-     "count": 4
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "5a0eee1486f77402aa773226",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c1dd24dffc5ce90a5b76b",
+   "id": "6a70c1d624dffc5ce90a58231",
    "traderName": "Mechanic",
    "traderLevel": 2,
    "taskLocked": false,
    "buyLimit": 5,
    "requiredItems": [
     {
-     "itemId": "59faff1d86f7746c51718c9c",
+     "itemId": "5e2af51086f7746d3f3c3402",
      "count": 1
     }
    ],
    "rewardItems": [
     {
-     "itemId": "68e95d71a3d110355b03e529",
+     "itemId": "5e32f56fcb6d5863cc5e5ee4",
      "count": 1
     }
    ]
   },
   {
-   "id": "6a70c1c924dffc5ce90a51f6b",
-   "traderName": "Jaeger",
-   "traderLevel": 4,
-   "taskLocked": false,
-   "buyLimit": 1,
-   "requiredItems": [
-    {
-     "itemId": "5bc9bdb8d4351e003562b8a1",
-     "count": 25
-    }
-   ],
-   "rewardItems": [
-    {
-     "itemId": "5780cf7f2459777de4559322",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "6a70c1c524dffc5ce90a5000b",
-   "traderName": "Jaeger",
+   "id": "6a70c1e724dffc5ce90a5fa21",
+   "traderName": "Peacekeeper",
    "traderLevel": 2,
    "taskLocked": false,
-   "buyLimit": 1,
+   "buyLimit": 8,
    "requiredItems": [
     {
-     "itemId": "590c639286f774151567fa95",
-     "count": 2
-    },
-    {
-     "itemId": "5d40407c86f774318526545a",
-     "count": 4
-    },
-    {
-     "itemId": "57347d7224597744596b4e72",
-     "count": 2
+     "itemId": "56742c2e4bdc2d95058b456d",
+     "count": 1
     }
    ],
    "rewardItems": [
     {
-     "itemId": "5913915886f774123603c392",
+     "itemId": "58d3db5386f77426186285a0",
      "count": 1
     }
    ]
   },
   {
-   "id": "6a70c1c524dffc5ce90a4fe2b",
-   "traderName": "Jaeger",
-   "traderLevel": 3,
+   "id": "6a70c1fd24dffc5ce90a699b1",
+   "traderName": "Prapor",
+   "traderLevel": 1,
    "taskLocked": false,
-   "buyLimit": 1,
+   "buyLimit": 2,
    "requiredItems": [
     {
-     "itemId": "5c13cef886f774072e618e82",
-     "count": 6
-    },
-    {
-     "itemId": "5e2aef7986f7746d3f3c33f5",
-     "count": 5
-    },
-    {
-     "itemId": "5e2af37686f774755a234b65",
-     "count": 2
-    },
-    {
-     "itemId": "5e2af02c86f7746d420957d4",
-     "count": 2
+     "itemId": "590a3cd386f77436f20848cb",
+     "count": 1
     }
    ],
    "rewardItems": [
     {
-     "itemId": "5ad7247386f7747487619dc3",
+     "itemId": "5710c24ad2720bc3458b45a3",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c1ff24dffc5ce90a6a6b1",
+   "traderName": "Prapor",
+   "traderLevel": 2,
+   "taskLocked": false,
+   "buyLimit": 3,
+   "requiredItems": [
+    {
+     "itemId": "590a3cd386f77436f20848cb",
+     "count": 1
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "5448be9a4bdc2dfd2f8b456a",
      "count": 1
     }
    ]
@@ -83839,6 +83873,386 @@
    "rewardItems": [
     {
      "itemId": "5ad5db3786f7743568421cce",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c20e24dffc5ce90a7217b",
+   "traderName": "Therapist",
+   "traderLevel": 1,
+   "taskLocked": false,
+   "buyLimit": 1,
+   "requiredItems": [
+    {
+     "itemId": "57513fcc24597720a31c09a6",
+     "count": 1
+    },
+    {
+     "itemId": "575146b724597720a27126d5",
+     "count": 1
+    },
+    {
+     "itemId": "5c13cef886f774072e618e82",
+     "count": 1
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "5938144586f77473c2087145",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c20e24dffc5ce90a7214b",
+   "traderName": "Therapist",
+   "traderLevel": 2,
+   "taskLocked": false,
+   "buyLimit": 1,
+   "requiredItems": [
+    {
+     "itemId": "6389c6463485cf0eeb260715",
+     "count": 1
+    },
+    {
+     "itemId": "6389c6c7dbfd5e4b95197e68",
+     "count": 1
+    },
+    {
+     "itemId": "5d1b3a5d86f774252167ba22",
+     "count": 5
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "5780cfa52459777dfb276eb1",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c20e24dffc5ce90a720bb",
+   "traderName": "Therapist",
+   "traderLevel": 1,
+   "taskLocked": false,
+   "buyLimit": 1,
+   "requiredItems": [
+    {
+     "itemId": "575062b524597720a31c09a1",
+     "count": 1
+    },
+    {
+     "itemId": "5448ff904bdc2d6f028b456e",
+     "count": 2
+    },
+    {
+     "itemId": "57347d8724597744596b4e76",
+     "count": 1
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "5780d0532459777a5108b9a2",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c1c524dffc5ce90a4fe2b",
+   "traderName": "Jaeger",
+   "traderLevel": 3,
+   "taskLocked": false,
+   "buyLimit": 1,
+   "requiredItems": [
+    {
+     "itemId": "5c13cef886f774072e618e82",
+     "count": 6
+    },
+    {
+     "itemId": "5e2aef7986f7746d3f3c33f5",
+     "count": 5
+    },
+    {
+     "itemId": "5e2af37686f774755a234b65",
+     "count": 2
+    },
+    {
+     "itemId": "5e2af02c86f7746d420957d4",
+     "count": 2
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "5ad7247386f7747487619dc3",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c1c524dffc5ce90a5000b",
+   "traderName": "Jaeger",
+   "traderLevel": 2,
+   "taskLocked": false,
+   "buyLimit": 1,
+   "requiredItems": [
+    {
+     "itemId": "590c639286f774151567fa95",
+     "count": 2
+    },
+    {
+     "itemId": "5d40407c86f774318526545a",
+     "count": 4
+    },
+    {
+     "itemId": "57347d7224597744596b4e72",
+     "count": 2
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "5913915886f774123603c392",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c1c924dffc5ce90a51f6b",
+   "traderName": "Jaeger",
+   "traderLevel": 4,
+   "taskLocked": false,
+   "buyLimit": 1,
+   "requiredItems": [
+    {
+     "itemId": "5bc9bdb8d4351e003562b8a1",
+     "count": 25
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "5780cf7f2459777de4559322",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c1dd24dffc5ce90a5b76b",
+   "traderName": "Mechanic",
+   "traderLevel": 2,
+   "taskLocked": false,
+   "buyLimit": 5,
+   "requiredItems": [
+    {
+     "itemId": "59faff1d86f7746c51718c9c",
+     "count": 1
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "68e95d71a3d110355b03e529",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c1df24dffc5ce90a5ca7b",
+   "traderName": "Mechanic",
+   "traderLevel": 2,
+   "taskLocked": false,
+   "buyLimit": 1,
+   "requiredItems": [
+    {
+     "itemId": "5734779624597737e04bf329",
+     "count": 2
+    },
+    {
+     "itemId": "590a3b0486f7743954552bdb",
+     "count": 2
+    },
+    {
+     "itemId": "5672cb124bdc2d1a0f8b4568",
+     "count": 4
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "5a0eee1486f77402aa773226",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c1f724dffc5ce90a66b0b",
+   "traderName": "Peacekeeper",
+   "traderLevel": 2,
+   "taskLocked": false,
+   "buyLimit": 1,
+   "requiredItems": [
+    {
+     "itemId": "590c37d286f77443be3d7827",
+     "count": 1
+    },
+    {
+     "itemId": "544fb3f34bdc2d03748b456a",
+     "count": 3
+    },
+    {
+     "itemId": "590c645c86f77412b01304d9",
+     "count": 1
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "5a145d4786f7744cbb6f4a12",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c20b24dffc5ce90a7038b",
+   "traderName": "Prapor",
+   "traderLevel": 2,
+   "taskLocked": false,
+   "buyLimit": 1,
+   "requiredItems": [
+    {
+     "itemId": "56742c2e4bdc2d95058b456d",
+     "count": 2
+    },
+    {
+     "itemId": "5672cb304bdc2dc2088b456a",
+     "count": 2
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "593aa4be86f77457f56379f8",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c20d24dffc5ce90a71b1b",
+   "traderName": "Therapist",
+   "traderLevel": 4,
+   "taskLocked": false,
+   "buyLimit": 1,
+   "requiredItems": [
+    {
+     "itemId": "5734773724597737fd047c14",
+     "count": 60
+    },
+    {
+     "itemId": "57347d90245977448f7b7f65",
+     "count": 10
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "5ad5d7d286f77450166e0a89",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c20d24dffc5ce90a71b4b",
+   "traderName": "Therapist",
+   "traderLevel": 2,
+   "taskLocked": false,
+   "buyLimit": 1,
+   "requiredItems": [
+    {
+     "itemId": "5734758f24597738025ee253",
+     "count": 4
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "5780d0532459777a5108b9a2",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c20e24dffc5ce90a71d8b",
+   "traderName": "Therapist",
+   "traderLevel": 1,
+   "taskLocked": false,
+   "buyLimit": 1,
+   "requiredItems": [
+    {
+     "itemId": "57347cd0245977445a2d6ff1",
+     "count": 7
+    },
+    {
+     "itemId": "5734795124597738002c6176",
+     "count": 3
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "593aa4be86f77457f56379f8",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c20e24dffc5ce90a71e1b",
+   "traderName": "Therapist",
+   "traderLevel": 3,
+   "taskLocked": false,
+   "buyLimit": 1,
+   "requiredItems": [
+    {
+     "itemId": "5d1b33a686f7742523398398",
+     "count": 2
+    },
+    {
+     "itemId": "5d1b385e86f774252167b98a",
+     "count": 2
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "5d80c78786f774403a401e3e",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c20e24dffc5ce90a71f9b",
+   "traderName": "Therapist",
+   "traderLevel": 1,
+   "taskLocked": false,
+   "buyLimit": 1,
+   "requiredItems": [
+    {
+     "itemId": "5d1b3a5d86f774252167ba22",
+     "count": 7
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "5938603e86f77435642354f4",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "6a70c20e24dffc5ce90a71ffb",
+   "traderName": "Therapist",
+   "traderLevel": 2,
+   "taskLocked": false,
+   "buyLimit": 1,
+   "requiredItems": [
+    {
+     "itemId": "5e2af02c86f7746d420957d4",
+     "count": 8
+    }
+   ],
+   "rewardItems": [
+    {
+     "itemId": "5a0ee37f86f774023657a86f",
      "count": 1
     }
    ]
@@ -96023,16 +96437,6 @@
    "shortName": "PP-91-01 Kedr-B Default",
    "iconLink": "https://assets.tarkov.dev/584149ea2459775a6c55e940-icon.webp"
   },
-  "58414a16245977599247970a": {
-   "name": "SV-98 7.62x54R bolt-action sniper rifle Default",
-   "shortName": "SV-98 Default",
-   "iconLink": "https://assets.tarkov.dev/58414a16245977599247970a-icon.webp"
-  },
-  "707265736574000000000017": {
-   "name": "Mosin 7.62x54R bolt-action rifle (Sniper) PU 3.5x",
-   "shortName": "Mosin Sniper PU 3.5x",
-   "iconLink": "https://assets.tarkov.dev/mosinscopedbarter0000001-icon.webp"
-  },
   "59e8d2b386f77445830dd299": {
    "name": "Lobaev Arms DVL-10 7.62x51 bolt-action sniper rifle Saboteur",
    "shortName": "DVL-10 Saboteur",
@@ -96078,85 +96482,65 @@
    "shortName": "M700 AAC SD",
    "iconLink": "https://assets.tarkov.dev/5c0c1dba86f7743e667da897-icon.webp"
   },
-  "707265736574000000000036": {
-   "name": "RPK-16 5.45x39 light machine gun Drum",
-   "shortName": "RPK-16 Drum",
-   "iconLink": "https://assets.tarkov.dev/707265736574000000000036-icon.webp"
+  "707265736574000000000017": {
+   "name": "Mosin 7.62x54R bolt-action rifle (Sniper) PU 3.5x",
+   "shortName": "Mosin Sniper PU 3.5x",
+   "iconLink": "https://assets.tarkov.dev/mosinscopedbarter0000001-icon.webp"
   },
-  "70726573657400000000001f": {
-   "name": "RPK-16 5.45x39 light machine gun 6L26",
-   "shortName": "RPK-16 6L26",
-   "iconLink": "https://assets.tarkov.dev/rpk166l26000000000000001-icon.webp"
-  },
-  "64cbdff43ccb85468628d5fc": {
-   "name": "Kalashnikov PKM 7.62x54R machine gun Default",
-   "shortName": "PKM Default",
-   "iconLink": "https://assets.tarkov.dev/64cbdff43ccb85468628d5fc-icon.webp"
-  },
-  "70726573657400000000000d": {
-   "name": "Degtyarev RPDN 7.62x39 machine gun OKP-7 DT",
-   "shortName": "RPDN OKP-7 DT",
-   "iconLink": "https://assets.tarkov.dev/rpdnokp70000000000000001-icon.webp"
+  "58414a16245977599247970a": {
+   "name": "SV-98 7.62x54R bolt-action sniper rifle Default",
+   "shortName": "SV-98 Default",
+   "iconLink": "https://assets.tarkov.dev/58414a16245977599247970a-icon.webp"
   },
   "5c0d1ec986f77439512a1a72": {
    "name": "RPK-16 5.45x39 light machine gun Default",
    "shortName": "RPK-16 Default",
    "iconLink": "https://assets.tarkov.dev/5c0d1ec986f77439512a1a72-icon.webp"
   },
+  "70726573657400000000000d": {
+   "name": "Degtyarev RPDN 7.62x39 machine gun OKP-7 DT",
+   "shortName": "RPDN OKP-7 DT",
+   "iconLink": "https://assets.tarkov.dev/rpdnokp70000000000000001-icon.webp"
+  },
+  "64cbdff43ccb85468628d5fc": {
+   "name": "Kalashnikov PKM 7.62x54R machine gun Default",
+   "shortName": "PKM Default",
+   "iconLink": "https://assets.tarkov.dev/64cbdff43ccb85468628d5fc-icon.webp"
+  },
+  "70726573657400000000001f": {
+   "name": "RPK-16 5.45x39 light machine gun 6L26",
+   "shortName": "RPK-16 6L26",
+   "iconLink": "https://assets.tarkov.dev/rpk166l26000000000000001-icon.webp"
+  },
+  "707265736574000000000036": {
+   "name": "RPK-16 5.45x39 light machine gun Drum",
+   "shortName": "RPK-16 Drum",
+   "iconLink": "https://assets.tarkov.dev/707265736574000000000036-icon.webp"
+  },
   "5f06d6e1475d472556679d16": {
    "name": "FN40GL Mk2 40mm grenade launcher Default",
    "shortName": "FN40GL Default",
    "iconLink": "https://assets.tarkov.dev/5f06d6e1475d472556679d16-icon.webp"
-  },
-  "66d98233302686954b0c6f81": {
-   "name": "RSP-30 reactive signal cartridge (Blue)",
-   "shortName": "Blue",
-   "iconLink": "https://assets.tarkov.dev/66d98233302686954b0c6f81-icon.webp"
-  },
-  "571a12c42459771f627b58a0": {
-   "name": "Tokarev TT-33 7.62x25 TT pistol",
-   "shortName": "TT",
-   "iconLink": "https://assets.tarkov.dev/571a12c42459771f627b58a0-icon.webp"
   },
   "620109578d82e67e7911abf2": {
    "name": "ZiD SP-81 26x75 signal pistol",
    "shortName": "SP-81",
    "iconLink": "https://assets.tarkov.dev/620109578d82e67e7911abf2-icon.webp"
   },
-  "5bead2e00db834001c062938": {
-   "name": "MPL-50 entrenching tool",
-   "shortName": "MPL-50",
-   "iconLink": "https://assets.tarkov.dev/5bead2e00db834001c062938-icon.webp"
+  "571a12c42459771f627b58a0": {
+   "name": "Tokarev TT-33 7.62x25 TT pistol",
+   "shortName": "TT",
+   "iconLink": "https://assets.tarkov.dev/571a12c42459771f627b58a0-icon.webp"
   },
-  "5bffdc370db834001d23eca8": {
-   "name": "6Kh5 Bayonet",
-   "shortName": "6Kh5",
-   "iconLink": "https://assets.tarkov.dev/5bffdc370db834001d23eca8-icon.webp"
+  "66d98233302686954b0c6f81": {
+   "name": "RSP-30 reactive signal cartridge (Blue)",
+   "shortName": "Blue",
+   "iconLink": "https://assets.tarkov.dev/66d98233302686954b0c6f81-icon.webp"
   },
-  "5c010e350db83400232feec7": {
-   "name": "SP-8 Survival Machete",
-   "shortName": "SP-8",
-   "iconLink": "https://assets.tarkov.dev/5c010e350db83400232feec7-icon.webp"
-  },
-  "5bffe7930db834001b734a39": {
-   "name": "Crash Axe",
-   "shortName": "SCA",
-   "iconLink": "https://assets.tarkov.dev/5bffe7930db834001b734a39-icon.webp"
-  },
-  "63920105a83e15700a00f168": {
-   "name": "SOG Voodoo Hawk tactical tomahawk",
-   "shortName": "Hawk",
-   "iconLink": "https://assets.tarkov.dev/63920105a83e15700a00f168-icon.webp"
-  },
-  "5c012ffc0db834001d23f03f": {
-   "name": "Camper axe",
-   "shortName": "Camper",
-   "iconLink": "https://assets.tarkov.dev/5c012ffc0db834001d23f03f-icon.webp"
-  },
-  "5bffdd7e0db834001b734a1a": {
-   "name": "Miller Bros. Blades M-2 Tactical Sword",
-   "shortName": "M-2",
-   "iconLink": "https://assets.tarkov.dev/5bffdd7e0db834001b734a1a-icon.webp"
+  "664a5428d5e33a713b622379": {
+   "name": "APOK Tactical Wasteland Gladius",
+   "shortName": "TWG",
+   "iconLink": "https://assets.tarkov.dev/664a5428d5e33a713b622379-icon.webp"
   },
   "5780cf7f2459777de4559322": {
    "name": "Dorm room 314 marked key",
@@ -96168,65 +96552,50 @@
    "shortName": "W112 San",
    "iconLink": "https://assets.tarkov.dev/5a0dc95c86f77452440fc675-icon.webp"
   },
-  "664a5428d5e33a713b622379": {
-   "name": "APOK Tactical Wasteland Gladius",
-   "shortName": "TWG",
-   "iconLink": "https://assets.tarkov.dev/664a5428d5e33a713b622379-icon.webp"
+  "5bffe7930db834001b734a39": {
+   "name": "Crash Axe",
+   "shortName": "SCA",
+   "iconLink": "https://assets.tarkov.dev/5bffe7930db834001b734a39-icon.webp"
   },
-  "56742c2e4bdc2d95058b456d": {
-   "name": "Zibbo lighter",
-   "shortName": "Zibbo",
-   "iconLink": "https://assets.tarkov.dev/56742c2e4bdc2d95058b456d-icon.webp"
+  "5bffdd7e0db834001b734a1a": {
+   "name": "Miller Bros. Blades M-2 Tactical Sword",
+   "shortName": "M-2",
+   "iconLink": "https://assets.tarkov.dev/5bffdd7e0db834001b734a1a-icon.webp"
+  },
+  "5c012ffc0db834001d23f03f": {
+   "name": "Camper axe",
+   "shortName": "Camper",
+   "iconLink": "https://assets.tarkov.dev/5c012ffc0db834001d23f03f-icon.webp"
+  },
+  "5c010e350db83400232feec7": {
+   "name": "SP-8 Survival Machete",
+   "shortName": "SP-8",
+   "iconLink": "https://assets.tarkov.dev/5c010e350db83400232feec7-icon.webp"
+  },
+  "5bffdc370db834001d23eca8": {
+   "name": "6Kh5 Bayonet",
+   "shortName": "6Kh5",
+   "iconLink": "https://assets.tarkov.dev/5bffdc370db834001d23eca8-icon.webp"
+  },
+  "63920105a83e15700a00f168": {
+   "name": "SOG Voodoo Hawk tactical tomahawk",
+   "shortName": "Hawk",
+   "iconLink": "https://assets.tarkov.dev/63920105a83e15700a00f168-icon.webp"
+  },
+  "5bead2e00db834001c062938": {
+   "name": "MPL-50 entrenching tool",
+   "shortName": "MPL-50",
+   "iconLink": "https://assets.tarkov.dev/5bead2e00db834001c062938-icon.webp"
   },
   "5e2af51086f7746d3f3c3402": {
    "name": "UZRGM grenade fuze",
    "shortName": "Fuze",
    "iconLink": "https://assets.tarkov.dev/5e2af51086f7746d3f3c3402-icon.webp"
   },
-  "5780d0532459777a5108b9a2": {
-   "name": "Tarcone Director's office key",
-   "shortName": "Director's",
-   "iconLink": "https://assets.tarkov.dev/5780d0532459777a5108b9a2-icon.webp"
-  },
-  "5a0ee37f86f774023657a86f": {
-   "name": "Health Resort west wing room 221 key",
-   "shortName": "W221 San",
-   "iconLink": "https://assets.tarkov.dev/5a0ee37f86f774023657a86f-icon.webp"
-  },
-  "5938603e86f77435642354f4": {
-   "name": "Dorm room 206 key",
-   "shortName": "Dorm 206",
-   "iconLink": "https://assets.tarkov.dev/5938603e86f77435642354f4-icon.webp"
-  },
-  "5d1b385e86f774252167b98a": {
-   "name": "Water filter",
-   "shortName": "WFilter",
-   "iconLink": "https://assets.tarkov.dev/5d1b385e86f774252167b98a-icon.webp"
-  },
-  "5d80c78786f774403a401e3e": {
-   "name": "RB-AK key",
-   "shortName": "RB-AK",
-   "iconLink": "https://assets.tarkov.dev/5d80c78786f774403a401e3e-icon.webp"
-  },
-  "5ad5d7d286f77450166e0a89": {
-   "name": "Kiba Arms outer door key",
-   "shortName": "KIBA outer",
-   "iconLink": "https://assets.tarkov.dev/5ad5d7d286f77450166e0a89-icon.webp"
-  },
-  "5a145d4786f7744cbb6f4a12": {
-   "name": "Health Resort east wing room 306 key",
-   "shortName": "E306 San",
-   "iconLink": "https://assets.tarkov.dev/5a145d4786f7744cbb6f4a12-icon.webp"
-  },
-  "5a0eee1486f77402aa773226": {
-   "name": "Health Resort east wing room 328 key",
-   "shortName": "E328 San",
-   "iconLink": "https://assets.tarkov.dev/5a0eee1486f77402aa773226-icon.webp"
-  },
-  "68e95d71a3d110355b03e529": {
-   "name": "Elektronik's key",
-   "shortName": "Elektronik",
-   "iconLink": "https://assets.tarkov.dev/68e95d71a3d110355b03e529-icon.webp"
+  "56742c2e4bdc2d95058b456d": {
+   "name": "Zibbo lighter",
+   "shortName": "Zibbo",
+   "iconLink": "https://assets.tarkov.dev/56742c2e4bdc2d95058b456d-icon.webp"
   },
   "5ad5cfbd86f7742c825d6104": {
    "name": "OLI logistics department office key",
@@ -96297,6 +96666,51 @@
    "name": "EMERCOM medical unit key",
    "shortName": "EMC",
    "iconLink": "https://assets.tarkov.dev/5ad5db3786f7743568421cce-icon.webp"
+  },
+  "5780d0532459777a5108b9a2": {
+   "name": "Tarcone Director's office key",
+   "shortName": "Director's",
+   "iconLink": "https://assets.tarkov.dev/5780d0532459777a5108b9a2-icon.webp"
+  },
+  "68e95d71a3d110355b03e529": {
+   "name": "Elektronik's key",
+   "shortName": "Elektronik",
+   "iconLink": "https://assets.tarkov.dev/68e95d71a3d110355b03e529-icon.webp"
+  },
+  "5a0eee1486f77402aa773226": {
+   "name": "Health Resort east wing room 328 key",
+   "shortName": "E328 San",
+   "iconLink": "https://assets.tarkov.dev/5a0eee1486f77402aa773226-icon.webp"
+  },
+  "5a145d4786f7744cbb6f4a12": {
+   "name": "Health Resort east wing room 306 key",
+   "shortName": "E306 San",
+   "iconLink": "https://assets.tarkov.dev/5a145d4786f7744cbb6f4a12-icon.webp"
+  },
+  "5ad5d7d286f77450166e0a89": {
+   "name": "Kiba Arms outer door key",
+   "shortName": "KIBA outer",
+   "iconLink": "https://assets.tarkov.dev/5ad5d7d286f77450166e0a89-icon.webp"
+  },
+  "5d1b385e86f774252167b98a": {
+   "name": "Water filter",
+   "shortName": "WFilter",
+   "iconLink": "https://assets.tarkov.dev/5d1b385e86f774252167b98a-icon.webp"
+  },
+  "5d80c78786f774403a401e3e": {
+   "name": "RB-AK key",
+   "shortName": "RB-AK",
+   "iconLink": "https://assets.tarkov.dev/5d80c78786f774403a401e3e-icon.webp"
+  },
+  "5938603e86f77435642354f4": {
+   "name": "Dorm room 206 key",
+   "shortName": "Dorm 206",
+   "iconLink": "https://assets.tarkov.dev/5938603e86f77435642354f4-icon.webp"
+  },
+  "5a0ee37f86f774023657a86f": {
+   "name": "Health Resort west wing room 221 key",
+   "shortName": "W221 San",
+   "iconLink": "https://assets.tarkov.dev/5a0ee37f86f774023657a86f-icon.webp"
   },
   "5c1d0f4986f7744bb01837fa": {
    "name": "TerraGroup Labs keycard (Black)",
