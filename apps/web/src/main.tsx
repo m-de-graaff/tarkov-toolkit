@@ -3,7 +3,11 @@ import './index.css';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { startCrossTabSync } from './lib/crossTab';
+import { initMonitoring } from './lib/monitoring';
 import { restoreProgressFromMirror, startProgressMirror } from './lib/storage';
+
+// fire-and-forget: monitoring must never delay or block boot
+void initMonitoring();
 
 // Restore the durable IndexedDB copy into localStorage (if needed) BEFORE the
 // store module loads and hydrates from localStorage.
