@@ -150,6 +150,11 @@
   }
 }
 
+/* leaflet panes stack up to z-index 1000; portal popovers must sit above them */
+[data-radix-popper-content-wrapper] {
+  z-index: 1200 !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
