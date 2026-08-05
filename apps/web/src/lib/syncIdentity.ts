@@ -28,7 +28,7 @@ export function setLastSyncUserId(id: string): void {
 export const freshSyncedState = (): SyncedState => ({
   gameMode: 'pvp',
   tracker: {
-    level: 15,
+    level: 1,
     faction: 'Any',
     completedTaskIds: [],
     hideoutLevels: {},

@@ -11,7 +11,7 @@ export type SpawnChoice =
   | { kind: 'custom'; position: GamePosition };
 
 const freshTracker = (): TrackerState => ({
-  level: 15,
+  level: 1,
   faction: 'Any',
   completedTaskIds: [],
   hideoutLevels: {},

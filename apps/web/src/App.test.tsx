@@ -42,6 +42,8 @@ describe('App', () => {
     act(() => root.render(<App />));
     expect(container.textContent).toContain('Select a map to begin planning.');
 
+    // fresh profiles start at level 1; badges below assume a mid-game roster
+    act(() => usePlanner.getState().setLevel(15));
     act(() => usePlanner.getState().selectMap(customs.id));
     const rows = container.querySelectorAll('.quest-row');
     expect(rows.length).toBeGreaterThan(10);
