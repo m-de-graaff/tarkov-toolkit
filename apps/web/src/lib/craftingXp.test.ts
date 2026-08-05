@@ -1,6 +1,6 @@
 import type { RpCraft } from '@raidplanner/data';
 import { describe, expect, it } from 'vitest';
-import { craftingLevelingRows } from './craftingXp';
+import { bestCraftsPerStation } from './craftingXp';
 import type { ItemPrices } from './profit';
 
 const prices: ItemPrices = {
@@ -19,32 +19,94 @@ const craft = (id: string, over: Partial<RpCraft>): RpCraft => ({
   ...over,
 });
 
-describe('craftingLevelingRows', () => {
-  it('ranks by cost per crafting hour, tools excluded', () => {
-    const rows = craftingLevelingRows(
+describe('bestCraftsPerStation', () => {
+  it('groups by station and prefers short cheap crafts, tools excluded from cost', () => {
+    const groups = bestCraftsPerStation(
       [
-        craft('slow-cheap', { durationSeconds: 4 * 3600 }), // 6k over 4h = 1.5k/h
-        craft('fast-cheap', {}), // 6k/h
+        craft('slow-cheap', { durationSeconds: 4 * 3600 }),
+        craft('fast-cheap', {}),
         craft('with-tool', {
           requiredItems: [
             { itemId: 'cheap', count: 1 },
             { itemId: 'tool', count: 1, tool: true },
           ],
           durationSeconds: 2 * 3600,
-        }), // 3k/h, tool free
+        }),
         craft('expensive', { requiredItems: [{ itemId: 'pricey', count: 2 }] }),
+        craft('med', { stationId: 'medstation' }),
       ],
       prices,
       {},
-      false,
+      { onlyBuilt: false, ignoreCost: false },
     );
-    expect(rows.map((r) => r.craft.id)).toEqual(['slow-cheap', 'with-tool', 'fast-cheap', 'expensive']);
-    expect(rows[0].costPerHour).toBe(1_500);
+    const workbench = groups.find((g) => g.stationId === 'workbench')!;
+    // score = materials + station-time value: the tool's 500k price never counts
+    expect(workbench.rows.map((r) => r.craft.id)).toEqual(['fast-cheap', 'with-tool', 'slow-cheap']);
+    expect(workbench.rows[0].costPerPoint).toBe(1_200); // 6k materials / 5 points
+    expect(groups.find((g) => g.stationId === 'medstation')!.rows).toHaveLength(1);
+  });
+
+  it('a much longer craft loses to a slightly pricier short one', () => {
+    const groups = bestCraftsPerStation(
+      [
+        craft('marathon', {
+          durationSeconds: 72 * 3600,
+          requiredItems: [{ itemId: 'pricey', count: 1 }],
+        }),
+        craft('quick', { durationSeconds: 3.5 * 3600 }),
+      ],
+      prices,
+      {},
+      { onlyBuilt: false, ignoreCost: false },
+    );
+    expect(groups[0].rows.map((r) => r.craft.id)).toEqual(['quick', 'marathon']);
+  });
+
+  it('ignoreCost ranks purely by duration and needs no prices', () => {
+    const groups = bestCraftsPerStation(
+      [
+        craft('long', { durationSeconds: 8 * 3600 }),
+        craft('short', {
+          durationSeconds: 30 * 60,
+          requiredItems: [{ itemId: 'unpriced', count: 1 }],
+        }),
+      ],
+      null,
+      {},
+      { onlyBuilt: false, ignoreCost: true },
+    );
+    expect(groups[0].rows.map((r) => r.craft.id)).toEqual(['short', 'long']);
+    // alternating the top two: 10 points per 8.5 combined hours
+    expect(groups[0].pairPointsPerHour).toBeCloseTo(10 / 8.5, 3);
+  });
+
+  it('a single-recipe station has no alternation pair', () => {
+    const groups = bestCraftsPerStation(
+      [craft('water', { stationId: 'water-collector' })],
+      prices,
+      {},
+      { onlyBuilt: false, ignoreCost: false },
+    );
+    expect(groups[0].pairPointsPerHour).toBeNull();
   });
 
   it('onlyBuilt filters to stations the user has at the required level', () => {
-    const crafts = [craft('a', {}), craft('b', { stationLevel: 3 })];
-    const rows = craftingLevelingRows(crafts, prices, { workbench: 1 }, true);
-    expect(rows.map((r) => r.craft.id)).toEqual(['a']);
+    const groups = bestCraftsPerStation(
+      [craft('a', {}), craft('b', { stationLevel: 3 })],
+      prices,
+      { workbench: 1 },
+      { onlyBuilt: true, ignoreCost: false },
+    );
+    expect(groups[0].rows.map((r) => r.craft.id)).toEqual(['a']);
+  });
+
+  it('caps each station at perStation rows', () => {
+    const groups = bestCraftsPerStation(
+      [craft('a', {}), craft('b', {}), craft('c', {}), craft('d', {})],
+      prices,
+      {},
+      { onlyBuilt: false, ignoreCost: false, perStation: 2 },
+    );
+    expect(groups[0].rows).toHaveLength(2);
   });
 });

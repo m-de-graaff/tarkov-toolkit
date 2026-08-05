@@ -38,8 +38,8 @@ describe('XpPage', () => {
     for (const guide of skillGuides) {
       expect(container.textContent).toContain(guide.name);
     }
-    expect(container.textContent).toContain('Crafting');
-    expect(container.textContent).toContain('roubles-per-hour');
+    expect(container.textContent).toContain('best crafts per station');
+    expect(container.textContent).toContain('Shortest, any price');
   });
 
   it('search filters skills by method text', async () => {
