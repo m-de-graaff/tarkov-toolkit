@@ -27,6 +27,9 @@ importers:
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
+      vitest:
+        specifier: ^2.1.9
+        version: 2.1.9(@types/node@24.13.3)(jsdom@30.0.1(@noble/hashes@2.2.0))(lightningcss@1.32.0)
 
   apps/proxy:
     dependencies:
@@ -3866,15 +3869,6 @@ snapshots:
       magic-string: 0.30.21
     optionalDependencies:
       vite: 5.4.21(@types/node@24.13.3)(lightningcss@1.32.0)
-    optional: true
-
-  '@vitest/mocker@2.1.9(vite@5.4.21(@types/node@26.1.2)(lightningcss@1.32.0))':
-    dependencies:
-      '@vitest/spy': 2.1.9
-      estree-walker: 3.0.3
-      magic-string: 0.30.21
-    optionalDependencies:
-      vite: 5.4.21(@types/node@26.1.2)(lightningcss@1.32.0)
 
   '@vitest/pretty-format@2.1.9':
     dependencies:
@@ -4603,7 +4597,6 @@ snapshots:
       - sugarss
       - supports-color
       - terser
-    optional: true
 
   vite-node@2.1.9(@types/node@26.1.2)(lightningcss@1.32.0):
     dependencies:
@@ -4632,7 +4625,6 @@ snapshots:
       '@types/node': 24.13.3
       fsevents: 2.3.3
       lightningcss: 1.32.0
-    optional: true
 
   vite@5.4.21(@types/node@26.1.2)(lightningcss@1.32.0):
     dependencies:
@@ -4679,12 +4671,11 @@ snapshots:
       - sugarss
       - supports-color
       - terser
-    optional: true
 
   vitest@2.1.9(@types/node@26.1.2)(jsdom@30.0.1(@noble/hashes@2.2.0))(lightningcss@1.32.0):
     dependencies:
       '@vitest/expect': 2.1.9
-      '@vitest/mocker': 2.1.9(vite@5.4.21(@types/node@26.1.2)(lightningcss@1.32.0))
+      '@vitest/mocker': 2.1.9(vite@5.4.21(@types/node@24.13.3)(lightningcss@1.32.0))
       '@vitest/pretty-format': 2.1.9
       '@vitest/runner': 2.1.9
       '@vitest/snapshot': 2.1.9

@@ -4,6 +4,20 @@
 import { betterAuth } from 'better-auth';
 import { pool } from './db.js';
 
+// defaults + TRUSTED_ORIGINS (comma-separated) + the current Vercel preview
+// URLs, so preview deployments and future custom domains don't silently fail
+// auth against a hardcoded list
+const trustedOrigins = [
+  'https://tarkovtoolkit.vercel.app',
+  'https://tarkov-toolkit.vercel.app',
+  ...(process.env.TRUSTED_ORIGINS?.split(',')
+    .map((s) => s.trim())
+    .filter(Boolean) ?? []),
+  ...[process.env.VERCEL_URL, process.env.VERCEL_BRANCH_URL]
+    .filter(Boolean)
+    .map((host) => `https://${host}`),
+];
+
 export const auth = betterAuth({
   database: pool,
   emailAndPassword: {
@@ -11,8 +25,11 @@ export const auth = betterAuth({
     // progress sync is the only thing an account gates; keep signup frictionless
     requireEmailVerification: false,
   },
-  trustedOrigins: [
-    'https://tarkovtoolkit.vercel.app',
-    'https://tarkov-toolkit.vercel.app',
-  ],
+  trustedOrigins,
+  // the default in-memory store is per-serverless-instance, i.e. no limit at
+  // all under load; the database store actually counts across instances
+  rateLimit: {
+    enabled: true,
+    storage: 'database',
+  },
 });

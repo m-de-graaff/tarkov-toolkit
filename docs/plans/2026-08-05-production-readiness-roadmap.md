@@ -43,7 +43,7 @@ states + silent catches deferred to Slice 5 pass (user WIP in those files)
   `storage.ts:58,72`, `handleStore.ts:28,44`, `useLiveWatcher.ts:81`,
   `PlannerPage.tsx:38,257`.
 
-## Slice 3 — Server & deploy hardening
+## Slice 3 — Server & deploy hardening  ✅ DONE (CSP deferred - needs browser-verified pass)
 - Bring `api/` into the pnpm workspace so CI type-checks and tests it; add
   tests for auth gating, body cap, PUT validation, setup key check.
 - Schema-validate the synced `state` blob server-side (`api/progress.ts:73`);
