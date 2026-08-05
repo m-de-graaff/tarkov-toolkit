@@ -22,10 +22,17 @@ jobs:
         run: pnpm --filter @raidplanner/watcher build:exe
         env:
           RELEASE_TAG: ${{ github.ref_name }}
+      - name: Publish sha256 checksum (the updater refuses releases without one)
+        shell: pwsh
+        run: |
+          $hash = (Get-FileHash -Algorithm SHA256 apps/watcher/dist/RaidplannerCompanion.exe).Hash.ToLower()
+          Set-Content -NoNewline -Encoding ascii apps/watcher/dist/RaidplannerCompanion.exe.sha256 "$hash  RaidplannerCompanion.exe"
       - name: Create release with the companion exe
         uses: softprops/action-gh-release@v2
         with:
-          files: apps/watcher/dist/RaidplannerCompanion.exe
+          files: |
+            apps/watcher/dist/RaidplannerCompanion.exe
+            apps/watcher/dist/RaidplannerCompanion.exe.sha256
           generate_release_notes: true
           body: |
             **RaidplannerCompanion.exe** — download, double-click, leave the window open.
