@@ -110,6 +110,11 @@ export function HomePage() {
             description={`${snapshot.ammo.length} rounds with pen tiers, damage, and velocity - offline.`}
           />
           <ToolCard
+            to="/xp"
+            title="Skill XP"
+            description="The fastest sensible way to level each skill, with a live crafting cost table."
+          />
+          <ToolCard
             to="/market"
             title="Profit"
             description={`Trader resells, barter flips, and crafts ranked by profit - per PvP/PvE economy.`}

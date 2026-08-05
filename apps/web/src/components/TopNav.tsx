@@ -69,6 +69,7 @@ export function TopNav() {
         <NavTab to="/items">Items</NavTab>
         <NavTab to="/ammo">Ammo</NavTab>
         <NavTab to="/market">Profit</NavTab>
+        <NavTab to="/xp">XP</NavTab>
       </nav>
       <GameModeToggle />
     </header>

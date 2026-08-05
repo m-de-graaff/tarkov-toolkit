@@ -7,6 +7,7 @@ import { ItemsPage } from './pages/ItemsPage';
 import { MarketPage } from './pages/MarketPage';
 import { PlannerPage } from './pages/PlannerPage';
 import { ProgressPage } from './pages/ProgressPage';
+import { XpPage } from './pages/XpPage';
 
 export function App() {
   return (
@@ -21,6 +22,7 @@ export function App() {
           <Route path="/items" element={<ItemsPage />} />
           <Route path="/ammo" element={<AmmoPage />} />
           <Route path="/market" element={<MarketPage />} />
+          <Route path="/xp" element={<XpPage />} />
         </Routes>
       </div>
     </BrowserRouter>

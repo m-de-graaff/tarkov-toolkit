@@ -11,14 +11,13 @@ import { cn } from '@/lib/utils';
 import type { TradeItemStack } from '@raidplanner/data';
 import { snapshot } from '@raidplanner/data';
 import { RefreshCw } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { ResizableTH } from '../components/ResizableTH';
-import { fetchPrices, loadCachedPrices, type CachedPrices } from '../lib/prices';
+import { usePrices } from '../lib/usePrices';
 import { barterProfit, craftProfit, fleaToTrader, traderResells } from '../lib/profit';
 import { useColumnWidths } from '../lib/useColumnWidths';
 import { usePlanner } from '../store';
 
-const STALE_MS = 30 * 60 * 1000; // auto-refresh cadence
 
 const rub = (n: number) => `₽${Math.round(n).toLocaleString()}`;
 
@@ -118,12 +117,12 @@ type Tab = 'resells' | 'fleaToTrader' | 'barters' | 'crafts';
 export function MarketPage() {
   const gameMode = usePlanner((s) => s.gameMode);
   const [tab, setTab] = useState<Tab>('barters');
-  const [cached, setCached] = useState<CachedPrices | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const priceState = usePrices();
+  const cached = priceState.cached;
+  const loading = priceState.loading;
+  const error = priceState.error;
   const [search, setSearch] = useState('');
   const [maxLevel, setMaxLevel] = useState<number>(4);
-  const fetchingRef = useRef(false);
   const tableRef = useRef<HTMLTableElement | null>(null);
 
   // per-tab resizable column widths (drag the header edges; double-click fits)
@@ -134,55 +133,6 @@ export function MarketPage() {
   const activeCols =
     tab === 'resells' ? resellCols : tab === 'fleaToTrader' ? fleaCols : tab === 'barters' ? barterCols : craftCols;
   const tableWidth = activeCols.widths.reduce((a, b) => a + b, 0);
-
-  // Prices load themselves: cache first, auto-fetch when missing or stale,
-  // then keep fresh on an interval while the page is open.
-  useEffect(() => {
-    let disposed = false;
-    setCached(null);
-    setError(null);
-
-    const refresh = async () => {
-      if (fetchingRef.current) return;
-      fetchingRef.current = true;
-      setLoading(true);
-      try {
-        const fresh = await fetchPrices(gameMode);
-        if (!disposed) {
-          setCached(fresh);
-          setError(null);
-        }
-      } catch {
-        if (!disposed) setError("Couldn't fetch prices - retrying in a few minutes.");
-      } finally {
-        fetchingRef.current = false;
-        if (!disposed) setLoading(false);
-      }
-    };
-
-    void loadCachedPrices(gameMode).then((existing) => {
-      if (disposed) return;
-      if (existing) setCached(existing);
-      if (!existing || Date.now() - existing.fetchedAt > STALE_MS) void refresh();
-    });
-    const interval = setInterval(() => void refresh(), STALE_MS);
-    return () => {
-      disposed = true;
-      clearInterval(interval);
-    };
-  }, [gameMode]);
-
-  const manualRefresh = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      setCached(await fetchPrices(gameMode));
-    } catch {
-      setError("Couldn't fetch prices - are you online?");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const prices = cached?.prices ?? null;
   const matchesSearch = (text: string) =>
@@ -269,7 +219,7 @@ export function MarketPage() {
               className="size-6"
               aria-label="Refresh prices now"
               disabled={loading}
-              onClick={() => void manualRefresh()}
+              onClick={() => void priceState.refresh()}
             >
               <RefreshCw aria-hidden="true" className={cn('size-3.5', loading && 'animate-spin')} />
             </Button>
