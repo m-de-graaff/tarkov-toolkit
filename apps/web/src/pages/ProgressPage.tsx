@@ -1,4 +1,3 @@
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -8,159 +7,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils';
-import type { RpTask } from '@raidplanner/data';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { snapshot } from '@raidplanner/data';
-import { Lock } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+import { StoryTimeline } from '../components/StoryTimeline';
+import { TraderQuestBoard } from '../components/TraderQuestBoard';
 import type { TrackerState } from '../lib/availability';
-import { availableQuests, isAvailable } from '../lib/availability';
+import { availableQuests } from '../lib/availability';
 import { snapshotForMode } from '../lib/modeTasks';
-import { STORY_WIKI_URL, storyChapters } from '../data/storyline';
 import { usePlanner } from '../store';
 
 const FACTIONS: TrackerState['faction'][] = ['Any', 'USEC', 'BEAR'];
-
-const mapName = (normalized: string) =>
-  snapshot.maps.find((m) => m.normalizedName === normalized)?.name ?? normalized;
-
-function StorylineSection() {
-  const done = usePlanner((s) => s.tracker.storyChapterIds) ?? [];
-  const toggleStoryChapter = usePlanner((s) => s.toggleStoryChapter);
-  return (
-    <section aria-label="Story chapters">
-      <h2 className="mb-1 flex items-baseline gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-        Storyline
-        <span className="normal-case tabular-nums">
-          {done.length}/{storyChapters.length} chapters
-        </span>
-        <a
-          href={STORY_WIKI_URL}
-          target="_blank"
-          rel="noreferrer"
-          className="ml-auto normal-case text-primary/70 underline-offset-2 hover:underline"
-        >
-          wiki
-        </a>
-      </h2>
-      <Separator className="mb-2" />
-      <ul className="m-0 flex list-none flex-col gap-1 p-0">
-        {storyChapters.map((chapter) => {
-          const finished = done.includes(chapter.id);
-          return (
-            <li
-              key={chapter.id}
-              className="story-row flex flex-col gap-0.5 rounded-md px-2 py-1.5 hover:bg-secondary/60"
-            >
-              <label className="flex cursor-pointer items-center gap-2.5">
-                <input
-                  type="checkbox"
-                  checked={finished}
-                  onChange={() => toggleStoryChapter(chapter.id)}
-                  aria-label={`Mark chapter ${chapter.name} as finished`}
-                  className="size-4 shrink-0 accent-primary"
-                />
-                <span
-                  className={cn(
-                    'text-sm font-medium',
-                    finished && 'text-muted-foreground line-through',
-                  )}
-                >
-                  {chapter.order}. {chapter.name}
-                </span>
-                <span className="ml-auto flex shrink-0 gap-1">
-                  {chapter.maps.slice(0, 3).map((m) => (
-                    <Badge
-                      key={m}
-                      variant="outline"
-                      className="px-1.5 text-[10px] text-muted-foreground"
-                    >
-                      {mapName(m)}
-                    </Badge>
-                  ))}
-                  {chapter.maps.length > 3 && (
-                    <span className="text-[10px] text-muted-foreground">
-                      +{chapter.maps.length - 3}
-                    </span>
-                  )}
-                </span>
-              </label>
-              {!finished && (
-                <p className="pl-6.5 text-pretty text-xs text-muted-foreground">{chapter.start}</p>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-    </section>
-  );
-}
-
-function ProgressQuestRow({ task, deadEnd }: { task: RpTask; deadEnd?: boolean }) {
-  const tracker = usePlanner((s) => s.tracker);
-  const toggleCompleted = usePlanner((s) => s.toggleCompleted);
-  const completed = tracker.completedTaskIds.includes(task.id);
-  const open = isAvailable(task, tracker);
-
-  return (
-    <li
-      className={cn(
-        'quest-row flex min-h-9 items-center gap-2.5 rounded-md px-2 py-1 hover:bg-secondary/60',
-        !open && !completed && 'opacity-55',
-      )}
-    >
-      <input
-        type="checkbox"
-        checked={completed}
-        onChange={() => toggleCompleted(task.id)}
-        aria-label={`Mark ${task.name} as finished`}
-        className="size-4 shrink-0 cursor-pointer accent-primary"
-      />
-      <Link
-        to={`/quest/${task.normalizedName}`}
-        className={cn(
-          'min-w-0 flex-1 truncate text-sm underline-offset-2 hover:underline',
-          completed && 'text-muted-foreground line-through',
-        )}
-        title={`${task.name} - details`}
-      >
-        {task.name}
-      </Link>
-      {task.minPlayerLevel > 1 && (
-        <span className="shrink-0 text-xs text-muted-foreground tabular-nums">
-          Lv {task.minPlayerLevel}
-        </span>
-      )}
-      {!open && !completed && (
-        <span
-          className="flex shrink-0 items-center gap-1 text-xs text-muted-foreground"
-          title="Finish the quests before it (or level up) to unlock"
-        >
-          <Lock aria-hidden="true" className="size-3" /> locked
-        </span>
-      )}
-      {deadEnd && (
-        <span
-          className="shrink-0 text-[10px] uppercase text-muted-foreground/70"
-          title="No other quest requires this one"
-        >
-          dead end
-        </span>
-      )}
-      {task.kappaRequired && (
-        <Badge
-          variant="outline"
-          className="shrink-0 px-1.5 text-[10px] text-muted-foreground"
-          title="Needed for the Kappa container"
-        >
-          KAPPA
-        </Badge>
-      )}
-    </li>
-  );
-}
 
 function ResetButton() {
   const resetProgress = usePlanner((s) => s.resetProgress);
@@ -197,49 +55,14 @@ export function ProgressPage() {
   const gameMode = usePlanner((s) => s.gameMode);
   const setLevel = usePlanner((s) => s.setLevel);
   const setFaction = usePlanner((s) => s.setFaction);
-  const [search, setSearch] = useState('');
-  const [showLocked, setShowLocked] = useState(true);
-  const [showCompleted, setShowCompleted] = useState(true);
-  const [kappaOnly, setKappaOnly] = useState(false);
-  const [unlocksOnly, setUnlocksOnly] = useState(false);
+  const [params, setParams] = useSearchParams();
+  const tab = params.get('tab') === 'story' ? 'story' : 'quests';
 
   const modeSnapshot = useMemo(() => snapshotForMode(snapshot, gameMode), [gameMode]);
-
-  // quests that are a prerequisite of at least one other quest in this mode -
-  // everything else is a dead end (nothing depends on it)
-  const unlocksSomething = useMemo(() => {
-    const ids = new Set<string>();
-    for (const task of modeSnapshot.tasks) {
-      for (const req of task.taskRequirements) ids.add(req.taskId);
-    }
-    return ids;
-  }, [modeSnapshot]);
   const openCount = useMemo(
     () => availableQuests(modeSnapshot, tracker).length,
     [tracker, modeSnapshot],
   );
-
-  const byTrader = useMemo(() => {
-    const groups = new Map<string, { tasks: RpTask[]; total: number; completed: number }>();
-    for (const task of modeSnapshot.tasks) {
-      const group = groups.get(task.trader.name) ?? { tasks: [], total: 0, completed: 0 };
-      group.total++;
-      const completed = tracker.completedTaskIds.includes(task.id);
-      if (completed) group.completed++;
-      groups.set(task.trader.name, group);
-
-      if (search && !task.name.toLowerCase().includes(search.toLowerCase())) continue;
-      if (kappaOnly && !task.kappaRequired) continue;
-      if (unlocksOnly && !unlocksSomething.has(task.id)) continue;
-      if (!showCompleted && completed) continue;
-      if (!showLocked && !completed && !isAvailable(task, tracker)) continue;
-      group.tasks.push(task);
-    }
-    for (const group of groups.values()) {
-      group.tasks.sort((a, b) => a.minPlayerLevel - b.minPlayerLevel || a.name.localeCompare(b.name));
-    }
-    return groups;
-  }, [search, modeSnapshot, showLocked, showCompleted, kappaOnly, unlocksOnly, unlocksSomething, tracker]);
 
   const totalCompleted = tracker.completedTaskIds.filter((id) =>
     modeSnapshot.tasks.some((t) => t.id === id),
@@ -315,60 +138,28 @@ export function ProgressPage() {
           </div>
         </section>
 
-        <StorylineSection />
+        <Tabs
+          value={tab}
+          onValueChange={(next) => {
+            const nextParams = new URLSearchParams(params);
+            if (next === 'quests') nextParams.delete('tab');
+            else nextParams.set('tab', next);
+            setParams(nextParams, { replace: true });
+          }}
+        >
+          <TabsList className="w-full sm:w-auto">
+            <TabsTrigger value="quests">Quests</TabsTrigger>
+            <TabsTrigger value="story">Story</TabsTrigger>
+          </TabsList>
 
-        <div className="sticky top-0 z-10 -mx-1 flex flex-wrap items-center gap-2 rounded-md bg-background/95 px-1 py-2 backdrop-blur">
-          <Input
-            type="search"
-            placeholder="Search all quests…"
-            aria-label="Search all quests"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="h-8 max-w-64 flex-1"
-          />
-          {(
-            [
-              { label: 'Locked', value: showLocked, set: setShowLocked },
-              { label: 'Completed', value: showCompleted, set: setShowCompleted },
-              { label: 'Kappa only', value: kappaOnly, set: setKappaOnly },
-              { label: 'Unlocks quests', value: unlocksOnly, set: setUnlocksOnly },
-            ] as const
-          ).map((chip) => (
-            <button
-              key={chip.label}
-              type="button"
-              aria-pressed={chip.value}
-              onClick={() => chip.set(!chip.value)}
-              className={cn(
-                'rounded-full border px-2.5 py-1 text-xs transition-colors',
-                chip.value
-                  ? 'border-primary/60 bg-accent text-primary'
-                  : 'text-muted-foreground hover:text-foreground',
-              )}
-            >
-              {chip.label}
-            </button>
-          ))}
-        </div>
+          <TabsContent value="story">
+            <StoryTimeline />
+          </TabsContent>
 
-        {[...byTrader.entries()]
-          .filter(([, group]) => group.tasks.length > 0)
-          .map(([trader, group]) => (
-            <section key={trader} aria-label={`${trader} quests`}>
-              <h2 className="mb-1 flex items-baseline gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                {trader}
-                <span className="normal-case tabular-nums">
-                  {group.completed}/{group.total} done
-                </span>
-              </h2>
-              <Separator className="mb-2" />
-              <ul className="m-0 flex list-none flex-col p-0">
-                {group.tasks.map((task) => (
-                  <ProgressQuestRow key={task.id} task={task} deadEnd={!unlocksSomething.has(task.id)} />
-                ))}
-              </ul>
-            </section>
-          ))}
+          <TabsContent value="quests">
+            <TraderQuestBoard />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
