@@ -1,42 +1,87 @@
 import { useCallback, useRef, useState } from 'react';
 
 const MIN_WIDTH = 60;
+const MAX_WIDTH = 640;
 
 function storageKey(tableKey: string) {
   // v2: widths saved while dragging was visually broken were untrustworthy
   return `raidplanner-cols-v2:${tableKey}`;
 }
 
-function load(tableKey: string, defaults: number[]): number[] {
+interface Saved {
+  w: number[];
+  /** true once the user dragged or explicitly fitted - stops automatic fits */
+  manual: boolean;
+}
+
+function load(tableKey: string, defaults: number[]): Saved {
   try {
     const raw = localStorage.getItem(storageKey(tableKey));
-    if (!raw) return defaults;
-    const parsed = JSON.parse(raw) as number[];
-    return parsed.length === defaults.length ? parsed : defaults;
+    if (!raw) return { w: defaults, manual: false };
+    const parsed = JSON.parse(raw) as number[] | Saved;
+    // older versions stored a bare array, and only wrote it on user action
+    if (Array.isArray(parsed)) {
+      return parsed.length === defaults.length ? { w: parsed, manual: true } : { w: defaults, manual: false };
+    }
+    return parsed.w?.length === defaults.length ? parsed : { w: defaults, manual: false };
   } catch {
-    return defaults;
+    return { w: defaults, manual: false };
   }
+}
+
+const clamp = (w: number) => Math.min(Math.max(Math.ceil(w), MIN_WIDTH), MAX_WIDTH);
+
+/**
+ * The natural per-column widths of a fixed-layout table: briefly switch it to
+ * auto layout with unconstrained columns, let the browser solve the layout,
+ * and read the resulting column boxes. Unlike scrollWidth probing this sees
+ * the full content of truncated cells.
+ */
+function measureNatural(table: HTMLTableElement): number[] | null {
+  const headerCells = table.tHead?.rows[0]?.cells;
+  if (!headerCells || headerCells.length === 0) return null;
+  const cols = Array.from(table.querySelectorAll('col'));
+  const prev = {
+    layout: table.style.tableLayout,
+    width: table.style.width,
+    colWidths: cols.map((c) => c.style.width),
+  };
+  table.style.tableLayout = 'auto';
+  table.style.width = 'auto';
+  for (const c of cols) c.style.width = '';
+  const widths = Array.from(headerCells, (cell) => clamp(cell.getBoundingClientRect().width + 2));
+  table.style.tableLayout = prev.layout;
+  table.style.width = prev.width;
+  cols.forEach((c, i) => {
+    c.style.width = prev.colWidths[i];
+  });
+  return widths;
 }
 
 export interface ColumnWidths {
   widths: number[];
+  /** whether the user has taken manual control (drag or explicit fit) */
+  manual: boolean;
   /** attach to the resize grip's onPointerDown */
   startDrag(index: number, event: React.PointerEvent): void;
   /** Excel-style double-click: fit the column to its widest cell */
   autoFit(index: number, table: HTMLTableElement | null): void;
+  /** fit every column to its content; used automatically until the user resizes */
+  fitAll(table: HTMLTableElement | null): void;
   reset(): void;
 }
 
 /**
- * Stateful per-column pixel widths for a fixed-layout table: drag to resize,
- * double-click to auto-fit, persisted per table key.
+ * Stateful per-column pixel widths for a fixed-layout table: automatically
+ * fitted to content until the user drags (then their widths persist per table
+ * key); double-click a grip to fit one column, reset to return to automatic.
  */
 export function useColumnWidths(tableKey: string, defaults: number[]): ColumnWidths {
-  const [widths, setWidths] = useState(() => load(tableKey, defaults));
+  const [saved, setSaved] = useState(() => load(tableKey, defaults));
   const dragRef = useRef<{ index: number; startX: number; startWidth: number } | null>(null);
 
   const persist = useCallback(
-    (next: number[]) => {
+    (next: Saved) => {
       try {
         localStorage.setItem(storageKey(tableKey), JSON.stringify(next));
       } catch {
@@ -49,21 +94,21 @@ export function useColumnWidths(tableKey: string, defaults: number[]): ColumnWid
   const startDrag = useCallback(
     (index: number, event: React.PointerEvent) => {
       event.preventDefault();
-      dragRef.current = { index, startX: event.clientX, startWidth: widths[index] };
+      dragRef.current = { index, startX: event.clientX, startWidth: saved.w[index] };
       const onMove = (move: PointerEvent) => {
         const drag = dragRef.current;
         if (!drag) return;
         const width = Math.max(MIN_WIDTH, drag.startWidth + (move.clientX - drag.startX));
-        setWidths((current) => {
-          const next = [...current];
-          next[drag.index] = width;
-          return next;
+        setSaved((current) => {
+          const w = [...current.w];
+          w[drag.index] = width;
+          return { w, manual: true };
         });
       };
       const onUp = () => {
         window.removeEventListener('pointermove', onMove);
         window.removeEventListener('pointerup', onUp);
-        setWidths((current) => {
+        setSaved((current) => {
           persist(current);
           return current;
         });
@@ -72,22 +117,18 @@ export function useColumnWidths(tableKey: string, defaults: number[]): ColumnWid
       window.addEventListener('pointermove', onMove);
       window.addEventListener('pointerup', onUp);
     },
-    [widths, persist],
+    [saved.w, persist],
   );
 
   const autoFit = useCallback(
     (index: number, table: HTMLTableElement | null) => {
       if (!table) return;
-      let widest = MIN_WIDTH;
-      for (const row of table.rows) {
-        const cell = row.cells[index];
-        if (!cell) continue;
-        // measure the cell's content at its natural width
-        widest = Math.max(widest, cell.scrollWidth + 8);
-      }
-      setWidths((current) => {
-        const next = [...current];
-        next[index] = Math.min(widest, 640);
+      const natural = measureNatural(table);
+      if (!natural) return;
+      setSaved((current) => {
+        const w = [...current.w];
+        w[index] = natural[index] ?? w[index];
+        const next = { w, manual: true };
         persist(next);
         return next;
       });
@@ -95,11 +136,31 @@ export function useColumnWidths(tableKey: string, defaults: number[]): ColumnWid
     [persist],
   );
 
-  const reset = useCallback(() => {
-    setWidths(defaults);
-    persist(defaults);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [persist]);
+  const fitAll = useCallback((table: HTMLTableElement | null) => {
+    if (!table) return;
+    const natural = measureNatural(table);
+    if (!natural) return;
+    // automatic fits are not persisted - content is remeasured per visit
+    setSaved((current) => {
+      if (
+        current.w.length === natural.length &&
+        current.w.every((w, i) => w === natural[i])
+      ) {
+        return current;
+      }
+      return { w: natural, manual: current.manual };
+    });
+  }, []);
 
-  return { widths, startDrag, autoFit, reset };
+  const reset = useCallback(() => {
+    try {
+      localStorage.removeItem(storageKey(tableKey));
+    } catch {
+      /* best-effort */
+    }
+    setSaved({ w: defaults, manual: false });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tableKey]);
+
+  return { widths: saved.w, manual: saved.manual, startDrag, autoFit, fitAll, reset };
 }
