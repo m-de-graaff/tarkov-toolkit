@@ -17,6 +17,7 @@ const freshTracker = (): TrackerState => ({
   hideoutLevels: {},
   itemsHave: {},
   storyChapterIds: [],
+  traderLoyalty: {},
 });
 
 interface PlannerState {
@@ -50,6 +51,8 @@ interface PlannerState {
   setSpawn(s: SpawnChoice | null): void;
   setLevel(n: number): void;
   setFaction(f: TrackerState['faction']): void;
+  /** loyalty with a trader: 0 = locked, 1-4 = LL tier */
+  setTraderLoyalty(traderName: string, level: number): void;
   toggleCompleted(taskId: string): void;
   toggleStoryChapter(chapterId: string): void;
   setHideoutLevel(stationId: string, level: number): void;
@@ -144,6 +147,13 @@ export const usePlanner = create<PlannerState>()(
       setSpawn: (spawn) => set({ spawn, spawnOverridesLive: spawn !== null }),
       setLevel: (level) => set((s) => ({ tracker: { ...s.tracker, level } })),
       setFaction: (faction) => set((s) => ({ tracker: { ...s.tracker, faction } })),
+      setTraderLoyalty: (traderName, level) =>
+        set((s) => ({
+          tracker: {
+            ...s.tracker,
+            traderLoyalty: { ...(s.tracker.traderLoyalty ?? {}), [traderName]: level },
+          },
+        })),
       toggleStoryChapter: (chapterId) =>
         set((s) => {
           const done = s.tracker.storyChapterIds ?? [];

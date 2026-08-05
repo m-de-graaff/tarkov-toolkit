@@ -44,6 +44,7 @@ describe('planner store', () => {
       hideoutLevels: {},
       itemsHave: {},
       storyChapterIds: [],
+      traderLoyalty: {},
     });
   });
 
@@ -136,6 +137,7 @@ describe('planner store', () => {
       hideoutLevels: {},
       itemsHave: {},
       storyChapterIds: [],
+      traderLoyalty: {},
     });
   });
 

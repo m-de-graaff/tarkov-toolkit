@@ -100,9 +100,19 @@ export const storyChapters: StoryChapter[] = [
     maps: ['shoreline', 'the-labyrinth'],
   },
   {
+    id: 'boreas',
+    name: 'Boreas',
+    order: 9,
+    start:
+      'The icebreaker arc (added in 1.1): board the Boreas and recover the hard drives from compartment C-1 for Mechanic.',
+    startMap: 'icebreaker',
+    maps: ['icebreaker'],
+    notes: 'Several trader quests (e.g. Ragman\'s Fresh Stock) only open after this chapter.',
+  },
+  {
     id: 'the-ticket',
     name: 'The Ticket',
-    order: 9,
+    order: 10,
     start:
       'Unlocks automatically once Falling Skies is done - the finale arc; your choices across the chapters decide which of the four endings you can reach.',
     maps: ['terminal'],

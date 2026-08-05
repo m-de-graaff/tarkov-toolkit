@@ -103,7 +103,7 @@ describe('ProgressPage', () => {
     const rows = lockedSection.querySelectorAll('.quest-row');
     expect(rows.length).toBeGreaterThan(0);
     for (const row of rows) {
-      expect(row.textContent).toMatch(/Lv \d+|after |USEC only|BEAR only/);
+      expect(row.textContent).toMatch(/Lv \d+|LL\d|locked|chapter|after |USEC only|BEAR only/);
     }
   });
 

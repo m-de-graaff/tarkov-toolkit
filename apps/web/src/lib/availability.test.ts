@@ -30,6 +30,21 @@ describe('isAvailable', () => {
     expect(isAvailable(tHighLevel, tracker({ level: 30, completedTaskIds: ['t-high-level'] }))).toBe(false);
   });
 
+  it('gates on trader loyalty and hides locked traders entirely', () => {
+    const ll2 = { ...tHighLevel, loyaltyLevel: 2 };
+    const traderName = tHighLevel.trader.name;
+    // default loyalty is LL1: an LL2 quest is hidden, an ungated one shows
+    expect(isAvailable(ll2, tracker({ level: 30 }))).toBe(false);
+    expect(isAvailable(tHighLevel, tracker({ level: 30 }))).toBe(true);
+    expect(
+      isAvailable(ll2, tracker({ level: 30, traderLoyalty: { [traderName]: 2 } })),
+    ).toBe(true);
+    // locked trader (loyalty 0) hides even its LL1 quests
+    expect(
+      isAvailable(tHighLevel, tracker({ level: 30, traderLoyalty: { [traderName]: 0 } })),
+    ).toBe(false);
+  });
+
   it('treats a mangled factionName as open to both factions', () => {
     // the 2026-08 snapshots shipped 'Any' blind-translated into 'any target',
     // which made every common quest disappear for USEC/BEAR trackers

@@ -10,6 +10,7 @@ const tracker = (over: Partial<TrackerState>): TrackerState => ({
   hideoutLevels: {},
   itemsHave: {},
   storyChapterIds: [],
+  traderLoyalty: {},
   ...over,
 });
 

@@ -7,7 +7,7 @@ import { snapshot } from '@raidplanner/data';
 import { ChevronRight, Lock } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { isAvailable } from '../lib/availability';
+import { isAvailable, traderLoyaltyOf } from '../lib/availability';
 import { lockReasons } from '../lib/lockReasons';
 import { snapshotForMode } from '../lib/modeTasks';
 import { usePlanner } from '../store';
@@ -64,6 +64,14 @@ function QuestRow({
           Lv {task.minPlayerLevel}
         </span>
       )}
+      {(task.loyaltyLevel ?? 1) > 1 && (
+        <span
+          className="shrink-0 text-xs text-muted-foreground tabular-nums"
+          title={`Needs loyalty level ${task.loyaltyLevel} with ${task.trader.name}`}
+        >
+          LL{task.loyaltyLevel}
+        </span>
+      )}
       {reasons && reasons.length > 0 && (
         <span
           className="flex shrink-0 items-center gap-1 text-xs text-muted-foreground"
@@ -91,6 +99,50 @@ function QuestRow({
         </Badge>
       )}
     </li>
+  );
+}
+
+/**
+ * Mirrors the in-game trader screen: quests only show for the loyalty tier
+ * you actually have, and a locked trader shows nothing. Defaults to LL1.
+ */
+function LoyaltyControl({ trader }: { trader: string }) {
+  const loyalty = usePlanner((s) => traderLoyaltyOf(s.tracker, trader));
+  const setTraderLoyalty = usePlanner((s) => s.setTraderLoyalty);
+  const tiers = [
+    { value: 0, label: 'Locked' },
+    { value: 1, label: 'I' },
+    { value: 2, label: 'II' },
+    { value: 3, label: 'III' },
+    { value: 4, label: 'IV' },
+  ];
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-xs text-muted-foreground">{trader} loyalty</span>
+      <div
+        role="radiogroup"
+        aria-label={`${trader} loyalty level`}
+        className="flex overflow-hidden rounded-md border"
+      >
+        {tiers.map((tier) => (
+          <button
+            key={tier.value}
+            type="button"
+            role="radio"
+            aria-checked={loyalty === tier.value}
+            onClick={() => setTraderLoyalty(trader, tier.value)}
+            className={cn(
+              'px-2 py-1 text-xs transition-colors not-first:border-l',
+              loyalty === tier.value
+                ? 'bg-accent text-primary'
+                : 'text-muted-foreground hover:text-foreground',
+            )}
+          >
+            {tier.label}
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -265,6 +317,8 @@ export function TraderQuestBoard() {
           ))}
         </div>
       </div>
+
+      {trader !== null && <LoyaltyControl trader={trader} />}
 
       <section aria-label="Open quests">
         <GroupHeading label="Open now" count={groups.open.length} />

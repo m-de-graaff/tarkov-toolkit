@@ -1,5 +1,6 @@
 import type { RpTask } from '@raidplanner/data';
 import type { TrackerState } from './availability';
+import { storyChapterSlug, traderLoyaltyOf } from './availability';
 
 /**
  * Why a quest is locked, as short human strings ("Lv 15", "after Only
@@ -15,6 +16,20 @@ export function lockReasons(
   if (tracker.completedTaskIds.includes(task.id)) return [];
   const reasons: string[] = [];
   if (tracker.level < task.minPlayerLevel) reasons.push(`Lv ${task.minPlayerLevel}`);
+  const loyalty = traderLoyaltyOf(tracker, task.trader.name);
+  if (loyalty < (task.loyaltyLevel ?? 1)) {
+    reasons.push(
+      loyalty === 0
+        ? `${task.trader.name} locked`
+        : `${task.trader.name} LL${task.loyaltyLevel}`,
+    );
+  }
+  if (
+    task.storyChapter &&
+    !(tracker.storyChapterIds ?? []).includes(storyChapterSlug(task.storyChapter))
+  ) {
+    reasons.push(`${task.storyChapter} chapter`);
+  }
   const taskFaction =
     task.factionName === 'USEC' || task.factionName === 'BEAR' ? task.factionName : 'Any';
   if (taskFaction !== 'Any' && tracker.faction !== 'Any' && taskFaction !== tracker.faction) {
