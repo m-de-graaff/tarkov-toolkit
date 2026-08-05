@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useMediaQuery } from '../lib/useMediaQuery';
 import { usePlanner } from '../store';
+import { AccountMenu } from './AccountMenu';
 import { Sidebar } from './Sidebar';
 
 function NavTab({ to, children }: { to: string; children: string }) {
@@ -72,6 +73,7 @@ export function TopNav() {
         <NavTab to="/xp">XP</NavTab>
       </nav>
       <GameModeToggle />
+      <AccountMenu />
     </header>
   );
 }
