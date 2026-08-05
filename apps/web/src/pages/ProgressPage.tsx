@@ -14,6 +14,7 @@ import type { RpTask } from '@raidplanner/data';
 import { snapshot } from '@raidplanner/data';
 import { Lock } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import type { TrackerState } from '../lib/availability';
 import { availableQuests, isAvailable } from '../lib/availability';
 import { snapshotForMode } from '../lib/modeTasks';
@@ -110,21 +111,23 @@ function ProgressQuestRow({ task, deadEnd }: { task: RpTask; deadEnd?: boolean }
         !open && !completed && 'opacity-55',
       )}
     >
-      <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-2.5">
-        <input
-          type="checkbox"
-          checked={completed}
-          onChange={() => toggleCompleted(task.id)}
-          aria-label={`Mark ${task.name} as finished`}
-          className="size-4 shrink-0 accent-primary"
-        />
-        <span
-          className={cn('truncate text-sm', completed && 'text-muted-foreground line-through')}
-          title={task.name}
-        >
-          {task.name}
-        </span>
-      </label>
+      <input
+        type="checkbox"
+        checked={completed}
+        onChange={() => toggleCompleted(task.id)}
+        aria-label={`Mark ${task.name} as finished`}
+        className="size-4 shrink-0 cursor-pointer accent-primary"
+      />
+      <Link
+        to={`/quest/${task.normalizedName}`}
+        className={cn(
+          'min-w-0 flex-1 truncate text-sm underline-offset-2 hover:underline',
+          completed && 'text-muted-foreground line-through',
+        )}
+        title={`${task.name} - details`}
+      >
+        {task.name}
+      </Link>
       {task.minPlayerLevel > 1 && (
         <span className="shrink-0 text-xs text-muted-foreground tabular-nums">
           Lv {task.minPlayerLevel}

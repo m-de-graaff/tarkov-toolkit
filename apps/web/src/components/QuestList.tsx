@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import type { RpTask } from '@raidplanner/data';
 import { Check, Lock } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import type { MapQuestEntry } from '../lib/questIndex';
 import { usePlanner } from '../store';
 
@@ -50,36 +51,25 @@ function QuestRow({
         completed && 'completed',
       )}
     >
-      {badge ? (
-        <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-2">
-          <input
-            type="checkbox"
-            checked={selected}
-            onChange={() => toggleTask(task.id)}
-            aria-label={`Plan ${task.name}`}
-            className="size-4 shrink-0 accent-primary"
-          />
-          <span
-            className={cn(
-              'quest-name truncate text-[13px]',
-              completed && 'text-muted-foreground line-through',
-            )}
-            title={task.name}
-          >
-            {task.name}
-          </span>
-        </label>
-      ) : (
-        <span
-          className={cn(
-            'quest-name min-w-0 flex-1 truncate text-[13px]',
-            completed && 'text-muted-foreground line-through',
-          )}
-          title={task.name}
-        >
-          {task.name}
-        </span>
+      {badge && (
+        <input
+          type="checkbox"
+          checked={selected}
+          onChange={() => toggleTask(task.id)}
+          aria-label={`Plan ${task.name}`}
+          className="size-4 shrink-0 cursor-pointer accent-primary"
+        />
       )}
+      <Link
+        to={`/quest/${task.normalizedName}`}
+        className={cn(
+          'quest-name min-w-0 flex-1 truncate text-[13px] underline-offset-2 hover:underline',
+          completed && 'text-muted-foreground line-through',
+        )}
+        title={`${task.name} - details`}
+      >
+        {task.name}
+      </Link>
       {badge && <RelationBadge entry={badge} />}
       {locatedCount > 0 && (
         <span

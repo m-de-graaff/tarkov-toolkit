@@ -3,6 +3,7 @@ import { snapshot } from '@raidplanner/data';
 import { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { MemoryRouter } from 'react-router-dom';
 import { usePlanner } from '../store';
 import { ProgressPage } from './ProgressPage';
 
@@ -28,7 +29,7 @@ describe('ProgressPage', () => {
 
   it('ticking a quest updates the tracker and the finished count', () => {
     const pvpCount = snapshot.tasks.filter((t) => t.modes.includes('pvp')).length;
-    act(() => root.render(<ProgressPage />));
+    act(() => root.render(<MemoryRouter><ProgressPage /></MemoryRouter>));
     expect(container.textContent).toContain(`0 of ${pvpCount} quests finished`);
 
     const checkbox = container.querySelector<HTMLInputElement>('.quest-row input[type=checkbox]')!;
@@ -41,7 +42,7 @@ describe('ProgressPage', () => {
   it('shows pve-only quests only when the PvE profile is active', () => {
     const pveOnly = snapshot.tasks.find((t) => t.modes.length === 1 && t.modes[0] === 'pve')!;
 
-    act(() => root.render(<ProgressPage />));
+    act(() => root.render(<MemoryRouter><ProgressPage /></MemoryRouter>));
     expect(container.textContent).not.toContain(pveOnly.name);
 
     act(() => usePlanner.getState().setGameMode('pve'));
@@ -49,7 +50,7 @@ describe('ProgressPage', () => {
   });
 
   it('filter chips hide locked and non-kappa quests', () => {
-    act(() => root.render(<ProgressPage />));
+    act(() => root.render(<MemoryRouter><ProgressPage /></MemoryRouter>));
     const rowsBefore = container.querySelectorAll('.quest-row').length;
 
     const chip = (label: string) =>
@@ -69,7 +70,7 @@ describe('ProgressPage', () => {
   });
 
   it('the unlocks-quests chip hides dead-end quests', () => {
-    act(() => root.render(<ProgressPage />));
+    act(() => root.render(<MemoryRouter><ProgressPage /></MemoryRouter>));
     const before = container.querySelectorAll('.quest-row').length;
     const chip = [...container.querySelectorAll('button')].find(
       (b) => b.textContent === 'Unlocks quests',
@@ -107,7 +108,7 @@ describe('ProgressPage', () => {
   it('reset requires a second, explicit click', () => {
     act(() => {
       usePlanner.getState().toggleCompleted(snapshot.tasks[0].id);
-      root.render(<ProgressPage />);
+      root.render(<MemoryRouter><ProgressPage /></MemoryRouter>);
     });
 
     const buttons = () => [...container.querySelectorAll('button')];
