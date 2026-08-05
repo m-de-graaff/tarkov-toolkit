@@ -9,12 +9,13 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import type { RpTask } from '@raidplanner/data';
 import { snapshot } from '@raidplanner/data';
 import { Lock } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import type { TrackerState } from '../lib/availability';
 import { availableQuests, isAvailable } from '../lib/availability';
 import { snapshotForMode } from '../lib/modeTasks';
@@ -197,6 +198,8 @@ export function ProgressPage() {
   const gameMode = usePlanner((s) => s.gameMode);
   const setLevel = usePlanner((s) => s.setLevel);
   const setFaction = usePlanner((s) => s.setFaction);
+  const [params, setParams] = useSearchParams();
+  const tab = params.get('tab') === 'story' ? 'story' : 'quests';
   const [search, setSearch] = useState('');
   const [showLocked, setShowLocked] = useState(true);
   const [showCompleted, setShowCompleted] = useState(true);
@@ -315,8 +318,25 @@ export function ProgressPage() {
           </div>
         </section>
 
-        <StorylineSection />
+        <Tabs
+          value={tab}
+          onValueChange={(next) => {
+            const nextParams = new URLSearchParams(params);
+            if (next === 'quests') nextParams.delete('tab');
+            else nextParams.set('tab', next);
+            setParams(nextParams, { replace: true });
+          }}
+        >
+          <TabsList className="w-full sm:w-auto">
+            <TabsTrigger value="quests">Quests</TabsTrigger>
+            <TabsTrigger value="story">Story</TabsTrigger>
+          </TabsList>
 
+          <TabsContent value="story">
+            <StorylineSection />
+          </TabsContent>
+
+          <TabsContent value="quests" className="flex flex-col gap-6">
         <div className="sticky top-0 z-10 -mx-1 flex flex-wrap items-center gap-2 rounded-md bg-background/95 px-1 py-2 backdrop-blur">
           <Input
             type="search"
@@ -369,6 +389,8 @@ export function ProgressPage() {
               </ul>
             </section>
           ))}
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

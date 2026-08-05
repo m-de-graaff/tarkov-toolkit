@@ -27,6 +27,36 @@ describe('ProgressPage', () => {
     container.remove();
   });
 
+  it('defaults to the quests tab; ?tab=story shows the storyline instead', () => {
+    act(() =>
+      root.render(
+        <MemoryRouter initialEntries={['/progress?tab=story']}>
+          <ProgressPage />
+        </MemoryRouter>,
+      ),
+    );
+    expect(container.textContent).toContain('chapters');
+    expect(container.textContent).toContain('Tour');
+    // quest list UI is not mounted on the story tab
+    expect(container.querySelector('input[type=search]')).toBeNull();
+    expect(container.querySelectorAll('.quest-row')).toHaveLength(0);
+  });
+
+  it('switching to the Story tab swaps the content', () => {
+    act(() => root.render(<MemoryRouter><ProgressPage /></MemoryRouter>));
+    expect(container.querySelector('input[type=search]')).toBeTruthy();
+
+    const trigger = [...container.querySelectorAll<HTMLButtonElement>('[role=tab]')].find(
+      (t) => t.textContent === 'Story',
+    )!;
+    // radix tabs activate on mousedown
+    act(() => {
+      trigger.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, button: 0 }));
+    });
+    expect(container.textContent).toContain('Tour');
+    expect(container.querySelector('input[type=search]')).toBeNull();
+  });
+
   it('ticking a quest updates the tracker and the finished count', () => {
     const pvpCount = snapshot.tasks.filter((t) => t.modes.includes('pvp')).length;
     act(() => root.render(<MemoryRouter><ProgressPage /></MemoryRouter>));
