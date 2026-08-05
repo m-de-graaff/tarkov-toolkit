@@ -19,85 +19,10 @@ import { Link, useSearchParams } from 'react-router-dom';
 import type { TrackerState } from '../lib/availability';
 import { availableQuests, isAvailable } from '../lib/availability';
 import { snapshotForMode } from '../lib/modeTasks';
-import { STORY_WIKI_URL, storyChapters } from '../data/storyline';
+import { StoryTimeline } from '../components/StoryTimeline';
 import { usePlanner } from '../store';
 
 const FACTIONS: TrackerState['faction'][] = ['Any', 'USEC', 'BEAR'];
-
-const mapName = (normalized: string) =>
-  snapshot.maps.find((m) => m.normalizedName === normalized)?.name ?? normalized;
-
-function StorylineSection() {
-  const done = usePlanner((s) => s.tracker.storyChapterIds) ?? [];
-  const toggleStoryChapter = usePlanner((s) => s.toggleStoryChapter);
-  return (
-    <section aria-label="Story chapters">
-      <h2 className="mb-1 flex items-baseline gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-        Storyline
-        <span className="normal-case tabular-nums">
-          {done.length}/{storyChapters.length} chapters
-        </span>
-        <a
-          href={STORY_WIKI_URL}
-          target="_blank"
-          rel="noreferrer"
-          className="ml-auto normal-case text-primary/70 underline-offset-2 hover:underline"
-        >
-          wiki
-        </a>
-      </h2>
-      <Separator className="mb-2" />
-      <ul className="m-0 flex list-none flex-col gap-1 p-0">
-        {storyChapters.map((chapter) => {
-          const finished = done.includes(chapter.id);
-          return (
-            <li
-              key={chapter.id}
-              className="story-row flex flex-col gap-0.5 rounded-md px-2 py-1.5 hover:bg-secondary/60"
-            >
-              <label className="flex cursor-pointer items-center gap-2.5">
-                <input
-                  type="checkbox"
-                  checked={finished}
-                  onChange={() => toggleStoryChapter(chapter.id)}
-                  aria-label={`Mark chapter ${chapter.name} as finished`}
-                  className="size-4 shrink-0 accent-primary"
-                />
-                <span
-                  className={cn(
-                    'text-sm font-medium',
-                    finished && 'text-muted-foreground line-through',
-                  )}
-                >
-                  {chapter.order}. {chapter.name}
-                </span>
-                <span className="ml-auto flex shrink-0 gap-1">
-                  {chapter.maps.slice(0, 3).map((m) => (
-                    <Badge
-                      key={m}
-                      variant="outline"
-                      className="px-1.5 text-[10px] text-muted-foreground"
-                    >
-                      {mapName(m)}
-                    </Badge>
-                  ))}
-                  {chapter.maps.length > 3 && (
-                    <span className="text-[10px] text-muted-foreground">
-                      +{chapter.maps.length - 3}
-                    </span>
-                  )}
-                </span>
-              </label>
-              {!finished && (
-                <p className="pl-6.5 text-pretty text-xs text-muted-foreground">{chapter.start}</p>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-    </section>
-  );
-}
 
 function ProgressQuestRow({ task, deadEnd }: { task: RpTask; deadEnd?: boolean }) {
   const tracker = usePlanner((s) => s.tracker);
@@ -333,7 +258,7 @@ export function ProgressPage() {
           </TabsList>
 
           <TabsContent value="story">
-            <StorylineSection />
+            <StoryTimeline />
           </TabsContent>
 
           <TabsContent value="quests" className="flex flex-col gap-6">
