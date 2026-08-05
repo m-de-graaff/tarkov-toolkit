@@ -4,6 +4,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { generateTileNav } from './tile-nav.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const dataRoot = path.join(here, '..');
@@ -420,6 +421,9 @@ async function main() {
 
   console.log(`Downloading ${svgDownloads.length} map SVGs...`);
   await downloadSvgs(svgDownloads);
+
+  console.log('Generating walkability masks for tile-only maps...');
+  await generateTileNav(maps);
 
   const ammo = buildAmmo(itemsData);
   const hideout = buildHideout(hideoutData, traderNames);
