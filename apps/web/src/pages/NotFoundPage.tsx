@@ -15,9 +15,6 @@ export function NotFoundPage() {
         </p>
         <div className="flex justify-center gap-2">
           <Button asChild>
-            <Link to="/">Go home</Link>
-          </Button>
-          <Button asChild variant="outline">
             <Link to="/planner">Open the planner</Link>
           </Button>
         </div>

@@ -39,13 +39,11 @@ describe('App', () => {
     }
   });
 
-  it('serves the home page at / with a working planner CTA', () => {
+  it('redirects / to the planner', () => {
     window.history.pushState({}, '', '/');
     act(() => root.render(<App />));
-    expect(container.textContent).toContain('Plan your raids');
-    expect(container.querySelector('a[href="/planner"]')).toBeTruthy();
-    expect(container.querySelector('a[href="/ammo"]')).toBeTruthy();
-    expect(container.querySelector('a[href="/market"]')).toBeTruthy();
+    expect(window.location.pathname).toBe('/planner');
+    expect(container.textContent).toContain('Select a map to begin planning.');
   });
 
   it('shows quests for the selected map and marks selected objectives on it', () => {
