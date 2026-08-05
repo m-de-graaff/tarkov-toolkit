@@ -73,7 +73,7 @@ async function detectScreenshotsDir(): Promise<string> {
   return answer;
 }
 
-const screenshotsDir = await detectScreenshotsDir();
+let screenshotsDir = '';
 
 const seen = new Set<string>();
 let latestFix: LiveFix | null = null;
@@ -116,47 +116,58 @@ async function scan(initial = false) {
   }
 }
 
-const server = new WebSocketServer({ host: '127.0.0.1', port: PORT });
-server.on('connection', (socket) => {
-  clients.add(socket);
-  socket.send(JSON.stringify({ type: 'hello', app: 'raidplanner-watcher' }));
-  if (latestFix) socket.send(JSON.stringify({ type: 'fix', fix: latestFix }));
-  socket.on('close', () => clients.delete(socket));
-  console.log('Web app connected.');
-});
+// no top-level await: the single-executable build bundles to CommonJS
+async function main() {
+  screenshotsDir = await detectScreenshotsDir();
 
-console.log(`Tarkov Toolkit companion watcher`);
-console.log(`Watching: ${screenshotsDir}`);
-console.log(`Waiting for the web app on ws://127.0.0.1:${PORT} — keep this window open.`);
+  const server = new WebSocketServer({ host: '127.0.0.1', port: PORT });
+  server.on('connection', (socket) => {
+    clients.add(socket);
+    socket.send(JSON.stringify({ type: 'hello', app: 'raidplanner-watcher' }));
+    if (latestFix) socket.send(JSON.stringify({ type: 'fix', fix: latestFix }));
+    socket.on('close', () => clients.delete(socket));
+    console.log('Web app connected.');
+  });
 
-await scan(true);
+  console.log(`Tarkov Toolkit companion watcher`);
+  console.log(`Watching: ${screenshotsDir}`);
+  console.log(`Waiting for the web app on ws://127.0.0.1:${PORT} — keep this window open.`);
 
-// fs.watch gives instant events; the 2s poll catches anything it misses
-// (network drives, editor-style atomic writes).
-let watcher: FSWatcher | null = null;
-try {
-  watcher = watch(screenshotsDir, () => void scan());
-} catch {
-  console.log('Folder not found yet — will keep checking every 2s.');
+  await scan(true);
+
+  // fs.watch gives instant events; the 2s poll catches anything it misses
+  // (network drives, editor-style atomic writes).
+  let watcher: FSWatcher | null = null;
+  try {
+    watcher = watch(screenshotsDir, () => void scan());
+  } catch {
+    console.log('Folder not found yet — will keep checking every 2s.');
+  }
+  const interval = setInterval(() => void scan(), 2000);
+
+  // Game-log automation: auto map detection + quest completion events.
+  const logsDir = detectLogsDir();
+  let stopLogs: (() => void) | null = null;
+  if (logsDir) {
+    stopLogs = startLogsWatcher(logsDir, broadcastLogEvent);
+  } else {
+    console.log(
+      'Game logs folder not found — auto map/quest detection off. ' +
+        'Set RAIDPLANNER_LOGS_DIR to enable it.',
+    );
+  }
+
+  process.on('SIGINT', () => {
+    watcher?.close();
+    stopLogs?.();
+    clearInterval(interval);
+    server.close();
+    process.exit(0);
+  });
 }
-const interval = setInterval(() => void scan(), 2000);
 
-// Game-log automation: auto map detection + quest completion events.
-const logsDir = detectLogsDir();
-let stopLogs: (() => void) | null = null;
-if (logsDir) {
-  stopLogs = startLogsWatcher(logsDir, broadcastLogEvent);
-} else {
-  console.log(
-    'Game logs folder not found — auto map/quest detection off. ' +
-      'Set RAIDPLANNER_LOGS_DIR to enable it.',
-  );
-}
-
-process.on('SIGINT', () => {
-  watcher?.close();
-  stopLogs?.();
-  clearInterval(interval);
-  server.close();
-  process.exit(0);
+void main().catch((err) => {
+  console.error(err);
+  // double-clicked exe: keep the window open long enough to read the error
+  setTimeout(() => process.exit(1), 15_000);
 });

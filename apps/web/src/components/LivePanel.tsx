@@ -46,6 +46,10 @@ function CompanionStatus() {
   );
 }
 
+/** latest GitHub release of the companion — CI attaches the exe on every version tag */
+export const COMPANION_DOWNLOAD_URL =
+  'https://github.com/m-de-graaff/raidplanner/releases/latest';
+
 export function LivePanel({
   watcher,
   outOfBounds,
@@ -60,6 +64,27 @@ export function LivePanel({
         className={cn('size-2 shrink-0 rounded-full', active ? 'bg-ok' : 'bg-muted-foreground')}
         aria-hidden="true"
       />
+      <span
+        className={cn('text-xs font-medium', watcher.companion ? 'text-ok' : 'text-muted-foreground')}
+        title={
+          watcher.companion
+            ? 'The companion app is feeding positions, raids, and quest completions'
+            : 'The companion app is not running'
+        }
+      >
+        {watcher.companion ? 'Connected' : 'Disconnected'}
+      </span>
+      {!watcher.companion && (
+        <a
+          href={COMPANION_DOWNLOAD_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="text-xs text-primary underline-offset-2 hover:underline"
+          title="Get RaidplannerCompanion.exe from the latest GitHub release — double-click and you're live"
+        >
+          Don't have the companion app? Download
+        </a>
+      )}
       {watcher.companion ? (
         <CompanionStatus />
       ) : watcher.canResume ? (
@@ -84,14 +109,7 @@ export function LivePanel({
         >
           {watcher.connected ? 'Stop showing my position' : 'Show my position'}
         </Button>
-      ) : (
-        <span
-          className="text-xs text-muted-foreground"
-          title="Start it with 'pnpm watcher' — it watches your screenshots and works with every browser"
-        >
-          Run the companion app to see your position (see README)
-        </span>
-      )}
+      ) : null}
       {active && <FixAge />}
       {watcher.error && <span className="text-xs text-destructive">{watcher.error}</span>}
       {outOfBounds && (
