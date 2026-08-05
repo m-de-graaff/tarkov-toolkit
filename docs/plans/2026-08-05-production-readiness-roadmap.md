@@ -69,7 +69,7 @@ states + silent catches deferred to Slice 5 pass (user WIP in those files)
 - Real tests for watcher (`package.json` test is `exit 0`); at minimum
   `compareVersions` and frame parsing.
 
-## Slice 5 — UI clarity & performance
+## Slice 5 — UI clarity & performance  ◑ safe subset done (prices policy, mobile nav, PWA); MarketPage items blocked on user WIP
 - Hosted app pulls ~16MB prices per mode direct from json.tarkov.dev on page
   load (`prices.ts:84-85`, no `/api/prices` rewrite in vercel.json;
   `usePrices.ts:53,56` auto-fetch + 30min refetch; `/xp` triggers too).
