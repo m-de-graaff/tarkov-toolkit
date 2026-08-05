@@ -140,16 +140,16 @@ export function MapCanvas({ map, markers, route, onMapClick }: MapCanvasProps) {
       m.addTo(layer);
     }
 
-    if (route && (route.stops.length > 0 || markers.some((m) => m.kind === 'extract'))) {
-      const origin = markers.find((m) => m.kind === 'player') ?? markers.find((m) => m.kind === 'spawn');
-      const extract = markers.find((m) => m.kind === 'extract');
-      const points = [
-        ...(origin ? [gameToLatLng(origin.position)] : []),
-        ...route.stops.map((s) => gameToLatLng(s.position)),
-        ...(extract ? [gameToLatLng(extract.position)] : []),
-      ];
-      if (points.length > 1) {
-        L.polyline(points, { color: ROUTE_COLOR, weight: 2, dashArray: '6 4' }).addTo(layer);
+    // Each leg carries its walkable polyline; straight-line fallbacks (no nav
+    // data, or disconnected endpoints) render dashed to signal as-the-crow-flies.
+    if (route) {
+      for (const leg of route.legs) {
+        if (leg.points.length < 2) continue;
+        L.polyline(leg.points.map(gameToLatLng), {
+          color: ROUTE_COLOR,
+          weight: leg.direct ? 2 : 2.5,
+          ...(leg.direct ? { dashArray: '6 4' } : {}),
+        }).addTo(layer);
       }
     }
   }, [markers, route, map.id]);

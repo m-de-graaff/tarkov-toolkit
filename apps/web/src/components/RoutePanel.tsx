@@ -83,8 +83,7 @@ export function RoutePanel({
           </p>
           <ol className="route-steps m-0 flex list-none flex-col p-0">
             {route.stops.map((stop, i) => {
-              const prev = i === 0 ? originPosition : route.stops[i - 1].position;
-              const leg = Math.round(distance2d(prev, stop.position));
+              const leg = route.legs[i];
               return (
                 <li key={stop.objectiveId} className="flex gap-2.5 py-2 not-last:border-b">
                   <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-[11px] font-semibold text-primary-foreground tabular-nums">
@@ -95,7 +94,8 @@ export function RoutePanel({
                     <span className="text-muted-foreground">{stop.description}</span>
                     {stop.neededItems && <StopItems needed={stop.neededItems} />}
                     <span className="text-xs text-muted-foreground/80 tabular-nums">
-                      {leg}m from previous
+                      {Math.round(leg?.distance ?? 0)}m from previous
+                      {leg?.direct ? ' (straight line)' : ''}
                     </span>
                   </span>
                 </li>
@@ -116,10 +116,12 @@ export function RoutePanel({
               <span className="ml-auto text-xs text-muted-foreground tabular-nums">
                 +
                 {Math.round(
-                  distance2d(
-                    route.stops.at(-1)?.position ?? originPosition,
-                    extract.position,
-                  ),
+                  route.legs.length > route.stops.length
+                    ? route.legs[route.legs.length - 1].distance
+                    : distance2d(
+                        route.stops.at(-1)?.position ?? originPosition,
+                        extract.position,
+                      ),
                 )}
                 m
               </span>

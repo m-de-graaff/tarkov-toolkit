@@ -26,6 +26,10 @@ const route: PlannedRoute = {
       position: { x: 10, y: 0, z: 10 },
     },
   ],
+  legs: [
+    { points: [{ x: 0, y: 0, z: -10 }, { x: 0, y: 0, z: 0 }], distance: 10, direct: false },
+    { points: [{ x: 0, y: 0, z: 0 }, { x: 10, y: 0, z: 10 }], distance: 15, direct: true },
+  ],
   totalDistance: 25,
 };
 
