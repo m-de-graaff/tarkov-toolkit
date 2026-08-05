@@ -14,7 +14,13 @@ import { RefreshCw } from 'lucide-react';
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { ResizableTH } from '../components/ResizableTH';
 import { usePrices } from '../lib/usePrices';
-import { barterProfit, craftProfit, fleaToTrader, traderResells } from '../lib/profit';
+import {
+  barterProfit,
+  craftProfit,
+  fleaToTrader,
+  traderResells,
+  type TradeProfit,
+} from '../lib/profit';
 import { useColumnWidths } from '../lib/useColumnWidths';
 import { usePlanner } from '../store';
 
@@ -112,6 +118,41 @@ function Money({ value, signed }: { value: number | null; signed?: boolean }) {
   );
 }
 
+/** flea and trader sell price side by side, the better outlet in bold */
+function SellCells({ profit }: { profit: TradeProfit }) {
+  const flea = profit.fleaRevenue;
+  const trader = profit.traderRevenue;
+  const fleaBest = flea !== null && (trader === null || flea >= trader);
+  const traderBest = trader !== null && (flea === null || trader > flea);
+  const traderName = profit.sellTraderId ? snapshot.traders[profit.sellTraderId] : undefined;
+  return (
+    <>
+      <td
+        className="whitespace-nowrap px-3 py-1.5 text-right"
+        title={fleaBest ? 'Best outlet: flea market' : undefined}
+      >
+        <span className={cn(fleaBest && 'font-semibold')}>
+          <Money value={flea} />
+        </span>
+      </td>
+      <td
+        className="whitespace-nowrap px-3 py-1.5 text-right"
+        title={
+          traderName
+            ? `Sell to ${traderName}${traderBest ? ' (best outlet)' : ''}`
+            : traderBest
+              ? 'Best outlet: trader'
+              : undefined
+        }
+      >
+        <span className={cn(traderBest && 'font-semibold')}>
+          <Money value={trader} />
+        </span>
+      </td>
+    </>
+  );
+}
+
 type Tab = 'resells' | 'fleaToTrader' | 'barters' | 'crafts';
 
 export function MarketPage() {
@@ -128,8 +169,8 @@ export function MarketPage() {
   // per-tab resizable column widths (drag the header edges; double-click fits)
   const resellCols = useColumnWidths('profit:resells', [420, 280, 140, 140, 160]);
   const fleaCols = useColumnWidths('profit:fleaToTrader', [440, 260, 150, 150, 150]);
-  const barterCols = useColumnWidths('profit:barters', [360, 330, 210, 140, 140, 140]);
-  const craftCols = useColumnWidths('profit:crafts', [320, 290, 220, 130, 130, 130, 130]);
+  const barterCols = useColumnWidths('profit:barters', [340, 310, 200, 130, 130, 130, 130]);
+  const craftCols = useColumnWidths('profit:crafts', [300, 270, 210, 125, 125, 125, 125, 125]);
   const activeCols =
     tab === 'resells' ? resellCols : tab === 'fleaToTrader' ? fleaCols : tab === 'barters' ? barterCols : craftCols;
   const tableWidth = activeCols.widths.reduce((a, b) => a + b, 0);
@@ -287,7 +328,9 @@ export function MarketPage() {
           <div className="overflow-x-auto rounded-lg border">
             <table
               ref={tableRef}
-              style={{ width: tableWidth }}
+              // fill the container; the measured sum only sets the scroll floor,
+              // so short content stretches instead of leaving dead space
+              style={{ width: '100%', minWidth: tableWidth }}
               className="table-fixed border-collapse text-[13px]"
             >
               {tab === 'resells' && (
@@ -354,7 +397,7 @@ export function MarketPage() {
                   <Cols widths={barterCols.widths} />
                   <thead>
                     <tr className="border-b bg-card">
-                      {['Give', 'Get', 'Trader', 'Cost', 'Sell', 'Profit'].map((label, i) => (
+                      {['Give', 'Get', 'Trader', 'Cost', 'Sell flea', 'Sell trader', 'Profit'].map((label, i) => (
                         <ResizableTH key={label} index={i} columns={barterCols} tableRef={tableRef} right={i >= 3}>
                           {label}
                         </ResizableTH>
@@ -371,7 +414,7 @@ export function MarketPage() {
                           {barter.buyLimit > 0 && <span className="text-xs"> · limit {barter.buyLimit}</span>}
                         </td>
                         <td className="whitespace-nowrap px-3 py-1.5 text-right"><Money value={profit.cost} /></td>
-                        <td className="whitespace-nowrap px-3 py-1.5 text-right"><Money value={profit.revenue} /></td>
+                        <SellCells profit={profit} />
                         <td className="whitespace-nowrap px-3 py-1.5 text-right"><Money value={profit.profit} signed /></td>
                       </tr>
                     ))}
@@ -383,7 +426,7 @@ export function MarketPage() {
                   <Cols widths={craftCols.widths} />
                   <thead>
                     <tr className="border-b bg-card">
-                      {['Input', 'Output', 'Station', 'Cost', 'Sell', 'Profit', 'Per hour'].map((label, i) => (
+                      {['Input', 'Output', 'Station', 'Cost', 'Sell flea', 'Sell trader', 'Profit', 'Per hour'].map((label, i) => (
                         <ResizableTH key={label} index={i} columns={craftCols} tableRef={tableRef} right={i >= 3}>
                           {label}
                         </ResizableTH>
@@ -400,7 +443,7 @@ export function MarketPage() {
                           <span className="text-xs tabular-nums"> · {(craft.durationSeconds / 3600).toFixed(1)}h</span>
                         </td>
                         <td className="whitespace-nowrap px-3 py-1.5 text-right"><Money value={profit.cost} /></td>
-                        <td className="whitespace-nowrap px-3 py-1.5 text-right"><Money value={profit.revenue} /></td>
+                        <SellCells profit={profit} />
                         <td className="whitespace-nowrap px-3 py-1.5 text-right"><Money value={profit.profit} signed /></td>
                         <td className="whitespace-nowrap px-3 py-1.5 text-right">
                           <Money value={profit.profitPerHour ?? null} signed />

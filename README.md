@@ -128,7 +128,7 @@ top bar with a slide-in sheet and a collapsible bottom route drawer.
   `VITE_PRICES_BASE` build env to its URL.
 
 Proxy configuration (`apps/proxy`): `REDIS_URL` (optional - falls back to
-in-process memory), `PRICE_TTL_SECONDS` (default 1800), `PORT` (default 8787).
+in-process memory), `PRICE_TTL_SECONDS` (default 600), `PORT` (default 8787).
 The web image accepts a `VITE_PRICES_BASE` build arg and a `PROXY_URL`
 runtime env for the nginx upstream.
 

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { usePlanner } from '../store';
 import { fetchPrices, loadCachedPrices, type CachedPrices } from './prices';
 
-const STALE_MS = 30 * 60 * 1000;
+const STALE_MS = 10 * 60 * 1000;
 
 export interface PricesState {
   cached: CachedPrices | null;
