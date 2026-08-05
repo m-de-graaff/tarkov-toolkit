@@ -5,6 +5,7 @@ import type { HideoutStation } from '@raidplanner/data';
 import { snapshot } from '@raidplanner/data';
 import { Hammer, Minus, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { ItemIcon } from '../components/ItemIcon';
 import { levelReadiness, nextLevelOf } from '../lib/hideoutReady';
 import { maxLevel } from '../lib/neededItems';
 import { usePlanner } from '../store';
@@ -93,14 +94,11 @@ function StationCard({ station }: { station: HideoutStation }) {
           <ul className="m-0 flex list-none flex-col gap-0.5 p-0">
             {readiness.items.map((item) => (
               <li key={item.itemId} className="flex items-center gap-1.5">
-                {snapshot.itemsLite[item.itemId]?.iconLink && (
-                  <img
-                    src={snapshot.itemsLite[item.itemId].iconLink}
-                    alt=""
-                    loading="lazy"
-                    className="size-5 shrink-0 rounded-sm border bg-black/40 object-contain"
-                  />
-                )}
+                <ItemIcon
+                  itemId={item.itemId}
+                  iconLink={snapshot.itemsLite[item.itemId]?.iconLink}
+                  className="size-5 shrink-0 rounded-sm border bg-black/40 object-contain"
+                />
                 <span className="min-w-0 truncate" title={snapshot.itemsLite[item.itemId]?.name}>
                   {snapshot.itemsLite[item.itemId]?.name ?? 'Unknown item'}
                 </span>

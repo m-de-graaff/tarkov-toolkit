@@ -8,6 +8,7 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { GuideCost, SkillGuide } from '../data/skillGuides';
 import { skillGlobalNotes, skillGuides } from '../data/skillGuides';
+import { ItemIcon } from '../components/ItemIcon';
 import type { CraftingLevelingRow } from '../lib/craftingXp';
 import { bestCraftsPerStation } from '../lib/craftingXp';
 import { usePrices } from '../lib/usePrices';
@@ -36,13 +37,11 @@ function ItemIcons({ itemIds }: { itemIds?: string[] }) {
     <span className="ml-auto flex shrink-0 items-center gap-1 self-center pl-2">
       {itemIds.map((id) => {
         const item = guideItem(id);
-        if (!item.iconLink) return null;
         return (
-          <img
+          <ItemIcon
             key={id}
-            src={item.iconLink}
-            alt=""
-            loading="lazy"
+            itemId={id}
+            iconLink={item.iconLink}
             title={item.name}
             className="size-6 rounded-sm border bg-black/40 object-contain"
           />
@@ -139,11 +138,10 @@ function CraftRow({
   return (
     <li className="group flex items-center gap-2 py-1.5 not-last:border-b">
       <span className="w-4 shrink-0 text-xs text-muted-foreground tabular-nums">{rank}.</span>
-      {item?.iconLink && (
-        <img
-          src={item.iconLink}
-          alt=""
-          loading="lazy"
+      {reward && (
+        <ItemIcon
+          itemId={reward.itemId}
+          iconLink={item?.iconLink}
           className="size-6 shrink-0 rounded-sm border bg-black/40 object-contain"
         />
       )}

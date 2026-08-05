@@ -12,6 +12,7 @@ import type { TradeItemStack } from '@raidplanner/data';
 import { snapshot } from '@raidplanner/data';
 import { RefreshCw } from 'lucide-react';
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { ItemIcon } from '../components/ItemIcon';
 import { ResizableTH } from '../components/ResizableTH';
 import { usePrices } from '../lib/usePrices';
 import {
@@ -34,14 +35,11 @@ function ItemCell({ stacks, bold }: { stacks: TradeItemStack[]; bold?: boolean }
         const item = snapshot.itemsLite[stack.itemId];
         return (
           <span key={`${stack.itemId}-${i}`} className="flex w-full min-w-0 items-center gap-1.5">
-            {item?.iconLink && (
-              <img
-                src={item.iconLink}
-                alt=""
-                loading="lazy"
-                className="size-6 shrink-0 rounded-sm border bg-black/40 object-contain"
-              />
-            )}
+            <ItemIcon
+              itemId={stack.itemId}
+              iconLink={item?.iconLink}
+              className="size-6 shrink-0 rounded-sm border bg-black/40 object-contain"
+            />
             <span
               className={cn('min-w-0 flex-1 truncate text-[13px]', bold && 'font-medium')}
               title={item?.name}
@@ -76,14 +74,11 @@ function SingleItemCell({
   const icon = lite?.iconLink ?? prices[itemId]?.iconLink;
   return (
     <span className="flex w-full min-w-0 items-center gap-1.5">
-      {icon && (
-        <img
-          src={icon}
-          alt=""
-          loading="lazy"
-          className="size-6 shrink-0 rounded-sm border bg-black/40 object-contain"
-        />
-      )}
+      <ItemIcon
+        itemId={itemId}
+        iconLink={icon}
+        className="size-6 shrink-0 rounded-sm border bg-black/40 object-contain"
+      />
       <span className="min-w-0 flex-1 truncate text-[13px] font-medium" title={name}>
         {name}
       </span>

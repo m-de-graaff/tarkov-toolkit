@@ -6,6 +6,7 @@ import { snapshot } from '@raidplanner/data';
 import { Check, Minus, Plus } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ItemIcon } from '../components/ItemIcon';
 import { snapshotForMode } from '../lib/modeTasks';
 import type { NeededItemRow } from '../lib/neededItems';
 import { neededItems } from '../lib/neededItems';
@@ -64,14 +65,11 @@ function ItemRow({ row }: { row: NeededItemRow }) {
       )}
     >
       <span className="flex min-w-0 flex-1 items-center gap-1.5">
-        {item?.iconLink && (
-          <img
-            src={item.iconLink}
-            alt=""
-            loading="lazy"
-            className="size-6 shrink-0 rounded-sm border bg-black/40 object-contain"
-          />
-        )}
+        <ItemIcon
+          itemId={row.itemId}
+          iconLink={item?.iconLink}
+          className="size-6 shrink-0 rounded-sm border bg-black/40 object-contain"
+        />
         <span className={cn('min-w-0 truncate text-[13px]', done && 'line-through')} title={item?.name}>
           {item?.name ?? 'Unknown item'}
         </span>
