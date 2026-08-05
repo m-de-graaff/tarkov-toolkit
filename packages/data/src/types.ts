@@ -19,6 +19,8 @@ export interface MapLayer {
   svgLayer?: string;
   /** per-floor tile pyramid url template */
   tileUrl?: string;
+  /** per-floor walkability mask under apps/web/public/nav/ (tile-only maps) */
+  navFile?: string;
   /** game y range this layer covers, [low, high] */
   heightRange?: [number, number];
 }
@@ -32,6 +34,9 @@ export interface MapCalibration {
   svgFile?: string;
   /** pretty baked-3D tile render (preferred base layer when online) */
   tiles?: MapTiles;
+  /** precomputed walkability mask under apps/web/public/nav/ for maps
+   * without an SVG (generated from the tile pyramid at snapshot time) */
+  navFile?: string;
   /** base (ground) svg layer group when the svg is multi-level */
   svgLayer?: string;
   /** game y range of the base layer */

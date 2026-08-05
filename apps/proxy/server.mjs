@@ -6,13 +6,13 @@
 // Env:
 //   PORT               listen port (default 8787)
 //   REDIS_URL          e.g. redis://redis:6379 - optional, memory cache otherwise
-//   PRICE_TTL_SECONDS  cache lifetime (default 1800 = 30 minutes)
+//   PRICE_TTL_SECONDS  cache lifetime (default 600 = 10 minutes)
 //   UPSTREAM           source base url (default https://json.tarkov.dev)
 import { createServer } from 'node:http';
 import { gzipSync, gunzipSync } from 'node:zlib';
 
 const PORT = Number(process.env.PORT ?? 8787);
-const TTL = Number(process.env.PRICE_TTL_SECONDS ?? 1800);
+const TTL = Number(process.env.PRICE_TTL_SECONDS ?? 600);
 const UPSTREAM = process.env.UPSTREAM ?? 'https://json.tarkov.dev';
 
 /** exact allow-list: this proxy serves price payloads and nothing else */

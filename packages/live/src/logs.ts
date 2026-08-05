@@ -24,6 +24,49 @@ const TASK_STATUS: Record<number, 'started' | 'failed' | 'finished'> = {
 };
 
 /**
+ * Log files that carry map-load lines. EFT names them with a rotation
+ * suffix ("<stamp> application_000.log"); older builds used "application.log".
+ */
+export function isApplicationLog(fileName: string): boolean {
+  return /application(_\d+)?\.log$/.test(fileName) && !fileName.endsWith('.zip');
+}
+
+/**
+ * Log files that carry quest notifications: "notifications.log" historically,
+ * "push-notifications_000.log" on current builds. output_*.log mirrors both
+ * streams and is deliberately excluded to avoid duplicate events.
+ */
+export function isNotificationsLog(fileName: string): boolean {
+  return /notifications(_\d+)?\.log$/.test(fileName) && !fileName.endsWith('.zip');
+}
+
+/** True when this file should be tailed for LogEvents. */
+export function isGameLogFile(fileName: string): boolean {
+  return isApplicationLog(fileName) || isNotificationsLog(fileName);
+}
+
+/**
+ * EFT session folders ("log_2026.08.05_3-01-16_1.1.0.0.46624") do not
+ * zero-pad hours, so a lexicographic sort ranks 3 AM after 19:55. Compare by
+ * the parsed timestamp instead; unparseable names sort first.
+ */
+export function sessionFolderTime(folderName: string): number {
+  const m = /^log_(\d{4})\.(\d{2})\.(\d{2})_(\d{1,2})-(\d{2})-(\d{2})/.exec(folderName);
+  if (!m) return 0;
+  const [, y, mo, d, h, mi, s] = m;
+  return Date.UTC(Number(y), Number(mo) - 1, Number(d), Number(h), Number(mi), Number(s));
+}
+
+/** The last map the session loaded, for catching up when tailing starts mid-raid. */
+export function lastMapEvent(content: string): LogEvent | null {
+  let last: LogEvent | null = null;
+  for (const event of new LogEventParser().push(content)) {
+    if (event.type === 'map') last = event;
+  }
+  return last;
+}
+
+/**
  * Stateful chunk parser for tailed log files. Feed appended text as it
  * arrives; complete events are returned once and incomplete tails (a JSON
  * block cut mid-chunk) are buffered for the next push.

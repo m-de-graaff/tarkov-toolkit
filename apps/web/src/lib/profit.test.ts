@@ -37,7 +37,37 @@ const barter: RpBarter = {
 describe('barterProfit', () => {
   it('computes revenue minus cost, selling rewards the best way', () => {
     // item-b sells better to a trader (60k) than on flea (50k)
-    expect(barterProfit(barter, prices)).toEqual({ cost: 30_000, revenue: 60_000, profit: 30_000 });
+    expect(barterProfit(barter, prices)).toEqual({
+      cost: 30_000,
+      revenue: 60_000,
+      profit: 30_000,
+      fleaRevenue: 50_000,
+      traderRevenue: 60_000,
+      sellTraderId: undefined,
+    });
+  });
+
+  it('splits revenue per outlet and reports the paying trader', () => {
+    const result = barterProfit(barter, {
+      ...prices,
+      'item-b': { ...prices['item-b'], bestTraderSellTraderId: 'therapist' },
+    });
+    expect(result.fleaRevenue).toBe(50_000);
+    expect(result.traderRevenue).toBe(60_000);
+    expect(result.sellTraderId).toBe('therapist');
+  });
+
+  it('nulls an outlet the reward cannot sell through', () => {
+    const result = barterProfit(
+      { ...barter, rewardItems: [{ itemId: 'flea-banned-reward', count: 1 }] },
+      {
+        ...prices,
+        'flea-banned-reward': { fleaAvg: 0, fleaLow: 0, basePrice: 0, bestTraderSell: 20_000 },
+      },
+    );
+    expect(result.fleaRevenue).toBeNull();
+    expect(result.traderRevenue).toBe(20_000);
+    expect(result.revenue).toBe(20_000);
   });
 
   it('marks trades with unpriceable inputs as null, not zero', () => {
@@ -79,6 +109,9 @@ describe('acquisition fallback and tools', () => {
       cost: 25_000,
       revenue: 40_000,
       profit: 15_000,
+      fleaRevenue: 40_000,
+      traderRevenue: null, // reward has no trader buyer
+      sellTraderId: undefined,
     });
   });
 
