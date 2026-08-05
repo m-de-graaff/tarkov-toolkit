@@ -4,9 +4,14 @@
   "type": "module",
   "description": "Caching proxy for tarkov.dev price payloads - Redis-backed with in-memory fallback",
   "scripts": {
-    "start": "node server.mjs"
+    "start": "node server.mjs",
+    "build": "node --check server.mjs && node --check routes.mjs",
+    "test": "vitest run"
   },
   "dependencies": {
     "redis": "^4.7.0"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.0"
   }
 }
