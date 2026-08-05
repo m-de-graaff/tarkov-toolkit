@@ -18,6 +18,9 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
       - run: pnpm test
+      # api/ is outside the workspace (Vercel functions); check it explicitly
+      - run: pnpm typecheck:api
+      - run: pnpm test:api
 
   e2e-smoke:
     runs-on: ubuntu-latest
@@ -36,6 +39,3 @@ jobs:
           pnpm --filter web exec vite preview --port 4173 &
           for i in $(seq 1 30); do curl -sf http://localhost:4173 >/dev/null && break; sleep 1; done
           BASE_URL=http://localhost:4173 node e2e/smoke.mjs
-      # api/ is outside the workspace (Vercel functions); check it explicitly
-      - run: pnpm typecheck:api
-      - run: pnpm test:api
