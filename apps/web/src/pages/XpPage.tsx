@@ -27,36 +27,57 @@ const COST_STYLE: Record<GuideCost, string> = {
 function SkillCard({ guide }: { guide: SkillGuide }) {
   return (
     <section className="skill-card flex flex-col gap-2 rounded-lg border bg-card p-4">
-      <div>
-        <h2 className="flex flex-wrap items-center gap-1.5 text-sm font-semibold">
-          {guide.name}
-          <Badge variant="outline" className={cn('px-1.5 text-[10px]', COST_STYLE[guide.cost])}>
-            {guide.cost}
-          </Badge>
-        </h2>
-        <p className="mt-0.5 text-xs text-muted-foreground">{guide.gives}</p>
-      </div>
-      <p className="text-xs text-muted-foreground">
-        <span className="font-medium text-foreground/80">How it levels: </span>
-        {guide.how}
-      </p>
-      <ol className="m-0 flex list-none flex-col gap-1.5 p-0">
+      <h2 className="flex flex-wrap items-center gap-1.5 text-sm font-semibold">
+        {guide.name}
+        <Badge variant="outline" className={cn('px-1.5 text-[10px]', COST_STYLE[guide.cost])}>
+          {guide.cost}
+        </Badge>
+      </h2>
+      <ol className="m-0 flex list-none flex-col gap-1 p-0">
         {guide.plan.map((step) => (
-          <li key={`${step.when}-${step.text.slice(0, 24)}`} className="flex gap-2 text-[13px]">
-            <span className="mt-0.5 h-fit shrink-0 rounded border px-1 py-px text-[10px] font-medium text-muted-foreground">
+          <li key={`${step.when}-${step.text.slice(0, 24)}`} className="flex items-baseline gap-2 text-[13px]">
+            <span className="w-16 shrink-0 rounded border px-1 py-px text-center text-[10px] font-medium text-muted-foreground">
               {step.when}
             </span>
-            <span className="min-w-0 text-muted-foreground">{step.text}</span>
+            <span className="min-w-0">{step.text}</span>
           </li>
         ))}
+        {guide.cheese && (
+          <li className="flex items-baseline gap-2 text-[13px]">
+            <span className="w-16 shrink-0 rounded border border-primary/40 px-1 py-px text-center text-[10px] font-medium text-primary">
+              Cheese
+            </span>
+            <span className="min-w-0">{guide.cheese.title}</span>
+          </li>
+        )}
       </ol>
-      {guide.cheese && (
-        <div className="rounded-md border border-primary/40 bg-primary/5 px-2.5 py-2 text-[13px]">
-          <p className="font-medium">Cheese: {guide.cheese.title}</p>
-          <p className="mt-0.5 text-muted-foreground">{guide.cheese.detail}</p>
+      <details className="mt-auto pt-1">
+        <summary className="cursor-pointer text-xs text-muted-foreground hover:text-foreground">
+          Details
+        </summary>
+        <div className="mt-1.5 flex flex-col gap-1.5 text-xs text-muted-foreground">
+          <p>
+            <span className="font-medium text-foreground/80">Gives: </span>
+            {guide.gives}
+          </p>
+          <p>
+            <span className="font-medium text-foreground/80">How it levels: </span>
+            {guide.how}
+          </p>
+          {guide.cheese && (
+            <p>
+              <span className="font-medium text-foreground/80">Cheese: </span>
+              {guide.cheese.detail}
+            </p>
+          )}
+          {guide.caps && (
+            <p>
+              <span className="font-medium text-foreground/80">Limits: </span>
+              {guide.caps}
+            </p>
+          )}
         </div>
-      )}
-      {guide.caps && <p className="text-xs text-muted-foreground/80">{guide.caps}</p>}
+      </details>
     </section>
   );
 }

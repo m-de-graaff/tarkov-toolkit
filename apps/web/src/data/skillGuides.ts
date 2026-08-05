@@ -1,5 +1,7 @@
 // Curated skill-leveling routines, rebuilt Aug 2026 from the official wiki
 // plus TarkovForge / timesaver.gg / Games Finder guides (EFT 1.0 era).
+// Plan steps are written for at-a-glance reading; the exact numbers and
+// mechanics live in `how`, `caps` and `cheese.detail`, which the UI collapses.
 // The Crafting skill is not listed here because the XP page computes it live
 // from craft data and prices. Recoil Control and Memory were removed from the
 // game in 0.14.5 and are deliberately absent.
@@ -8,44 +10,47 @@ export type GuideCost = 'free' | 'cheap' | 'moderate' | 'expensive';
 
 /** When during play a step happens; shown as a chip in front of the step. */
 export type StepWhen =
-  | 'Raid start'
+  | 'Start'
   | 'Mid raid'
-  | 'Before extract'
+  | 'Extract'
   | 'Every raid'
-  | 'Duo raid'
+  | 'Duo'
   | 'Hideout'
   | 'Daily';
 
 export interface PlanStep {
   when: StepWhen;
+  /** one short line, glanceable */
   text: string;
 }
 
 export interface SkillCheese {
+  /** short enough to read at a glance */
   title: string;
+  /** the full safe instructions, shown under Details */
   detail: string;
 }
 
 export interface SkillGuide {
   id: string;
   name: string;
-  /** what the skill gives you, one line */
+  /** what the skill gives you, one line (under Details) */
   gives: string;
-  /** how XP is actually earned, one line */
+  /** how XP is actually earned, one line (under Details) */
   how: string;
-  /** the easy proven routine, in order */
+  /** the easy proven routine, in order - short lines only */
   plan: PlanStep[];
   cheese?: SkillCheese;
-  /** fatigue / cap warnings worth knowing before grinding */
+  /** fatigue / cap warnings (under Details) */
   caps?: string;
   cost: GuideCost;
 }
 
 /** Page-level rules that apply to every skill below. */
 export const skillGlobalNotes: string[] = [
-  'Skill fatigue: after about 2-3 points in one skill per raid, gains are throttled hard. A 200 second pause without gains resets the rate to normal. Budget a little per skill per raid instead of grinding one.',
-  'Hideout boosters: the Air Filtering Unit with an FP-100 filter gives +40 percent leveling on all physical skills. Defective Wall levels 2-5 impose -12 percent on physical skills until upgraded to the Gym.',
-  'Quests that reward skill levels grant whole levels - the closer the skill is to its next level, the more points a reward level is worth.',
+  'Fatigue: about 2-3 points per skill per raid, then gains crater. A 200 second pause resets the rate.',
+  'Air Filtering Unit + FP-100 filter: +40 percent on all physical skills. Defective Wall levels 2-5: -12 percent until it becomes the Gym.',
+  'Skill-reward quests grant whole levels - turn them in when the skill is close to its next level.',
 ];
 
 export const skillGuides: SkillGuide[] = [
@@ -53,26 +58,14 @@ export const skillGuides: SkillGuide[] = [
     id: 'metabolism',
     name: 'Metabolism',
     gives: 'Longer energy and hydration, faster physical skill gains, no fractures at elite.',
-    how: 'XP per point of energy and hydration you restore in raid. Eating in the stash gives nothing.',
+    how: 'XP per point of energy and hydration you restore in raid. Eating in the stash gives nothing - the drain-then-refill loop is the whole game.',
     plan: [
-      {
-        when: 'Raid start',
-        text: 'Apply a Golden Star balm immediately and keep reapplying it all raid - it slowly drains energy and hydration, which you refill for points. Ibuprofen works the same way.',
-      },
-      {
-        when: 'Mid raid',
-        text: 'Eat a Jar of DevilDog mayo (+100 energy, -99 hydration) or a Can of condensed milk (+75, -65), then drink an Aquamari (+100 hydration) to refill the drain.',
-      },
-      {
-        when: 'Before extract',
-        text: 'Eat and drink back to full, and consume any found food you cannot carry out - those are free points.',
-      },
-      {
-        when: 'Hideout',
-        text: 'Medstation 3 crafts Golden Star into Propital you can sell, making the drain loop essentially free.',
-      },
+      { when: 'Start', text: 'Golden Star balm on, reapply all raid' },
+      { when: 'Mid raid', text: 'DevilDog mayo or condensed milk, then an Aquamari' },
+      { when: 'Extract', text: 'Eat and drink back to full, finish found food' },
+      { when: 'Hideout', text: 'Medstation 3 crafts Golden Star into Propital - sell it' },
     ],
-    caps: 'Fatigue throttles after 2-3 points per raid. High Metabolism later shortens debuff durations and slows Immunity leveling - if you want both, level Immunity first.',
+    caps: 'Fatigue throttles after 2-3 points per raid. High Metabolism later shortens debuff durations and slows Immunity - level Immunity first if you want both. Why these items: DevilDog mayo (+100 energy, -99 hydration) and condensed milk (+75, -65) are the biggest hydration drains, Aquamari (+100) the biggest refill.',
     cost: 'cheap',
   },
   {
@@ -81,25 +74,16 @@ export const skillGuides: SkillGuide[] = [
     gives: 'More stamina, quieter breathing, faster stamina regeneration.',
     how: 'Distance sprinted or walked while NOT overweight (white weight number), credited when you stop.',
     plan: [
-      {
-        when: 'Every raid',
-        text: 'Take a light kit (SMG or pistol, small rig, empty or no backpack) on a big map like Woods, Shoreline or Lighthouse and sprint everywhere while the weight number stays white.',
-      },
-      {
-        when: 'Raid start',
-        text: 'Optional: inject an SJ6 stim - more stamina means more sprint distance per minute.',
-      },
-      {
-        when: 'Daily',
-        text: 'One Gym session (up to 15 reps). A second session within 24 hours pays half points, a third pays nothing.',
-      },
+      { when: 'Every raid', text: 'Light kit, big map, sprint everywhere, weight white' },
+      { when: 'Start', text: 'Optional SJ6 stim for more sprint per minute' },
+      { when: 'Daily', text: 'One Gym session, up to 15 reps' },
     ],
     cheese: {
-      title: 'Stim under the weight bar',
+      title: 'Weight stim flips sprints to Endurance',
       detail:
-        'A strength or carry-weight stim can flip a normally overweight kit back under the threshold, so your sprints feed Endurance instead of Strength.',
+        'A strength or carry-weight stim can push a normally overweight kit back under the threshold, so your sprints feed Endurance instead of Strength.',
     },
-    caps: 'Fatigue after 2-3 points per raid; Gym is effectively once per day.',
+    caps: 'Fatigue after 2-3 points per raid. Gym: a second session within 24 hours pays half points, a third pays nothing.',
     cost: 'cheap',
   },
   {
@@ -108,20 +92,11 @@ export const skillGuides: SkillGuide[] = [
     gives: 'Higher carry weight, faster sprint, further throws, more melee damage.',
     how: 'Distance moved while overweight (yellow number), plus grenade throws and melee hits (3 points per raid each), plus the Gym.',
     plan: [
-      {
-        when: 'Every raid',
-        text: 'Pad your backpack just past the yellow weight threshold with cheap filler - 20-round stacks of 12/70 shotgun shells weigh 1 kg each - then move between points as normal and drop filler as real loot fills the bag.',
-      },
-      {
-        when: 'Mid raid',
-        text: 'Throw 3 cheap grenades in quiet moments: RDG-2B or M18 smokes, or a Zarya. That fills the whole grenade cap for the raid.',
-      },
-      {
-        when: 'Daily',
-        text: 'Gym session - reps land randomly in Strength or Endurance.',
-      },
+      { when: 'Every raid', text: 'Pad bag just past yellow: 12/70 shell stacks, 1 kg each' },
+      { when: 'Mid raid', text: 'Throw 3 cheap grenades: RDG-2B, M18 or Zarya' },
+      { when: 'Daily', text: 'Gym session, shared with Endurance' },
     ],
-    caps: 'Grenade throws and melee hits each cap at 3 points per raid; overweight-movement XP fatigues like everything else.',
+    caps: 'Grenade throws and melee hits each cap at 3 points per raid; overweight-movement XP fatigues like everything else. Drop the filler as real loot fills the bag.',
     cost: 'cheap',
   },
   {
@@ -130,19 +105,13 @@ export const skillGuides: SkillGuide[] = [
     gives: 'Lower bleed chance, and at elite bleeds stop on their own.',
     how: '0.01 points per 5 damage taken plus 0.3 points per bleed received, from any source - including a friend.',
     plan: [
-      {
-        when: 'Duo raid',
-        text: 'In a quiet corner, let a friend put controlled shots into your legs, heal up with a Grizzly, swap roles, and repeat 2-3 cycles before playing the raid out normally.',
-      },
-      {
-        when: 'Every raid',
-        text: 'Bleeds are worth far more than raw damage - barbed wire scrapes and light bleeds are efficient. Power move: out-heal a heavy bleed with Propital without stopping it, so the ticks keep paying.',
-      },
+      { when: 'Duo', text: 'Friend shoots legs, Grizzly up, swap, 2-3 cycles' },
+      { when: 'Every raid', text: 'Bleeds pay most: Propital through a heavy bleed' },
     ],
     cheese: {
-      title: 'The friend-shooting method, done safely',
+      title: 'Friend shoots legs: Makarov PM + 9x18 PBM',
       detail:
-        'Friend shoots your LEGS with a Makarov PM loaded with 9x18mm PM PBM gzh (40 damage, the weakest 9x18) or the dirt-cheap P gzh (50). A fresh leg has 65 HP, so one round never blacks it. Never shoot an already blacked limb - that damage spreads body-wide and can kill. Alternate legs, heal with a Grizzly, bring CALOK-B for bleeds and a splint for fractures. Also levels Health (25 percent pass-through) and Stress Resistance. It does NOT level Immunity. Ammo pick is community-derived from the ballistics table, not a named guide load.',
+        'Friend shoots your LEGS with a Makarov PM loaded with 9x18mm PM PBM gzh (40 damage, the weakest 9x18) or the dirt-cheap P gzh (50). A fresh leg has 65 HP, so one round never blacks it. Never shoot an already blacked limb - that damage spreads body-wide and can kill. Alternate legs, heal with a Grizzly, bring CALOK-B for bleeds and a splint for fractures. Also levels Health (25 percent pass-through) and Stress Resistance. It does NOT level Immunity. Ammo pick is community-derived from the ballistics table.',
     },
     caps: 'Fatigue after 2-3 points per raid - pause 3-4 minutes between damage cycles.',
     cost: 'moderate',
@@ -151,20 +120,10 @@ export const skillGuides: SkillGuide[] = [
     id: 'health',
     name: 'Health',
     gives: 'More HP on every limb, less fracture chance, faster out-of-raid regeneration.',
-    how: 'Not trained directly: it gains 25 percent of every Endurance, Strength and Vitality point you earn in raid.',
+    how: 'Not trained directly: it gains 25 percent of every Endurance, Strength and Vitality point you earn in raid. Gym points reportedly do not pass through.',
     plan: [
-      {
-        when: 'Every raid',
-        text: 'Just run the Endurance and Strength routines - Health accrues automatically at a quarter rate of everything they earn.',
-      },
-      {
-        when: 'Duo raid',
-        text: 'The Vitality damage session is also the fastest Health farm via the pass-through.',
-      },
-      {
-        when: 'Daily',
-        text: 'Gym points reportedly do NOT pass through to Health, so earn the contributing points in raid, not only at the Gym.',
-      },
+      { when: 'Every raid', text: 'Run the Endurance and Strength routines' },
+      { when: 'Duo', text: 'The Vitality damage session pays 25 percent here' },
     ],
     cost: 'free',
   },
@@ -172,22 +131,13 @@ export const skillGuides: SkillGuide[] = [
     id: 'immunity',
     name: 'Immunity',
     gives: 'Less poison and toxin damage; at elite, immunity to most negative food effects.',
-    how: 'About 0.0045 points per second of stim or food debuff, paid out when the debuff ENDS in raid. Extracting early forfeits the points.',
+    how: 'About 0.0045 points per second of stim or food debuff, paid when the debuff ENDS in raid. Extracting early forfeits the points - dose early, never late.',
     plan: [
-      {
-        when: 'Raid start',
-        text: 'Drink a Can of Max Energy - its roughly 5 minute debuff is the cheapest reliable point source. Repeat every 5 minutes if you brought more.',
-      },
-      {
-        when: 'Raid start',
-        text: 'Bigger option: inject 2A2-(b-TG) (15 minute hydration drain, bring water) or Obdolbos 2 (30 minutes of debuffs, bring meds) - only in the first minutes, so it runs out before extract.',
-      },
-      {
-        when: 'Every raid',
-        text: 'Stacks perfectly with the Metabolism loop: the food and drink you chug anyway refills what the debuffs drain.',
-      },
+      { when: 'Start', text: 'Max Energy, another every 5 minutes' },
+      { when: 'Start', text: 'Bigger: 2A2-(b-TG) or Obdolbos 2, first minutes only' },
+      { when: 'Every raid', text: 'Pairs with the Metabolism loop' },
     ],
-    caps: 'Friend-shooting does NOT level Immunity - only consumable debuffs count. Level it before Metabolism gets high, because high Metabolism shortens debuff durations.',
+    caps: 'Friend-shooting does NOT level Immunity - only consumable debuffs count. Level it before Metabolism gets high, because high Metabolism shortens debuff durations. Bring water for 2A2, meds for Obdolbos 2.',
     cost: 'cheap',
   },
   {
@@ -196,21 +146,15 @@ export const skillGuides: SkillGuide[] = [
     gives: 'Less pain shake and tremor; elite is Berserk mode.',
     how: '0.033 points per second while low on health plus 0.33 per pain effect. Painkillers suppress pain and therefore slow it.',
     plan: [
-      {
-        when: 'Mid raid',
-        text: 'After a fight, stay on low HP while you loot instead of insta-healing - about 2 points per minute of low-HP time - and patch up only before the next fight or extract.',
-      },
-      {
-        when: 'Every raid',
-        text: 'Let pain tick for a while before taking painkillers. Skip the Golden Star Metabolism loop on raids where you farm this - the balm suppresses the pain you want.',
-      },
+      { when: 'Mid raid', text: 'Loot on low HP, heal only before fights or extract' },
+      { when: 'Every raid', text: 'Let pain tick before taking painkillers' },
     ],
     cheese: {
-      title: 'Crate concussion',
+      title: 'Zarya in a crate: pain, no real damage',
       detail:
-        'Drop a Zarya or RDG-2B into an enclosed open-top crate and stand next to it: concussion plus a pain effect at 0.33 points each, with no lethal damage. Conveniently spends the 3-grenade Strength budget too.',
+        'Drop a Zarya or RDG-2B into an enclosed open-top crate and stand next to it: concussion plus a pain effect at 0.33 points each, with no lethal damage. Conveniently spends the 3-grenade Strength budget too. Skip the Golden Star loop on these raids - the balm suppresses the pain you want.',
     },
-    caps: 'Fatigue after 2-3 points per raid.',
+    caps: 'Fatigue after 2-3 points per raid. Roughly 2 points per minute of low-HP time.',
     cost: 'cheap',
   },
   {
@@ -219,13 +163,10 @@ export const skillGuides: SkillGuide[] = [
     gives: 'Quieter footsteps and faster covert movement speed.',
     how: 'Distance covered at slow speed with the sound meter showing no bar; points land each time you STOP moving.',
     plan: [
-      {
-        when: 'Every raid',
-        text: 'During quiet stretches - indoors, between points, waiting at extract - drop to minimum-noise slow walk and move in segments: walk, stop, walk, stop. Do it on your normal loot route.',
-      },
+      { when: 'Every raid', text: 'Quiet stretches: slow-walk in segments, stop often' },
     ],
     cheese: {
-      title: 'Extract shuffle',
+      title: 'Stop-start shuffle at extract',
       detail:
         'Slow-walk stop-start loops in a safe corner before extracting. Works, but fatigue caps it - 5 to 10 minutes per raid is all that pays.',
     },
@@ -238,15 +179,12 @@ export const skillGuides: SkillGuide[] = [
     gives: 'Elite lets you search two containers at once - the real prize.',
     how: 'XP per container or corpse searched and per loose item picked up.',
     plan: [
-      {
-        when: 'Every raid',
-        text: 'Run container-dense routes - Interchange shelves and registers, Customs and Shoreline hidden-stash circuits - and search every jacket, cabinet and corpse you pass. Trains Attention and Perception at the same time.',
-      },
+      { when: 'Every raid', text: 'Container-dense routes, search everything you pass' },
     ],
     cheese: {
-      title: 'Night stash runs',
+      title: 'Night stash circuits',
       detail:
-        'Hidden-stash circuits at night (PMC or Scav) hit 15+ containers per raid with near-zero PvP exposure.',
+        'Hidden-stash circuits on Customs or Shoreline at night (PMC or Scav) hit 15+ containers per raid with near-zero PvP exposure. Trains Attention and Perception at the same time.',
     },
     cost: 'free',
   },
@@ -256,21 +194,15 @@ export const skillGuides: SkillGuide[] = [
     gives: 'Faster surgery, less max-HP loss; elite restores limbs to full.',
     how: '1.1 points per CMS or Surv12 use on a blacked (0 HP) limb.',
     plan: [
-      {
-        when: 'Every raid',
-        text: 'Carry a CMS kit (cheap, 5 uses). Whenever a limb blacks naturally, surgery it in raid instead of just painkilling through.',
-      },
-      {
-        when: 'Before extract',
-        text: 'Dedicated grind: take a short fall to black both legs, CMS both, then extract - 2 surgeries per raid is the efficient ceiling anyway.',
-      },
+      { when: 'Every raid', text: 'Carry a CMS, surgery every limb that blacks' },
+      { when: 'Extract', text: 'Short fall, black both legs, CMS both, leave' },
     ],
     cheese: {
-      title: 'Duo limb service',
+      title: 'Duo: buddy blacks limbs, you CMS',
       detail:
         'A squadmate blacks your limbs with weak pistol ammo (see Vitality for the safe load) so you can surgery 3-4 limbs per raid - and their shots feed your Vitality at the same time.',
     },
-    caps: 'Fatigue makes roughly 2 surgeries per raid the efficient ceiling.',
+    caps: 'Fatigue makes roughly 2 surgeries per raid the efficient ceiling. A CMS is about 30k for 5 uses.',
     cost: 'cheap',
   },
   {
@@ -279,10 +211,8 @@ export const skillGuides: SkillGuide[] = [
     gives: 'Faster aim-down-sights and less ADS movement penalty.',
     how: '0.2 points per hit landed while aiming down sights. Hip-fire hits give nothing.',
     plan: [
-      {
-        when: 'Every raid',
-        text: 'Always ADS when shooting Scavs - every connecting bullet counts, kills not required. Factory with a fast cheap SMG is the classic farm: several rounds into each Scav, limbs count too.',
-      },
+      { when: 'Every raid', text: 'Always ADS on Scavs - every hit counts, limbs too' },
+      { when: 'Every raid', text: 'Factory with a fast cheap SMG is the classic farm' },
     ],
     caps: 'About 10 ADS hits (2 points) per raid before fatigue bites.',
     cost: 'cheap',
@@ -291,16 +221,10 @@ export const skillGuides: SkillGuide[] = [
     id: 'bolt-action-rifles',
     name: 'Bolt-action Rifles',
     gives: 'The old Sniper skill: better bolt-action handling; elite steadies aim at any stamina.',
-    how: 'XP for hits, reloads and bolt cycling with bolt-action rifles. Distance does not matter.',
+    how: 'XP for hits, reloads and bolt cycling with bolt-action rifles. Distance does not matter - legging Scavs pays more hits than one-taps.',
     plan: [
-      {
-        when: 'Every raid',
-        text: 'Bring a cheap Mosin as a secondary on loot runs and use it on every Scav you safely can. Legging Scavs with cheap 7.62x54R pays more hits than one-taps.',
-      },
-      {
-        when: 'Every raid',
-        text: 'Work the Tarkov Shooter and A Shooter Born in Heaven questlines - their reward levels (+5, +3) outpace raw grinding.',
-      },
+      { when: 'Every raid', text: 'Cheap Mosin secondary, use it on every safe Scav' },
+      { when: 'Every raid', text: 'Run the Tarkov Shooter questlines for +11 levels' },
     ],
     cost: 'cheap',
   },
@@ -308,26 +232,20 @@ export const skillGuides: SkillGuide[] = [
     id: 'perception',
     name: 'Perception',
     gives: 'Better loot highlight reach and hearing; elite gives a loot proximity sense.',
-    how: 'XP for picking up loot of any kind. 20 percent of it bleeds into Charisma.',
+    how: 'XP for picking up loot of any kind - grab and drop counts. 20 percent of it bleeds into Charisma.',
     plan: [
-      {
-        when: 'Every raid',
-        text: 'Pick up (not just look at) every item on your route - grab and drop counts. Airdrops, hidden stashes and supply crates are the densest sources.',
-      },
+      { when: 'Every raid', text: 'Pick up everything: stashes, airdrops, supply crates' },
     ],
-    caps: 'Six different quests award Perception levels - the most of any mental skill - so bank them when the skill is close to its next level.',
+    caps: 'Six different quests award Perception levels - the most of any mental skill.',
     cost: 'free',
   },
   {
     id: 'attention',
     name: 'Attention',
     gives: 'Faster looting and examination; elite doubles looting XP and can insta-find items.',
-    how: '0.08 points per item uncovered in a container, plus loose-loot pickups.',
+    how: '0.08 points per item uncovered in a container, plus loose-loot pickups - item-dense containers are the whole game.',
     plan: [
-      {
-        when: 'Every raid',
-        text: 'Prefer containers that hold MANY items - supply crates, airdrops, dead PMC backpacks - over single-slot jackets. Same route as Search and Perception; the three level together.',
-      },
+      { when: 'Every raid', text: 'Open many-item containers: crates, airdrops, PMC bags' },
     ],
     cost: 'free',
   },
@@ -337,14 +255,8 @@ export const skillGuides: SkillGuide[] = [
     gives: 'Discounts on healing, insurance and the Scav Case.',
     how: '20 percent of Attention and Perception XP, plus 0.4 points per Scav Case run, per 200k roubles insured and per 10k roubles of trader repairs.',
     plan: [
-      {
-        when: 'Every raid',
-        text: 'Insure everything, every raid - it is the correct play anyway and it pays Charisma.',
-      },
-      {
-        when: 'Hideout',
-        text: 'Keep the Scav Case running on cooldown with the cheapest input; loot heavily and let the Attention and Perception transfer do the rest.',
-      },
+      { when: 'Every raid', text: 'Insure everything' },
+      { when: 'Hideout', text: 'Scav Case on cooldown, cheapest input' },
     ],
     cheese: {
       title: 'Scav Case spam',
@@ -359,13 +271,11 @@ export const skillGuides: SkillGuide[] = [
     gives: 'Faster examining and weapon modding, better repair quality.',
     how: 'About 0.4 points per 10 durability restored with weapon or armor repair kits, plus hideout crafts. Examining items currently grants nothing despite the tooltip.',
     plan: [
-      {
-        when: 'Hideout',
-        text: 'Repair the beat-up Scav guns and armor you drag out of raids with repair kits before selling them, and keep crafts running.',
-      },
+      { when: 'Hideout', text: 'Repair-kit Scav guns and armor before selling' },
+      { when: 'Hideout', text: 'Keep crafts running' },
     ],
     cheese: {
-      title: 'Flea junk grinder',
+      title: 'Repair-kit cheap flea junk',
       detail:
         'Buy cheap high-wear Scav weapons off the flea and grind them through a Weapon repair kit - 0.4 points per 10 durability adds up fast and feeds the armor skills when done on vests.',
     },
@@ -376,15 +286,12 @@ export const skillGuides: SkillGuide[] = [
     id: 'troubleshooting',
     name: 'Troubleshooting',
     gives: 'Faster malfunction clearing; elite identifies the malfunction without inspecting.',
-    how: 'XP for fixing weapon malfunctions (inspect, then clear).',
+    how: 'XP for fixing weapon malfunctions. Malfunctions come from low durability and cheap ammo.',
     plan: [
-      {
-        when: 'Every raid',
-        text: 'Run worn Scav-tier guns (under 80 percent durability) with the cheapest surplus ammo on Scav-farming raids and clear every jam that happens - it levels itself as a byproduct.',
-      },
+      { when: 'Every raid', text: 'Worn guns, surplus ammo, clear every jam' },
     ],
     cheese: {
-      title: 'Jam fishing',
+      title: 'Mag-dump a broken gun to fish jams',
       detail:
         'Bring a near-broken gun with surplus ammo and mag-dump at safe moments to force malfunctions, clearing each one. Slow - mostly worth it for the quest requirements.',
     },
@@ -396,17 +303,11 @@ export const skillGuides: SkillGuide[] = [
     gives: 'Less light-armor wear and movement penalty; elite gives bleed immunity on covered parts.',
     how: '0.4 points per 10 durability repaired with a Body armor repair kit on aramid, aluminium or UHMWPE armor, plus 0.02 per durability point of damage taken while wearing it.',
     plan: [
-      {
-        when: 'Every raid',
-        text: 'Wear cheap aramid armor (PACA, 6B23 variants) so incoming fire trains it.',
-      },
-      {
-        when: 'Hideout',
-        text: 'Repair the damage yourself with a Body armor repair kit instead of trader repair - both halves of the loop pay points.',
-      },
+      { when: 'Every raid', text: 'Wear cheap aramid: PACA, 6B23' },
+      { when: 'Hideout', text: 'Self-repair with a Body armor repair kit' },
     ],
     cheese: {
-      title: 'Blown-armor repair grind',
+      title: 'Repair blown flea armor from the stash',
       detail:
         'Buy blown-out light armors cheap off the flea and repair-kit them from the stash - no raid required.',
     },
@@ -419,13 +320,10 @@ export const skillGuides: SkillGuide[] = [
     gives: 'Less heavy-armor wear; elite can deflect bullets outright.',
     how: 'Same loop as Light Vests for steel, ceramic and Titan armor: 0.4 points per 10 durability repaired, 0.01 per durability of damage taken (half the light-armor rate).',
     plan: [
-      {
-        when: 'Hideout',
-        text: 'If you run steel or ceramic rigs anyway, self-repair them with a Body armor repair kit - damage alone levels this at half speed, so the kit is the main lever.',
-      },
+      { when: 'Hideout', text: 'Self-repair steel and ceramic rigs with a kit' },
     ],
     cheese: {
-      title: 'Blown-armor repair grind',
+      title: 'Repair blown flea armor from the stash',
       detail: 'Same flea trick as Light Vests with cheap worn Kirasa or ZHUK ceramic armors.',
     },
     cost: 'moderate',
@@ -436,13 +334,11 @@ export const skillGuides: SkillGuide[] = [
     gives: 'Faster mag loading and checking; elite shows mag fill on pickup.',
     how: 'XP for loading, unloading and checking magazines IN RAID only - stash and hideout mag work counts for nothing.',
     plan: [
-      {
-        when: 'Every raid',
-        text: 'Do all mag management inside the raid during quiet moments: load looted ammo boxes into mags on the spot, consolidate half-empty mags before extract, and mag-check pickups off bodies.',
-      },
+      { when: 'Every raid', text: 'Load looted ammo into mags in raid' },
+      { when: 'Extract', text: 'Consolidate mags, mag-check pickups' },
     ],
     cheese: {
-      title: 'Extract load-unload',
+      title: 'Load-unload at extract',
       detail:
         'Carry a stack of cheap 5.45 PS and a spare mag; at a safe moment before extract, load, unload and mag-check repeatedly until the fatigue arrow shows.',
     },
@@ -455,10 +351,8 @@ export const skillGuides: SkillGuide[] = [
     gives: 'Stronger hideout bonuses and slower fuel and filter drain per level.',
     how: '0.8 points per finished craft, 12 per module upgrade, plus a trickle from resources being consumed. The Library bonus does NOT apply to it.',
     plan: [
-      {
-        when: 'Hideout',
-        text: 'Keep the generator running and short crafts finishing around the clock - the crafting plan above does double duty here - and do every module upgrade you can afford.',
-      },
+      { when: 'Hideout', text: 'Generator on, short crafts always finishing' },
+      { when: 'Hideout', text: 'Do every module upgrade you can afford' },
     ],
     caps: 'Once upgrades run out, progression is slow by design - the per-craft trickle is the only repeatable source.',
     cost: 'moderate',
