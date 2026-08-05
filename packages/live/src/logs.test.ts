@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import {
+  finishedTaskEvents,
   isGameLogFile,
   lastMapEvent,
   LogEventParser,
   sessionFolderTime,
+  sessionFolderVersion,
 } from './logs.ts';
 
 const MAP_LINE =
@@ -92,6 +94,38 @@ describe('sessionFolderTime', () => {
 
   it('sorts unparseable names first', () => {
     expect(sessionFolderTime('weird')).toBe(0);
+  });
+});
+
+describe('sessionFolderVersion', () => {
+  it('extracts the game version suffix', () => {
+    expect(sessionFolderVersion('log_2026.08.04_0-12-19_1.1.0.0.46624')).toBe('1.1.0.0.46624');
+    expect(sessionFolderVersion('log_2026.08.02_15-03-23_1.0.6.5.46221')).toBe('1.0.6.5.46221');
+  });
+
+  it('returns null for legacy names without a version', () => {
+    expect(sessionFolderVersion('log_2023.10.12_12-00-00')).toBeNull();
+    expect(sessionFolderVersion('weird')).toBeNull();
+  });
+});
+
+describe('finishedTaskEvents', () => {
+  it('returns only quest completions, in file order', () => {
+    const content =
+      MAP_LINE +
+      taskNotification(12, 'aaa') +
+      taskNotification(10, 'bbb') +
+      'noise\n' +
+      taskNotification(12, 'ccc') +
+      taskNotification(11, 'ddd');
+    expect(finishedTaskEvents(content)).toEqual([
+      { type: 'task', taskId: 'aaa', status: 'finished' },
+      { type: 'task', taskId: 'ccc', status: 'finished' },
+    ]);
+  });
+
+  it('returns nothing for a session without completions', () => {
+    expect(finishedTaskEvents(MAP_LINE + 'launcher noise\n')).toEqual([]);
   });
 });
 
