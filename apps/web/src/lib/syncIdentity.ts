@@ -33,6 +33,7 @@ export const freshSyncedState = (): SyncedState => ({
     completedTaskIds: [],
     hideoutLevels: {},
     itemsHave: {},
+    storyChapterIds: [],
   },
   profiles: {},
   craftBlacklist: [],

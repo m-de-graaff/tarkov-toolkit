@@ -9,6 +9,7 @@ const tracker = (over: Partial<TrackerState>): TrackerState => ({
   completedTaskIds: [],
   hideoutLevels: {},
   itemsHave: {},
+  storyChapterIds: [],
   ...over,
 });
 
@@ -99,5 +100,18 @@ describe('normalizeSynced', () => {
   it('leaves complete payloads unchanged', () => {
     const full = state({ craftBlacklist: ['c'] });
     expect(normalizeSynced(full)).toEqual(full);
+  });
+
+  it('unions story chapters and fills them on old payloads', () => {
+    const remote = state({ tracker: tracker({ storyChapterIds: ['tour'] }) });
+    const local = state({ tracker: tracker({ storyChapterIds: ['batya'] }) });
+    expect(mergeSyncedState(remote, local).tracker.storyChapterIds?.sort()).toEqual([
+      'batya',
+      'tour',
+    ]);
+
+    const legacy = state({});
+    delete (legacy.tracker as Partial<TrackerState>).storyChapterIds;
+    expect(normalizeSynced(legacy).tracker.storyChapterIds).toEqual([]);
   });
 });

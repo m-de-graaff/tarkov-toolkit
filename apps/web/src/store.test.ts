@@ -43,6 +43,7 @@ describe('planner store', () => {
       completedTaskIds: [],
       hideoutLevels: {},
       itemsHave: {},
+      storyChapterIds: [],
     });
   });
 
@@ -117,6 +118,7 @@ describe('planner store', () => {
       completedTaskIds: [],
       hideoutLevels: {},
       itemsHave: {},
+      storyChapterIds: [],
     });
   });
 

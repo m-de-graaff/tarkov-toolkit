@@ -29,6 +29,14 @@ describe('isAvailable', () => {
   it('excludes already-completed tasks', () => {
     expect(isAvailable(tHighLevel, tracker({ level: 30, completedTaskIds: ['t-high-level'] }))).toBe(false);
   });
+
+  it('treats a mangled factionName as open to both factions', () => {
+    // the 2026-08 snapshots shipped 'Any' blind-translated into 'any target',
+    // which made every common quest disappear for USEC/BEAR trackers
+    const mangled = { ...tHighLevel, factionName: 'any target' };
+    expect(isAvailable(mangled, tracker({ level: 30, faction: 'USEC' }))).toBe(true);
+    expect(isAvailable(mangled, tracker({ level: 30, faction: 'BEAR' }))).toBe(true);
+  });
 });
 
 describe('availableQuests', () => {

@@ -57,7 +57,18 @@ async function fetchTranslated(name, prefix = 'regular') {
 // (a string or an array of strings). Objects always recurse: the API's
 // top-level collections share names with reference keys (e.g. data.maps vs
 // objective.maps), and skipping the collection leaves its subtree untranslated.
-const UNTRANSLATED_KEYS = new Set(['id', 'normalizedName', 'map', 'maps', 'task', 'trader']);
+// factionName is an enum (Any/USEC/BEAR) - the blind dictionary substitution
+// once "translated" the value 'Any' into the unrelated string 'any target',
+// which made every common quest look faction-locked.
+const UNTRANSLATED_KEYS = new Set([
+  'id',
+  'normalizedName',
+  'map',
+  'maps',
+  'task',
+  'trader',
+  'factionName',
+]);
 
 function isIdValue(value) {
   return (
@@ -232,7 +243,8 @@ function buildTasks(rawTasks, traderNames, idRemap) {
     trader: { id: raw.trader, name: traderNames.get(raw.trader) ?? 'Unknown' },
     mapId: raw.map ? remapId(raw.map) : null,
     minPlayerLevel: raw.minPlayerLevel ?? 1,
-    factionName: raw.factionName ?? 'Any',
+    // normalize defensively: anything that isn't a real faction means "Any"
+    factionName: ['USEC', 'BEAR'].includes(raw.factionName) ? raw.factionName : 'Any',
     kappaRequired: raw.kappaRequired ?? false,
     ...(raw.wikiLink ? { wikiLink: raw.wikiLink } : {}),
     experience: raw.experience ?? 0,

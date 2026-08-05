@@ -10,6 +10,7 @@ import { MarketPage } from './pages/MarketPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { PlannerPage } from './pages/PlannerPage';
 import { ProgressPage } from './pages/ProgressPage';
+import { QuestPage } from './pages/QuestPage';
 import { XpPage } from './pages/XpPage';
 
 // the boundary wraps only the routed content - the nav must survive a page
@@ -27,6 +28,7 @@ function RoutedPages() {
         <Route path="/ammo" element={<AmmoPage />} />
         <Route path="/market" element={<MarketPage />} />
         <Route path="/xp" element={<XpPage />} />
+        <Route path="/quest/:normalizedName" element={<QuestPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </ErrorBoundary>

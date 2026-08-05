@@ -14,12 +14,89 @@ import type { RpTask } from '@raidplanner/data';
 import { snapshot } from '@raidplanner/data';
 import { Lock } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import type { TrackerState } from '../lib/availability';
 import { availableQuests, isAvailable } from '../lib/availability';
 import { snapshotForMode } from '../lib/modeTasks';
+import { STORY_WIKI_URL, storyChapters } from '../data/storyline';
 import { usePlanner } from '../store';
 
 const FACTIONS: TrackerState['faction'][] = ['Any', 'USEC', 'BEAR'];
+
+const mapName = (normalized: string) =>
+  snapshot.maps.find((m) => m.normalizedName === normalized)?.name ?? normalized;
+
+function StorylineSection() {
+  const done = usePlanner((s) => s.tracker.storyChapterIds) ?? [];
+  const toggleStoryChapter = usePlanner((s) => s.toggleStoryChapter);
+  return (
+    <section aria-label="Story chapters">
+      <h2 className="mb-1 flex items-baseline gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        Storyline
+        <span className="normal-case tabular-nums">
+          {done.length}/{storyChapters.length} chapters
+        </span>
+        <a
+          href={STORY_WIKI_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="ml-auto normal-case text-primary/70 underline-offset-2 hover:underline"
+        >
+          wiki
+        </a>
+      </h2>
+      <Separator className="mb-2" />
+      <ul className="m-0 flex list-none flex-col gap-1 p-0">
+        {storyChapters.map((chapter) => {
+          const finished = done.includes(chapter.id);
+          return (
+            <li
+              key={chapter.id}
+              className="story-row flex flex-col gap-0.5 rounded-md px-2 py-1.5 hover:bg-secondary/60"
+            >
+              <label className="flex cursor-pointer items-center gap-2.5">
+                <input
+                  type="checkbox"
+                  checked={finished}
+                  onChange={() => toggleStoryChapter(chapter.id)}
+                  aria-label={`Mark chapter ${chapter.name} as finished`}
+                  className="size-4 shrink-0 accent-primary"
+                />
+                <span
+                  className={cn(
+                    'text-sm font-medium',
+                    finished && 'text-muted-foreground line-through',
+                  )}
+                >
+                  {chapter.order}. {chapter.name}
+                </span>
+                <span className="ml-auto flex shrink-0 gap-1">
+                  {chapter.maps.slice(0, 3).map((m) => (
+                    <Badge
+                      key={m}
+                      variant="outline"
+                      className="px-1.5 text-[10px] text-muted-foreground"
+                    >
+                      {mapName(m)}
+                    </Badge>
+                  ))}
+                  {chapter.maps.length > 3 && (
+                    <span className="text-[10px] text-muted-foreground">
+                      +{chapter.maps.length - 3}
+                    </span>
+                  )}
+                </span>
+              </label>
+              {!finished && (
+                <p className="pl-6.5 text-pretty text-xs text-muted-foreground">{chapter.start}</p>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+}
 
 function ProgressQuestRow({ task, deadEnd }: { task: RpTask; deadEnd?: boolean }) {
   const tracker = usePlanner((s) => s.tracker);
@@ -34,21 +111,23 @@ function ProgressQuestRow({ task, deadEnd }: { task: RpTask; deadEnd?: boolean }
         !open && !completed && 'opacity-55',
       )}
     >
-      <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-2.5">
-        <input
-          type="checkbox"
-          checked={completed}
-          onChange={() => toggleCompleted(task.id)}
-          aria-label={`Mark ${task.name} as finished`}
-          className="size-4 shrink-0 accent-primary"
-        />
-        <span
-          className={cn('truncate text-sm', completed && 'text-muted-foreground line-through')}
-          title={task.name}
-        >
-          {task.name}
-        </span>
-      </label>
+      <input
+        type="checkbox"
+        checked={completed}
+        onChange={() => toggleCompleted(task.id)}
+        aria-label={`Mark ${task.name} as finished`}
+        className="size-4 shrink-0 cursor-pointer accent-primary"
+      />
+      <Link
+        to={`/quest/${task.normalizedName}`}
+        className={cn(
+          'min-w-0 flex-1 truncate text-sm underline-offset-2 hover:underline',
+          completed && 'text-muted-foreground line-through',
+        )}
+        title={`${task.name} - details`}
+      >
+        {task.name}
+      </Link>
       {task.minPlayerLevel > 1 && (
         <span className="shrink-0 text-xs text-muted-foreground tabular-nums">
           Lv {task.minPlayerLevel}
@@ -235,6 +314,8 @@ export function ProgressPage() {
             <ResetButton />
           </div>
         </section>
+
+        <StorylineSection />
 
         <div className="sticky top-0 z-10 -mx-1 flex flex-wrap items-center gap-2 rounded-md bg-background/95 px-1 py-2 backdrop-blur">
           <Input
