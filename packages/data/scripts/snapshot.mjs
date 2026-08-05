@@ -5,6 +5,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { generateTileNav } from './tile-nav.mjs';
+import { applyWikiRenames, fetchWikiRenames } from './wikiRenames.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const dataRoot = path.join(here, '..');
@@ -430,6 +431,18 @@ async function main() {
     modes: ['pve'],
   }));
   tasks.push(...pveOnlyTasks);
+
+  // Game patches rename quests and tarkov.dev lags; the wiki has the
+  // in-game names within hours and leaves redirects from the old titles.
+  // Best-effort: a wiki outage must not block the snapshot.
+  try {
+    console.log('Checking the wiki for quest renames...');
+    const renames = await fetchWikiRenames(tasks.map((t) => t.name), fetchJson);
+    const renamed = applyWikiRenames(tasks, renames);
+    console.log(`  ${renamed} quest name(s) updated to their current in-game titles.`);
+  } catch (err) {
+    console.log(`  wiki rename pass skipped: ${err.message}`);
+  }
 
   console.log(`Downloading ${svgDownloads.length} map SVGs...`);
   await downloadSvgs(svgDownloads);
