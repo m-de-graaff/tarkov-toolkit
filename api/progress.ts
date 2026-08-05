@@ -3,8 +3,8 @@
 // PUT  <- { version, state }            (last write wins; merging is client-side)
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { fromNodeHeaders } from 'better-auth/node';
-import { auth } from './_lib/auth';
-import { pool } from './_lib/db';
+import { auth } from './_lib/auth.js';
+import { pool } from './_lib/db.js';
 
 const MAX_BYTES = 1_000_000; // tracker state is a few KB; 1MB is generous
 

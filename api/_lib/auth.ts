@@ -2,7 +2,7 @@
 // Self-hosted/local builds never call these endpoints - the client hides all
 // account UI unless VITE_AUTH_ENABLED is set at build time.
 import { betterAuth } from 'better-auth';
-import { pool } from './db';
+import { pool } from './db.js';
 
 export const auth = betterAuth({
   database: pool,

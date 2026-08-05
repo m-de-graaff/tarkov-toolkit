@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { toNodeHandler } from 'better-auth/node';
-import { auth } from '../_lib/auth';
+import { auth } from '../_lib/auth.js';
 
 const notConfigured = (_req: IncomingMessage, res: ServerResponse) => {
   res.statusCode = 503;
