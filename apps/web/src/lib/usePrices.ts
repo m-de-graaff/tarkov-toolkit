@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { usePlanner } from '../store';
 import { fetchPrices, loadCachedPrices, type CachedPrices } from './prices';
 
-const STALE_MS = 30 * 60 * 1000;
-
 export interface PricesState {
   cached: CachedPrices | null;
   loading: boolean;
@@ -12,9 +10,12 @@ export interface PricesState {
 }
 
 /**
- * Live flea prices for the active game mode: cache first, auto-fetch when
- * missing or stale, refreshed on an interval while mounted. Auto-fetching is
- * disabled under tests so pages render deterministically offline.
+ * Live flea prices for the active game mode: cache first. The ~16MB payload
+ * is fetched automatically only when NO cache exists for the mode (first
+ * visit); after that, re-downloading is always user-triggered via refresh().
+ * A stale cache renders as-is - pages show its age next to the refresh
+ * button. Auto-fetching is disabled under tests so pages render
+ * deterministically offline.
  */
 export function usePrices(): PricesState {
   const gameMode = usePlanner((s) => s.gameMode);
@@ -50,13 +51,11 @@ export function usePrices(): PricesState {
       if (disposed) return;
       if (existing) setCached(existing);
       if (import.meta.env.MODE === 'test') return;
-      if (!existing || Date.now() - existing.fetchedAt > STALE_MS) void refresh();
+      // only a missing cache warrants an unsolicited ~16MB download
+      if (!existing) void refresh();
     });
-    const interval =
-      import.meta.env.MODE === 'test' ? null : setInterval(() => void refresh(), STALE_MS);
     return () => {
       disposed = true;
-      if (interval) clearInterval(interval);
     };
   }, [gameMode]);
 
