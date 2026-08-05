@@ -142,14 +142,16 @@ export function applyWikiSync({ tasks, maps, traderIdByName, index, pages, confi
           fields.storyChapter = [task.storyChapter ?? '(none)', page.storyChapter];
           task.storyChapter = page.storyChapter;
         }
-        if (page.previous != null) {
-          // A "#section" link (Collector's kappa list) or a fully
-          // unresolvable set means the infobox can't be interpreted as a
-          // task list - keep the API's chain rather than un-gating the quest.
+        if (page.previous != null && page.previous.length > 0) {
+          // Only a non-empty, resolvable "previous" field counts as
+          // information. An EMPTY field is indistinguishable from an
+          // unfilled infobox (it un-gated Therapist quests that the game
+          // still chains), a "#section" link (Collector's kappa list) and a
+          // fully unresolvable set can't be interpreted as a task list -
+          // in all those cases keep the API's chain.
           const sectionLink = page.previous.some((n) => n.includes('#'));
           const reqs = sectionLink ? [] : resolvePrereqs(page.previous, quest.name);
-          const uninterpretable =
-            sectionLink || (page.previous.length > 0 && reqs.length === 0);
+          const uninterpretable = sectionLink || reqs.length === 0;
           if (!uninterpretable) {
             const before = task.taskRequirements.map((r) => r.taskId).sort().join();
             const after = reqs.map((r) => r.taskId).sort().join();

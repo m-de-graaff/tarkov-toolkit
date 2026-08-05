@@ -45,6 +45,34 @@ describe('isAvailable', () => {
     ).toBe(false);
   });
 
+  it("gates 'active'-status requirements on the prereq being obtainable", () => {
+    // Postman Pat - Part 2 requires Part 1 "active"; while Part 1 sits
+    // behind trader LL2 the game shows neither
+    const part1 = {
+      ...tHighLevel,
+      id: 'pp1',
+      minPlayerLevel: 1,
+      loyaltyLevel: 2,
+      taskRequirements: [],
+    };
+    const part2 = {
+      ...tHighLevel,
+      id: 'pp2',
+      minPlayerLevel: 1,
+      taskRequirements: [{ taskId: 'pp1', status: ['active'] }],
+    };
+    const byId = new Map([['pp1', part1], ['pp2', part2]]);
+    const traderName = tHighLevel.trader.name;
+    expect(isAvailable(part2, tracker(), byId)).toBe(false);
+    expect(
+      isAvailable(part2, tracker({ traderLoyalty: { [traderName]: 2 } }), byId),
+    ).toBe(true);
+    expect(isAvailable(part2, tracker({ completedTaskIds: ['pp1'] }), byId)).toBe(true);
+    // unknown prereq ids stay lenient (dropped/renamed tasks)
+    const dangling = { ...part2, id: 'pp3', taskRequirements: [{ taskId: 'gone', status: ['active'] }] };
+    expect(isAvailable(dangling, tracker(), byId)).toBe(true);
+  });
+
   it('treats a mangled factionName as open to both factions', () => {
     // the 2026-08 snapshots shipped 'Any' blind-translated into 'any target',
     // which made every common quest disappear for USEC/BEAR trackers

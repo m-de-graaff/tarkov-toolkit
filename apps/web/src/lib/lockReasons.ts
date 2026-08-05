@@ -1,6 +1,6 @@
 import type { RpTask } from '@raidplanner/data';
 import type { TrackerState } from './availability';
-import { storyChapterSlug, traderLoyaltyOf } from './availability';
+import { requirementSatisfied, storyChapterSlug, traderLoyaltyOf } from './availability';
 
 /**
  * Why a quest is locked, as short human strings ("Lv 15", "after Only
@@ -36,7 +36,7 @@ export function lockReasons(
     reasons.push(`${taskFaction} only`);
   }
   const missing = task.taskRequirements.filter(
-    (req) => req.status.includes('complete') && !tracker.completedTaskIds.includes(req.taskId),
+    (req) => !requirementSatisfied(req, tracker, byId, new Set([task.id])),
   );
   for (const req of missing.slice(0, 2)) {
     reasons.push(`after ${byId.get(req.taskId)?.name ?? 'an earlier quest'}`);

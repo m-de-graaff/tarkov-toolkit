@@ -146,7 +146,9 @@ const task = (id, name, extra = {}) => ({
 });
 {
   const tasks = [
-    task('t1', 'Debut'),
+    task('t1', 'Debut', {
+      taskRequirements: [{ taskId: 't3', status: ['complete'] }],
+    }),
     task('t2', 'Removed Quest'),
     task('t3', 'Kept Daily'),
     task('t4', 'Zone Quest [PVP ZONE]'),
@@ -185,6 +187,10 @@ const task = (id, name, extra = {}) => ({
   });
   const byId = new Map(synced.map((t) => [t.id, t]));
   check(byId.get('t1')?.experience === 3000, 'matched task adopts wiki EXP');
+  check(
+    byId.get('t1')?.taskRequirements.length === 1,
+    'an EMPTY wiki previous field keeps the API prerequisite chain',
+  );
   check(byId.get('t1')?.minPlayerLevel === 1, 'no level line -> loyalty-gated -> level 1');
   check(byId.get('t1')?.kappaRequired === true, 'kappa adopted');
   check(!byId.has('t2'), 'quest gone from the wiki is dropped');

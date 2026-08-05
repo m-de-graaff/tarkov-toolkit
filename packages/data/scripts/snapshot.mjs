@@ -297,7 +297,7 @@ function buildTasks(rawTasks, traderNames, idRemap) {
 // player level (apiLevels holds the pre-sync values - the wiki sync pass
 // rewrites minPlayerLevel, which must not count as the API catching up).
 // Returns what happened per entry for the drift report.
-async function applyManualOverrides(tasks, apiLevels) {
+async function applyManualOverrides(tasks, apiLevels, apiReqs) {
   const { overrides } = JSON.parse(
     await readFile(path.join(dataRoot, 'manual', 'task-overrides.json'), 'utf8'),
   );
@@ -311,7 +311,16 @@ async function applyManualOverrides(tasks, apiLevels) {
       continue;
     }
     const apiLevel = apiLevels.get(entry.id) ?? task.minPlayerLevel;
-    if (apiLevel <= entry.retireWhenApiMinPlayerLevelAtMost) {
+    // Two catch-up signals: the API lowering the player level, or (for
+    // prerequisite fixes) the API changing the stale chain the entry
+    // corrects - either means upstream ingested the patch data.
+    const levelCaughtUp =
+      entry.retireWhenApiMinPlayerLevelAtMost !== undefined &&
+      apiLevel <= entry.retireWhenApiMinPlayerLevelAtMost;
+    const reqsCaughtUp =
+      entry.retireWhenApiTaskRequirementsChangeFrom !== undefined &&
+      (apiReqs.get(entry.id) ?? '') !== entry.retireWhenApiTaskRequirementsChangeFrom;
+    if (levelCaughtUp || reqsCaughtUp) {
       console.log(
         `  override for "${task.name}" retired - the API caught up, delete it from task-overrides.json`,
       );
@@ -474,9 +483,15 @@ async function main() {
   }));
   tasks.push(...pveOnlyTasks);
 
-  // The raw API levels decide when a manual override retires; captured
+  // The raw API values decide when a manual override retires; captured
   // before any wiki pass rewrites them.
   const apiLevels = new Map(tasks.map((t) => [t.id, t.minPlayerLevel]));
+  const apiReqs = new Map(
+    tasks.map((t) => [
+      t.id,
+      t.taskRequirements.map((r) => r.taskId).sort().join(','),
+    ]),
+  );
 
   // Game patches rename quests and tarkov.dev lags; the wiki has the
   // in-game names within hours and leaves redirects from the old titles.
@@ -517,7 +532,7 @@ async function main() {
   }
 
   console.log('Applying manual task overrides...');
-  const overrideOutcome = await applyManualOverrides(tasks, apiLevels);
+  const overrideOutcome = await applyManualOverrides(tasks, apiLevels, apiReqs);
 
   await mkdir(generatedDir, { recursive: true });
   await writeFile(
