@@ -9,7 +9,7 @@ not production-hardened: concrete data-loss paths, no error boundary/404, `api/`
 outside the workspace (never type-checked in CI), no rate limiting, and two
 real security issues in the companion watcher.
 
-## Slice 1 — Data persistence & sync integrity  ✦ IN PROGRESS
+## Slice 1 — Data persistence & sync integrity  ✅ DONE (PR: feat/data-persistence-hardening)
 Plan: `2026-08-05-data-persistence-hardening.md`
 
 - Sign-in on a shared browser merges the previous user's progress into the new

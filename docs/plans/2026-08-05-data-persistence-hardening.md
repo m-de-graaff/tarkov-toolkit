@@ -43,12 +43,12 @@ vitest 2 + jsdom 30, `fake-indexeddb` (new devDep, tests only).
 - Produces: `isValidPersistedJson(value: string | null): boolean` — exported
   for reuse by Task 2's mirror logic.
 
-- [ ] **Step 1: Write the failing test** (`safeStorage.test.ts`, jsdom env):
+- [x] **Step 1: Write the failing test** (`safeStorage.test.ts`, jsdom env):
   getItem returns stored value; returns null when value is `'{invalid'`;
   setItem does not throw when the underlying `Storage.setItem` throws a
   `QuotaExceededError` (spy via `vi.spyOn(Storage.prototype, 'setItem')`).
-- [ ] **Step 2: Run, confirm fail** — `vitest run src/lib/safeStorage.test.ts`.
-- [ ] **Step 3: Implement** `safeStorage.ts`:
+- [x] **Step 2: Run, confirm fail** — `vitest run src/lib/safeStorage.test.ts`.
+- [x] **Step 3: Implement** `safeStorage.ts`:
 
 ```ts
 import type { StateStorage } from 'zustand/middleware';
@@ -74,10 +74,10 @@ export const safeLocalStorage: StateStorage = {
 };
 ```
 
-- [ ] **Step 4: Wire into the store** (`store.ts` persist options):
+- [x] **Step 4: Wire into the store** (`store.ts` persist options):
   `storage: createJSONStorage(() => safeLocalStorage)` (import
   `createJSONStorage` from `zustand/middleware`).
-- [ ] **Step 5: Run tests green, run full web suite, commit.**
+- [x] **Step 5: Run tests green, run full web suite, commit.**
 
 ### Task 2: Mirror hardening (restore on corrupt value; never flush garbage; flush on pagehide)
 
@@ -101,14 +101,14 @@ Behaviour changes:
    `visibilitychange` (only when `document.visibilityState === 'hidden'`) —
    mobile browsers reliably fire these, not beforeunload.
 
-- [ ] **Step 1: Failing tests** — with fake-indexeddb: (a) corrupt localStorage
+- [x] **Step 1: Failing tests** — with fake-indexeddb: (a) corrupt localStorage
   + valid mirror → restore overwrites the corrupt value; (b) valid localStorage
   → mirror untouched; (c) corrupt mirror value → not restored; (d) flush with
   corrupt localStorage does not overwrite a good mirror value; (e) pagehide
   triggers flush without waiting for the debounce.
-- [ ] **Step 2: Run, confirm fail.**
-- [ ] **Step 3: Implement** the three behaviour changes above.
-- [ ] **Step 4: Run green, full suite, commit.**
+- [x] **Step 2: Run, confirm fail.**
+- [x] **Step 3: Implement** the three behaviour changes above.
+- [x] **Step 4: Run green, full suite, commit.**
 
 ### Task 3: Cross-tab rehydration
 
@@ -144,11 +144,11 @@ export function startCrossTabSync(rehydrate: () => void): () => void {
 In `main.tsx`:
 `startCrossTabSync(() => void usePlanner.persist.rehydrate());`
 
-- [ ] **Step 1: Failing test** — dispatch
+- [x] **Step 1: Failing test** — dispatch
   `new StorageEvent('storage', { key: PROGRESS_KEY, newValue: '{}' })`; assert
   rehydrate spy called once after the debounce (fake timers); assert other keys
   and null newValue are ignored; assert cleanup removes the listener.
-- [ ] **Step 2: Run fail → implement → run green, full suite, commit** (small
+- [x] **Step 2: Run fail → implement → run green, full suite, commit** (small
   task; collapse the cycle).
 
 ### Task 4: Account identity guard + AUTH_ENABLED env fix
@@ -181,12 +181,12 @@ In `main.tsx`:
   `usePlanner.setState(...)` with it, then `setLastSyncUserId(userId)` before
   the initial push.
 
-- [ ] **Step 1: Failing tests** for `resolveSignInState` (same user merges;
+- [x] **Step 1: Failing tests** for `resolveSignInState` (same user merges;
   first sign-in merges; different user with remote adopts remote verbatim;
   different user without remote gets fresh state) and for the `AUTH_ENABLED`
   coercion cases (`'false'`, `''`, `undefined` → false; `'true'`, `'1'` → true)
   — test the regexp via an exported helper `parseAuthEnabled(v: unknown)`.
-- [ ] **Step 2: Run fail → implement → run green, full suite, commit.**
+- [x] **Step 2: Run fail → implement → run green, full suite, commit.**
 
 ### Task 5: Resilient push pipeline + remote version guard
 
@@ -221,16 +221,16 @@ In `main.tsx`:
      debounce or unsent change fires `pushProgress(..., { keepalive: true })`
      immediately.
 
-- [ ] **Step 1: Failing tests** — `normalizeSynced` fills holes; version-guard
+- [x] **Step 1: Failing tests** — `normalizeSynced` fills holes; version-guard
   path (mock fetch GET returning `{version: SYNC_VERSION + 1, ...}` → no PUT
   issued, status error); pull-window edit gets pushed after pull (fake timers);
   push failure schedules retry and `online` triggers it; hide flush uses
   keepalive.
-- [ ] **Step 2: Run fail → implement → run green, full suite.**
-- [ ] **Step 3: Update `AccountMenu.tsx:17` copy** if its "retrying" claim needs
+- [x] **Step 2: Run fail → implement → run green, full suite.**
+- [x] **Step 3: Update `AccountMenu.tsx:17` copy** if its "retrying" claim needs
   rewording — after this task the claim becomes true; verify wording matches
   behaviour.
-- [ ] **Step 4: Commit.**
+- [x] **Step 4: Commit.**
 
 ## Execution notes
 
