@@ -75,8 +75,22 @@ const navStyle = (blockedStrokeUnits: number) => `
   [id^="Swamp"][id], [id^="Swamp"][id] * { fill: #fff !important; stroke: none !important; }
 `;
 
+/** Paints ONLY stairs, for extracting per-level stair masks. */
+const stairStyle = `
+  * {
+    fill: none !important;
+    stroke: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    fill-opacity: 1 !important;
+  }
+  .stairs *, .stairs.stairs { fill: #fff !important; }
+`;
+
 export interface NavLevelGrid {
   grid: NavGrid;
+  /** cells on stairways - portals between floors */
+  stairs?: Uint8Array;
   heightRange?: [number, number];
 }
 
@@ -168,7 +182,8 @@ async function build(cal: MapCalibration): Promise<MultiNavGrid | null> {
   const style = doc.createElementNS('http://www.w3.org/2000/svg', 'style');
   // barrier strokes should land ~2 raster px wide regardless of svg scale,
   // but never thinner than 1 svg unit
-  style.textContent = navStyle(Math.max(1, 2 / scale));
+  const walkabilityStyle = navStyle(Math.max(1, 2 / scale));
+  style.textContent = walkabilityStyle;
   svg.appendChild(style);
 
   const layerDefs = (cal.layers ?? []).filter((l): l is MapLayer & { svgLayer: string } =>
@@ -179,23 +194,30 @@ async function build(cal: MapCalibration): Promise<MultiNavGrid | null> {
   );
   const groups = findLayerGroups(svg, groupNames);
 
-  const rasterLevel = async (visible: string | null): Promise<NavGrid | null> => {
+  const rasterLevel = async (visible: string | null): Promise<NavLevelGrid | null> => {
     if (groups.size > 0) applyLayerVisibility(groups, visible);
+    style.textContent = walkabilityStyle;
     const cells = await drawToCells(svg, width, height);
-    return cells ? { width, height, cells, projector } : null;
+    if (!cells) return null;
+    style.textContent = stairStyle;
+    const stairs = (await drawToCells(svg, width, height)) ?? undefined;
+    return { grid: { width, height, cells, projector }, stairs };
   };
 
   // base level: non-layer content + the ground layer group
-  const baseGrid = await rasterLevel(cal.svgLayer ?? null);
-  if (!baseGrid) return null;
-  const base: NavLevelGrid = { grid: baseGrid, heightRange: cal.heightRange };
+  const base = await rasterLevel(cal.svgLayer ?? null);
+  if (!base) return null;
+  base.heightRange = cal.heightRange;
 
   const layers: NavLevelGrid[] = [];
   if (groups.size > 0) {
     for (const def of layerDefs) {
       if (!groups.has(def.svgLayer)) continue;
-      const grid = await rasterLevel(def.svgLayer);
-      if (grid) layers.push({ grid, heightRange: def.heightRange });
+      const level = await rasterLevel(def.svgLayer);
+      if (level) {
+        level.heightRange = def.heightRange;
+        layers.push(level);
+      }
     }
   }
   return { base, layers };

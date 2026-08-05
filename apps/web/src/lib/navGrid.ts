@@ -288,6 +288,8 @@ function polylineLength(points: GamePosition[]): number {
  */
 export interface LevelGrid {
   grid: NavGrid;
+  /** cells on stairways - portals between floors (same raster dims as grid) */
+  stairs?: Uint8Array;
   /** game y range this level covers, [low, high); absent = catch-all base */
   heightRange?: [number, number];
 }
@@ -304,9 +306,12 @@ function cellsPerMeter(grid: NavGrid): number {
  * height range contains its y AND whose grid has walkable content nearby -
  * the upstream height ranges are map-wide, but a floor only exists where it
  * is drawn (terrain at "2nd floor" height far from the building is still
- * ground level). Same level = pathfind on that level's grid; different
- * levels = straight-line fallback, because stair connectivity between
- * floors is not modeled.
+ * ground level). Same level = pathfind on that level's grid. Different
+ * levels = route through a stairway: pick a stair cell that is walkable on
+ * both levels, path to it on the first floor and onward on the second
+ * (chaining through the base level when two upper floors share no stair).
+ * Only when no stair connection exists does the leg fall back to a straight
+ * line.
  */
 export function makeMultiNavigator(base: LevelGrid, layers: LevelGrid[]): Navigator {
   const navs = new Map<NavGrid, Navigator>();
@@ -328,20 +333,121 @@ export function makeMultiNavigator(base: LevelGrid, layers: LevelGrid[]): Naviga
     }
     return r;
   };
-  const gridFor = (p: GamePosition): NavGrid => {
+  const levels = [base, ...layers];
+  const levelFor = (p: GamePosition): LevelGrid => {
     for (const l of layers) {
       if (!l.heightRange) continue;
       if (p.y < l.heightRange[0] || p.y >= l.heightRange[1]) continue;
-      if (nearestWalkable(l.grid, cellOf(l.grid, p), radiusFor(l.grid))) return l.grid;
+      if (nearestWalkable(l.grid, cellOf(l.grid, p), radiusFor(l.grid))) return l;
     }
-    return base.grid;
+    return base;
   };
+
+  /**
+   * Portal cells between two levels, thinned to a manageable set. Stairways
+   * (walkable on both levels) are the real thing; maps whose SVGs tag no
+   * stairs fall back to cells walkable on both levels at the EDGE of the
+   * upper level's footprint - garage ramps and entrances live there, while
+   * interior cells merely stacked above each other do not qualify.
+   */
+  const portalCache = new Map<string, GamePosition[]>();
+  const portalsBetween = (x: LevelGrid, y: LevelGrid): GamePosition[] => {
+    const key = `${levels.indexOf(x)}:${levels.indexOf(y)}`;
+    const cached = portalCache.get(key);
+    if (cached) return cached;
+    const out: GamePosition[] = [];
+    const { width, height, cells } = x.grid;
+    if (y.grid.width === width && y.grid.height === height) {
+      let all: number[] = [];
+      for (let i = 0; i < cells.length; i++) {
+        if (!(x.stairs?.[i] || y.stairs?.[i])) continue;
+        if (!cells[i] || !y.grid.cells[i]) continue;
+        all.push(i);
+      }
+      if (all.length === 0) {
+        const upper = x === base ? y : x;
+        const ug = upper.grid;
+        for (let i = 0; i < cells.length; i++) {
+          if (!cells[i] || !y.grid.cells[i]) continue;
+          const cx = i % width;
+          const cy = (i / width) | 0;
+          let boundary = false;
+          for (let dy = -1; dy <= 1 && !boundary; dy++) {
+            for (let dx = -1; dx <= 1; dx++) {
+              if (!isWalkable(ug, cx + dx, cy + dy)) {
+                boundary = true;
+                break;
+              }
+            }
+          }
+          if (boundary) all.push(i);
+        }
+      }
+      const step = Math.max(1, all.length / 48);
+      for (let k = 0; k < all.length; k += step) {
+        const i = all[Math.floor(k)];
+        out.push(x.grid.projector.toGame(i % width, (i / width) | 0));
+      }
+    }
+    portalCache.set(key, out);
+    return out;
+  };
+
+  const joinLegs = (legsChain: NavLeg[]): NavLeg => {
+    const points = legsChain[0].points.slice();
+    let distance = legsChain[0].distance;
+    for (let i = 1; i < legsChain.length; i++) {
+      points.push(...legsChain[i].points.slice(1));
+      distance += legsChain[i].distance;
+    }
+    return { points, distance, direct: false };
+  };
+
+  /** best single stairway hop from one level to another */
+  const viaPortal = (
+    a: GamePosition,
+    la: LevelGrid,
+    b: GamePosition,
+    lb: LevelGrid,
+  ): NavLeg | null => {
+    const ports = portalsBetween(la, lb);
+    if (ports.length === 0) return null;
+    const ranked = [...ports].sort(
+      (p, q) => gameDist(a, p) + gameDist(p, b) - (gameDist(a, q) + gameDist(q, b)),
+    );
+    let best: NavLeg | null = null;
+    for (const p of ranked.slice(0, 4)) {
+      const first = navFor(la.grid).leg(a, p);
+      const second = navFor(lb.grid).leg(p, b);
+      if (first.direct && second.direct) continue;
+      const combined = joinLegs([first, second]);
+      if (!best || combined.distance < best.distance) best = combined;
+    }
+    return best;
+  };
+
   return {
     leg(a, b) {
-      const ga = gridFor(a);
-      const gb = gridFor(b);
-      if (ga !== gb) return { points: [a, b], distance: gameDist(a, b), direct: true };
-      return navFor(ga).leg(a, b);
+      const la = levelFor(a);
+      const lb = levelFor(b);
+      if (la === lb) return navFor(la.grid).leg(a, b);
+
+      const hop = viaPortal(a, la, b, lb);
+      if (hop) return hop;
+
+      // two upper floors with no shared stairway: chain through the base
+      if (la !== base && lb !== base) {
+        const down = portalsBetween(la, base);
+        if (down.length > 0) {
+          const mid = [...down].sort(
+            (p, q) => gameDist(a, p) + gameDist(p, b) - (gameDist(a, q) + gameDist(q, b)),
+          )[0];
+          const first = navFor(la.grid).leg(a, mid);
+          const rest = viaPortal(mid, base, b, lb);
+          if (rest) return joinLegs([first, rest]);
+        }
+      }
+      return { points: [a, b], distance: gameDist(a, b), direct: true };
     },
   };
 }

@@ -12,7 +12,7 @@ import {
   smoothPath,
 } from './navGrid';
 
-/** Build a grid from ascii art: '.' walkable, '#' blocked. */
+/** Build a grid from ascii art: '.' walkable, '#' blocked, 'S' walkable stair. */
 function gridFrom(rows: string[], cal?: MapCalibration): NavGrid {
   const height = rows.length;
   const width = rows[0].length;
@@ -30,6 +30,16 @@ function gridFrom(rows: string[], cal?: MapCalibration): NavGrid {
     ],
   };
   return { width, height, cells, projector: makeProjector(calibration, width, height) };
+}
+
+/** LevelGrid from ascii art; 'S' cells also land in the stair mask. */
+function levelFrom(rows: string[], heightRange?: [number, number]) {
+  const grid = gridFrom(rows);
+  const stairs = new Uint8Array(grid.cells.length);
+  rows.forEach((row, y) => {
+    for (let x = 0; x < grid.width; x++) if (row[x] === 'S') stairs[y * grid.width + x] = 1;
+  });
+  return { grid, stairs, heightRange };
 }
 
 describe('makeProjector', () => {
@@ -217,12 +227,47 @@ describe('makeMultiNavigator', () => {
     expect(ground.direct).toBe(false);
   });
 
-  it('falls back to a straight line across levels', () => {
-    const nav = makeMultiNavigator({ grid: base, heightRange: [-1, 3] }, [
-      { grid: upper, heightRange: [3, 6] },
+  it('falls back to a straight line across levels sharing no walkable overlap', () => {
+    const west = gridFrom(['..###', '..###', '..###']);
+    const east = gridFrom(['###..', '###..', '###..']);
+    const nav = makeMultiNavigator({ grid: west, heightRange: [-1, 3] }, [
+      { grid: east, heightRange: [3, 6] },
     ]);
     const cross = nav.leg({ x: 0.5, y: 0, z: -0.5 }, { x: 4.5, y: 4, z: -0.5 });
     expect(cross.direct).toBe(true);
+  });
+
+  it('connects stairless levels at footprint-boundary overlap (garage ramp)', () => {
+    // garage under the plaza: entrance where both are walkable at the garage edge
+    const plaza = levelFrom(['.....', '.....', '.....'], [0, 100]);
+    const garage = levelFrom(['##...', '#####', '#####'], [-100, 0]);
+    const nav = makeMultiNavigator(plaza, [garage]);
+    const leg = nav.leg({ x: 0.5, y: 5, z: -2.5 }, { x: 2.4, y: -5, z: -0.4 });
+    expect(leg.direct).toBe(false);
+  });
+
+  it('routes across levels through a shared stairway', () => {
+    // stair at the right end (x=4): walkable on both floors, marked S upstairs
+    const ground = levelFrom(['.....', '.....', '.....'], [-1, 3]);
+    const second = levelFrom(['####S', '#####', '#####'], [3, 6]);
+    const nav = makeMultiNavigator(ground, [second]);
+    // from ground far left to the upper stair landing
+    const leg = nav.leg({ x: 0.5, y: 0, z: -1.5 }, { x: 4.4, y: 4, z: -0.4 });
+    expect(leg.direct).toBe(false);
+    // must pass through the stair cell area (x near 4)
+    expect(leg.distance).toBeGreaterThan(3.5);
+    expect(leg.points.length).toBeGreaterThan(2);
+  });
+
+  it('chains through the base when two upper floors share no stair', () => {
+    const ground = levelFrom(['S...s'.replace('s', 'S'), '.....'], [-10, 0]);
+    const second = levelFrom(['S####', '#####'], [0, 5]);
+    const third = levelFrom(['####S', '#####'], [5, 10]);
+    const nav = makeMultiNavigator(ground, [second, third]);
+    const leg = nav.leg({ x: 0.4, y: 2, z: -0.4 }, { x: 4.4, y: 7, z: -0.4 });
+    expect(leg.direct).toBe(false);
+    // down at x=0, across the ground, up at x=4: longer than the euclid 4.0
+    expect(leg.distance).toBeGreaterThan(4.4);
   });
 
   it('layer height without nearby layer content resolves to the base grid', () => {
