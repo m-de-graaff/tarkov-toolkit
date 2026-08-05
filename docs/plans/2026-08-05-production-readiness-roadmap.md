@@ -69,7 +69,7 @@ states + silent catches deferred to Slice 5 pass (user WIP in those files)
 - Real tests for watcher (`package.json` test is `exit 0`); at minimum
   `compareVersions` and frame parsing.
 
-## Slice 5 — UI clarity & performance  ◑ safe subset done (prices policy, mobile nav, PWA); MarketPage items blocked on user WIP
+## Slice 5 — UI clarity & performance  ✅ DONE (prices policy, mobile nav, PWA, MarketPage states + remeasure fix; row virtualization deferred as nice-to-have)
 - Hosted app pulls ~16MB prices per mode direct from json.tarkov.dev on page
   load (`prices.ts:84-85`, no `/api/prices` rewrite in vercel.json;
   `usePrices.ts:53,56` auto-fetch + 30min refetch; `/xp` triggers too).
@@ -94,7 +94,7 @@ states + silent catches deferred to Slice 5 pass (user WIP in those files)
 - HomePage card link names (`HomePage.tsx:35-38`); MapCanvas marker labels
   reachable without hover (`MapCanvas.tsx:213-215`).
 
-## Slice 7 — Test coverage for critical paths
+## Slice 7 — Test coverage for critical paths  ✅ DONE (sync, storage, api, watcher, routes, proxy covered across slices)
 - useProgressSync orchestration (pull race, retry, status), pullProgress /
   pushProgress HTTP behaviour (204/401/503).
 - storage.ts mirror restore/flush incl. corrupt-blob path.

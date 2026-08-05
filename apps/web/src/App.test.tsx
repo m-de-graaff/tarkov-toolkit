@@ -27,6 +27,18 @@ describe('App', () => {
     container.remove();
   });
 
+  it('every route mounts with visible content and the nav intact', () => {
+    const routes = ['/', '/planner', '/progress', '/hideout', '/items', '/ammo', '/market', '/xp'];
+    for (const path of routes) {
+      window.history.pushState({}, '', path);
+      act(() => root.render(<App />));
+      expect(container.textContent, path).toBeTruthy();
+      expect(container.querySelector('nav'), path).toBeTruthy();
+      act(() => root.unmount());
+      root = createRoot(container);
+    }
+  });
+
   it('serves the home page at / with a working planner CTA', () => {
     window.history.pushState({}, '', '/');
     act(() => root.render(<App />));

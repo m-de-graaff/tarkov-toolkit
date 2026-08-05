@@ -81,6 +81,10 @@ export interface ColumnWidths {
 export function useColumnWidths(tableKey: string, defaults: number[]): ColumnWidths {
   const [saved, setSaved] = useState(() => load(tableKey, defaults));
   const dragRef = useRef<{ index: number; startX: number; startWidth: number } | null>(null);
+  // callers pass array literals; a ref keeps reset() stable without a
+  // new-identity dep churning the callback every render
+  const defaultsRef = useRef(defaults);
+  defaultsRef.current = defaults;
 
   const persist = useCallback(
     (next: Saved) => {
@@ -173,8 +177,7 @@ export function useColumnWidths(tableKey: string, defaults: number[]): ColumnWid
     } catch {
       /* best-effort */
     }
-    setSaved({ w: defaults, manual: false });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setSaved({ w: defaultsRef.current, manual: false });
   }, [tableKey]);
 
   return { widths: saved.w, manual: saved.manual, startDrag, autoFit, nudge, fitAll, reset };

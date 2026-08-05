@@ -10,18 +10,11 @@
 //   UPSTREAM           source base url (default https://json.tarkov.dev)
 import { createServer } from 'node:http';
 import { gzipSync, gunzipSync } from 'node:zlib';
+import { resolvePricePath } from './routes.mjs';
 
 const PORT = Number(process.env.PORT ?? 8787);
 const TTL = Number(process.env.PRICE_TTL_SECONDS ?? 600);
 const UPSTREAM = process.env.UPSTREAM ?? 'https://json.tarkov.dev';
-
-/** exact allow-list: this proxy serves price payloads and nothing else */
-const ALLOWED = new Set([
-  'regular/items',
-  'regular/items_en',
-  'pve/items',
-  'pve/items_en',
-]);
 
 // --- cache backends --------------------------------------------------------
 
@@ -87,9 +80,8 @@ const server = createServer(async (req, res) => {
     res.writeHead(200, { 'content-type': 'text/plain' }).end('ok');
     return;
   }
-  // accept both /regular/items and /prices/regular/items
-  const path = url.pathname.replace(/^\/(prices\/)?/, '');
-  if (req.method !== 'GET' || !ALLOWED.has(path)) {
+  const path = resolvePricePath(url.pathname);
+  if (req.method !== 'GET' || path === null) {
     res.writeHead(404, { 'content-type': 'text/plain' }).end('not found');
     return;
   }
