@@ -107,9 +107,13 @@ export interface RpTaskRequirement {
 export type GameMode = 'pvp' | 'pve';
 
 export interface RpTask {
+  /** API id, or "wiki-<slug>" for quests synthesized from the wiki catalog */
   id: string;
   name: string;
   normalizedName: string;
+  /** true when the quest exists on the wiki but tarkov.dev does not serve it
+   * yet; such tasks vanish automatically once the API catches up */
+  wikiOnly?: boolean;
   /** which game modes this quest exists in */
   modes: GameMode[];
   trader: { id: string; name: string };

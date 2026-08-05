@@ -1,0 +1,4 @@
+{
+  "comment": "Config for the wiki catalog sync (wikiSync.mjs). keepDespiteWikiAbsence lists task ids or exact task names that must stay in the snapshot even though the wiki's Quests tables do not list them - operational/daily tasks and event quests. Everything else missing from the wiki tables is treated as removed from the game and dropped (recorded in generated/wiki-drift.json).",
+  "keepDespiteWikiAbsence": []
+}

@@ -23,6 +23,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm snapshot
+      - name: Wiki drift summary
+        run: node packages/data/scripts/drift-summary.mjs >> "$GITHUB_STEP_SUMMARY"
       - run: pnpm --filter @raidplanner/data test
       - run: pnpm build
       - name: Commit and push if changed
