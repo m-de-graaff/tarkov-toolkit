@@ -165,7 +165,10 @@ export function ProgressPage() {
   const totalCompleted = tracker.completedTaskIds.filter((id) =>
     modeSnapshot.tasks.some((t) => t.id === id),
   ).length;
-  const progressPct = Math.round((totalCompleted / modeSnapshot.tasks.length) * 100);
+  const progressPct =
+    modeSnapshot.tasks.length === 0
+      ? 0
+      : Math.round((totalCompleted / modeSnapshot.tasks.length) * 100);
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto">
@@ -189,7 +192,7 @@ export function ProgressPage() {
               min={1}
               max={79}
               value={tracker.level}
-              onChange={(e) => setLevel(Number(e.target.value) || 1)}
+              onChange={(e) => setLevel(Math.min(79, Math.max(1, Number(e.target.value) || 1)))}
               className="h-9 w-24 tabular-nums"
             />
           </label>
