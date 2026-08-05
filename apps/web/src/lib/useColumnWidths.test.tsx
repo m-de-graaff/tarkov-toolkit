@@ -42,7 +42,7 @@ describe('column drag resize', () => {
 
   it('dragging the grip changes the column width', () => {
     act(() => root.render(<Harness />));
-    const grip = container.querySelectorAll('th span[title*="Drag to resize"]')[0]!;
+    const grip = container.querySelectorAll('th span[role="separator"]')[0]!;
 
     act(() => {
       grip.dispatchEvent(
@@ -59,5 +59,22 @@ describe('column drag resize', () => {
     const widths = container.querySelector('table')!.dataset.widths!.split(',').map(Number);
     expect(widths[0]).toBe(160); // 100 + 60px drag
     expect(widths[1]).toBe(200);
+  });
+
+  it('the grip is keyboard-operable: arrow keys resize', () => {
+    act(() => root.render(<Harness />));
+    const grip = container.querySelectorAll<HTMLElement>('th span[role="separator"]')[0]!;
+    expect(grip.tabIndex).toBe(0);
+
+    const widths = () =>
+      container.querySelector('table')!.dataset.widths!.split(',').map(Number);
+    act(() => {
+      grip.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+    });
+    expect(widths()[0]).toBe(116); // 100 + 16px step
+    act(() => {
+      grip.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }));
+    });
+    expect(widths()[0]).toBe(100);
   });
 });
