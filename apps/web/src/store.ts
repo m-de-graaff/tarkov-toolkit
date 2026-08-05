@@ -11,7 +11,7 @@ export type SpawnChoice =
   | { kind: 'custom'; position: GamePosition };
 
 const freshTracker = (): TrackerState => ({
-  level: 15,
+  level: 1,
   faction: 'Any',
   completedTaskIds: [],
   hideoutLevels: {},
@@ -33,6 +33,11 @@ interface PlannerState {
   profiles: Partial<Record<GameMode, TrackerState>>;
   search: string;
   liveFix: LiveFix | null;
+  /**
+   * A map click while live outranks the fix until the next screenshot: the
+   * player wants to plan from somewhere they aren't standing yet.
+   */
+  spawnOverridesLive: boolean;
   /** last companion automation event, for the toolbar status line */
   lastAutoEvent: string | null;
   setLiveFix(f: LiveFix | null): void;
@@ -70,8 +75,11 @@ export const usePlanner = create<PlannerState>()(
       profiles: {},
       search: '',
       liveFix: null,
+      spawnOverridesLive: false,
       lastAutoEvent: null,
-      setLiveFix: (liveFix) => set({ liveFix }),
+      // a fresh fix (new screenshot) reclaims the route origin from a manual click
+      setLiveFix: (liveFix) =>
+        set((s) => ({ liveFix, spawnOverridesLive: liveFix ? false : s.spawnOverridesLive })),
       applyLogEvent: (event) =>
         set((s) => {
           if (event.type === 'map') {
@@ -83,7 +91,7 @@ export const usePlanner = create<PlannerState>()(
             return {
               lastAutoEvent: `Raid detected: ${map.name}`,
               ...(changed
-                ? { selectedMapId: map.id, selectedTaskIds: [], spawn: null }
+                ? { selectedMapId: map.id, selectedTaskIds: [], spawn: null, spawnOverridesLive: false }
                 : {}),
             };
           }
@@ -111,7 +119,13 @@ export const usePlanner = create<PlannerState>()(
           };
         }),
       selectMap: (id) =>
-        set({ selectedMapId: id, selectedTaskIds: [], spawn: null, targetExtractId: null }),
+        set({
+          selectedMapId: id,
+          selectedTaskIds: [],
+          spawn: null,
+          spawnOverridesLive: false,
+          targetExtractId: null,
+        }),
       toggleTask: (id) =>
         set((s) => ({
           selectedTaskIds: s.selectedTaskIds.includes(id)
@@ -119,7 +133,7 @@ export const usePlanner = create<PlannerState>()(
             : [...s.selectedTaskIds, id],
         })),
       clearTasks: () => set({ selectedTaskIds: [] }),
-      setSpawn: (spawn) => set({ spawn }),
+      setSpawn: (spawn) => set({ spawn, spawnOverridesLive: spawn !== null }),
       setLevel: (level) => set((s) => ({ tracker: { ...s.tracker, level } })),
       setFaction: (faction) => set((s) => ({ tracker: { ...s.tracker, faction } })),
       toggleCompleted: (taskId) =>

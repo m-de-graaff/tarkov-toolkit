@@ -38,7 +38,7 @@ describe('planner store', () => {
   it('has sensible tracker defaults', () => {
     const { tracker } = usePlanner.getState();
     expect(tracker).toEqual({
-      level: 15,
+      level: 1,
       faction: 'Any',
       completedTaskIds: [],
       hideoutLevels: {},
@@ -51,7 +51,7 @@ describe('planner store', () => {
     usePlanner.getState().toggleCompleted('t-pvp-quest');
 
     usePlanner.getState().setGameMode('pve');
-    expect(usePlanner.getState().tracker.level).toBe(15); // fresh profile
+    expect(usePlanner.getState().tracker.level).toBe(1); // fresh profile
     expect(usePlanner.getState().tracker.completedTaskIds).toEqual([]);
     usePlanner.getState().setLevel(7);
 

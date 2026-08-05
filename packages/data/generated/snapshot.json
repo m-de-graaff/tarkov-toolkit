@@ -15902,7 +15902,8 @@
       "heightRange": [
        3,
        10000
-      ]
+      ],
+      "navFile": "the-lab-layer0.png"
      },
      {
       "name": "Technical",
@@ -15910,9 +15911,11 @@
       "heightRange": [
        -10000,
        -0.9
-      ]
+      ],
+      "navFile": "the-lab-layer1.png"
      }
-    ]
+    ],
+    "navFile": "the-lab.png"
    },
    "spawns": [
     {
@@ -18731,7 +18734,8 @@
      "tileSize": 256,
      "minZoom": 1,
      "maxZoom": 6
-    }
+    },
+    "navFile": "the-labyrinth.png"
    },
    "spawns": [
     {
@@ -18895,7 +18899,8 @@
       "heightRange": [
        18.92,
        19.56
-      ]
+      ],
+      "navFile": "icebreaker-layer0.png"
      },
      {
       "name": "Helipad",
@@ -18903,7 +18908,8 @@
       "heightRange": [
        19.57,
        22.1
-      ]
+      ],
+      "navFile": "icebreaker-layer1.png"
      },
      {
       "name": "Gym/Canteen",
@@ -18911,7 +18917,8 @@
       "heightRange": [
        22.2,
        25.2
-      ]
+      ],
+      "navFile": "icebreaker-layer2.png"
      },
      {
       "name": "Accommodation (lower)",
@@ -18919,7 +18926,8 @@
       "heightRange": [
        25.3,
        28.2
-      ]
+      ],
+      "navFile": "icebreaker-layer3.png"
      },
      {
       "name": "Accommodation (mid)",
@@ -18927,7 +18935,8 @@
       "heightRange": [
        28.3,
        31.3
-      ]
+      ],
+      "navFile": "icebreaker-layer4.png"
      },
      {
       "name": "Accommodation (upper)",
@@ -18935,7 +18944,8 @@
       "heightRange": [
        31.4,
        34.4
-      ]
+      ],
+      "navFile": "icebreaker-layer5.png"
      },
      {
       "name": "Officers' Deck",
@@ -18943,7 +18953,8 @@
       "heightRange": [
        34.5,
        37.5
-      ]
+      ],
+      "navFile": "icebreaker-layer6.png"
      },
      {
       "name": "Stairs (blocked)",
@@ -18951,7 +18962,8 @@
       "heightRange": [
        37.6,
        40.6
-      ]
+      ],
+      "navFile": "icebreaker-layer7.png"
      },
      {
       "name": "Bridge",
@@ -18959,7 +18971,8 @@
       "heightRange": [
        40.7,
        43.7
-      ]
+      ],
+      "navFile": "icebreaker-layer8.png"
      },
      {
       "name": "Bridge Roof",
@@ -18967,7 +18980,8 @@
       "heightRange": [
        43.8,
        10000
-      ]
+      ],
+      "navFile": "icebreaker-layer9.png"
      },
      {
       "name": "Control Room",
@@ -18975,7 +18989,8 @@
       "heightRange": [
        -10000,
        3.5
-      ]
+      ],
+      "navFile": "icebreaker-layer10.png"
      },
      {
       "name": "Engine Room",
@@ -18983,7 +18998,8 @@
       "heightRange": [
        3.6,
        5.6
-      ]
+      ],
+      "navFile": "icebreaker-layer11.png"
      },
      {
       "name": "Engine Room (upper)",
@@ -18991,7 +19007,8 @@
       "heightRange": [
        5.7,
        8.7
-      ]
+      ],
+      "navFile": "icebreaker-layer12.png"
      },
      {
       "name": "Fuel Pumps (lower)",
@@ -18999,7 +19016,8 @@
       "heightRange": [
        8.8,
        11.8
-      ]
+      ],
+      "navFile": "icebreaker-layer13.png"
      },
      {
       "name": "Fuel Pumps",
@@ -19007,7 +19025,8 @@
       "heightRange": [
        11.9,
        14.9
-      ]
+      ],
+      "navFile": "icebreaker-layer14.png"
      },
      {
       "name": "Storage/Security",
@@ -19015,9 +19034,11 @@
       "heightRange": [
        15,
        18.93
-      ]
+      ],
+      "navFile": "icebreaker-layer15.png"
      }
-    ]
+    ],
+    "navFile": "icebreaker.png"
    },
    "spawns": [
     {

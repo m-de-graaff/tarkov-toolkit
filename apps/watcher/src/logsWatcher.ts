@@ -2,9 +2,15 @@
 // Log locations and event semantics ported from the-hideout/TarkovMonitor (MIT).
 import { spawnSync } from 'node:child_process';
 import { closeSync, existsSync, openSync, readSync, statSync } from 'node:fs';
-import { readdir } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
-import { LogEventParser, type LogEvent } from '@raidplanner/live';
+import {
+  isGameLogFile,
+  lastMapEvent,
+  LogEventParser,
+  sessionFolderTime,
+  type LogEvent,
+} from '@raidplanner/live';
 
 const REGISTRY_PATHS = [
   'HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\EscapeFromTarkov',
@@ -51,13 +57,16 @@ export function startLogsWatcher(
 ): () => void {
   const tails = new Map<string, TailedFile>();
   let currentFolder: string | null = null;
+  let firstAttach = true;
 
   const poll = async () => {
     try {
+      // Folder names don't zero-pad hours, so sort by parsed timestamp -
+      // lexicographic order ranks a 3 AM session after a 7 PM one.
       const folders = (await readdir(logsDir, { withFileTypes: true }))
         .filter((d) => d.isDirectory())
         .map((d) => d.name)
-        .sort();
+        .sort((a, b) => sessionFolderTime(a) - sessionFolderTime(b));
       const newest = folders.at(-1);
       if (!newest) return;
       const folderPath = path.join(logsDir, newest);
@@ -67,16 +76,18 @@ export function startLogsWatcher(
         console.log(`Watching game logs: ${folderPath}`);
       }
 
-      const files = (await readdir(folderPath)).filter(
-        (f) =>
-          (f.includes('application.log') || f.includes('notifications.log')) &&
-          !f.endsWith('.zip'),
-      );
+      const files = (await readdir(folderPath)).filter(isGameLogFile);
       for (const file of files) {
         const filePath = path.join(folderPath, file);
         let tail = tails.get(filePath);
         if (!tail) {
-          // start at the end: only NEW events count
+          // start at the end: only NEW events count. But when the watcher
+          // itself just started, the session may already be mid-raid - replay
+          // the newest map load (idempotent) so the web app catches up.
+          if (firstAttach) {
+            const replay = lastMapEvent(await readFile(filePath, 'utf8'));
+            if (replay) onEvent(replay);
+          }
           tail = { path: filePath, offset: statSync(filePath).size, parser: new LogEventParser() };
           tails.set(filePath, tail);
         }
@@ -93,6 +104,7 @@ export function startLogsWatcher(
           closeSync(fd);
         }
       }
+      firstAttach = false;
     } catch {
       /* transient FS errors - next poll retries */
     }
