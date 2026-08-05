@@ -57,6 +57,24 @@ export function sessionFolderTime(folderName: string): number {
   return Date.UTC(Number(y), Number(mo) - 1, Number(d), Number(h), Number(mi), Number(s));
 }
 
+/**
+ * The game version a session folder was recorded on
+ * ("log_2026.08.04_0-12-19_1.1.0.0.46624" -> "1.1.0.0.46624"). Wipes ship
+ * with version bumps, so quest completions are only trustworthy within the
+ * current version. Null for legacy names without a version suffix.
+ */
+export function sessionFolderVersion(folderName: string): string | null {
+  const m = /^log_\d{4}\.\d{2}\.\d{2}_\d{1,2}-\d{2}-\d{2}_(.+)$/.exec(folderName);
+  return m?.[1] ?? null;
+}
+
+/** Every quest completion in existing content, for replaying history. */
+export function finishedTaskEvents(content: string): LogEvent[] {
+  return new LogEventParser()
+    .push(content)
+    .filter((e) => e.type === 'task' && e.status === 'finished');
+}
+
 /** The last map the session loaded, for catching up when tailing starts mid-raid. */
 export function lastMapEvent(content: string): LogEvent | null {
   let last: LogEvent | null = null;

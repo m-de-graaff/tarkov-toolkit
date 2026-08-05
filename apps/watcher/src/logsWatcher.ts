@@ -5,10 +5,13 @@ import { closeSync, existsSync, openSync, readSync, statSync } from 'node:fs';
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import {
+  finishedTaskEvents,
   isGameLogFile,
+  isNotificationsLog,
   lastMapEvent,
   LogEventParser,
   sessionFolderTime,
+  sessionFolderVersion,
   type LogEvent,
 } from '@raidplanner/live';
 
@@ -43,6 +46,52 @@ interface TailedFile {
   path: string;
   offset: number;
   parser: LogEventParser;
+}
+
+/**
+ * Quest completions from every session of the CURRENT game version, deduped
+ * by task id and in chronological order. Replayed to connecting web apps so
+ * quests finished while no browser tab was open still get ticked. Older
+ * versions are excluded on purpose: wipes ship with version bumps, and
+ * replaying a pre-wipe completion would tick quests the current profile
+ * never finished.
+ */
+export async function collectQuestHistory(logsDir: string): Promise<LogEvent[]> {
+  const history: LogEvent[] = [];
+  const seen = new Set<string>();
+  try {
+    const folders = (await readdir(logsDir, { withFileTypes: true }))
+      .filter((d) => d.isDirectory())
+      .map((d) => d.name)
+      .sort((a, b) => sessionFolderTime(a) - sessionFolderTime(b));
+    const newest = folders.at(-1);
+    if (!newest) return history;
+    const version = sessionFolderVersion(newest);
+    for (const folder of folders) {
+      if (sessionFolderVersion(folder) !== version) continue;
+      const folderPath = path.join(logsDir, folder);
+      let files: string[];
+      try {
+        files = (await readdir(folderPath)).filter(isNotificationsLog);
+      } catch {
+        continue;
+      }
+      for (const file of files) {
+        try {
+          for (const event of finishedTaskEvents(await readFile(path.join(folderPath, file), 'utf8'))) {
+            if (event.type !== 'task' || seen.has(event.taskId)) continue;
+            seen.add(event.taskId);
+            history.push(event);
+          }
+        } catch {
+          /* unreadable file - skip */
+        }
+      }
+    }
+  } catch {
+    /* logs dir briefly unavailable - backfill just stays empty */
+  }
+  return history;
 }
 
 /**
