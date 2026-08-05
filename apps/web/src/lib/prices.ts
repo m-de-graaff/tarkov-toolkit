@@ -7,7 +7,11 @@ import type { ItemPrices } from './profit';
 const DB_NAME = 'raidplanner-prices';
 const STORE = 'prices';
 
+/** bump when ItemPriceEntry gains fields — old caches are discarded and refetched */
+export const PRICES_FORMAT_VERSION = 2;
+
 export interface CachedPrices {
+  formatVersion?: number;
   fetchedAt: number;
   prices: ItemPrices;
 }
@@ -31,6 +35,9 @@ export async function loadCachedPrices(mode: GameMode): Promise<CachedPrices | n
       request.onerror = () => reject(request.error);
     });
     db.close();
+    // caches written before a format bump lack fields the UI needs (e.g. item
+    // names) — treat them as absent so the page fetches fresh data right away
+    if (cached && cached.formatVersion !== PRICES_FORMAT_VERSION) return null;
     return cached;
   } catch {
     return null;
@@ -53,7 +60,7 @@ async function saveCachedPrices(mode: GameMode, cached: CachedPrices): Promise<v
   }
 }
 
-interface RawTraderOffer {
+export interface RawTraderOffer {
   trader: string;
   priceRUB?: number;
   minTraderLevel?: number;
@@ -61,7 +68,7 @@ interface RawTraderOffer {
   buyLimit?: number;
 }
 
-interface RawItem {
+export interface RawItem {
   id: string;
   name?: string;
   iconLink?: string;
@@ -86,10 +93,25 @@ export async function fetchPrices(mode: GameMode): Promise<CachedPrices> {
     get(`${prefix}/items`),
     get(`${prefix}/items_en`).catch(() => null),
   ]);
+  const prices = buildPrices(payload.data.items, en?.data ?? {});
+  const cached: CachedPrices = {
+    formatVersion: PRICES_FORMAT_VERSION,
+    fetchedAt: Date.now(),
+    prices,
+  };
+  await saveCachedPrices(mode, cached);
+  return cached;
+}
+
+/** pure extraction from the raw items payload — unit-testable */
+export function buildPrices(
+  itemsById: Record<string, RawItem>,
+  enDict: Record<string, string>,
+): ItemPrices {
   const translate = (key: unknown): string | undefined =>
-    typeof key === 'string' ? ((en?.data?.[key] as string | undefined) ?? undefined) : undefined;
+    typeof key === 'string' ? (enDict[key] ?? undefined) : undefined;
   const prices: ItemPrices = {};
-  for (const item of Object.values(payload.data.items) as RawItem[]) {
+  for (const item of Object.values(itemsById)) {
     let bestTraderSell = 0;
     let bestTraderSellTraderId: string | undefined;
     for (const offer of item.sellToTrader ?? []) {
@@ -119,7 +141,5 @@ export async function fetchPrices(mode: GameMode): Promise<CachedPrices> {
       ...(offers.length > 0 ? { offers } : {}),
     };
   }
-  const cached = { fetchedAt: Date.now(), prices };
-  await saveCachedPrices(mode, cached);
-  return cached;
+  return prices;
 }
