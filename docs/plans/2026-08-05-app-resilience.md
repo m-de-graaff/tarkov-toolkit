@@ -45,15 +45,15 @@ surfacing in prices.ts, exhaustive-deps fixes.
   boundary exposes `resetKey` prop; App passes the current pathname so a route
   change auto-resets the boundary (`getDerivedStateFromProps` comparison).
 
-- [ ] **Step 1: Failing test** — a child that throws renders the fallback
+- [x] **Step 1: Failing test** — a child that throws renders the fallback
   (React logs suppressed via `vi.spyOn(console, 'error')`); "Try again" resets;
   changing `resetKey` resets.
-- [ ] **Step 2: Run fail → implement → green.**
-- [ ] **Step 3: Wrap routes in App.tsx** with
+- [x] **Step 2: Run fail → implement → green.**
+- [x] **Step 3: Wrap routes in App.tsx** with
   `<ErrorBoundary resetKey={location.pathname}>` (App already has access to
   location via `useLocation` or wraps inside `BrowserRouter` — check and place
   accordingly; the nav must stay OUTSIDE the boundary).
-- [ ] **Step 4: Full suite, commit.**
+- [x] **Step 4: Full suite, commit.**
 
 ### Task 2: 404 route
 
@@ -67,9 +67,9 @@ surfacing in prices.ts, exhaustive-deps fixes.
   and links (`react-router-dom` `Link`) to Home and the Planner. Inside the
   shell so the nav is present.
 
-- [ ] **Step 1: Failing test** — render App at `/no-such-page`; expect
+- [x] **Step 1: Failing test** — render App at `/no-such-page`; expect
   "Page not found" text and a link to `/`.
-- [ ] **Step 2: Run fail → implement → green, commit.**
+- [x] **Step 2: Run fail → implement → green, commit.**
 
 ### Task 3: Boot failure fallback
 
@@ -82,10 +82,10 @@ surfacing in prices.ts, exhaustive-deps fixes.
   `#root`: "The app failed to load" + a reload `<button>`. Copy mentions the
   likely cause (connection lost / new version deployed).
 
-- [ ] **Step 1: Implement** (no test file — jsdom can't simulate a failed
+- [x] **Step 1: Implement** (no test file — jsdom can't simulate a failed
   dynamic import of the real modules meaningfully; the catch handler is
   4 lines of DOM. Verified by type-check + build).
-- [ ] **Step 2: Full suite + build, commit.**
+- [x] **Step 2: Full suite + build, commit.**
 
 ### Task 4: ProgressPage guards
 
@@ -99,6 +99,6 @@ surfacing in prices.ts, exhaustive-deps fixes.
 - Level input: clamp typed values into `[1, 79]` on change/blur
   (`Math.min(79, Math.max(1, n))`), non-numeric input leaves level unchanged.
 
-- [ ] **Step 1: Failing tests** — typing `999` in the level input yields 79;
+- [x] **Step 1: Failing tests** — typing `999` in the level input yields 79;
   typing `0` yields 1.
-- [ ] **Step 2: Run fail → implement → green, full suite, commit.**
+- [x] **Step 2: Run fail → implement → green, full suite, commit.**

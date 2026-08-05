@@ -27,7 +27,9 @@ Plan: `2026-08-05-data-persistence-hardening.md`
   payloads.
 - `VITE_AUTH_ENABLED=false` *enables* auth (`authClient.ts:6` Boolean coercion).
 
-## Slice 2 — App resilience & dead ends
+## Slice 2 — App resilience & dead ends  ✅ core done (error boundary, 404, boot
+recovery, ProgressPage guards — see `2026-08-05-app-resilience.md`); MarketPage
+states + silent catches deferred to Slice 5 pass (user WIP in those files)
 - Error boundary around the app (and around route content) with a "reload"
   affordance; no render throw may white-screen the SPA.
 - `.catch` + user-visible recovery on the boot chunk-load path (`main.tsx:9-16`
