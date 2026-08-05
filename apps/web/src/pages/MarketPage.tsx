@@ -127,10 +127,10 @@ export function MarketPage() {
   const tableRef = useRef<HTMLTableElement | null>(null);
 
   // per-tab resizable column widths (drag the header edges; double-click fits)
-  const resellCols = useColumnWidths('profit:resells', [320, 220, 110, 110, 130]);
-  const fleaCols = useColumnWidths('profit:fleaToTrader', [340, 200, 120, 120, 120]);
-  const barterCols = useColumnWidths('profit:barters', [260, 240, 170, 110, 110, 110]);
-  const craftCols = useColumnWidths('profit:crafts', [230, 210, 180, 100, 100, 100, 100]);
+  const resellCols = useColumnWidths('profit:resells', [420, 280, 140, 140, 160]);
+  const fleaCols = useColumnWidths('profit:fleaToTrader', [440, 260, 150, 150, 150]);
+  const barterCols = useColumnWidths('profit:barters', [360, 330, 210, 140, 140, 140]);
+  const craftCols = useColumnWidths('profit:crafts', [320, 290, 220, 130, 130, 130, 130]);
 
   // Prices load themselves: cache first, auto-fetch when missing or stale,
   // then keep fresh on an interval while the page is open.
@@ -249,7 +249,7 @@ export function MarketPage() {
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto">
-      <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-8">
+      <div className="mx-auto flex w-full max-w-[1700px] flex-col gap-4 px-6 py-8">
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
           <h1 className="text-lg font-semibold">Profit</h1>
           <span className="text-xs uppercase tracking-wider text-primary">{gameMode}</span>

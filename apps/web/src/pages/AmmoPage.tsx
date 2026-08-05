@@ -12,17 +12,17 @@ import { snapshot } from '@raidplanner/data';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { AmmoSortKey, Effectiveness } from '../lib/ammoSort';
-import { classEffectiveness, filterAmmo, sortAmmo, totalDamage } from '../lib/ammoSort';
+import { classEffectiveness, classRating, filterAmmo, sortAmmo, totalDamage } from '../lib/ammoSort';
 
 const ALL = '__all__';
 const calibers = [...new Set(snapshot.ammo.map((a) => a.caliber))].sort();
 
-const EFFECT_STYLE: Record<Effectiveness, { cls: string; glyph: string; label: string }> = {
-  excellent: { cls: 'bg-ok/60 text-white', glyph: '●', label: 'penetrates reliably' },
-  good: { cls: 'bg-ok/30 text-ok', glyph: '◕', label: 'penetrates well' },
-  fair: { cls: 'bg-primary/25 text-primary', glyph: '◑', label: 'inconsistent' },
-  poor: { cls: 'bg-destructive/20 text-destructive', glyph: '◔', label: 'mostly bounces' },
-  none: { cls: 'bg-secondary text-muted-foreground', glyph: '·', label: 'does not penetrate' },
+const EFFECT_STYLE: Record<Effectiveness, { cls: string; label: string }> = {
+  excellent: { cls: 'bg-ok/60 text-white', label: 'penetrates reliably' },
+  good: { cls: 'bg-ok/30 text-ok', label: 'penetrates well' },
+  fair: { cls: 'bg-primary/25 text-primary', label: 'inconsistent' },
+  poor: { cls: 'bg-destructive/20 text-destructive', label: 'mostly bounces' },
+  none: { cls: 'bg-secondary text-muted-foreground', label: 'does not penetrate' },
 };
 
 function ClassBlocks({ round }: { round: AmmoRound }) {
@@ -34,13 +34,13 @@ function ClassBlocks({ round }: { round: AmmoRound }) {
         return (
           <span
             key={armorClass}
-            title={`Class ${armorClass}: ${style.label}`}
+            title={`Class ${armorClass}: ${style.label} (${classRating(round.penetrationPower, armorClass)}/6)`}
             className={cn(
-              'flex h-6 w-7 items-center justify-center rounded-[3px] text-[11px] leading-none',
+              'flex h-6 w-7 items-center justify-center rounded-[3px] text-[11px] font-medium leading-none tabular-nums',
               style.cls,
             )}
           >
-            {style.glyph}
+            {classRating(round.penetrationPower, armorClass)}
           </span>
         );
       })}
@@ -88,8 +88,8 @@ export function AmmoPage() {
         <div>
           <h1 className="text-lg font-semibold">Ammo chart</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            The C1–C6 blocks show how each round handles armor classes 1 through 6 — solid green
-            means it goes straight through, dim means it bounces.
+            The C1–C6 blocks rate each round against armor classes 1 through 6: 6 goes straight
+            through, 0 bounces.
           </p>
         </div>
 
