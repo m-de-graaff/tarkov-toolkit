@@ -7,28 +7,57 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
+import type { AmmoRound } from '@raidplanner/data';
 import { snapshot } from '@raidplanner/data';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import type { AmmoSortKey } from '../lib/ammoSort';
-import { filterAmmo, penTier, sortAmmo, totalDamage } from '../lib/ammoSort';
+import type { AmmoSortKey, Effectiveness } from '../lib/ammoSort';
+import { classEffectiveness, filterAmmo, sortAmmo, totalDamage } from '../lib/ammoSort';
 
 const ALL = '__all__';
 const calibers = [...new Set(snapshot.ammo.map((a) => a.caliber))].sort();
 
-const TIER_CLASSES = [
-  'bg-destructive/20 text-destructive',        // 0 flesh only
-  'bg-destructive/15 text-destructive/90',
-  'bg-primary/10 text-primary/70',
-  'bg-primary/20 text-primary',
-  'bg-ok/15 text-ok',
-  'bg-ok/25 text-ok',
-  'bg-ok/40 text-ok',
-];
+const EFFECT_STYLE: Record<Effectiveness, { cls: string; glyph: string; label: string }> = {
+  excellent: { cls: 'bg-ok/60 text-white', glyph: '●', label: 'penetrates reliably' },
+  good: { cls: 'bg-ok/30 text-ok', glyph: '◕', label: 'penetrates well' },
+  fair: { cls: 'bg-primary/25 text-primary', glyph: '◑', label: 'inconsistent' },
+  poor: { cls: 'bg-destructive/20 text-destructive', glyph: '◔', label: 'mostly bounces' },
+  none: { cls: 'bg-secondary text-muted-foreground', glyph: '·', label: 'does not penetrate' },
+};
+
+function ClassBlocks({ round }: { round: AmmoRound }) {
+  return (
+    <div className="flex gap-0.5" role="img" aria-label={armorSummary(round)}>
+      {[1, 2, 3, 4, 5, 6].map((armorClass) => {
+        const effect = classEffectiveness(round.penetrationPower, armorClass);
+        const style = EFFECT_STYLE[effect];
+        return (
+          <span
+            key={armorClass}
+            title={`Class ${armorClass}: ${style.label}`}
+            className={cn(
+              'flex h-6 w-7 items-center justify-center rounded-[3px] text-[11px] leading-none',
+              style.cls,
+            )}
+          >
+            {style.glyph}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
+function armorSummary(round: AmmoRound): string {
+  const best = [6, 5, 4, 3, 2, 1].find(
+    (c) => classEffectiveness(round.penetrationPower, c) !== 'none',
+  );
+  return best ? `effective up to armor class ${best}` : 'flesh damage only';
+}
 
 const COLUMNS: { key: AmmoSortKey; label: string; title: string }[] = [
   { key: 'damage', label: 'Damage', title: 'Flesh damage (× pellets for buckshot)' },
-  { key: 'penetrationPower', label: 'Pen', title: 'Penetration power — colored by the armor class it reliably defeats' },
+  { key: 'penetrationPower', label: 'Pen', title: 'Penetration power' },
   { key: 'armorDamage', label: 'Armor dmg', title: 'Armor durability damage %' },
   { key: 'fragmentationChance', label: 'Frag', title: 'Fragmentation chance' },
   { key: 'initialSpeed', label: 'Velocity', title: 'Muzzle velocity m/s' },
@@ -55,12 +84,12 @@ export function AmmoPage() {
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto">
-      <div className="mx-auto flex max-w-4xl flex-col gap-4 px-4 py-8">
+      <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-8">
         <div>
           <h1 className="text-lg font-semibold">Ammo chart</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Pen color shows the armor class a round reliably defeats — green means it goes
-            through.
+            The C1–C6 blocks show how each round handles armor classes 1 through 6 — solid green
+            means it goes straight through, dim means it bounces.
           </p>
         </div>
 
@@ -95,8 +124,7 @@ export function AmmoPage() {
           <table className="ammo-table w-full border-collapse text-[13px]">
             <thead>
               <tr className="border-b bg-card text-left">
-                <th className="px-3 py-2 font-medium">Round</th>
-                <th className="px-3 py-2 font-medium">Caliber</th>
+                <th className="px-3 py-2 text-xs font-medium text-muted-foreground">Round</th>
                 {COLUMNS.map((col) => (
                   <th key={col.key} className="px-1 py-1">
                     <button
@@ -104,8 +132,8 @@ export function AmmoPage() {
                       onClick={() => onSort(col.key)}
                       title={col.title}
                       className={cn(
-                        'flex w-full items-center gap-1 rounded px-2 py-1 text-left font-medium hover:bg-secondary',
-                        sortKey === col.key && 'text-primary',
+                        'flex w-full items-center gap-1 whitespace-nowrap rounded px-2 py-1 text-left text-xs font-medium hover:bg-secondary',
+                        sortKey === col.key ? 'text-primary' : 'text-muted-foreground',
                       )}
                     >
                       {col.label}
@@ -118,38 +146,58 @@ export function AmmoPage() {
                     </button>
                   </th>
                 ))}
+                <th className="px-3 py-2 text-xs font-medium text-muted-foreground">
+                  <span className="flex gap-0.5">
+                    {[1, 2, 3, 4, 5, 6].map((c) => (
+                      <span key={c} className="flex h-5 w-7 items-center justify-center text-[10px]">
+                        C{c}
+                      </span>
+                    ))}
+                  </span>
+                </th>
               </tr>
             </thead>
             <tbody>
               {rounds.map((round) => (
-                <tr key={round.id} className="border-b last:border-0 hover:bg-secondary/50">
-                  <td className="px-3 py-1.5" title={round.name}>
-                    {round.shortName}
-                    {round.tracer && (
-                      <span className="ml-1.5 text-[10px] uppercase text-muted-foreground">tracer</span>
-                    )}
+                <tr key={round.id} className="border-b last:border-0 hover:bg-secondary/40">
+                  <td className="px-3 py-1.5">
+                    <span className="flex min-w-0 items-center gap-1.5">
+                      {round.iconLink && (
+                        <img
+                          src={round.iconLink}
+                          alt=""
+                          loading="lazy"
+                          className="size-6 shrink-0 rounded-sm border bg-black/40 object-contain"
+                        />
+                      )}
+                      <span className="min-w-0 truncate font-medium" title={round.name}>
+                        {round.shortName}
+                      </span>
+                      {round.tracer && (
+                        <span className="shrink-0 text-[10px] uppercase text-muted-foreground">tracer</span>
+                      )}
+                      {caliber === ALL && (
+                        <span className="shrink-0 text-xs text-muted-foreground">{round.caliber}</span>
+                      )}
+                    </span>
                   </td>
-                  <td className="px-3 py-1.5 text-muted-foreground">{round.caliber}</td>
-                  <td className="px-3 py-1.5 tabular-nums">
+                  <td className="whitespace-nowrap px-3 py-1.5 tabular-nums">
                     {totalDamage(round)}
                     {round.projectileCount > 1 && (
                       <span className="text-xs text-muted-foreground"> ({round.damage}×{round.projectileCount})</span>
                     )}
                   </td>
-                  <td className="px-1.5 py-1">
-                    <span
-                      className={cn(
-                        'inline-block min-w-10 rounded px-2 py-0.5 text-center font-medium tabular-nums',
-                        TIER_CLASSES[penTier(round.penetrationPower)],
-                      )}
-                      title={`Defeats armor class ${penTier(round.penetrationPower)}`}
-                    >
-                      {round.penetrationPower}
-                    </span>
+                  <td className="whitespace-nowrap px-3 py-1.5 font-medium tabular-nums">
+                    {round.penetrationPower}
                   </td>
-                  <td className="px-3 py-1.5 tabular-nums">{round.armorDamage}%</td>
-                  <td className="px-3 py-1.5 tabular-nums">{Math.round(round.fragmentationChance * 100)}%</td>
-                  <td className="px-3 py-1.5 tabular-nums">{round.initialSpeed} m/s</td>
+                  <td className="whitespace-nowrap px-3 py-1.5 tabular-nums">{round.armorDamage}%</td>
+                  <td className="whitespace-nowrap px-3 py-1.5 tabular-nums">
+                    {Math.round(round.fragmentationChance * 100)}%
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-1.5 tabular-nums">{round.initialSpeed}</td>
+                  <td className="px-3 py-1.5">
+                    <ClassBlocks round={round} />
+                  </td>
                 </tr>
               ))}
             </tbody>

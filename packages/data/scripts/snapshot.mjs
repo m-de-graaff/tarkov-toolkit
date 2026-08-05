@@ -251,6 +251,7 @@ function buildAmmo(itemsData) {
       id: item.id,
       name: item.name,
       shortName: item.shortName,
+      ...(item.iconLink ? { iconLink: item.iconLink } : {}),
       caliber: (item.properties.caliber ?? '').replace(/^Caliber/, ''),
       damage: item.properties.damage ?? 0,
       penetrationPower: item.properties.penetrationPower ?? 0,

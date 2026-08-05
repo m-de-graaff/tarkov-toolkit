@@ -95,6 +95,7 @@ export interface AmmoRound {
   id: string;
   name: string;
   shortName: string;
+  iconLink?: string;
   /** caliber without the "Caliber" prefix, e.g. "556x45NATO" */
   caliber: string;
   damage: number;

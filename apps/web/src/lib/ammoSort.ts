@@ -42,3 +42,19 @@ export function penTier(penetrationPower: number): 0 | 1 | 2 | 3 | 4 | 5 | 6 {
 export function totalDamage(round: AmmoRound): number {
   return round.damage * round.projectileCount;
 }
+
+export type Effectiveness = 'excellent' | 'good' | 'fair' | 'poor' | 'none';
+
+/**
+ * How reliably a round defeats a given armor class (1..6), tarkov.dev-style:
+ * each class's reference threshold is class×10 pen; margins map to tiers.
+ */
+export function classEffectiveness(penetrationPower: number, armorClass: number): Effectiveness {
+  const threshold = armorClass * 10;
+  const margin = penetrationPower - threshold;
+  if (margin >= 15) return 'excellent';
+  if (margin >= 5) return 'good';
+  if (margin >= -5) return 'fair';
+  if (margin >= -15) return 'poor';
+  return 'none';
+}
