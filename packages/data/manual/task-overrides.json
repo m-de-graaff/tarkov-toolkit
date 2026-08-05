@@ -164,6 +164,34 @@
       }
     },
     {
+      "id": "5968eb3186f7741dde183a4d",
+      "note": "'Blood in the Water': in-game (1.1.0.0 PvE, level 7, Therapist LL1, only 'First in Line' done) it is active alongside 'Operation Aquarius', so the API's chain (requires Operation Aquarius complete) is stale; the 1.1 starter set chains behind 'First in Line' only.",
+      "source": "in-game Therapist task board, 2026-08-06",
+      "retireWhenApiTaskRequirementsChangeFrom": "59689fbd86f7740d137ebfc4",
+      "set": {
+        "taskRequirements": [{ "taskId": "657315ddab5a49b71f098853", "status": ["complete"] }]
+      }
+    },
+    {
+      "id": "59689fbd86f7740d137ebfc4",
+      "note": "'Operation Aquarius': same in-game evidence - active alongside 'Shortage', so the API's chain (requires Shortage complete) is stale.",
+      "source": "in-game Therapist task board, 2026-08-06",
+      "retireWhenApiTaskRequirementsChangeFrom": "5967733e86f774602332fc84",
+      "set": {
+        "taskRequirements": [{ "taskId": "657315ddab5a49b71f098853", "status": ["complete"] }]
+      }
+    },
+    {
+      "id": "596a0e1686f7741ddf17dbee",
+      "note": "'Supply Plans': active in-game at level 7 Therapist LL1 with only 'First in Line' done; the API/wiki level 13 and the 'Pharmacist' prerequisite are both stale.",
+      "source": "in-game Therapist task board, 2026-08-06",
+      "retireWhenApiTaskRequirementsChangeFrom": "5969f9e986f7741dde183a50",
+      "set": {
+        "minPlayerLevel": 1,
+        "taskRequirements": [{ "taskId": "657315ddab5a49b71f098853", "status": ["complete"] }]
+      }
+    },
+    {
       "id": "5ae448e586f7744dcf0c2a67",
       "note": "'Big Sale': not offered on the in-game Ragman LL1 board (1.1.0.0 PvE, level 7, 2026-08-06) although the wiki documents no gate and the API prereq ('Only Business') was removed from the game. Best supported reading: LL2. Revisit when the wiki adds a requirements line.",
       "source": "https://escapefromtarkov.fandom.com/wiki/Big_Sale",

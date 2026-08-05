@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-05T23:20:52.730Z",
+ "generatedAt": "2026-08-05T23:44:48.597Z",
  "gameMode": "regular",
  "maps": [
   {
@@ -19447,7 +19447,15 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Debut",
    "experience": 3000,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "657315df034d76585f032e01",
+     "status": [
+      "complete",
+      "failed"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "5967379186f77463860dadd6",
@@ -19495,7 +19503,15 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Shortage",
    "experience": 2000,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "657315ddab5a49b71f098853",
+     "status": [
+      "complete",
+      "failed"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "5968edc086f77420d2328014",
@@ -20873,7 +20889,14 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/The_Survivalist_Path_-_Junkie",
    "experience": 5900,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5d25e2a986f77409dd5cdf2a",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "5eaaaa7c93afa0558f3b5a1f",
@@ -21947,7 +21970,7 @@
    "experience": 3300,
    "taskRequirements": [
     {
-     "taskId": "5967733e86f774602332fc84",
+     "taskId": "657315ddab5a49b71f098853",
      "status": [
       "complete"
      ]
@@ -22116,7 +22139,7 @@
    "experience": 3400,
    "taskRequirements": [
     {
-     "taskId": "59689fbd86f7740d137ebfc4",
+     "taskId": "657315ddab5a49b71f098853",
      "status": [
       "complete"
      ]
@@ -22296,7 +22319,14 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Stirrup",
    "experience": 10000,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "596b36c586f77450d6045ad2",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "5c9b5e3f86f7744aab7329b5",
@@ -22390,7 +22420,14 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Painkiller",
    "experience": 4500,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "596a204686f774576d4c95de",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "5969f98286f774576d4c9542",
@@ -23356,7 +23393,14 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Fishing_Gear",
    "experience": 4800,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5a27d2af86f7744e1115b323",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "5a3ba11786f7742c9d4f5d29",
@@ -26414,7 +26458,14 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/The_Cult_-_Part_1",
    "experience": 6200,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5a27b87686f77460de0252a8",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "5a3ba51d86f7743af1475c3a",
@@ -26469,7 +26520,14 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Spa_Tour_-_Part_3",
    "experience": 7600,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5a03173786f77451cb427172",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "5a03289686f7745dbc6c5063",
@@ -26701,7 +26759,14 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Spa_Tour_-_Part_7",
    "experience": 9700,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5a27ba9586f7741b543d8e85",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "5a28151986f77466837984c9",
@@ -27154,7 +27219,14 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Bad_Habit",
    "experience": 6700,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5ac3460c86f7742880308185",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "5ac5ee9986f7746e7a509a26",
@@ -27394,7 +27466,14 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Cargo_X_-_Part_4",
    "experience": 8600,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5a27bb5986f7741dfb660900",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "61958d54aa0f643f9a0aed73",
@@ -27439,7 +27518,14 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Broadcast_-_Part_1",
    "experience": 6700,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5ac3460c86f7742880308185",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "63ac232087413d64ae0ac23c",
@@ -27840,7 +27926,14 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/All_Is_Revealed",
    "experience": 17200,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "669fa3a1c26f13bd04030f37",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "669fb6c859bdae826f7325d4",
@@ -27893,7 +27986,14 @@
    "kappaRequired": false,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Secrets_of_Polikhim",
    "experience": 19400,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "669fa3a1c26f13bd04030f37",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "66ab97a5c74ce045d6c32578",
@@ -28025,7 +28125,14 @@
    "kappaRequired": false,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Beneath_The_Streets",
    "experience": 24000,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "6573387d0b26ed4fde798de3",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "66aba85403e0ee310104287a",
@@ -28147,7 +28254,14 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Passion_for_Ergonomics",
    "experience": 7200,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5ac3460c86f7742880308185",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "675c15916580a378dc0f012f",
@@ -28302,7 +28416,7 @@
     "name": "Therapist"
    },
    "mapId": "5704e3c2d2720bac5b8b4567",
-   "minPlayerLevel": 13,
+   "minPlayerLevel": 1,
    "loyaltyLevel": 1,
    "factionName": "Any",
    "kappaRequired": true,
@@ -28310,7 +28424,7 @@
    "experience": 7500,
    "taskRequirements": [
     {
-     "taskId": "5969f9e986f7741dde183a50",
+     "taskId": "657315ddab5a49b71f098853",
      "status": [
       "complete"
      ]
@@ -28815,7 +28929,14 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Farming_-_Part_3",
    "experience": 6500,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5ac3460c86f7742880308185",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "5ac6248586f77416781dd3a3",
@@ -30273,7 +30394,14 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Big_Sale",
    "experience": 8200,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5ae448a386f7744d3730fff0",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "5ae4508386f7741250488337",
@@ -30769,7 +30897,14 @@
    "kappaRequired": false,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/The_Door",
    "experience": 30200,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5ac346cf86f7741d63233a02",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "64ee9df4496db64f9b7a4433",
@@ -30868,7 +31003,14 @@
    "kappaRequired": false,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Steady_Signal",
    "experience": 14000,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5ac346e886f7741d6118b99b",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "6578ec473dbd035d04531a92",
@@ -31661,7 +31803,14 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Break_the_Deal",
    "experience": 11400,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5ae448bf86f7744d733e55ee",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "675c14f54662a2fae349dbb9",
@@ -33528,7 +33677,14 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/No_Place_for_Renegades",
    "experience": 15300,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5ede567cfa6dc072ce15d6e3",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "608bffeee0cc9c2d4d2ccb29",
@@ -33633,7 +33789,14 @@
    "kappaRequired": false,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Audit",
    "experience": 8700,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5ae448a386f7744d3730fff0",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "638fd070202cd55bee01ca11",
@@ -34351,7 +34514,14 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Setup",
    "experience": 21900,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5a27d2af86f7744e1115b323",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "5c1fa9c986f7740de474cb3d",
@@ -34385,7 +34555,14 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/The_Cult_-_Part_2",
    "experience": 10000,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5a27b9de86f77464e5044585",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "5a2806e086f774291b084041",
@@ -35335,7 +35512,14 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Long_Road",
    "experience": 15300,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5a27d2af86f7744e1115b323",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "6193dabd5f6468204470571f",
@@ -36703,7 +36887,14 @@
    "kappaRequired": false,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Gendarmerie_-_District_Patrol",
    "experience": 10000,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "64e7b9a4aac4cd0a726562cb",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "64e7bdd52d369a1c0172722f",
@@ -36808,7 +36999,14 @@
    "kappaRequired": false,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/No_Questions_Asked",
    "experience": 65000,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "59ca2eb686f77445a80ed049",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "68ee1cc7e8b13097f525e6f2",
@@ -37670,7 +37868,14 @@
    "kappaRequired": false,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Glory_to_CPSU_-_Part_2",
    "experience": 10100,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "639135b04ed9512be67647d7",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "64f5aac4b63b74469b6c14c7",
@@ -38672,7 +38877,14 @@
    "kappaRequired": false,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/The_Huntsman_Path_-_Crooked_Cop",
    "experience": 10000,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "639136df4b15ca31f76bc31f",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "6578eb36e5020875d64645d0",
@@ -40479,7 +40691,14 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Lend-Lease_-_Part_1",
    "experience": 17500,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5a27d2af86f7744e1115b323",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "66d078aadf338e6c13578080",
@@ -40653,7 +40872,14 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Regulated_Materials",
    "experience": 65000,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5979f8bb86f7743ec214c7a6",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "5d4bfe4b86f7744a9d4fe032",
@@ -45854,7 +46080,14 @@
    "kappaRequired": false,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Debtor",
    "experience": 13200,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5b4795fb86f7745876267770",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "63a7cd3aee7b4d0d5507baee",
@@ -47016,7 +47249,14 @@
    "kappaRequired": false,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/The_Invisible_Hand",
    "experience": 12800,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5ae448a386f7744d3730fff0",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "66696cd3997231debad40d19",
@@ -47413,7 +47653,14 @@
    "kappaRequired": false,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Irresistible",
    "experience": 32000,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5c0bdb5286f774166e38eed4",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "671a5941cb557f8656561a12",
@@ -47635,7 +47882,20 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Decontamination_Service",
    "experience": 65000,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5a68669a86f774255929b4d4",
+     "status": [
+      "complete"
+     ]
+    },
+    {
+     "taskId": "5c0be5fc86f774467a116593",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "5c1b778286f774294438b536",
@@ -47803,7 +48063,14 @@
    "kappaRequired": true,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Crisis",
    "experience": 34000,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5c0d0d5086f774363760aef2",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "60e8658571035f300c301ac6",
@@ -49159,7 +49426,15 @@
    "kappaRequired": false,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Hobby_Club",
    "experience": 21380,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "657315e4a6af4ab4b50f3459",
+     "status": [
+      "complete",
+      "active"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "68406fd3b614b3db64e6097d",
@@ -50980,7 +51255,14 @@
    "kappaRequired": false,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Night_Sweep",
    "experience": 65000,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "5edabd13218d181e29451442",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "60e82c12fd1bf4491c4e4547",
@@ -51083,7 +51365,14 @@
    "kappaRequired": false,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Booze",
    "experience": 20000,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "60e71dc0a94be721b065bbfc",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "60e73333465ea8368012cc5b",
@@ -51234,7 +51523,14 @@
    "kappaRequired": false,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/The_Courier",
    "experience": 3000,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "60e71d23c1bfa3050473b8e6",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "60e84ba726b88043510e0ad8",
@@ -51541,7 +51837,14 @@
    "kappaRequired": false,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Special_Equipment",
    "experience": 65000,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "60e71ccb5688f6424c7bfec4",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "60e7434ed1a062318d3d2260",
@@ -53571,7 +53874,15 @@
    "kappaRequired": false,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Make_Amends_-_Buyout",
    "experience": 0,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "625d700cc48e6c62a440fab5",
+     "status": [
+      "complete",
+      "failed"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "62616a9ca4eb80027c4f2e12",
@@ -58975,7 +59286,14 @@
    "kappaRequired": false,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Make_Amends_-_Security",
    "experience": 0,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "6391d90f4ed9512be67647df",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "62668b98ddc94657c21a1628",
@@ -59447,7 +59765,14 @@
    "kappaRequired": false,
    "wikiLink": "https://escapefromtarkov.fandom.com/wiki/Make_Amends_-_Software",
    "experience": 0,
-   "taskRequirements": [],
+   "taskRequirements": [
+    {
+     "taskId": "6391d912f8e5dd32bf4e3ab2",
+     "status": [
+      "complete"
+     ]
+    }
+   ],
    "objectives": [
     {
      "id": "626676e1c48e6c62a440faba",

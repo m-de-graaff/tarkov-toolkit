@@ -1,4 +1,5 @@
-import type { RpTask, Snapshot } from '@raidplanner/data';
+import type { RpTask, RpTaskRequirement, Snapshot } from '@raidplanner/data';
+import { snapshot as fullSnapshot } from '@raidplanner/data';
 
 export interface TrackerState {
   level: number;
@@ -24,9 +25,37 @@ export function storyChapterSlug(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
 
-// v1 simplification: a requirement whose status does not include 'complete'
-// (e.g. ['active']) is treated as satisfied rather than resolved recursively.
-export function isAvailable(task: RpTask, tracker: TrackerState): boolean {
+// default prerequisite index over the bundled snapshot; tests pass fixtures
+let defaultIndex: Map<string, RpTask> | null = null;
+const taskIndex = (): Map<string, RpTask> =>
+  (defaultIndex ??= new Map(fullSnapshot.tasks.map((t) => [t.id, t])));
+
+/**
+ * A requirement with 'complete' in its status needs the prereq finished. An
+ * 'active'-style requirement (no 'complete') mirrors the game: the prereq
+ * must at least be obtainable - Postman Pat - Part 2 requires Part 1
+ * "active", and while Part 1 sits behind Therapist LL2 the game shows
+ * neither. Unknown prereq ids stay lenient (dropped/renamed tasks).
+ */
+export function requirementSatisfied(
+  req: RpTaskRequirement,
+  tracker: TrackerState,
+  byId: ReadonlyMap<string, RpTask>,
+  seen: ReadonlySet<string>,
+): boolean {
+  if (tracker.completedTaskIds.includes(req.taskId)) return true;
+  if (req.status.includes('complete')) return false;
+  const prereq = byId.get(req.taskId);
+  if (!prereq || seen.has(req.taskId)) return true;
+  return isAvailable(prereq, tracker, byId, new Set([...seen, req.taskId]));
+}
+
+export function isAvailable(
+  task: RpTask,
+  tracker: TrackerState,
+  byId: ReadonlyMap<string, RpTask> = taskIndex(),
+  seen: ReadonlySet<string> = new Set([task.id]),
+): boolean {
   if (tracker.completedTaskIds.includes(task.id)) return false;
   if (tracker.level < task.minPlayerLevel) return false;
   // the game gates quests on trader loyalty tiers (and hides locked traders'
@@ -50,9 +79,8 @@ export function isAvailable(task: RpTask, tracker: TrackerState): boolean {
   if (taskFaction !== 'Any' && tracker.faction !== 'Any' && taskFaction !== tracker.faction) {
     return false;
   }
-  return task.taskRequirements.every(
-    (req) =>
-      !req.status.includes('complete') || tracker.completedTaskIds.includes(req.taskId),
+  return task.taskRequirements.every((req) =>
+    requirementSatisfied(req, tracker, byId, seen),
   );
 }
 

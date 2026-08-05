@@ -52,8 +52,23 @@ describe('App', () => {
     act(() => root.render(<App />));
     expect(container.textContent).toContain('Select a map to begin planning.');
 
-    // fresh profiles start at level 1; badges below assume a mid-game roster
-    act(() => usePlanner.getState().setLevel(15));
+    // fresh profiles start at level 1 with every chain unfinished; open a
+    // customs-locked quest the way the game would - level up and finish its
+    // prerequisites (availability now mirrors in-game gating exactly)
+    const mapQuest = snapshot.tasks.find(
+      (t) =>
+        t.mapId === customs.id &&
+        t.minPlayerLevel <= 15 &&
+        (t.loyaltyLevel ?? 1) <= 1 &&
+        !t.storyChapter &&
+        t.modes.includes('pvp'),
+    )!;
+    act(() => {
+      usePlanner.getState().setLevel(15);
+      for (const req of mapQuest.taskRequirements) {
+        usePlanner.getState().toggleCompleted(req.taskId);
+      }
+    });
     act(() => usePlanner.getState().selectMap(customs.id));
     const rows = container.querySelectorAll('.quest-row');
     expect(rows.length).toBeGreaterThan(10);
