@@ -1,3 +1,22 @@
+# Auth design (Better Auth) - IMPLEMENTED (2026-08-05)
+
+Decisions made: Neon Postgres (via Vercel Marketplace) + email/password only.
+Implementation lives in `api/` (Better Auth handler + `/api/progress`),
+`apps/web/src/lib/{authClient,progressSync,useProgressSync}.ts` and
+`components/AccountMenu.tsx`. The account UI ships only when the Vercel build
+sets `VITE_AUTH_ENABLED`; local/self-hosted builds never show it.
+
+Go-live checklist (remaining):
+1. Vercel dashboard -> raidplanner project -> Storage -> add Neon (free tier),
+   which injects DATABASE_URL.
+2. `vercel env pull .env.local && node scripts/setup-db.mjs` (creates Better
+   Auth tables + the progress table).
+3. Set `VITE_AUTH_ENABLED=1` (production env) and redeploy.
+
+Original design below for reference.
+
+---
+
 # Auth design (Better Auth) - decisions needed before implementation
 
 Goal: the hosted deployment (Vercel) offers accounts so quest progress syncs

@@ -9,7 +9,14 @@
     "snapshot": "pnpm --filter @raidplanner/data snapshot",
     "watcher": "pnpm --filter @raidplanner/watcher start"
   },
+  "dependencies": {
+    "better-auth": "1.6.25",
+    "pg": "^8.16.0"
+  },
   "devDependencies": {
-    "turbo": "^2.5.0"
+    "@types/node": "^24.10.1",
+    "@types/pg": "^8.15.6",
+    "turbo": "^2.5.0",
+    "typescript": "^5.9.3"
   }
 }
