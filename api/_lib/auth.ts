@@ -12,7 +12,7 @@ export const auth = betterAuth({
     requireEmailVerification: false,
   },
   trustedOrigins: [
+    'https://tarkovtoolkit.vercel.app',
     'https://tarkov-toolkit.vercel.app',
-    'https://raidplanner.vercel.app',
   ],
 });
