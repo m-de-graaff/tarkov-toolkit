@@ -259,12 +259,24 @@ export function smoothPath(grid: NavGrid, path: [number, number][]): [number, nu
   return out;
 }
 
+export interface NavLegSegment {
+  points: GamePosition[];
+  /** true = unknown ground (a gap the grid can't route), rendered dashed */
+  direct: boolean;
+}
+
 export interface NavLeg {
   /** walkable polyline from a to b in game coordinates, both endpoints included */
   points: GamePosition[];
   distance: number;
-  /** true when no walkable path was found and this is a straight-line fallback */
+  /** true when the whole leg is a straight-line fallback */
   direct: boolean;
+  /**
+   * mixed rendering: walkable stretches and the dashed gaps between them.
+   * Present when the endpoints sit in disconnected walkable areas and the leg
+   * is routed as far as the grid allows with short jumps over the holes.
+   */
+  segments?: NavLegSegment[];
 }
 
 export interface Navigator {
@@ -393,14 +405,20 @@ export function makeMultiNavigator(base: LevelGrid, layers: LevelGrid[]): Naviga
     return out;
   };
 
+  const segmentsOf = (leg: NavLeg): NavLegSegment[] =>
+    leg.segments ?? [{ points: leg.points, direct: leg.direct }];
+
   const joinLegs = (legsChain: NavLeg[]): NavLeg => {
     const points = legsChain[0].points.slice();
     let distance = legsChain[0].distance;
+    const segments = segmentsOf(legsChain[0]).slice();
     for (let i = 1; i < legsChain.length; i++) {
       points.push(...legsChain[i].points.slice(1));
       distance += legsChain[i].distance;
+      segments.push(...segmentsOf(legsChain[i]));
     }
-    return { points, distance, direct: false };
+    const mixed = segments.some((s) => s.direct);
+    return { points, distance, direct: false, ...(mixed ? { segments } : {}) };
   };
 
   /** best single stairway hop from one level to another */
@@ -452,8 +470,153 @@ export function makeMultiNavigator(base: LevelGrid, layers: LevelGrid[]): Naviga
   };
 }
 
+/** 4-connected component labels for every walkable cell (-1 = blocked). */
+export function labelComponents(grid: NavGrid): Int32Array {
+  const { width, height, cells } = grid;
+  const comp = new Int32Array(width * height).fill(-1);
+  const queue = new Int32Array(width * height);
+  let next = 0;
+  for (let start = 0; start < cells.length; start++) {
+    if (!cells[start] || comp[start] !== -1) continue;
+    let head = 0;
+    let tail = 0;
+    queue[tail++] = start;
+    comp[start] = next;
+    while (head < tail) {
+      const idx = queue[head++];
+      const x = idx % width;
+      const y = (idx / width) | 0;
+      for (const [dx, dy] of [
+        [1, 0],
+        [-1, 0],
+        [0, 1],
+        [0, -1],
+      ]) {
+        const nx = x + dx;
+        const ny = y + dy;
+        if (nx < 0 || ny < 0 || nx >= width || ny >= height) continue;
+        const nIdx = ny * width + nx;
+        if (!cells[nIdx] || comp[nIdx] !== -1) continue;
+        comp[nIdx] = next;
+        queue[tail++] = nIdx;
+      }
+    }
+    next++;
+  }
+  return comp;
+}
+
+/** All cells of the straight segment between two cells (Bresenham, inclusive). */
+function lineCells(
+  [x0, y0]: [number, number],
+  [x1, y1]: [number, number],
+): [number, number][] {
+  const out: [number, number][] = [];
+  let x = x0;
+  let y = y0;
+  const dx = Math.abs(x1 - x0);
+  const dy = Math.abs(y1 - y0);
+  const sx = x0 < x1 ? 1 : -1;
+  const sy = y0 < y1 ? 1 : -1;
+  let err = dx - dy;
+  for (;;) {
+    out.push([x, y]);
+    if (x === x1 && y === y1) return out;
+    const e2 = 2 * err;
+    if (e2 > -dy) {
+      err -= dy;
+      x += sx;
+    }
+    if (e2 < dx) {
+      err += dx;
+      y += sy;
+    }
+  }
+}
+
 export function makeNavigator(grid: NavGrid): Navigator {
   const memo = new Map<string, NavLeg>();
+  // snap endpoints within ~80 game meters: spawns inside unmapped building
+  // interiors (Streets' mall) otherwise miss the fixed 48-cell ring on fine
+  // grids and the whole leg degrades to a straight line
+  const snapRadius = Math.max(48, Math.ceil(80 * cellsPerMeter(grid)));
+  let comps: Int32Array | null = null;
+  const compOf = ([x, y]: [number, number]): number => {
+    comps ??= labelComponents(grid);
+    return comps[y * grid.width + x];
+  };
+
+  /** A* within one component, smoothed, as game points (cells guaranteed connected). */
+  const walk = (from: [number, number], to: [number, number]): GamePosition[] | null => {
+    const cellPath = findPath(grid, from, to);
+    if (!cellPath) return null;
+    return smoothPath(grid, cellPath).map(([x, y]) => grid.projector.toGame(x, y));
+  };
+
+  /**
+   * Endpoints in disconnected walkable areas: the map drawing simply has no
+   * walkable link (an entrance drawn as building, a void band in a tile
+   * mask). Instead of giving up on the whole leg, walk each component as far
+   * as the corridor allows and jump the actual holes with short dashed gaps.
+   */
+  const bridged = (a: GamePosition, b: GamePosition, sa: [number, number], sb: [number, number]): NavLeg | null => {
+    // walkable runs along the straight corridor, merged by component
+    const runs: { comp: number; entry: [number, number]; exit: [number, number] }[] = [];
+    for (const cell of [sa, ...lineCells(sa, sb), sb]) {
+      if (!isWalkable(grid, cell[0], cell[1])) continue;
+      const c = compOf(cell);
+      const last = runs[runs.length - 1];
+      if (last && last.comp === c) last.exit = cell;
+      else runs.push({ comp: c, entry: cell, exit: cell });
+    }
+    if (runs.length < 2) return null;
+
+    const segments: NavLegSegment[] = [];
+    const push = (points: GamePosition[], direct: boolean) => {
+      if (points.length >= 2) segments.push({ points, direct });
+    };
+    let cursor: [number, number] = sa;
+    let cursorGame = a;
+    for (let i = 0; i < runs.length; i++) {
+      const run = runs[i];
+      if (run.comp !== compOf(cursor)) {
+        // hole between components: dashed hop to the next walkable stretch
+        const entryGame = grid.projector.toGame(run.entry[0], run.entry[1]);
+        push([cursorGame, entryGame], true);
+        cursor = run.entry;
+        cursorGame = entryGame;
+      }
+      // walk to the far edge of this component's stretch (or to the goal in
+      // the final component)
+      const target = run.comp === compOf(sb) ? sb : run.exit;
+      const points = walk(cursor, target);
+      if (points) {
+        push([cursorGame, ...points], false);
+        cursor = target;
+        cursorGame = points[points.length - 1] ?? cursorGame;
+      }
+      if (run.comp === compOf(sb)) break;
+    }
+    if (compOf(cursor) !== compOf(sb)) {
+      // corridor never reached the goal's component - final dashed hop
+      const sbGame = grid.projector.toGame(sb[0], sb[1]);
+      push([cursorGame, sbGame], true);
+      cursorGame = sbGame;
+    }
+    push([cursorGame, b], false);
+    if (segments.length === 0) return null;
+
+    const points = segments.flatMap((s, i) => (i === 0 ? s.points : s.points.slice(1)));
+    const walked = segments.filter((s) => !s.direct).length;
+    if (walked === 0) return null; // nothing routable - plain direct is honest
+    return {
+      points: [a, ...points.slice(1, -1), b],
+      distance: polylineLength(points),
+      direct: false,
+      segments,
+    };
+  };
+
   return {
     leg(a, b) {
       const ca = cellOf(grid, a);
@@ -466,14 +629,17 @@ export function makeNavigator(grid: NavGrid): Navigator {
           points: [...cachedReverse.points].reverse(),
           distance: cachedReverse.distance,
           direct: cachedReverse.direct,
+          segments: cachedReverse.segments
+            ?.map((s) => ({ ...s, points: [...s.points].reverse() }))
+            .reverse(),
         };
       }
       const cached = memo.get(key);
       if (cached) return cached;
 
       const direct: NavLeg = { points: [a, b], distance: gameDist(a, b), direct: true };
-      const sa = nearestWalkable(grid, ca);
-      const sb = nearestWalkable(grid, cb);
+      const sa = nearestWalkable(grid, ca, snapRadius);
+      const sb = nearestWalkable(grid, cb, snapRadius);
       let result = direct;
       if (sa && sb) {
         const cellPath = findPath(grid, sa, sb);
@@ -483,6 +649,8 @@ export function makeNavigator(grid: NavGrid): Navigator {
           // the snapped cell centers duplicate the endpoints visually; keep
           // them anyway (they are the walkable anchors) but measure honestly
           result = { points, distance: polylineLength(points), direct: false };
+        } else {
+          result = bridged(a, b, sa, sb) ?? direct;
         }
       }
       memo.set(key, result);

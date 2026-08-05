@@ -184,7 +184,7 @@ describe('makeNavigator', () => {
     expect(leg.points.at(-1)).toEqual(b);
   });
 
-  it('falls back to the straight line when endpoints are disconnected', () => {
+  it('bridges disconnected endpoints: walkable stretches with a dashed gap', () => {
     const grid = gridFrom([
       '..#..',
       '..#..',
@@ -193,8 +193,14 @@ describe('makeNavigator', () => {
     ]);
     const nav = makeNavigator(grid);
     const leg = nav.leg({ x: 0.5, y: 0, z: -0.5 }, { x: 4.5, y: 0, z: -0.5 });
-    expect(leg.direct).toBe(true);
-    expect(leg.distance).toBeCloseTo(4);
+    // the map drawing has no link between the halves - the leg routes each
+    // side and jumps the wall with an explicit gap segment instead of giving
+    // up on the whole distance
+    expect(leg.direct).toBe(false);
+    expect(leg.segments?.some((s) => s.direct)).toBe(true);
+    expect(leg.segments?.some((s) => !s.direct)).toBe(true);
+    expect(leg.points[0]).toEqual({ x: 0.5, y: 0, z: -0.5 });
+    expect(leg.points.at(-1)).toEqual({ x: 4.5, y: 0, z: -0.5 });
   });
 
   it('snaps endpoints inside blocked areas to the nearest walkable cell', () => {
