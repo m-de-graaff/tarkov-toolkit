@@ -79,7 +79,7 @@ export function useLiveWatcher(): LiveWatcher {
           if (message.type === 'fix' && message.fix) setLiveFix(message.fix);
           if (message.type === 'map' || message.type === 'task') applyLogEvent(message);
         } catch {
-          /* malformed frame — ignore */
+          /* malformed frame - ignore */
         }
       };
       ws.onclose = () => {
@@ -187,7 +187,7 @@ export function useLiveWatcher(): LiveWatcher {
       setResumeHandle(null);
       await startWatching(resumeHandle);
     } else {
-      setError('Access was not granted — pick the folder again.');
+      setError('Access was not granted - pick the folder again.');
       setResumeHandle(null);
     }
   }, [resumeHandle, startWatching]);

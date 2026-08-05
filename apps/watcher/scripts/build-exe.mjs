@@ -1,7 +1,7 @@
 // Builds RaidplannerCompanion.exe via Node's Single Executable Application
 // pipeline: esbuild bundles the TS (workspace deps included) into one CJS
 // file, node bakes it into a SEA blob, postject injects the blob into a copy
-// of the node binary. No signing, no installer — one runnable file.
+// of the node binary. No signing, no installer - one runnable file.
 import { execSync } from 'node:child_process';
 import { copyFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';

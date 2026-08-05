@@ -70,7 +70,7 @@ export function HomePage() {
           </h1>
           <p className="max-w-xl text-[15px] text-muted-foreground">
             A free toolkit for Escape from Tarkov. Pick a map, see exactly the quests you have
-            open, and get the best route drawn for you — live-updated from nothing more than an
+            open, and get the best route drawn for you, live-updated from nothing more than an
             in-game screenshot.
           </p>
           <div className="flex items-center gap-3">
@@ -92,7 +92,7 @@ export function HomePage() {
           <ToolCard
             to="/progress"
             title="Quest Progress"
-            description={`Tick off what you've finished across ${snapshot.tasks.length} quests — the planner always shows what you can actually do.`}
+            description={`Tick off what you've finished across ${snapshot.tasks.length} quests - the planner always shows what you can actually do.`}
           />
           <ToolCard
             to="/hideout"
@@ -107,12 +107,12 @@ export function HomePage() {
           <ToolCard
             to="/ammo"
             title="Ammo Chart"
-            description={`${snapshot.ammo.length} rounds with pen tiers, damage, and velocity — offline.`}
+            description={`${snapshot.ammo.length} rounds with pen tiers, damage, and velocity - offline.`}
           />
           <ToolCard
             to="/market"
             title="Profit"
-            description={`Trader resells, barter flips, and crafts ranked by profit — per PvP/PvE economy.`}
+            description={`Trader resells, barter flips, and crafts ranked by profit - per PvP/PvE economy.`}
           />
         </section>
 
@@ -129,7 +129,7 @@ export function HomePage() {
             <Step
               icon={Camera}
               title="2 · Press PrtScn in raid"
-              text="Your position is encoded in the screenshot's filename — no overlay, no game hooks, nothing uploaded."
+              text="Your position is encoded in the screenshot's filename - no overlay, no game hooks, nothing uploaded."
             />
             <Step
               icon={Route}
@@ -141,7 +141,7 @@ export function HomePage() {
 
         <section className="flex items-center gap-2 rounded-lg border border-dashed p-4 text-[13px] text-muted-foreground">
           <ListChecks aria-hidden="true" className="size-4 shrink-0 text-primary" />
-          Everything runs in your browser and saves locally — no account needed.
+          Everything runs in your browser and saves locally. No account needed.
         </section>
       </div>
     </div>

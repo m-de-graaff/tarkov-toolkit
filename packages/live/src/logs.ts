@@ -53,7 +53,7 @@ export class LogEventParser {
           events.push({ type: 'task', taskId: templateId.split(' ')[0], status });
         }
       } catch {
-        /* malformed JSON block — skip */
+        /* malformed JSON block - skip */
       }
       consumedTo = Math.max(consumedTo, match.index + match[0].length);
     }

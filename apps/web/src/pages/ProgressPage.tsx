@@ -126,7 +126,7 @@ export function ProgressPage() {
 
   const modeSnapshot = useMemo(() => snapshotForMode(snapshot, gameMode), [gameMode]);
 
-  // quests that are a prerequisite of at least one other quest in this mode —
+  // quests that are a prerequisite of at least one other quest in this mode -
   // everything else is a dead end (nothing depends on it)
   const unlocksSomething = useMemo(() => {
     const ids = new Set<string>();
@@ -173,7 +173,7 @@ export function ProgressPage() {
         <div>
           <h1 className="text-lg font-semibold">Your progress</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Set your level and tick the quests you've finished — the planner then always shows
+            Set your level and tick the quests you have finished. The planner then always shows
             exactly what you can work on. Everything is saved in your browser.
           </p>
         </div>

@@ -17,7 +17,7 @@ export interface MapMarker {
 }
 
 export interface MapCanvasProps {
-  /** must have calibration — the caller guards */
+  /** must have calibration - the caller guards */
   map: RpMap;
   markers: MapMarker[];
   route: PlannedRoute | null;
@@ -31,7 +31,10 @@ function markerIcon(marker: MapMarker, mapRotation: number): L.DivIcon {
     const heading = (marker.yawDeg ?? 0) + mapRotation;
     return L.divIcon({
       className: '',
-      html: `<div class="marker player" style="transform: rotate(${heading}deg)">➤</div>`,
+      html:
+        `<div class="marker player" style="transform: rotate(${heading}deg)">` +
+        `<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">` +
+        `<path d="M2 2 L14 8 L2 14 L5 8 Z" fill="currentColor"/></svg></div>`,
       iconSize: [24, 24],
       iconAnchor: [12, 12],
     });
@@ -132,7 +135,7 @@ export function MapCanvas({ map, markers, route, onMapClick }: MapCanvasProps) {
       const m = L.marker(gameToLatLng(marker.position), {
         icon: markerIcon(marker, cal?.coordinateRotation ?? 0),
       });
-      const tooltip = marker.taskName ? `${marker.taskName} — ${marker.label}` : marker.label;
+      const tooltip = marker.taskName ? `${marker.taskName} - ${marker.label}` : marker.label;
       m.bindTooltip(tooltip, { direction: 'top', offset: L.point(0, -10) });
       m.addTo(layer);
     }

@@ -122,7 +122,7 @@ export function QuestList({ entries }: { entries: MapQuestEntry[] }) {
   if (visible.length === 0) {
     return (
       <p className="empty-note rounded-md border border-dashed p-3 text-[13px] text-muted-foreground">
-        Nothing open on this map right now — check the Progress page or another map.
+        Nothing open on this map right now - check the Progress page or another map.
       </p>
     );
   }
@@ -151,7 +151,7 @@ export function QuestList({ entries }: { entries: MapQuestEntry[] }) {
   );
 }
 
-/** Quests on this map the user hasn't unlocked yet — collapsed, informational. */
+/** Quests on this map the user hasn't unlocked yet - collapsed, informational. */
 export function LockedQuestList({ entries }: { entries: MapQuestEntry[] }) {
   if (entries.length === 0) return null;
   return (
@@ -181,7 +181,7 @@ export function LockedQuestList({ entries }: { entries: MapQuestEntry[] }) {
   );
 }
 
-/** Open quests with no fixed location — doable on any map. Tasks arrive pre-filtered to available. */
+/** Open quests with no fixed location - doable on any map. Tasks arrive pre-filtered to available. */
 export function AnywhereQuestList({ tasks }: { tasks: RpTask[] }) {
   const search = usePlanner((s) => s.search);
 

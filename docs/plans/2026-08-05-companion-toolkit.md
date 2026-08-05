@@ -2,7 +2,7 @@
 
 > **To execute:** use the `executing-plans` skill. Steps use `- [ ]` for tracking.
 
-**Goal:** (1) A standalone file-watcher process (like TarkovPilot) so live position works in any browser — the web app auto-detects it over a local WebSocket; the in-browser folder picker stays as the zero-install fallback. (2) Reframe the app as the "Tarkov Toolkit" — a shell with tools (Raid Planner today; barter calculator, flea prices later slot in as new routes). (3) Themed thin scrollbars.
+**Goal:** (1) A standalone file-watcher process (like TarkovPilot) so live position works in any browser - the web app auto-detects it over a local WebSocket; the in-browser folder picker stays as the zero-install fallback. (2) Reframe the app as the "Tarkov Toolkit" - a shell with tools (Raid Planner today; barter calculator, flea prices later slot in as new routes). (3) Themed thin scrollbars.
 
 **Architecture:** New workspace `apps/watcher`: a small Node CLI that `fs.watch`es `Documents\Escape from Tarkov\Screenshots`, parses filenames with `@raidplanner/live` (built for exactly this reuse), and broadcasts fixes over a `ws` WebSocket server bound to `127.0.0.1:17520`. On startup it also broadcasts the newest existing screenshot (same initial-fix rule as the browser path). The web app's `useLiveWatcher` gains a companion transport: it quietly tries the WebSocket on mount, retries every 5s, and prefers it over the File System Access path; `LivePanel` reflects which transport is active. Node 24 runs the shared TS engine directly via type stripping.
 
@@ -10,10 +10,10 @@
 
 - WS server binds 127.0.0.1 only; port 17520, overridable via `RAIDPLANNER_WATCHER_PORT`.
 - Message protocol: `{"type":"hello","app":"raidplanner-watcher"}` on connect, then `{"type":"fix","fix":LiveFix}` per screenshot (newest-existing first).
-- Web app never errors visibly when the companion is absent — silent retry; FSA button remains the visible affordance.
+- Web app never errors visibly when the companion is absent - silent retry; FSA button remains the visible affordance.
 - Test determinism: jsdom test setup stubs `WebSocket` with an inert fake (never connects) so the hook's auto-connect cannot touch the network.
 - Toolkit shell: wordmark "Tarkov Toolkit"; nav tabs "Raid Planner" (`/`), "Progress" (`/progress`); `<title>` and README updated; `@raidplanner/*` package names stay (rename is churn with no user value).
-- Companion is started with `pnpm watcher` for now — packaging as a double-click .exe is future work, stated in README.
+- Companion is started with `pnpm watcher` for now - packaging as a double-click .exe is future work, stated in README.
 - Scrollbars: global `scrollbar-width: thin` + `scrollbar-color` and `::-webkit-scrollbar` (8px, `--border` thumb, transparent track, rounded) in `index.css`.
 
 ### Task 1: `apps/watcher` companion process

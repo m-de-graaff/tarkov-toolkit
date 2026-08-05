@@ -12,14 +12,14 @@ export interface LevelReadiness {
   items: ItemReadiness[];
   itemsMet: boolean;
   stationsMet: boolean;
-  /** every item and station prerequisite satisfied — ready to build */
+  /** every item and station prerequisite satisfied - ready to build */
   ready: boolean;
 }
 
 /**
  * Whether the next level of a station can be built from what the user has
  * collected (itemsHave) and already built (hideoutLevels). Trader loyalty
- * isn't tracked, so it never blocks readiness — it's displayed, not enforced.
+ * isn't tracked, so it never blocks readiness - it's displayed, not enforced.
  */
 export function levelReadiness(
   level: HideoutLevel,

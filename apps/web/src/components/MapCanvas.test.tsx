@@ -8,7 +8,7 @@ import type { MapMarker } from './MapCanvas';
 import { MapCanvas } from './MapCanvas';
 
 // Leaflet needs real element dimensions; jsdom reports 0x0, which leaflet
-// tolerates for creation, markers, and overlays — enough for a smoke test.
+// tolerates for creation, markers, and overlays - enough for a smoke test.
 describe('MapCanvas', () => {
   let container: HTMLDivElement;
   let root: ReturnType<typeof createRoot>;
@@ -44,7 +44,7 @@ describe('MapCanvas', () => {
 
     const canvas = container.querySelector('.map-canvas');
     expect(canvas?.classList.contains('leaflet-container')).toBe(true);
-    // customs has a tile variant — the pretty tile layer is the base
+    // customs has a tile variant - the pretty tile layer is the base
     expect(container.querySelector('.map-tiles')).toBeTruthy();
     expect(container.querySelectorAll('.marker.objective').length).toBe(markers.length);
   });

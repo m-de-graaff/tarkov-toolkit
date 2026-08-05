@@ -22,7 +22,7 @@ function FixAge() {
   if (!liveFix || receivedAt === null) {
     return (
       <span className="text-xs text-muted-foreground">
-        waiting for a screenshot — press PrtScn in raid
+        waiting for a screenshot. Press PrtScn in raid
       </span>
     );
   }
@@ -41,14 +41,14 @@ function CompanionStatus() {
   const lastAutoEvent = usePlanner((s) => s.lastAutoEvent);
   return (
     <span className="live-auto text-xs text-muted-foreground">
-      {lastAutoEvent ?? 'Companion connected — raids and quests track themselves'}
+      {lastAutoEvent ?? 'Companion connected. Raids and quests track themselves.'}
     </span>
   );
 }
 
-/** latest GitHub release of the companion — CI attaches the exe on every version tag */
+/** latest GitHub release of the companion - CI attaches the exe on every version tag */
 export const COMPANION_DOWNLOAD_URL =
-  'https://github.com/m-de-graaff/raidplanner/releases/latest';
+  'https://github.com/m-de-graaff/tarkov-toolkit/releases/latest';
 
 export function LivePanel({
   watcher,
@@ -80,7 +80,7 @@ export function LivePanel({
           target="_blank"
           rel="noreferrer"
           className="text-xs text-primary underline-offset-2 hover:underline"
-          title="Get RaidplannerCompanion.exe from the latest GitHub release — double-click and you're live"
+          title="Get RaidplannerCompanion.exe from the latest GitHub release. Double-click and you're live"
         >
           Don't have the companion app? Download
         </a>
@@ -114,7 +114,7 @@ export function LivePanel({
       {watcher.error && <span className="text-xs text-destructive">{watcher.error}</span>}
       {outOfBounds && (
         <span className="text-xs text-destructive">
-          Position is outside this map — wrong map selected?
+          Position is outside this map - wrong map selected?
         </span>
       )}
     </div>
