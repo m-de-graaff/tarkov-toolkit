@@ -15,6 +15,7 @@ import { WebSocketServer, type WebSocket } from 'ws';
 import { parseScreenshotName, pickNewestFix, type LiveFix, type LogEvent } from '@raidplanner/live';
 import { isSeaBuild, setupLogging } from './log.ts';
 import { detectLogsDir, startLogsWatcher } from './logsWatcher.ts';
+import { isAllowedOrigin } from './origin.ts';
 import { startTray, type Tray } from './tray.ts';
 import { checkForUpdate, cleanupOldBinary, downloadAndInstall } from './updater.ts';
 
@@ -130,7 +131,15 @@ async function main() {
   screenshotsDir = await detectScreenshotsDir();
 
   const server = new WebSocketServer({ host: '127.0.0.1', port: PORT });
-  server.on('connection', (socket) => {
+  server.on('connection', (socket, req) => {
+    // localhost binding does not stop drive-by websites: browsers happily open
+    // a WebSocket to 127.0.0.1 from any page, and this feed is live position
+    const origin = req.headers.origin;
+    if (!isAllowedOrigin(origin, process.env.RAIDPLANNER_ALLOWED_ORIGINS)) {
+      console.log(`Rejected connection from disallowed origin: ${origin}`);
+      socket.close(1008, 'origin not allowed');
+      return;
+    }
     clients.add(socket);
     socket.send(JSON.stringify({ type: 'hello', app: 'raidplanner-watcher' }));
     if (latestFix) socket.send(JSON.stringify({ type: 'fix', fix: latestFix }));
@@ -199,17 +208,26 @@ async function main() {
       }
     });
 
-    // startup auto-update: download, swap, relaunch. Opt out with
-    // RAIDPLANNER_NO_AUTO_UPDATE=1 (the tray menu still updates on demand).
+    // startup update check notifies by default; installing without being
+    // asked is opt-in (RAIDPLANNER_AUTO_UPDATE=1). Opt out of the check
+    // entirely with RAIDPLANNER_NO_AUTO_UPDATE=1. The tray menu always
+    // updates on demand.
     if (process.env.RAIDPLANNER_NO_AUTO_UPDATE !== '1') {
       void checkForUpdate(VERSION)
         .then(async (update) => {
           if (!update) return;
-          console.log(`Update available: ${update.tag}, installing`);
-          tray?.balloon(`Updating to ${update.tag}...`);
-          await downloadAndInstall(update);
+          if (process.env.RAIDPLANNER_AUTO_UPDATE === '1') {
+            console.log(`Update available: ${update.tag}, installing`);
+            tray?.balloon(`Updating to ${update.tag}...`);
+            await downloadAndInstall(update);
+            return;
+          }
+          console.log(
+            `Update available: ${update.tag} - use the tray menu ("update") to install.`,
+          );
+          tray?.balloon(`Update ${update.tag} available - right-click the tray icon to install.`);
         })
-        .catch((err) => console.error('auto-update failed:', err));
+        .catch((err) => console.error('update check failed:', err));
     }
   }
 }
