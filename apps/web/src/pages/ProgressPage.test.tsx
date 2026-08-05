@@ -48,6 +48,26 @@ describe('ProgressPage', () => {
     expect(container.textContent).toContain(pveOnly.name);
   });
 
+  it('filter chips hide locked and non-kappa quests', () => {
+    act(() => root.render(<ProgressPage />));
+    const rowsBefore = container.querySelectorAll('.quest-row').length;
+
+    const chip = (label: string) =>
+      [...container.querySelectorAll('button')].find((b) => b.textContent === label)!;
+
+    act(() => chip('Locked').click());
+    const rowsUnlockedOnly = container.querySelectorAll('.quest-row').length;
+    expect(rowsUnlockedOnly).toBeLessThan(rowsBefore);
+
+    act(() => chip('Locked').click()); // back on
+    act(() => chip('Kappa only').click());
+    const kappaRows = container.querySelectorAll('.quest-row').length;
+    const kappaCount = snapshot.tasks.filter(
+      (t) => t.modes.includes('pvp') && t.kappaRequired,
+    ).length;
+    expect(kappaRows).toBe(kappaCount);
+  });
+
   it('reset requires a second, explicit click', () => {
     act(() => {
       usePlanner.getState().toggleCompleted(snapshot.tasks[0].id);
