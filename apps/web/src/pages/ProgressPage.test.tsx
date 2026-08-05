@@ -69,47 +69,90 @@ describe('ProgressPage', () => {
     expect(container.textContent).toContain(`1 of ${pvpCount} quests finished`);
   });
 
-  it('shows pve-only quests only when the PvE profile is active', () => {
+  const setSearch = (value: string) => {
+    const input = container.querySelector<HTMLInputElement>('input[type=search]')!;
+    const nativeSet = Object.getOwnPropertyDescriptor(
+      window.HTMLInputElement.prototype,
+      'value',
+    )!.set!;
+    act(() => {
+      nativeSet.call(input, value);
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+  };
+
+  it('the All view shows what is open now, not every trader list stacked', () => {
+    act(() => root.render(<MemoryRouter><ProgressPage /></MemoryRouter>));
+    expect(container.textContent).toContain('Open now');
+    expect(container.textContent).toContain('By trader');
+    const allChip = [...container.querySelectorAll('button')].find((b) => b.textContent === 'All')!;
+    expect(allChip.getAttribute('aria-pressed')).toBe('true');
+    // far fewer rows than the full quest count - only open quests render
+    const pvpCount = snapshot.tasks.filter((t) => t.modes.includes('pvp')).length;
+    expect(container.querySelectorAll('.quest-row').length).toBeLessThan(pvpCount / 4);
+  });
+
+  it('selecting a trader groups quests and explains every lock', () => {
+    act(() => root.render(<MemoryRouter><ProgressPage /></MemoryRouter>));
+    const ragman = [...container.querySelectorAll<HTMLButtonElement>('.trader-rail button')].find(
+      (b) => b.textContent?.startsWith('Ragman'),
+    )!;
+    act(() => ragman.click());
+    expect(container.textContent).toContain('Locked');
+    const lockedSection = container.querySelector('[aria-label="Locked quests"]')!;
+    const rows = lockedSection.querySelectorAll('.quest-row');
+    expect(rows.length).toBeGreaterThan(0);
+    for (const row of rows) {
+      expect(row.textContent).toMatch(/Lv \d+|after |USEC only|BEAR only/);
+    }
+  });
+
+  it('completed quests collapse behind a details section', () => {
+    const ragmanTask = snapshot.tasks.find(
+      (t) => t.trader.name === 'Ragman' && t.modes.includes('pvp'),
+    )!;
+    act(() => {
+      usePlanner.getState().toggleCompleted(ragmanTask.id);
+      root.render(<MemoryRouter initialEntries={['/progress?trader=Ragman']}><ProgressPage /></MemoryRouter>);
+    });
+    const details = container.querySelector<HTMLDetailsElement>('details')!;
+    expect(details.open).toBe(false);
+    expect(details.textContent).toContain('Completed');
+    act(() => {
+      details.open = true;
+      details.dispatchEvent(new Event('toggle'));
+    });
+    expect(details.querySelector('.quest-row')?.textContent).toContain(ragmanTask.name);
+  });
+
+  it('searching surfaces locked quests too, with pve-only quests gated by mode', () => {
     const pveOnly = snapshot.tasks.find((t) => t.modes.length === 1 && t.modes[0] === 'pve')!;
 
     act(() => root.render(<MemoryRouter><ProgressPage /></MemoryRouter>));
+    setSearch(pveOnly.name);
     expect(container.textContent).not.toContain(pveOnly.name);
 
     act(() => usePlanner.getState().setGameMode('pve'));
     expect(container.textContent).toContain(pveOnly.name);
   });
 
-  it('filter chips hide locked and non-kappa quests', () => {
-    act(() => root.render(<MemoryRouter><ProgressPage /></MemoryRouter>));
-    const rowsBefore = container.querySelectorAll('.quest-row').length;
-
+  it('the kappa and unlocks chips narrow the open list', () => {
+    act(() => {
+      usePlanner.getState().setLevel(30);
+      root.render(<MemoryRouter><ProgressPage /></MemoryRouter>);
+    });
     const chip = (label: string) =>
       [...container.querySelectorAll('button')].find((b) => b.textContent === label)!;
 
-    act(() => chip('Locked').click());
-    const rowsUnlockedOnly = container.querySelectorAll('.quest-row').length;
-    expect(rowsUnlockedOnly).toBeLessThan(rowsBefore);
-
-    act(() => chip('Locked').click()); // back on
     act(() => chip('Kappa only').click());
-    const kappaRows = container.querySelectorAll('.quest-row').length;
-    const kappaCount = snapshot.tasks.filter(
-      (t) => t.modes.includes('pvp') && t.kappaRequired,
-    ).length;
-    expect(kappaRows).toBe(kappaCount);
-  });
+    const kappaRows = [...container.querySelectorAll('.quest-row')];
+    expect(kappaRows.length).toBeGreaterThan(0);
+    for (const row of kappaRows) expect(row.textContent).toContain('KAPPA');
+    act(() => chip('Kappa only').click());
 
-  it('the unlocks-quests chip hides dead-end quests', () => {
-    act(() => root.render(<MemoryRouter><ProgressPage /></MemoryRouter>));
-    const before = container.querySelectorAll('.quest-row').length;
-    const chip = [...container.querySelectorAll('button')].find(
-      (b) => b.textContent === 'Unlocks quests',
-    )!;
-    act(() => chip.click());
-    const after = container.querySelectorAll('.quest-row').length;
-    expect(after).toBeLessThan(before);
-    expect(after).toBeGreaterThan(0);
-    // none of the visible rows are dead ends
+    act(() => chip('Unlocks quests').click());
+    const rows = [...container.querySelectorAll('.quest-row')];
+    expect(rows.length).toBeGreaterThan(0);
     expect(container.textContent).not.toContain('dead end');
   });
 
