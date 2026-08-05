@@ -131,6 +131,9 @@ export function MarketPage() {
   const fleaCols = useColumnWidths('profit:fleaToTrader', [440, 260, 150, 150, 150]);
   const barterCols = useColumnWidths('profit:barters', [360, 330, 210, 140, 140, 140]);
   const craftCols = useColumnWidths('profit:crafts', [320, 290, 220, 130, 130, 130, 130]);
+  const activeCols =
+    tab === 'resells' ? resellCols : tab === 'fleaToTrader' ? fleaCols : tab === 'barters' ? barterCols : craftCols;
+  const tableWidth = activeCols.widths.reduce((a, b) => a + b, 0);
 
   // Prices load themselves: cache first, auto-fetch when missing or stale,
   // then keep fresh on an interval while the page is open.
@@ -325,7 +328,11 @@ export function MarketPage() {
           </p>
         ) : (
           <div className="overflow-x-auto rounded-lg border">
-            <table ref={tableRef} className="min-w-full table-fixed border-collapse text-[13px]">
+            <table
+              ref={tableRef}
+              style={{ width: tableWidth }}
+              className="table-fixed border-collapse text-[13px]"
+            >
               {tab === 'resells' && (
                 <>
                   <Cols widths={resellCols.widths} />

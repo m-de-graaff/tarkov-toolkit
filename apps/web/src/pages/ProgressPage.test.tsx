@@ -68,6 +68,20 @@ describe('ProgressPage', () => {
     expect(kappaRows).toBe(kappaCount);
   });
 
+  it('the unlocks-quests chip hides dead-end quests', () => {
+    act(() => root.render(<ProgressPage />));
+    const before = container.querySelectorAll('.quest-row').length;
+    const chip = [...container.querySelectorAll('button')].find(
+      (b) => b.textContent === 'Unlocks quests',
+    )!;
+    act(() => chip.click());
+    const after = container.querySelectorAll('.quest-row').length;
+    expect(after).toBeLessThan(before);
+    expect(after).toBeGreaterThan(0);
+    // none of the visible rows are dead ends
+    expect(container.textContent).not.toContain('dead end');
+  });
+
   it('reset requires a second, explicit click', () => {
     act(() => {
       usePlanner.getState().toggleCompleted(snapshot.tasks[0].id);
