@@ -6,7 +6,8 @@ import { useEffect, useRef } from 'react';
 import { usePlanner } from '../store';
 import { AUTH_ENABLED, authClient } from './authClient';
 import type { SyncedState } from './progressSync';
-import { mergeSyncedState, pullProgress, pushProgress } from './progressSync';
+import { pullProgress, pushProgress } from './progressSync';
+import { getLastSyncUserId, resolveSignInState, setLastSyncUserId } from './syncIdentity';
 
 /** matches the zustand persist version in store.ts */
 export const SYNC_VERSION = 3;
@@ -26,12 +27,13 @@ export type SyncStatus = 'off' | 'syncing' | 'synced' | 'error';
 
 export function useProgressSync(onStatus?: (status: SyncStatus) => void) {
   const session = authClient.useSession();
-  const signedIn = AUTH_ENABLED && Boolean(session.data);
+  const userId = session.data?.user.id;
+  const signedIn = AUTH_ENABLED && Boolean(userId);
   const statusRef = useRef(onStatus);
   statusRef.current = onStatus;
 
   useEffect(() => {
-    if (!signedIn) {
+    if (!signedIn || !userId) {
       statusRef.current?.('off');
       return;
     }
@@ -56,10 +58,11 @@ export function useProgressSync(onStatus?: (status: SyncStatus) => void) {
       try {
         const remote = await pullProgress();
         if (cancelled) return;
-        if (remote?.state) {
-          const merged = mergeSyncedState(remote.state, currentSynced());
-          usePlanner.setState(merged);
-        }
+        // identity guard: a different user on this browser must not inherit
+        // the previous user's local progress (docs/auth-design.md)
+        const next = resolveSignInState(remote, currentSynced(), getLastSyncUserId(), userId);
+        usePlanner.setState(next);
+        setLastSyncUserId(userId);
         pulling = false;
         // establish the merged (or first) copy server-side right away
         await pushProgress(SYNC_VERSION, currentSynced());
@@ -86,5 +89,5 @@ export function useProgressSync(onStatus?: (status: SyncStatus) => void) {
       if (timer) clearTimeout(timer);
       unsubscribe();
     };
-  }, [signedIn]);
+  }, [signedIn, userId]);
 }

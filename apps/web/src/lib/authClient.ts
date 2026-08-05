@@ -3,6 +3,10 @@
 // Local dev, static and docker self-hosting stay account-free (localStorage).
 import { createAuthClient } from 'better-auth/react';
 
-export const AUTH_ENABLED = Boolean(import.meta.env?.VITE_AUTH_ENABLED);
+// env vars are strings: Boolean("false") is true, so parse explicitly
+export const parseAuthEnabled = (value: unknown): boolean =>
+  /^(1|true)$/i.test(String(value ?? ''));
+
+export const AUTH_ENABLED = parseAuthEnabled(import.meta.env?.VITE_AUTH_ENABLED);
 
 export const authClient = createAuthClient();
