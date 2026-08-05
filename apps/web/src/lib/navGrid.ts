@@ -286,6 +286,66 @@ function polylineLength(points: GamePosition[]): number {
  * be snapped or the cells are disconnected - a wrong-but-visible route beats
  * no route.
  */
+export interface LevelGrid {
+  grid: NavGrid;
+  /** game y range this level covers, [low, high); absent = catch-all base */
+  heightRange?: [number, number];
+}
+
+/** Roughly how many grid cells one game meter spans (grids differ per map). */
+function cellsPerMeter(grid: NavGrid): number {
+  const [x0, y0] = grid.projector.toCell({ x: 0, y: 0, z: 0 });
+  const [x1, y1] = grid.projector.toCell({ x: 1, y: 0, z: 1 });
+  return Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0), 0.01);
+}
+
+/**
+ * Multi-level navigator: an endpoint resolves to the first layer whose
+ * height range contains its y AND whose grid has walkable content nearby -
+ * the upstream height ranges are map-wide, but a floor only exists where it
+ * is drawn (terrain at "2nd floor" height far from the building is still
+ * ground level). Same level = pathfind on that level's grid; different
+ * levels = straight-line fallback, because stair connectivity between
+ * floors is not modeled.
+ */
+export function makeMultiNavigator(base: LevelGrid, layers: LevelGrid[]): Navigator {
+  const navs = new Map<NavGrid, Navigator>();
+  const navFor = (grid: NavGrid): Navigator => {
+    let nav = navs.get(grid);
+    if (!nav) {
+      nav = makeNavigator(grid);
+      navs.set(grid, nav);
+    }
+    return nav;
+  };
+  const footprintRadius = new Map<NavGrid, number>();
+  const radiusFor = (grid: NavGrid): number => {
+    let r = footprintRadius.get(grid);
+    if (r === undefined) {
+      // "near" the floor's footprint = within ~4 game meters
+      r = Math.max(2, Math.ceil(4 * cellsPerMeter(grid)));
+      footprintRadius.set(grid, r);
+    }
+    return r;
+  };
+  const gridFor = (p: GamePosition): NavGrid => {
+    for (const l of layers) {
+      if (!l.heightRange) continue;
+      if (p.y < l.heightRange[0] || p.y >= l.heightRange[1]) continue;
+      if (nearestWalkable(l.grid, cellOf(l.grid, p), radiusFor(l.grid))) return l.grid;
+    }
+    return base.grid;
+  };
+  return {
+    leg(a, b) {
+      const ga = gridFor(a);
+      const gb = gridFor(b);
+      if (ga !== gb) return { points: [a, b], distance: gameDist(a, b), direct: true };
+      return navFor(ga).leg(a, b);
+    },
+  };
+}
+
 export function makeNavigator(grid: NavGrid): Navigator {
   const memo = new Map<string, NavLeg>();
   return {

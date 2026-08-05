@@ -1,15 +1,23 @@
-// Builds a walkability NavGrid by rasterizing a bundled map SVG in the
+// Builds walkability NavGrids by rasterizing a bundled map SVG in the
 // browser. The SVGs (from the-hideout/tarkov-dev) tag every surface with a
 // material class, and paint in document order - so a cement bridge drawn
 // after the river it crosses genuinely reads as walkable. We recolor the
 // document (walkable = white, blocking = black, background = black),
 // rasterize it, and threshold the pixels.
-import type { MapCalibration } from '@raidplanner/data';
+//
+// Multi-level maps (Factory, Shoreline resort, Streets interiors...) draw
+// each floor as a separate layer group. Rasterizing them stacked would let
+// upper floors erase ground-floor walls, so each level gets its own grid:
+// non-layer content plus exactly one layer group visible at a time.
+import type { MapCalibration, MapLayer } from '@raidplanner/data';
 import type { NavGrid } from './navGrid';
 import { makeProjector } from './navGrid';
 
-/** longest raster dimension; ~1.5-2.5 game meters per cell on big maps */
+/** longest raster dimension; ~1.5-2.5 game meters per cell on big maps.
+ * Small SVGs (Factory's viewBox is in whole meters) get upscaled so indoor
+ * walls and doorways survive rasterization. */
 const MAX_RASTER = 900;
+const MAX_UPSCALE = 8;
 
 /**
  * Surface classification. Anything not listed renders nothing and therefore
@@ -34,7 +42,7 @@ const BLOCKED_FILLS = ['water', 'danger', 'danger_small', 'building', 'locked', 
 const BLOCKED_STROKES = ['map_border', 'wall', 'fence'];
 
 /**
- * Recoloring stylesheet. Three specificity tiers so the right paint wins:
+ * Recoloring stylesheet. Specificity tiers so the right paint wins:
  * 1. universal reset (paints nothing),
  * 2. descendant rules (`.land *`) - children of a classed group render with
  *    the group's classification even though the reset killed inheritance;
@@ -42,9 +50,11 @@ const BLOCKED_STROKES = ['map_border', 'wall', 'fence'];
  *    group stay blocked,
  * 3. doubled own-class rules (`.cement.cement`) - an element's own class
  *    always beats any ancestor's classification (a cement bridge drawn
- *    inside/after the river stays walkable).
+ *    inside/after the river stays walkable),
+ * 4. named exceptions last: swamps are water you can wade through, so any
+ *    element (or group) whose id starts with "Swamp" is walkable.
  */
-const NAV_STYLE = `
+const navStyle = (blockedStrokeUnits: number) => `
   * {
     fill: none !important;
     stroke: none !important;
@@ -61,8 +71,19 @@ const NAV_STYLE = `
   ${WALKABLE_FILLS.map((c) => `.${c}.${c}`).join(', ')} { fill: #fff !important; }
   ${WALKABLE_STROKES.map((c) => `.${c}.${c}`).join(', ')} { stroke: #fff !important; }
   ${BLOCKED_FILLS.map((c) => `.${c}.${c}`).join(', ')} { fill: #000 !important; }
-  ${BLOCKED_STROKES.map((c) => `.${c}.${c}`).join(', ')} { stroke: #000 !important; stroke-width: 3 !important; }
+  ${BLOCKED_STROKES.map((c) => `.${c}.${c}`).join(', ')} { stroke: #000 !important; stroke-width: ${blockedStrokeUnits} !important; }
+  [id^="Swamp"][id], [id^="Swamp"][id] * { fill: #fff !important; stroke: none !important; }
 `;
+
+export interface NavLevelGrid {
+  grid: NavGrid;
+  heightRange?: [number, number];
+}
+
+export interface MultiNavGrid {
+  base: NavLevelGrid;
+  layers: NavLevelGrid[];
+}
 
 function svgSize(svg: SVGSVGElement): { width: number; height: number } {
   const vb = svg.viewBox.baseVal;
@@ -73,24 +94,34 @@ function svgSize(svg: SVGSVGElement): { width: number; height: number } {
   };
 }
 
-async function rasterize(svgSource: string): Promise<{
-  data: Uint8ClampedArray;
-  width: number;
-  height: number;
-} | null> {
-  const doc = new DOMParser().parseFromString(svgSource, 'image/svg+xml');
-  const svg = doc.documentElement as unknown as SVGSVGElement;
-  if (svg.nodeName !== 'svg') return null;
+/** Layer groups are marked with data-layer (or fall back to a matching id). */
+export function findLayerGroups(root: Element, names: string[]): Map<string, Element> {
+  const groups = new Map<string, Element>();
+  for (const el of root.querySelectorAll('[data-layer]')) {
+    const name = el.getAttribute('data-layer');
+    if (name) groups.set(name, el);
+  }
+  for (const name of names) {
+    if (groups.has(name)) continue;
+    const byId = root.querySelector(`#${CSS.escape(name)}`);
+    if (byId) groups.set(name, byId);
+  }
+  return groups;
+}
 
-  const style = doc.createElementNS('http://www.w3.org/2000/svg', 'style');
-  style.textContent = NAV_STYLE;
-  svg.appendChild(style);
+/** Show exactly one layer group (null = none); non-layer content stays visible. */
+function applyLayerVisibility(groups: Map<string, Element>, visible: string | null): void {
+  for (const [name, el] of groups) {
+    if (name === visible) el.setAttribute('display', '');
+    else el.setAttribute('display', 'none');
+  }
+}
 
-  const { width: srcW, height: srcH } = svgSize(svg);
-  const scale = Math.min(1, MAX_RASTER / Math.max(srcW, srcH));
-  const width = Math.max(1, Math.round(srcW * scale));
-  const height = Math.max(1, Math.round(srcH * scale));
-
+async function drawToCells(
+  svg: SVGSVGElement,
+  width: number,
+  height: number,
+): Promise<Uint8Array | null> {
   const blob = new Blob([new XMLSerializer().serializeToString(svg)], {
     type: 'image/svg+xml',
   });
@@ -108,37 +139,151 @@ async function rasterize(svgSource: string): Promise<{
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, width, height);
     ctx.drawImage(img, 0, 0, width, height);
-    return { data: ctx.getImageData(0, 0, width, height).data, width, height };
+    const data = ctx.getImageData(0, 0, width, height).data;
+    const cells = new Uint8Array(width * height);
+    for (let i = 0; i < cells.length; i++) {
+      // green channel is as good as luminance for black/white
+      cells[i] = data[i * 4 + 1] > 127 ? 1 : 0;
+    }
+    return cells;
   } finally {
     URL.revokeObjectURL(url);
   }
 }
 
-async function build(cal: MapCalibration): Promise<NavGrid | null> {
+async function build(cal: MapCalibration): Promise<MultiNavGrid | null> {
   if (!cal.svgFile) return null;
   const res = await fetch(`/maps/${cal.svgFile}`);
   if (!res.ok) return null;
-  const raster = await rasterize(await res.text());
-  if (!raster) return null;
+  const doc = new DOMParser().parseFromString(await res.text(), 'image/svg+xml');
+  const svg = doc.documentElement as unknown as SVGSVGElement;
+  if (svg.nodeName !== 'svg') return null;
 
-  const { data, width, height } = raster;
-  const cells = new Uint8Array(width * height);
-  for (let i = 0; i < cells.length; i++) {
-    // green channel is as good as luminance for black/white
-    cells[i] = data[i * 4 + 1] > 127 ? 1 : 0;
+  const { width: srcW, height: srcH } = svgSize(svg);
+  const scale = Math.min(MAX_UPSCALE, MAX_RASTER / Math.max(srcW, srcH));
+  const width = Math.max(1, Math.round(srcW * scale));
+  const height = Math.max(1, Math.round(srcH * scale));
+  const projector = makeProjector(cal, width, height);
+
+  const style = doc.createElementNS('http://www.w3.org/2000/svg', 'style');
+  // barrier strokes should land ~2 raster px wide regardless of svg scale,
+  // but never thinner than 1 svg unit
+  style.textContent = navStyle(Math.max(1, 2 / scale));
+  svg.appendChild(style);
+
+  const layerDefs = (cal.layers ?? []).filter((l): l is MapLayer & { svgLayer: string } =>
+    Boolean(l.svgLayer),
+  );
+  const groupNames = [cal.svgLayer, ...layerDefs.map((l) => l.svgLayer)].filter(
+    (n): n is string => Boolean(n),
+  );
+  const groups = findLayerGroups(svg, groupNames);
+
+  const rasterLevel = async (visible: string | null): Promise<NavGrid | null> => {
+    if (groups.size > 0) applyLayerVisibility(groups, visible);
+    const cells = await drawToCells(svg, width, height);
+    return cells ? { width, height, cells, projector } : null;
+  };
+
+  // base level: non-layer content + the ground layer group
+  const baseGrid = await rasterLevel(cal.svgLayer ?? null);
+  if (!baseGrid) return null;
+  const base: NavLevelGrid = { grid: baseGrid, heightRange: cal.heightRange };
+
+  const layers: NavLevelGrid[] = [];
+  if (groups.size > 0) {
+    for (const def of layerDefs) {
+      if (!groups.has(def.svgLayer)) continue;
+      const grid = await rasterLevel(def.svgLayer);
+      if (grid) layers.push({ grid, heightRange: def.heightRange });
+    }
   }
-  return { width, height, cells, projector: makeProjector(cal, width, height) };
+  return { base, layers };
 }
 
-const cache = new Map<string, Promise<NavGrid | null>>();
+const cache = new Map<string, Promise<MultiNavGrid | null>>();
 
-/** Load (and memoize) the walkability grid for a map; null when unavailable. */
-export function loadNavGrid(mapId: string, cal: MapCalibration | undefined): Promise<NavGrid | null> {
+/** Load (and memoize) the walkability grids for a map; null when unavailable. */
+export function loadNavGrid(
+  mapId: string,
+  cal: MapCalibration | undefined,
+): Promise<MultiNavGrid | null> {
   if (!cal?.svgFile) return Promise.resolve(null);
   let entry = cache.get(mapId);
   if (!entry) {
     entry = build(cal).catch(() => null);
     cache.set(mapId, entry);
+  }
+  return entry;
+}
+
+// --- display variants for the floor selector -------------------------------
+
+const svgTextCache = new Map<string, Promise<string>>();
+const displayUrlCache = new Map<string, Promise<string | null>>();
+
+function fetchSvgText(svgFile: string): Promise<string> {
+  let entry = svgTextCache.get(svgFile);
+  if (!entry) {
+    entry = fetch(`/maps/${svgFile}`).then((r) => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.text();
+    });
+    svgTextCache.set(svgFile, entry);
+  }
+  return entry;
+}
+
+function toBlobUrl(svg: SVGSVGElement): string {
+  const blob = new Blob([new XMLSerializer().serializeToString(svg)], {
+    type: 'image/svg+xml',
+  });
+  return URL.createObjectURL(blob);
+}
+
+/**
+ * A display URL for the map SVG with one floor selected.
+ * - 'fallback': the full map with only the chosen layer group visible among
+ *   the layer groups (base image for maps with no tile render).
+ * - 'overlay': ONLY the chosen layer group (plus styles/defs), for stacking
+ *   on top of the base tile render; everything else is transparent.
+ */
+export function layerDisplayUrl(
+  cal: MapCalibration,
+  layerName: string,
+  mode: 'fallback' | 'overlay',
+): Promise<string | null> {
+  const svgFile = cal.svgFile;
+  if (!svgFile) return Promise.resolve(null);
+  const key = `${svgFile}:${mode}:${layerName}`;
+  let entry = displayUrlCache.get(key);
+  if (!entry) {
+    entry = fetchSvgText(svgFile)
+      .then((text) => {
+        const doc = new DOMParser().parseFromString(text, 'image/svg+xml');
+        const svg = doc.documentElement as unknown as SVGSVGElement;
+        if (svg.nodeName !== 'svg') return null;
+        const names = [cal.svgLayer, ...(cal.layers ?? []).map((l) => l.svgLayer)].filter(
+          (n): n is string => Boolean(n),
+        );
+        const groups = findLayerGroups(svg, names);
+        const target = groups.get(layerName);
+        if (!target) return null;
+        if (mode === 'fallback') {
+          applyLayerVisibility(groups, layerName);
+        } else {
+          // keep styles and defs, drop everything else, re-add the floor group
+          for (const child of [...svg.children]) {
+            const tag = child.nodeName.toLowerCase();
+            if (tag !== 'style' && tag !== 'defs') child.remove();
+          }
+          target.removeAttribute('display');
+          svg.appendChild(target);
+        }
+        return toBlobUrl(svg);
+      })
+      .catch(() => null);
+    displayUrlCache.set(key, entry);
   }
   return entry;
 }

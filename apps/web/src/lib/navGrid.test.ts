@@ -5,6 +5,7 @@ import {
   cellOf,
   findPath,
   lineOfSight,
+  makeMultiNavigator,
   makeNavigator,
   makeProjector,
   nearestWalkable,
@@ -195,6 +196,49 @@ describe('makeNavigator', () => {
     const nav = makeNavigator(grid);
     // endpoint dead-center in the blocked block
     const leg = nav.leg({ x: 2, y: 0, z: -1 }, { x: 0.5, y: 0, z: -0.5 });
+    expect(leg.direct).toBe(false);
+  });
+});
+
+describe('makeMultiNavigator', () => {
+  // base: open field; upper floor: everything blocked except one corridor row
+  const base = gridFrom(['.....', '.....', '.....']);
+  const upper = gridFrom(['#####', '.....', '#####']);
+
+  it('routes on the level matching the endpoints height', () => {
+    const nav = makeMultiNavigator({ grid: base, heightRange: [-1, 3] }, [
+      { grid: upper, heightRange: [3, 6] },
+    ]);
+    // both on the upper floor (y = 4): must use the corridor grid
+    const upstairs = nav.leg({ x: 0.5, y: 4, z: -1.5 }, { x: 4.5, y: 4, z: -1.5 });
+    expect(upstairs.direct).toBe(false);
+    // both on the ground floor (y = 0): open field, direct-ish path
+    const ground = nav.leg({ x: 0.5, y: 0, z: -0.5 }, { x: 4.5, y: 0, z: -0.5 });
+    expect(ground.direct).toBe(false);
+  });
+
+  it('falls back to a straight line across levels', () => {
+    const nav = makeMultiNavigator({ grid: base, heightRange: [-1, 3] }, [
+      { grid: upper, heightRange: [3, 6] },
+    ]);
+    const cross = nav.leg({ x: 0.5, y: 0, z: -0.5 }, { x: 4.5, y: 4, z: -0.5 });
+    expect(cross.direct).toBe(true);
+  });
+
+  it('layer height without nearby layer content resolves to the base grid', () => {
+    // "2nd floor" height, but the floor is not drawn anywhere near: terrain
+    // at that elevation is still ground level
+    const emptyUpper = gridFrom(['#####', '#####', '#####']);
+    const nav = makeMultiNavigator({ grid: base, heightRange: [-1000, -1] }, [
+      { grid: emptyUpper, heightRange: [-1, 2] },
+    ]);
+    const leg = nav.leg({ x: 0.5, y: 0, z: -0.5 }, { x: 4.5, y: 0, z: -0.5 });
+    expect(leg.direct).toBe(false);
+  });
+
+  it('heights outside every layer resolve to the base grid', () => {
+    const nav = makeMultiNavigator({ grid: base }, [{ grid: upper, heightRange: [3, 6] }]);
+    const leg = nav.leg({ x: 0.5, y: 40, z: -0.5 }, { x: 4.5, y: 40, z: -0.5 });
     expect(leg.direct).toBe(false);
   });
 });
