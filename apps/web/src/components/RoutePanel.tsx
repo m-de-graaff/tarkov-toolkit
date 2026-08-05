@@ -48,12 +48,15 @@ export function RoutePanel({
   originLabel,
   hasSelection,
   extract,
+  routingSupported = true,
 }: {
   route: PlannedRoute | null;
   originPosition: GamePosition | null;
   originLabel: 'live position' | 'spawn';
   hasSelection: boolean;
   extract?: RpExtract | null;
+  /** false = this map has no usable walkable-area data; distances are hidden */
+  routingSupported?: boolean;
 }) {
   return (
     <aside
@@ -64,6 +67,13 @@ export function RoutePanel({
       <h2 className="mb-3 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
         Route
       </h2>
+      {!routingSupported && (
+        <p className="routing-unsupported mb-3 rounded-md border border-primary/40 bg-accent/40 p-2.5 text-xs text-muted-foreground">
+          Route drawing isn't supported on this map yet - there is no reliable
+          walkable-area data for it. Objectives are still listed in a sensible
+          visiting order.
+        </p>
+      )}
       {!hasSelection ? (
         <p className="empty-note rounded-md border border-dashed p-3 text-[13px] text-muted-foreground">
           Tick quests in the sidebar and their objectives appear here in visiting order.
@@ -93,10 +103,16 @@ export function RoutePanel({
                     <span className="font-medium">{stop.taskName}</span>
                     <span className="text-muted-foreground">{stop.description}</span>
                     {stop.neededItems && <StopItems needed={stop.neededItems} />}
-                    <span className="text-xs text-muted-foreground/80 tabular-nums">
-                      {Math.round(leg?.distance ?? 0)}m from previous
-                      {leg?.direct ? ' (straight line)' : ''}
-                    </span>
+                    {routingSupported && (
+                      <span className="text-xs text-muted-foreground/80 tabular-nums">
+                        {Math.round(leg?.distance ?? 0)}m from previous
+                        {leg?.direct
+                          ? ' (straight line)'
+                          : leg?.segments?.some((s) => s.direct)
+                            ? ' (crosses unmapped ground)'
+                            : ''}
+                      </span>
+                    )}
                   </span>
                 </li>
               );
@@ -127,9 +143,11 @@ export function RoutePanel({
               </span>
             </p>
           )}
-          <p className="route-total mt-3 border-t pt-3 text-[13px] font-medium tabular-nums">
-            Total ≈ {Math.round(route.totalDistance)}m
-          </p>
+          {routingSupported && (
+            <p className="route-total mt-3 border-t pt-3 text-[13px] font-medium tabular-nums">
+              Total ≈ {Math.round(route.totalDistance)}m
+            </p>
+          )}
         </>
       )}
     </aside>

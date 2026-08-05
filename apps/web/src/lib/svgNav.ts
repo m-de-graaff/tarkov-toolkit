@@ -26,7 +26,6 @@ const MAX_UPSCALE = 8;
 const WALKABLE_FILLS = [
   'land',
   'trees',
-  'rock',
   'gravel',
   'tarmac',
   'floor',
@@ -38,7 +37,10 @@ const WALKABLE_FILLS = [
   'misc',
 ];
 const WALKABLE_STROKES = ['road_tarmac', 'road_gravel', 'railroad'];
-const BLOCKED_FILLS = ['water', 'danger', 'danger_small', 'building', 'locked', 'chopper'];
+// rock is blocked: it draws boulders and mountain ridges (Woods' massif,
+// Lighthouse's divide), not walkable ground - paths through rocks are drawn
+// as land/gravel on top and win by document order
+const BLOCKED_FILLS = ['water', 'rock', 'danger', 'danger_small', 'building', 'locked', 'chopper'];
 const BLOCKED_STROKES = ['map_border', 'wall', 'fence'];
 
 /**
@@ -51,10 +53,10 @@ const BLOCKED_STROKES = ['map_border', 'wall', 'fence'];
  * 3. doubled own-class rules (`.cement.cement`) - an element's own class
  *    always beats any ancestor's classification (a cement bridge drawn
  *    inside/after the river stays walkable),
- * 4. named exceptions last: swamps are water you can wade through, so any
- *    element (or group) whose id starts with "Swamp" is walkable; Lighthouse's
- *    impassable ridge is a rock-classed group named "mountains", so that id
- *    is blocked (other maps' "Rocks" are scattered walkable boulders).
+ * 4. named exceptions last: swamps are water you can wade through, and
+ *    "Sniper" danger zones (Customs, Ground Zero, Streets) are risky but
+ *    traversable roads - hard-blocking them severed the walkable graph and
+ *    made most Streets routes fall back to straight lines. Mines stay blocked.
  */
 const navStyle = (blockedStrokeUnits: number) => `
   * {
@@ -75,7 +77,7 @@ const navStyle = (blockedStrokeUnits: number) => `
   ${BLOCKED_FILLS.map((c) => `.${c}.${c}`).join(', ')} { fill: #000 !important; }
   ${BLOCKED_STROKES.map((c) => `.${c}.${c}`).join(', ')} { stroke: #000 !important; stroke-width: ${blockedStrokeUnits} !important; }
   [id^="Swamp"][id], [id^="Swamp"][id] * { fill: #fff !important; stroke: none !important; }
-  [id^="mountains"][id], [id^="mountains"][id] * { fill: #000 !important; stroke: none !important; }
+  [id^="Sniper"][id], [id^="Sniper"][id] *, [id^="sniper"][id], [id^="sniper"][id] * { fill: none !important; stroke: none !important; }
 `;
 
 /** Paints ONLY stairs, for extracting per-level stair masks. */
@@ -111,7 +113,13 @@ function svgSize(svg: SVGSVGElement): { width: number; height: number } {
   };
 }
 
-/** Layer groups are marked with data-layer (or fall back to a matching id). */
+/**
+ * Layer groups are marked with data-layer (or fall back to a matching id).
+ * EVERY data-layer group is collected, not only the calibrated names: the
+ * upstream layer list can skip a floor (Streets' First_Floor), and a skipped
+ * group that never gets hidden would paint its geometry into every level's
+ * grid.
+ */
 export function findLayerGroups(root: Element, names: string[]): Map<string, Element> {
   const groups = new Map<string, Element>();
   for (const el of root.querySelectorAll('[data-layer]')) {

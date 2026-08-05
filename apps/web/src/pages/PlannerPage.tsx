@@ -26,6 +26,7 @@ import { optimizeRoute } from '../lib/route';
 import { useLiveWatcher } from '../lib/useLiveWatcher';
 import { useMediaQuery } from '../lib/useMediaQuery';
 import { useNavGrid } from '../lib/useNavGrid';
+import { routingSupported } from '../lib/routingSupport';
 import { usePlanner } from '../store';
 
 const LAYOUT_KEY = 'raidplanner-layout';
@@ -53,6 +54,7 @@ export function PlannerPage() {
   const map = snapshot.maps.find((m) => m.id === selectedMapId);
   const isDesktop = useMediaQuery('(min-width: 768px)');
   const navigator = useNavGrid(map);
+  const canRoute = routingSupported(map);
 
   // named PMC spawn zones: the keyboard/screen-reader path to what a map
   // click does (WCAG 2.5.7 - a pointer gesture needs an alternative)
@@ -252,7 +254,7 @@ export function PlannerPage() {
         <MapCanvas
           map={map}
           markers={markers}
-          route={route}
+          route={canRoute ? route : null}
           onMapClick={(p) => setSpawn({ kind: 'custom', position: p })}
         />
       </div>
@@ -272,7 +274,7 @@ export function PlannerPage() {
         {map?.calibration && selectedTaskIds.length > 0 && (
           <details className="shrink-0 border-t bg-card">
             <summary className="cursor-pointer px-3 py-2 text-[13px] font-semibold text-primary tabular-nums">
-              Route{route ? ` · ≈ ${Math.round(route.totalDistance)}m` : ''}
+              Route{route && canRoute ? ` · ≈ ${Math.round(route.totalDistance)}m` : ''}
             </summary>
             <div className="max-h-[40dvh] overflow-y-auto">
               <RoutePanel
@@ -281,6 +283,7 @@ export function PlannerPage() {
                 originLabel={liveFix && !spawnWins ? 'live position' : 'spawn'}
                 hasSelection={selectedTaskIds.length > 0}
                 extract={chosenExtract}
+                routingSupported={canRoute}
               />
             </div>
           </details>
@@ -317,7 +320,8 @@ export function PlannerPage() {
                   originPosition={routeOrigin}
                   originLabel={liveFix && !spawnWins ? 'live position' : 'spawn'}
                   hasSelection={selectedTaskIds.length > 0}
-                extract={chosenExtract}
+                  extract={chosenExtract}
+                  routingSupported={canRoute}
                 />
               </div>
             )}

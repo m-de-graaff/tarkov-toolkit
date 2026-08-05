@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import type { Navigator } from './navGrid';
 import { makeMultiNavigator } from './navGrid';
 import { loadMaskNav } from './maskNav';
+import { routingSupported } from './routingSupport';
 import { loadNavGrid } from './svgNav';
 
 /**
@@ -17,11 +18,12 @@ export function useNavGrid(map: RpMap | undefined): Navigator | null {
   const [nav, setNav] = useState<Navigator | null>(null);
   const mapId = map?.id;
   const cal = map?.calibration;
+  const supported = routingSupported(map);
 
   useEffect(() => {
     let alive = true;
     setNav(null);
-    if (!mapId || !cal) return;
+    if (!mapId || !cal || !supported) return;
     const load = cal.svgFile
       ? loadNavGrid(mapId, cal)
       : cal.navFile
@@ -34,7 +36,7 @@ export function useNavGrid(map: RpMap | undefined): Navigator | null {
     return () => {
       alive = false;
     };
-  }, [mapId, cal]);
+  }, [mapId, cal, supported]);
 
   return nav;
 }

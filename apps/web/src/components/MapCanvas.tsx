@@ -74,6 +74,7 @@ export function MapCanvas({ map, markers, route, onMapClick }: MapCanvasProps) {
   const leafletRef = useRef<L.Map | null>(null);
   const overlayLayerRef = useRef<L.LayerGroup | null>(null);
   const baseSvgOverlayRef = useRef<L.ImageOverlay | null>(null);
+  const baseTileLayerRef = useRef<L.TileLayer | null>(null);
   const floorLayerRef = useRef<L.Layer | null>(null);
   const clickHandlerRef = useRef(onMapClick);
   clickHandlerRef.current = onMapClick;
@@ -130,6 +131,7 @@ export function MapCanvas({ map, markers, route, onMapClick }: MapCanvasProps) {
         addSvgOverlay();
       });
       tileLayer.addTo(lMap);
+      baseTileLayerRef.current = tileLayer;
     } else {
       addSvgOverlay();
     }
@@ -151,6 +153,7 @@ export function MapCanvas({ map, markers, route, onMapClick }: MapCanvasProps) {
       leafletRef.current = null;
       overlayLayerRef.current = null;
       baseSvgOverlayRef.current = null;
+      baseTileLayerRef.current = null;
       floorLayerRef.current = null;
       lMap.remove();
     };
@@ -161,19 +164,32 @@ export function MapCanvas({ map, markers, route, onMapClick }: MapCanvasProps) {
 
   // Swap the visible floor: per-floor tile pyramid where one exists,
   // otherwise a per-layer SVG image (replacing the fallback base image, or
-  // stacked on top of the base tiles).
+  // stacked on top of the base tiles). While a floor is active the ground
+  // imagery dims to a faint backdrop - previously both rendered at full
+  // strength on top of each other and the active floor was hard to read.
   useEffect(() => {
     const lMap = leafletRef.current;
     if (!lMap || !cal) return;
     floorLayerRef.current?.remove();
     floorLayerRef.current = null;
     baseSvgOverlayRef.current?.setUrl(`/maps/${cal.svgFile}`);
-    if (!floor) return;
+    const dimBase = (dimmed: boolean) => {
+      baseTileLayerRef.current?.setOpacity(dimmed ? 0.2 : 1);
+      baseSvgOverlayRef.current?.setOpacity(dimmed ? 0.2 : 1);
+    };
+    if (!floor) {
+      dimBase(false);
+      return;
+    }
     const layer = cal.layers?.find((l) => l.name === floor);
-    if (!layer) return;
+    if (!layer) {
+      dimBase(false);
+      return;
+    }
 
     const bounds = L.latLngBounds(boundsToLatLng(cal.svgBounds ?? cal.bounds));
     if (cal.tiles && layer.tileUrl) {
+      dimBase(true);
       floorLayerRef.current = L.tileLayer(layer.tileUrl, {
         tileSize: cal.tiles.tileSize,
         minNativeZoom: cal.tiles.minZoom,
@@ -184,14 +200,19 @@ export function MapCanvas({ map, markers, route, onMapClick }: MapCanvasProps) {
       }).addTo(lMap);
       return;
     }
-    if (!cal.svgFile || !layer.svgLayer) return;
+    if (!cal.svgFile || !layer.svgLayer) {
+      dimBase(false);
+      return;
+    }
     const mode = cal.tiles ? 'overlay' : 'fallback';
     let cancelled = false;
     void layerDisplayUrl(cal, layer.svgLayer, mode).then((url) => {
       if (cancelled || !url || leafletRef.current !== lMap) return;
       if (mode === 'fallback') {
+        // the floor image replaces the base outright - no dimming needed
         baseSvgOverlayRef.current?.setUrl(url);
       } else {
+        dimBase(true);
         floorLayerRef.current = L.imageOverlay(url, bounds).addTo(lMap);
       }
     });
@@ -215,16 +236,20 @@ export function MapCanvas({ map, markers, route, onMapClick }: MapCanvasProps) {
       m.addTo(layer);
     }
 
-    // Each leg carries its walkable polyline; straight-line fallbacks (no nav
-    // data, or disconnected endpoints) render dashed to signal as-the-crow-flies.
+    // Each leg carries its walkable polyline; straight-line fallbacks and the
+    // gap hops inside mixed legs render dashed to signal as-the-crow-flies.
     if (route) {
-      for (const leg of route.legs) {
-        if (leg.points.length < 2) continue;
-        L.polyline(leg.points.map(gameToLatLng), {
+      const draw = (points: GamePosition[], direct: boolean) => {
+        if (points.length < 2) return;
+        L.polyline(points.map(gameToLatLng), {
           color: ROUTE_COLOR,
-          weight: leg.direct ? 2 : 2.5,
-          ...(leg.direct ? { dashArray: '6 4' } : {}),
+          weight: direct ? 2 : 2.5,
+          ...(direct ? { dashArray: '6 4' } : {}),
         }).addTo(layer);
+      };
+      for (const leg of route.legs) {
+        if (leg.segments) for (const s of leg.segments) draw(s.points, s.direct);
+        else draw(leg.points, leg.direct);
       }
     }
   }, [markers, route, map.id]);

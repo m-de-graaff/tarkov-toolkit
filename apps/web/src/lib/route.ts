@@ -12,13 +12,8 @@ export interface RouteStop {
   neededItems?: NeededItems;
 }
 
-export interface RouteLeg {
-  /** polyline in game coordinates, both endpoints included */
-  points: GamePosition[];
-  distance: number;
-  /** straight-line fallback (no walkable path known) */
-  direct: boolean;
-}
+/** a leg between stops - a NavLeg, including any mixed walk/gap segments */
+export type RouteLeg = NavLeg;
 
 export interface PlannedRoute {
   stops: RouteStop[];
