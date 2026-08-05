@@ -89,6 +89,11 @@ export function barterProfit(barter: RpBarter, prices: ItemPrices): TradeProfit 
   };
 }
 
+/** material cost of one craft run (tools excluded); null if any input is unpriceable */
+export function craftMaterialCost(craft: RpCraft, prices: ItemPrices): number | null {
+  return stackCost(prices, craft.requiredItems);
+}
+
 export function craftProfit(craft: RpCraft, prices: ItemPrices): TradeProfit {
   const cost = stackCost(prices, craft.requiredItems);
   const revenue = stackRevenue(prices, craft.rewardItems);
