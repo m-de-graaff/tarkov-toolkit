@@ -21,6 +21,18 @@ export interface SyncPayload {
 
 const unionIds = (a: string[], b: string[]): string[] => [...new Set([...a, ...b])];
 
+// loyalty reached on either device stays reached (per-trader max)
+const mergeLoyalty = (
+  a: Record<string, number> | undefined,
+  b: Record<string, number> | undefined,
+): Record<string, number> => {
+  const out: Record<string, number> = { ...(b ?? {}) };
+  for (const [trader, level] of Object.entries(a ?? {})) {
+    out[trader] = Math.max(out[trader] ?? 0, level);
+  }
+  return out;
+};
+
 function mergeTracker(
   newer: TrackerState | undefined,
   older: TrackerState | undefined,
@@ -34,6 +46,7 @@ function mergeTracker(
     completedTaskIds: unionIds(newer.completedTaskIds, older.completedTaskIds),
     // a chapter finished on either device stays finished
     storyChapterIds: unionIds(newer.storyChapterIds ?? [], older.storyChapterIds ?? []),
+    traderLoyalty: mergeLoyalty(newer.traderLoyalty, older.traderLoyalty),
   };
 }
 
@@ -84,6 +97,7 @@ export function normalizeSynced(state: SyncedState): SyncedState {
     hideoutLevels: t.hideoutLevels ?? {},
     itemsHave: t.itemsHave ?? {},
     storyChapterIds: t.storyChapterIds ?? [],
+    traderLoyalty: t.traderLoyalty ?? {},
   });
   return {
     ...state,

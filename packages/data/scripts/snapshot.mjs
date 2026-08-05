@@ -6,6 +6,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { generateTileNav } from './tile-nav.mjs';
 import { applyWikiRenames, fetchWikiRenames } from './wikiRenames.mjs';
+import { fetchQuestIndex, fetchQuestPages } from './wikiQuests.mjs';
+import { applyWikiSync } from './wikiSync.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const dataRoot = path.join(here, '..');
@@ -244,6 +246,12 @@ function buildTasks(rawTasks, traderNames, idRemap) {
     trader: { id: raw.trader, name: traderNames.get(raw.trader) ?? 'Unknown' },
     mapId: raw.map ? remapId(raw.map) : null,
     minPlayerLevel: raw.minPlayerLevel ?? 1,
+    // required loyalty level with the quest's own trader (LL gating); the
+    // wiki sync overrides this from quest pages where the API lags
+    loyaltyLevel:
+      (raw.traderRequirements ?? []).find(
+        (req) => req.requirementType === 'level' && req.trader === raw.trader,
+      )?.value ?? 1,
     // normalize defensively: anything that isn't a real faction means "Any"
     factionName: ['USEC', 'BEAR'].includes(raw.factionName) ? raw.factionName : 'Any',
     kappaRequired: raw.kappaRequired ?? false,
@@ -282,31 +290,38 @@ function buildTasks(rawTasks, traderNames, idRemap) {
   }));
 }
 
-// Hand-maintained corrections for task data the API lags behind on (see the
-// comment field in manual/task-overrides.json). The wiki rename pass heals
-// titles; this pass fixes levels, prerequisites, objectives, and XP that
-// game patches changed. Each entry patches the task with the matching id and
-// self-retires once the API reports the expected player level, so a stale
-// entry can never fight fresh upstream data.
-async function applyManualOverrides(tasks) {
+// Hand-maintained corrections for task data neither the API nor the wiki
+// sync gets right (see the comment field in manual/task-overrides.json).
+// Applied last, so it has the final say. Each entry patches the task with
+// the matching id and self-retires once the RAW API reports the expected
+// player level (apiLevels holds the pre-sync values - the wiki sync pass
+// rewrites minPlayerLevel, which must not count as the API catching up).
+// Returns what happened per entry for the drift report.
+async function applyManualOverrides(tasks, apiLevels) {
   const { overrides } = JSON.parse(
     await readFile(path.join(dataRoot, 'manual', 'task-overrides.json'), 'utf8'),
   );
   const byId = new Map(tasks.map((t) => [t.id, t]));
+  const applied = [];
+  const retired = [];
   for (const entry of overrides) {
     const task = byId.get(entry.id);
     if (!task) {
       console.warn(`  override ${entry.id}: task absent from API data, skipped`);
       continue;
     }
-    if (task.minPlayerLevel <= entry.retireWhenApiMinPlayerLevelAtMost) {
+    const apiLevel = apiLevels.get(entry.id) ?? task.minPlayerLevel;
+    if (apiLevel <= entry.retireWhenApiMinPlayerLevelAtMost) {
       console.log(
         `  override for "${task.name}" retired - the API caught up, delete it from task-overrides.json`,
       );
+      retired.push({ id: entry.id, name: task.name });
       continue;
     }
     Object.assign(task, entry.set);
+    applied.push({ id: entry.id, name: task.name });
   }
+  return { applied, retired };
 }
 
 function buildAmmo(itemsData) {
@@ -445,7 +460,7 @@ async function main() {
   // Union of both game modes' quest sets, each task tagged with the modes it
   // exists in (~95% overlap; PvP-only and PvE-only tails are real).
   const pveIds = new Set(Object.keys(pveTasksData.tasks));
-  const tasks = buildTasks(tasksData.tasks, traderNames, idRemap).map((task) => ({
+  let tasks = buildTasks(tasksData.tasks, traderNames, idRemap).map((task) => ({
     ...task,
     modes: pveIds.has(task.id) ? ['pvp', 'pve'] : ['pvp'],
   }));
@@ -459,6 +474,10 @@ async function main() {
   }));
   tasks.push(...pveOnlyTasks);
 
+  // The raw API levels decide when a manual override retires; captured
+  // before any wiki pass rewrites them.
+  const apiLevels = new Map(tasks.map((t) => [t.id, t.minPlayerLevel]));
+
   // Game patches rename quests and tarkov.dev lags; the wiki has the
   // in-game names within hours and leaves redirects from the old titles.
   // Best-effort: a wiki outage must not block the snapshot.
@@ -471,8 +490,44 @@ async function main() {
     console.log(`  wiki rename pass skipped: ${err.message}`);
   }
 
+  // Reconcile the quest catalog with the wiki's per-trader tables: add
+  // quests the API misses, drop quests removed from the game, adopt current
+  // levels/prereqs/XP/kappa (wikiSync.mjs). Best-effort like the rename pass.
+  let drift = null;
+  try {
+    console.log('Syncing quest catalog with the wiki...');
+    const index = await fetchQuestIndex(fetchJson);
+    const pages = await fetchQuestPages(index.map((q) => q.name), fetchJson);
+    const config = JSON.parse(
+      await readFile(path.join(dataRoot, 'manual', 'wiki-sync.json'), 'utf8'),
+    );
+    const traderIdByName = new Map(
+      [...traderNames.entries()].map(([id, name]) => [name, id]),
+    );
+    const result = applyWikiSync({ tasks, maps, traderIdByName, index, pages, config });
+    tasks = result.tasks;
+    drift = result.drift;
+    console.log(
+      `  wiki catalog: ${index.length} quests, +${drift.synthesized.length} synthesized, ` +
+        `-${drift.dropped.length} dropped, ${drift.patched.length} patched.`,
+    );
+  } catch (err) {
+    console.log(`  wiki sync pass skipped: ${err.message}`);
+    drift = { skipped: err.message };
+  }
+
   console.log('Applying manual task overrides...');
-  await applyManualOverrides(tasks);
+  const overrideOutcome = await applyManualOverrides(tasks, apiLevels);
+
+  await mkdir(generatedDir, { recursive: true });
+  await writeFile(
+    path.join(generatedDir, 'wiki-drift.json'),
+    JSON.stringify(
+      { generatedAt: new Date().toISOString(), ...drift, manualOverrides: overrideOutcome },
+      null,
+      1,
+    ),
+  );
 
   console.log(`Downloading ${svgDownloads.length} map SVGs...`);
   await downloadSvgs(svgDownloads);

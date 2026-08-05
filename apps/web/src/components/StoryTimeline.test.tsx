@@ -55,7 +55,7 @@ describe('StoryTimeline', () => {
     expect(usePlanner.getState().tracker.storyChapterIds).toContain(storyChapters[0].id);
     // chapter 2's start text is now front and center in the current card
     expect(container.textContent).toContain(storyChapters[1].start);
-    expect(container.textContent).toContain('1/9 chapters');
+    expect(container.textContent).toContain('1/10 chapters');
   });
 
   it('map chips open the planner with that map selected', () => {
