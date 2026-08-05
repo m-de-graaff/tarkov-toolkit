@@ -15,11 +15,12 @@ export interface TrackerState {
 export function isAvailable(task: RpTask, tracker: TrackerState): boolean {
   if (tracker.completedTaskIds.includes(task.id)) return false;
   if (tracker.level < task.minPlayerLevel) return false;
-  if (
-    task.factionName !== 'Any' &&
-    tracker.faction !== 'Any' &&
-    task.factionName !== tracker.faction
-  ) {
+  // anything that isn't a real faction means "open to both" - old snapshots
+  // shipped 'Any' blind-translated into 'any target', hiding every common
+  // quest from USEC/BEAR trackers
+  const taskFaction =
+    task.factionName === 'USEC' || task.factionName === 'BEAR' ? task.factionName : 'Any';
+  if (taskFaction !== 'Any' && tracker.faction !== 'Any' && taskFaction !== tracker.faction) {
     return false;
   }
   return task.taskRequirements.every(

@@ -35,6 +35,14 @@ check(
   snapshot.tasks.every((t) => Array.isArray(t.modes) && t.modes.length > 0),
   'every task must carry a modes tag',
 );
+check(
+  snapshot.tasks.every((t) => ['Any', 'USEC', 'BEAR'].includes(t.factionName)),
+  'factionName must be the Any/USEC/BEAR enum (blind translation once turned Any into "any target")',
+);
+check(
+  snapshot.tasks.filter((t) => t.factionName === 'Any').length > snapshot.tasks.length / 2,
+  'most tasks must be faction-neutral',
+);
 
 const tasksWithPoints = snapshot.tasks.filter((t) =>
   t.objectives.some((o) => o.points.length > 0),
