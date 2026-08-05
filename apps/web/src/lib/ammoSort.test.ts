@@ -1,6 +1,6 @@
 import type { AmmoRound } from '@raidplanner/data';
 import { describe, expect, it } from 'vitest';
-import { classEffectiveness, filterAmmo, penTier, sortAmmo, totalDamage } from './ammoSort';
+import { classEffectiveness, classRating, filterAmmo, penTier, sortAmmo, totalDamage } from './ammoSort';
 
 const round = (name: string, over: Partial<AmmoRound>): AmmoRound => ({
   id: name,
@@ -54,6 +54,14 @@ describe('classEffectiveness', () => {
     expect(classEffectiveness(44, 4)).toBe('fair'); // +4
     expect(classEffectiveness(44, 5)).toBe('poor'); // -6
     expect(classEffectiveness(44, 6)).toBe('none'); // -16
+  });
+
+  it('maps tiers to the displayed 0-6 rating', () => {
+    expect(classRating(44, 2)).toBe(6);
+    expect(classRating(44, 3)).toBe(5);
+    expect(classRating(44, 4)).toBe(3);
+    expect(classRating(44, 5)).toBe(1);
+    expect(classRating(44, 6)).toBe(0);
   });
 });
 
