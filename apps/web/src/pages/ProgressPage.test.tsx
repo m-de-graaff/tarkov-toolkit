@@ -84,7 +84,7 @@ describe('ProgressPage', () => {
   });
 
   it('typed level values are clamped into 1-79', () => {
-    act(() => root.render(<ProgressPage />));
+    act(() => root.render(<MemoryRouter><ProgressPage /></MemoryRouter>));
     const level = container.querySelector<HTMLInputElement>('input[type=number]')!;
     const nativeSet = Object.getOwnPropertyDescriptor(
       window.HTMLInputElement.prototype,
