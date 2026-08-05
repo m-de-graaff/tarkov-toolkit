@@ -69,6 +69,29 @@ export function mergeSyncedState(newer: SyncedState, older: SyncedState): Synced
   };
 }
 
+/**
+ * Fill schema holes in a synced payload: pre-v3 remote copies may lack
+ * hideoutLevels/itemsHave (or even completedTaskIds on hand-rolled payloads);
+ * the store's migrations only run on the localStorage path, so synced state
+ * is normalized here instead.
+ */
+export function normalizeSynced(state: SyncedState): SyncedState {
+  const fill = (t: TrackerState): TrackerState => ({
+    ...t,
+    completedTaskIds: t.completedTaskIds ?? [],
+    hideoutLevels: t.hideoutLevels ?? {},
+    itemsHave: t.itemsHave ?? {},
+  });
+  return {
+    ...state,
+    tracker: fill(state.tracker),
+    profiles: Object.fromEntries(
+      Object.entries(state.profiles ?? {}).map(([mode, t]) => [mode, fill(t as TrackerState)]),
+    ),
+    craftBlacklist: state.craftBlacklist ?? [],
+  };
+}
+
 export async function pullProgress(): Promise<SyncPayload | null> {
   const res = await fetch('/api/progress', { credentials: 'include' });
   if (res.status === 204) return null;
@@ -76,12 +99,18 @@ export async function pullProgress(): Promise<SyncPayload | null> {
   return (await res.json()) as SyncPayload;
 }
 
-export async function pushProgress(version: number, state: SyncedState): Promise<void> {
+export async function pushProgress(
+  version: number,
+  state: SyncedState,
+  opts?: { keepalive?: boolean },
+): Promise<void> {
   const res = await fetch('/api/progress', {
     method: 'PUT',
     credentials: 'include',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ version, state }),
+    // keepalive lets the final flush survive the page being torn down
+    keepalive: opts?.keepalive,
   });
   if (!res.ok) throw new Error(`PUT /api/progress ${res.status}`);
 }

@@ -14,7 +14,7 @@ const STATUS_LABEL: Record<SyncStatus, string> = {
   off: '',
   syncing: 'Syncing...',
   synced: 'Progress synced',
-  error: 'Sync failed - retrying on next change',
+  error: 'Sync failed - retrying automatically',
 };
 
 function AuthForm({ onDone }: { onDone: () => void }) {
