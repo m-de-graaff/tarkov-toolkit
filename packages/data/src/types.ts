@@ -30,6 +30,16 @@ export interface RpSpawn {
   zoneName: string;
 }
 
+export interface RpExtract {
+  id: string;
+  name: string;
+  /** 'pmc' | 'shared' | 'scav' */
+  faction: string;
+  position: GamePosition;
+  /** switch-gated / not always open */
+  conditional: boolean;
+}
+
 export interface RpMap {
   id: string;
   name: string;
@@ -44,6 +54,7 @@ export interface RpMap {
   /** absent => not renderable in v1 (tile-based or virtual map) */
   calibration?: MapCalibration;
   spawns: RpSpawn[];
+  extracts: RpExtract[];
 }
 
 export interface RpZone {

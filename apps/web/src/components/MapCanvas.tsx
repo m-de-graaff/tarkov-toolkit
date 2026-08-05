@@ -9,7 +9,7 @@ export interface MapMarker {
   id: string;
   position: GamePosition;
   label: string;
-  kind: 'objective' | 'spawn' | 'player';
+  kind: 'objective' | 'spawn' | 'player' | 'extract';
   orderIndex?: number;
   taskName?: string;
   /** heading in degrees for kind 'player' (map rotation added at render) */
@@ -36,7 +36,14 @@ function markerIcon(marker: MapMarker, mapRotation: number): L.DivIcon {
       iconAnchor: [12, 12],
     });
   }
-  const text = marker.kind === 'spawn' ? 'S' : marker.orderIndex != null ? String(marker.orderIndex + 1) : '•';
+  const text =
+    marker.kind === 'spawn'
+      ? 'S'
+      : marker.kind === 'extract'
+        ? 'EX'
+        : marker.orderIndex != null
+          ? String(marker.orderIndex + 1)
+          : '•';
   return L.divIcon({
     className: '',
     html: `<div class="marker ${marker.kind}">${text}</div>`,
@@ -130,13 +137,17 @@ export function MapCanvas({ map, markers, route, onMapClick }: MapCanvasProps) {
       m.addTo(layer);
     }
 
-    if (route && route.stops.length > 0) {
+    if (route && (route.stops.length > 0 || markers.some((m) => m.kind === 'extract'))) {
       const origin = markers.find((m) => m.kind === 'player') ?? markers.find((m) => m.kind === 'spawn');
+      const extract = markers.find((m) => m.kind === 'extract');
       const points = [
         ...(origin ? [gameToLatLng(origin.position)] : []),
         ...route.stops.map((s) => gameToLatLng(s.position)),
+        ...(extract ? [gameToLatLng(extract.position)] : []),
       ];
-      L.polyline(points, { color: ROUTE_COLOR, weight: 2, dashArray: '6 4' }).addTo(layer);
+      if (points.length > 1) {
+        L.polyline(points, { color: ROUTE_COLOR, weight: 2, dashArray: '6 4' }).addTo(layer);
+      }
     }
   }, [markers, route, map.id]);
 

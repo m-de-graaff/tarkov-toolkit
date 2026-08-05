@@ -161,6 +161,16 @@ function buildMaps(rawMaps, calibrationIndex) {
     // Merged variants keep their own nameId/scenePath in the logs — collect
     // them all so log-based map detection resolves variants to the canonical map.
     const logSources = spawnSources;
+    const extracts = (raw.extracts ?? [])
+      .filter((e) => e.position && e.faction !== 'scav')
+      .map((e) => ({
+        id: e.id,
+        name: e.name,
+        faction: e.faction,
+        position: e.position,
+        conditional: (e.switches ?? []).length > 0,
+      }));
+
     maps.push({
       id: raw.id,
       name: raw.name,
@@ -172,6 +182,7 @@ function buildMaps(rawMaps, calibrationIndex) {
         : {}),
       ...(calibration ? { calibration } : {}),
       spawns,
+      extracts,
     });
   }
   return { maps, svgDownloads, idRemap };

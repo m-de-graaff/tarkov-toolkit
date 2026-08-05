@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import type { HideoutStation } from '@raidplanner/data';
 import { snapshot } from '@raidplanner/data';
-import { Hammer, Minus } from 'lucide-react';
+import { Hammer, Minus, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { levelReadiness, nextLevelOf } from '../lib/hideoutReady';
 import { maxLevel } from '../lib/neededItems';
@@ -58,6 +58,23 @@ function StationCard({ station }: { station: HideoutStation }) {
           <span className="min-w-10 text-center text-sm font-medium tabular-nums">
             {current} / {max}
           </span>
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            className="size-6"
+            aria-label={`Set ${station.name} one level higher`}
+            disabled={current >= max}
+            title="Set the level directly (e.g. already built in game) — uses up any matching materials you've collected, no requirements check"
+            onClick={() => {
+              if (next) {
+                consumeItems(next.itemRequirements.map((r) => ({ itemId: r.itemId, count: r.count })));
+              }
+              setHideoutLevel(station.id, current + 1);
+            }}
+          >
+            <Plus aria-hidden="true" className="size-3" />
+          </Button>
         </div>
       </div>
 

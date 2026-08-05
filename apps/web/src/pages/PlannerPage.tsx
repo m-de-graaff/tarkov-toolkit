@@ -3,6 +3,13 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { snapshot } from '@raidplanner/data';
 import { useMemo } from 'react';
 import type { Layout } from 'react-resizable-panels';
@@ -21,6 +28,7 @@ import { useMediaQuery } from '../lib/useMediaQuery';
 import { usePlanner } from '../store';
 
 const LAYOUT_KEY = 'raidplanner-layout';
+const AUTO_EXTRACT = '__auto__';
 
 function loadSavedLayout(): Layout | undefined {
   try {
@@ -37,6 +45,7 @@ export function PlannerPage() {
   const spawn = usePlanner((s) => s.spawn);
   const setSpawn = usePlanner((s) => s.setSpawn);
   const liveFix = usePlanner((s) => s.liveFix);
+  const setTargetExtract = usePlanner((s) => s.setTargetExtract);
   const watcher = useLiveWatcher();
 
   const map = snapshot.maps.find((m) => m.id === selectedMapId);
@@ -74,9 +83,30 @@ export function PlannerPage() {
     return out;
   }, [map, selectedTaskIds, routeOrigin]);
 
+  // Extract choice: explicit pick wins; auto = the farthest always-open
+  // PMC/shared exfil from where you start (Tarkov puts exfils opposite spawns).
+  const targetExtractId = usePlanner((s) => s.targetExtractId);
+  const extracts = useMemo(
+    () => (map?.extracts ?? []).filter((e) => e.faction === 'pmc' || e.faction === 'shared'),
+    [map],
+  );
+  const chosenExtract = useMemo(() => {
+    if (targetExtractId) return extracts.find((e) => e.id === targetExtractId) ?? null;
+    if (!routeOrigin || extracts.length === 0) return null;
+    const candidates = extracts.some((e) => !e.conditional)
+      ? extracts.filter((e) => !e.conditional)
+      : extracts;
+    return candidates.reduce((a, b) =>
+      distance2d(a.position, routeOrigin) >= distance2d(b.position, routeOrigin) ? a : b,
+    );
+  }, [targetExtractId, extracts, routeOrigin]);
+
   const route = useMemo(
-    () => (routeOrigin && stops.length > 0 ? optimizeRoute(routeOrigin, stops) : null),
-    [routeOrigin, stops],
+    () =>
+      routeOrigin && (stops.length > 0 || chosenExtract)
+        ? optimizeRoute(routeOrigin, stops, chosenExtract?.position)
+        : null,
+    [routeOrigin, stops, chosenExtract],
   );
 
   const outOfBounds = useMemo(() => {
@@ -113,8 +143,16 @@ export function PlannerPage() {
         yawDeg: liveFix.yawDeg,
       });
     }
+    if (chosenExtract && routeOrigin) {
+      out.push({
+        id: `extract-${chosenExtract.id}`,
+        position: chosenExtract.position,
+        label: `Extract: ${chosenExtract.name}${chosenExtract.conditional ? ' (conditional)' : ''}`,
+        kind: 'extract',
+      });
+    }
     return out;
-  }, [stops, route, spawn, liveFix]);
+  }, [stops, route, spawn, liveFix, chosenExtract, routeOrigin]);
 
   const mapArea = map?.calibration ? (
     <>
@@ -133,6 +171,30 @@ export function PlannerPage() {
             Spawn set · clear
           </button>
         ) : null}
+        {extracts.length > 0 && (
+          <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <span>Extract</span>
+            <Select
+              value={targetExtractId ?? AUTO_EXTRACT}
+              onValueChange={(v) => setTargetExtract(v === AUTO_EXTRACT ? null : v)}
+            >
+              <SelectTrigger className="h-7 max-w-52 text-xs" aria-label="Target extract">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={AUTO_EXTRACT}>
+                  Auto{!targetExtractId && chosenExtract ? ` (${chosenExtract.name})` : ''}
+                </SelectItem>
+                {extracts.map((e) => (
+                  <SelectItem key={e.id} value={e.id}>
+                    {e.name}
+                    {e.conditional ? ' · conditional' : ''}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </label>
+        )}
         <div className="h-5 w-px bg-border" aria-hidden="true" />
         <LivePanel watcher={watcher} outOfBounds={outOfBounds} />
         <div className="ml-auto">
@@ -171,6 +233,7 @@ export function PlannerPage() {
                 originPosition={routeOrigin}
                 originLabel={liveFix ? 'live position' : 'spawn'}
                 hasSelection={selectedTaskIds.length > 0}
+                extract={chosenExtract}
               />
             </div>
           </details>
@@ -207,6 +270,7 @@ export function PlannerPage() {
                   originPosition={routeOrigin}
                   originLabel={liveFix ? 'live position' : 'spawn'}
                   hasSelection={selectedTaskIds.length > 0}
+                extract={chosenExtract}
                 />
               </div>
             )}
