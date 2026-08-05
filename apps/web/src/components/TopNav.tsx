@@ -22,7 +22,7 @@ function NavTab({ to, children }: { to: string; children: string }) {
       end
       className={({ isActive }) =>
         cn(
-          'rounded-md px-2.5 py-1 text-sm transition-colors hover:text-foreground',
+          'whitespace-nowrap rounded-md px-2.5 py-1 text-sm transition-colors hover:text-foreground',
           isActive ? 'bg-secondary font-medium text-foreground' : 'text-muted-foreground',
         )
       }
@@ -44,7 +44,7 @@ export function TopNav() {
   }, [selectedMapId]);
 
   return (
-    <header className="flex h-12 shrink-0 items-center gap-3 border-b bg-card px-4">
+    <header className="flex min-h-12 shrink-0 flex-wrap items-center gap-x-3 gap-y-0 border-b bg-card px-4 py-1.5 md:h-12 md:flex-nowrap md:py-0">
       {!isDesktop && location.pathname === '/planner' && (
         <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
           <SheetTrigger asChild>
@@ -61,14 +61,15 @@ export function TopNav() {
           </SheetContent>
         </Sheet>
       )}
-      <span className="flex items-center gap-2 text-sm font-semibold">
+      <span className="flex items-center gap-2 whitespace-nowrap text-sm font-semibold">
         <img src="/logo.svg" alt="" className="size-5 rounded-[5px]" />
-        Tarkov Toolkit
+        <span className="max-[440px]:hidden">Tarkov Toolkit</span>
       </span>
+      {/* below md the tabs drop to their own full-width scrollable row; the
+          edge fade tells mobile users the strip scrolls */}
       <nav
         aria-label="Tools"
-        // the edge fade tells mobile users the strip scrolls; desktop fits fully
-        className="ml-2 flex min-w-0 items-center gap-1 overflow-x-auto [mask-image:linear-gradient(to_right,transparent,black_16px,black_calc(100%-16px),transparent)] md:[mask-image:none]"
+        className="order-last -mx-4 flex w-[calc(100%+2rem)] min-w-0 items-center gap-1 overflow-x-auto px-4 pt-1 [mask-image:linear-gradient(to_right,transparent,black_16px,black_calc(100%-16px),transparent)] md:order-none md:mx-0 md:ml-2 md:w-auto md:px-0 md:pt-0 md:[mask-image:none]"
       >
         <NavTab to="/">Home</NavTab>
         <NavTab to="/planner">Raid Planner</NavTab>
