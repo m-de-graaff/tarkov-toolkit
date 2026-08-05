@@ -13,7 +13,14 @@ import path from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import { WebSocketServer, type WebSocket } from 'ws';
 import { parseScreenshotName, pickNewestFix, type LiveFix, type LogEvent } from '@raidplanner/live';
+import { isSeaBuild, setupLogging } from './log.ts';
 import { detectLogsDir, startLogsWatcher } from './logsWatcher.ts';
+import { startTray, type Tray } from './tray.ts';
+import { checkForUpdate, cleanupOldBinary, downloadAndInstall } from './updater.ts';
+
+declare const __COMPANION_VERSION__: string | undefined;
+const VERSION =
+  typeof __COMPANION_VERSION__ === 'string' ? __COMPANION_VERSION__ : 'dev';
 
 const PORT = Number(process.env.RAIDPLANNER_WATCHER_PORT ?? 17520);
 const CONFIG_FILE = path.join(homedir(), '.raidplanner-watcher.json');
@@ -118,6 +125,8 @@ async function scan(initial = false) {
 
 // no top-level await: the single-executable build bundles to CommonJS
 async function main() {
+  setupLogging();
+  cleanupOldBinary();
   screenshotsDir = await detectScreenshotsDir();
 
   const server = new WebSocketServer({ host: '127.0.0.1', port: PORT });
@@ -157,13 +166,52 @@ async function main() {
     );
   }
 
-  process.on('SIGINT', () => {
+  const shutdown = () => {
+    tray?.dispose();
     watcher?.close();
     stopLogs?.();
     clearInterval(interval);
     server.close();
     process.exit(0);
-  });
+  };
+  process.on('SIGINT', shutdown);
+
+  // Tray icon + updater for the packaged app (dev runs stay console-only,
+  // opt in with RAIDPLANNER_TRAY=1).
+  let tray: Tray | null = null;
+  if (process.platform === 'win32' && (isSeaBuild() || process.env.RAIDPLANNER_TRAY === '1')) {
+    tray = startTray(VERSION, (action) => {
+      if (action === 'quit') shutdown();
+      if (action === 'update') {
+        void checkForUpdate(VERSION)
+          .then(async (update) => {
+            if (!update) {
+              tray?.balloon(`You are on the latest version (${VERSION}).`);
+              return;
+            }
+            tray?.balloon(`Updating to ${update.tag}...`);
+            await downloadAndInstall(update);
+          })
+          .catch((err) => {
+            console.error('update failed:', err);
+            tray?.balloon('Update check failed. Are you online?');
+          });
+      }
+    });
+
+    // startup auto-update: download, swap, relaunch. Opt out with
+    // RAIDPLANNER_NO_AUTO_UPDATE=1 (the tray menu still updates on demand).
+    if (process.env.RAIDPLANNER_NO_AUTO_UPDATE !== '1') {
+      void checkForUpdate(VERSION)
+        .then(async (update) => {
+          if (!update) return;
+          console.log(`Update available: ${update.tag}, installing`);
+          tray?.balloon(`Updating to ${update.tag}...`);
+          await downloadAndInstall(update);
+        })
+        .catch((err) => console.error('auto-update failed:', err));
+    }
+  }
 }
 
 void main().catch((err) => {
