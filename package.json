@@ -10,7 +10,7 @@
     "watcher": "pnpm --filter @raidplanner/watcher start"
   },
   "dependencies": {
-    "better-auth": "^1.6.26",
+    "better-auth": "1.6.25",
     "pg": "^8.16.0"
   },
   "devDependencies": {
