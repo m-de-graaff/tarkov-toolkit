@@ -82,6 +82,28 @@ describe('ProgressPage', () => {
     expect(container.textContent).not.toContain('dead end');
   });
 
+  it('typed level values are clamped into 1-79', () => {
+    act(() => root.render(<ProgressPage />));
+    const level = container.querySelector<HTMLInputElement>('input[type=number]')!;
+    const nativeSet = Object.getOwnPropertyDescriptor(
+      window.HTMLInputElement.prototype,
+      'value',
+    )!.set!;
+
+    const type = (v: string) =>
+      act(() => {
+        nativeSet.call(level, v);
+        level.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+
+    type('999');
+    expect(usePlanner.getState().tracker.level).toBe(79);
+    type('0');
+    expect(usePlanner.getState().tracker.level).toBe(1);
+    type('42');
+    expect(usePlanner.getState().tracker.level).toBe(42);
+  });
+
   it('reset requires a second, explicit click', () => {
     act(() => {
       usePlanner.getState().toggleCompleted(snapshot.tasks[0].id);
