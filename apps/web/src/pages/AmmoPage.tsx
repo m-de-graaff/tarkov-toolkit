@@ -52,7 +52,12 @@ function armorSummary(round: AmmoRound): string {
   const best = [6, 5, 4, 3, 2, 1].find(
     (c) => classEffectiveness(round.penetrationPower, c) !== 'none',
   );
-  return best ? `effective up to armor class ${best}` : 'flesh damage only';
+  const headline = best ? `effective up to armor class ${best}` : 'flesh damage only';
+  // per-class ratings must reach screen readers too, not only the color blocks
+  const ratings = [1, 2, 3, 4, 5, 6]
+    .map((c) => `class ${c}: ${classRating(round.penetrationPower, c)} of 6`)
+    .join(', ');
+  return `${headline} (${ratings})`;
 }
 
 const COLUMNS: { key: AmmoSortKey; label: string; title: string }[] = [
