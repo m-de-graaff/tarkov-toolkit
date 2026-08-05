@@ -59,12 +59,14 @@ describe('/api/setup', () => {
     expect(res.statusCode).toBe(401);
   });
 
-  it('runs migrations and creates the progress table with the right key', async () => {
+  it('runs migrations and creates the progress and feedback tables', async () => {
     query.mockResolvedValue({ rows: [] } as never);
     const res = makeRes();
     await handler(makeReq('POST', 'the-setup-secret'), res);
     expect(res.statusCode).toBe(200);
     expect(runMigrations).toHaveBeenCalledOnce();
-    expect(query).toHaveBeenCalledOnce();
+    const ddl = query.mock.calls.map(([sql]) => String(sql));
+    expect(ddl.some((s) => s.includes('CREATE TABLE IF NOT EXISTS progress'))).toBe(true);
+    expect(ddl.some((s) => s.includes('CREATE TABLE IF NOT EXISTS feedback'))).toBe(true);
   });
 });

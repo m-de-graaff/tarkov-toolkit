@@ -4,6 +4,7 @@
 // escape hatch for errors that persist.
 import { Button } from '@/components/ui/button';
 import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { reportError } from '../lib/monitoring';
 
 interface Props {
   children: ReactNode;
@@ -32,6 +33,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, info: ErrorInfo) {
     console.error('render error:', error, info.componentStack);
+    reportError(error, { componentStack: info.componentStack });
   }
 
   render() {

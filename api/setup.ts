@@ -43,6 +43,17 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         updated_at timestamptz NOT NULL DEFAULT now()
       )
     `);
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS feedback (
+        id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+        user_id text REFERENCES "user"(id) ON DELETE SET NULL,
+        message text NOT NULL,
+        email text,
+        page text,
+        user_agent text,
+        created_at timestamptz NOT NULL DEFAULT now()
+      )
+    `);
     reply(200, { ok: true });
   } catch (err) {
     reply(500, { error: err instanceof Error ? err.message : 'setup failed' });

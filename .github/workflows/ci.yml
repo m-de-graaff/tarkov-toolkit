@@ -21,3 +21,21 @@ jobs:
       # api/ is outside the workspace (Vercel functions); check it explicitly
       - run: pnpm typecheck:api
       - run: pnpm test:api
+
+  e2e-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @raidplanner/e2e exec playwright install --with-deps chromium
+      - run: pnpm --filter web build
+      - name: Serve the built app and run the smoke suite
+        run: |
+          pnpm --filter web exec vite preview --port 4173 &
+          for i in $(seq 1 30); do curl -sf http://localhost:4173 >/dev/null && break; sleep 1; done
+          BASE_URL=http://localhost:4173 node e2e/smoke.mjs

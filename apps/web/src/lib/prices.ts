@@ -84,7 +84,30 @@ export interface RawItem {
 const PRICES_BASE: string =
   (import.meta.env?.VITE_PRICES_BASE as string | undefined) || 'https://json.tarkov.dev';
 
+/** Hosted deployments set VITE_PRICES_TRIMMED=1: prices come pre-built from
+ * our own /api/prices (edge-cached, ~1-2MB) instead of the ~16MB raw payload. */
+const PRICES_TRIMMED = /^(1|true)$/i.test(
+  String((import.meta.env?.VITE_PRICES_TRIMMED as string | undefined) ?? ''),
+);
+
+async function fetchTrimmed(mode: GameMode): Promise<CachedPrices> {
+  const response = await fetch(`/api/prices?mode=${mode === 'pve' ? 'pve' : 'regular'}`, {
+    headers: { Accept: 'application/json' },
+  });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  const payload = (await response.json()) as CachedPrices;
+  const cached: CachedPrices = {
+    formatVersion: PRICES_FORMAT_VERSION,
+    // server timestamps survive edge caching (at most ~10 minutes old)
+    fetchedAt: payload.fetchedAt ?? Date.now(),
+    prices: payload.prices ?? {},
+  };
+  await saveCachedPrices(mode, cached);
+  return cached;
+}
+
 export async function fetchPrices(mode: GameMode): Promise<CachedPrices> {
+  if (PRICES_TRIMMED) return fetchTrimmed(mode);
   const prefix = mode === 'pve' ? 'pve' : 'regular';
   const get = async (path: string) => {
     const response = await fetch(`${PRICES_BASE}/${path}`, {
