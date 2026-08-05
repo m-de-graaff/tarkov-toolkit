@@ -18,3 +18,6 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
       - run: pnpm test
+      # api/ is outside the workspace (Vercel functions); check it explicitly
+      - run: pnpm typecheck:api
+      - run: pnpm test:api
