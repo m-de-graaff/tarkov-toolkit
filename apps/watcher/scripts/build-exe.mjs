@@ -33,10 +33,32 @@ writeFileSync(
 );
 run('node --experimental-sea-config dist/sea-config.json');
 
-// 3. copy node binary and inject
+// 3. copy node binary, brand it, and inject
 const exeName = process.platform === 'win32' ? 'RaidplannerCompanion.exe' : 'raidplanner-companion';
 const exePath = path.join(dist, exeName);
 copyFileSync(process.execPath, exePath);
+
+// 3a. icon + version resources (before injection, so the blob is appended to
+// a finished resource section). The tray icon is extracted from the exe, so
+// this brands both the file and the notification area.
+if (process.platform === 'win32') {
+  const { rcedit } = await import('rcedit');
+  const tag = process.env.RELEASE_TAG ?? '';
+  const numeric = /^v\d+\.\d+\.\d+$/.test(tag) ? tag.slice(1) : '0.0.0';
+  await rcedit(exePath, {
+    icon: path.join(root, 'assets', 'companion.ico'),
+    'product-version': numeric,
+    'file-version': numeric,
+    'version-string': {
+      ProductName: 'Tarkov Toolkit Companion',
+      FileDescription: 'Tarkov Toolkit Companion - live raid position and quest automation',
+      LegalCopyright: 'MIT License',
+      OriginalFilename: exeName,
+    },
+  });
+  console.log('Embedded icon and version resources.');
+}
+
 run(
   `pnpm dlx postject "${exePath}" NODE_SEA_BLOB dist/sea-prep.blob ` +
     `--sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2`,

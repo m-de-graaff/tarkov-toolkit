@@ -1,0 +1,14 @@
+{
+  "name": "Tarkov Toolkit",
+  "short_name": "Tarkov Toolkit",
+  "description": "Raid planner, quest tracker and profit tools for Escape from Tarkov.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#111110",
+  "theme_color": "#111110",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

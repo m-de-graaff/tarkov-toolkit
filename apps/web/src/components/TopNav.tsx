@@ -61,7 +61,10 @@ export function TopNav() {
           </SheetContent>
         </Sheet>
       )}
-      <span className="text-sm font-semibold">Tarkov Toolkit</span>
+      <span className="flex items-center gap-2 text-sm font-semibold">
+        <img src="/logo.svg" alt="" className="size-5 rounded-[5px]" />
+        Tarkov Toolkit
+      </span>
       <nav aria-label="Tools" className="ml-2 flex min-w-0 items-center gap-1 overflow-x-auto">
         <NavTab to="/">Home</NavTab>
         <NavTab to="/planner">Raid Planner</NavTab>

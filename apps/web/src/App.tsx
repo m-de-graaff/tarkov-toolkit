@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { TopNav } from './components/TopNav';
+import { RouteMetaSync } from './lib/routeMeta';
 import { AmmoPage } from './pages/AmmoPage';
 import { HideoutPage } from './pages/HideoutPage';
 import { HomePage } from './pages/HomePage';
@@ -12,6 +13,7 @@ import { XpPage } from './pages/XpPage';
 export function App() {
   return (
     <BrowserRouter>
+      <RouteMetaSync />
       <div className="app flex h-dvh flex-col">
         <TopNav />
         <Routes>
