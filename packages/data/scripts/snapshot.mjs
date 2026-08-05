@@ -1,7 +1,7 @@
 // Dev-time snapshot: pulls quest/map/trader data from json.tarkov.dev plus map
 // calibration from the-hideout/tarkov-dev, and downloads per-map SVGs. The app
 // itself never touches the network - it imports generated/snapshot.json.
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { generateTileNav } from './tile-nav.mjs';
@@ -282,6 +282,33 @@ function buildTasks(rawTasks, traderNames, idRemap) {
   }));
 }
 
+// Hand-maintained corrections for task data the API lags behind on (see the
+// comment field in manual/task-overrides.json). The wiki rename pass heals
+// titles; this pass fixes levels, prerequisites, objectives, and XP that
+// game patches changed. Each entry patches the task with the matching id and
+// self-retires once the API reports the expected player level, so a stale
+// entry can never fight fresh upstream data.
+async function applyManualOverrides(tasks) {
+  const { overrides } = JSON.parse(
+    await readFile(path.join(dataRoot, 'manual', 'task-overrides.json'), 'utf8'),
+  );
+  const byId = new Map(tasks.map((t) => [t.id, t]));
+  for (const entry of overrides) {
+    const task = byId.get(entry.id);
+    if (!task) {
+      console.warn(`  override ${entry.id}: task absent from API data, skipped`);
+      continue;
+    }
+    if (task.minPlayerLevel <= entry.retireWhenApiMinPlayerLevelAtMost) {
+      console.log(
+        `  override for "${task.name}" retired - the API caught up, delete it from task-overrides.json`,
+      );
+      continue;
+    }
+    Object.assign(task, entry.set);
+  }
+}
+
 function buildAmmo(itemsData) {
   return Object.values(itemsData.items)
     .filter((item) => item.properties?.propertiesType === 'ItemPropertiesAmmo')
@@ -443,6 +470,9 @@ async function main() {
   } catch (err) {
     console.log(`  wiki rename pass skipped: ${err.message}`);
   }
+
+  console.log('Applying manual task overrides...');
+  await applyManualOverrides(tasks);
 
   console.log(`Downloading ${svgDownloads.length} map SVGs...`);
   await downloadSvgs(svgDownloads);

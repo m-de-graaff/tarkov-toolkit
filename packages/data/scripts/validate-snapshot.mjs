@@ -44,6 +44,34 @@ check(
   'most tasks must be faction-neutral',
 );
 
+// EFT 1.1 Ragman LL1 quests, covered by manual/task-overrides.json until the
+// API catches up. Availability must not depend on the (best-effort) wiki
+// rename pass, so the level check keys on ids. Each new-era name may appear
+// at most once: twice means the API added a fresh task alongside the patched
+// one and the override must be deleted.
+const RAGMAN_11_QUESTS = {
+  '5ae4493d86f7744b8e15aa8f': 'A Big Loss',
+  '5ae448f286f77448d73c0131': 'Fuel Crisis',
+  '5ae449c386f7744bde357697': 'Pathfinder',
+  '5c10f94386f774227172c572': 'Small Things, Big Help',
+  '5ae449b386f77446d8741719': 'Gratitude',
+  '5ae4490786f7744ca822adcc': 'Dressed to Kill',
+  '60e71dc0a94be721b065bbfc': 'Long Line',
+  '5ae448bf86f7744d733e55ee': 'Make ULTRA Great Again',
+};
+for (const [id, newName] of Object.entries(RAGMAN_11_QUESTS)) {
+  const task = snapshot.tasks.find((t) => t.id === id);
+  check(task !== undefined, `Ragman 1.1 quest ${id} ("${newName}") missing from snapshot`);
+  if (task) {
+    check(
+      task.minPlayerLevel <= 7,
+      `"${newName}" is LL1 in-game but has minPlayerLevel ${task.minPlayerLevel} - override not applied?`,
+    );
+  }
+  const named = snapshot.tasks.filter((t) => t.name === newName);
+  check(named.length <= 1, `expected at most one task named "${newName}", got ${named.length}`);
+}
+
 const tasksWithPoints = snapshot.tasks.filter((t) =>
   t.objectives.some((o) => o.points.length > 0),
 );
