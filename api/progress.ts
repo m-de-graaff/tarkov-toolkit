@@ -34,6 +34,10 @@ const json = (res: ServerResponse, status: number, body?: unknown) => {
 };
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
+  if (!process.env.DATABASE_URL) {
+    json(res, 503, { error: 'accounts are not configured on this deployment' });
+    return;
+  }
   const session = await auth.api.getSession({ headers: fromNodeHeaders(req.headers) });
   if (!session) {
     json(res, 401, { error: 'not signed in' });
