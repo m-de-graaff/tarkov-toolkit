@@ -7,6 +7,7 @@
 import { useEffect, useRef } from 'react';
 import { usePlanner } from '../store';
 import { AUTH_ENABLED, authClient } from './authClient';
+import { identifyUser } from './monitoring';
 import type { SyncedState } from './progressSync';
 import { normalizeSynced, pullProgress, pushProgress } from './progressSync';
 import { getLastSyncUserId, resolveSignInState, setLastSyncUserId } from './syncIdentity';
@@ -34,6 +35,10 @@ export function useProgressSync(onStatus?: (status: SyncStatus) => void) {
   // user may be absent even when data is set (e.g. dev/self-host where the
   // auth endpoint doesn't exist and the client parses an unexpected response)
   const userId = session.data?.user?.id;
+  useEffect(() => {
+    // id only - lets Sentry count real users; cleared on sign-out
+    identifyUser(userId ?? null);
+  }, [userId]);
   const signedIn = AUTH_ENABLED && Boolean(userId);
   const statusRef = useRef(onStatus);
   statusRef.current = onStatus;

@@ -36,7 +36,8 @@ export async function initMonitoring(): Promise<void> {
       // release groups errors per deploy; Vercel exposes the commit sha
       release: (import.meta.env?.VITE_VERCEL_GIT_COMMIT_SHA as string | undefined) ?? undefined,
       integrations: [
-        // router-aware tracing: transactions named by route, not raw URL
+        // router-aware tracing: transactions named by route, not raw URL.
+        // Tracing must register before profiling.
         mod.reactRouterV7BrowserTracingIntegration({
           useEffect,
           useLocation,
@@ -44,11 +45,17 @@ export async function initMonitoring(): Promise<void> {
           createRoutesFromChildren,
           matchRoutes,
         }),
+        // browser profiling: needs the Document-Policy: js-profiling response
+        // header (set in vercel.json); silently no-ops where unsupported
+        mod.browserProfilingIntegration(),
         mod.replayIntegration({ maskAllText: true, blockAllMedia: true }),
       ],
       // tracing: sample production lightly, everything in dev
       tracesSampleRate: import.meta.env.MODE === 'production' ? 0.2 : 1.0,
       tracePropagationTargets: ['localhost', /^\/api/],
+      // profiling: profiles attach to sampled traces automatically
+      profileSessionSampleRate: import.meta.env.MODE === 'production' ? 0.1 : 1.0,
+      profileLifecycle: 'trace',
       // replay: 10% of ordinary sessions, every session with an error
       replaysSessionSampleRate: 0.1,
       replaysOnErrorSampleRate: 1.0,
@@ -67,4 +74,46 @@ export function reportError(error: unknown, context?: Record<string, unknown>): 
   } else {
     console.error('error:', error, context ?? '');
   }
+}
+
+/**
+ * Application metrics (count / gauge / distribution), no-ops without a DSN.
+ * Reserve for KPIs Sentry can't derive from errors and spans - business
+ * events, not request counts.
+ */
+export const metric = {
+  count(name: string, value = 1, attributes?: Record<string, string | number>): void {
+    sentry?.metrics?.count?.(name, value, attributes ? { attributes } : undefined);
+  },
+  gauge(name: string, value: number, attributes?: Record<string, string | number>): void {
+    sentry?.metrics?.gauge?.(name, value, attributes ? { attributes } : undefined);
+  },
+  distribution(
+    name: string,
+    value: number,
+    attributes?: Record<string, string | number>,
+  ): void {
+    sentry?.metrics?.distribution?.(name, value, attributes ? { attributes } : undefined);
+  },
+};
+
+/** Forward a user-feedback submission to Sentry (alongside our own storage). */
+export function reportFeedback(message: string, email?: string): void {
+  sentry?.captureFeedback(
+    {
+      message,
+      ...(email ? { email } : {}),
+      url: window.location.href,
+    },
+    { captureContext: { tags: { source: 'feedback-sheet' } } },
+  );
+}
+
+/**
+ * Attach/detach the signed-in user (id only - no email or name) so Sentry's
+ * release health and issue pages count real users instead of anonymous
+ * sessions.
+ */
+export function identifyUser(userId: string | null): void {
+  sentry?.setUser(userId ? { id: userId } : null);
 }

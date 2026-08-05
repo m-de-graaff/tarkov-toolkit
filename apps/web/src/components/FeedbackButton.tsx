@@ -14,6 +14,7 @@ import { MessageSquarePlus } from 'lucide-react';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { AUTH_ENABLED } from '../lib/authClient';
+import { metric, reportFeedback } from '../lib/monitoring';
 
 type Status = 'idle' | 'sending' | 'sent' | 'error';
 
@@ -40,6 +41,9 @@ export function FeedbackButton() {
         }),
       });
       if (!res.ok) throw new Error(String(res.status));
+      // mirror into Sentry User Feedback so it sits next to errors/replays
+      reportFeedback(message, email.trim() || undefined);
+      metric.count('feedback.submitted');
       setStatus('sent');
       setMessage('');
     } catch {
