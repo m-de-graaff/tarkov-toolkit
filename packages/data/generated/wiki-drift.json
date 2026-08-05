@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-05T23:06:30.226Z",
+ "generatedAt": "2026-08-05T23:20:39.456Z",
  "synthesized": [
   {
    "id": "wiki-first-introduction",
@@ -278,6 +278,12 @@
    "minPlayerLevel": 8
   },
   {
+   "id": "5a27d2af86f7744e1115b323",
+   "name": "Friend From the West - Part 2",
+   "trader": "Skier",
+   "minPlayerLevel": 9
+  },
+  {
    "id": "59c93e8e86f7742a406989c4",
    "name": "Loyalty Buyout",
    "trader": "Skier",
@@ -494,6 +500,10 @@
     "minPlayerLevel": [
      9,
      1
+    ],
+    "loyaltyLevel": [
+     1,
+     2
     ]
    }
   },
@@ -504,6 +514,10 @@
     "experience": [
      10300,
      15300
+    ],
+    "taskRequirements": [
+     "5ede567cfa6dc072ce15d6e3",
+     "(none)"
     ]
    }
   },
@@ -514,6 +528,10 @@
     "minPlayerLevel": [
      10,
      1
+    ],
+    "loyaltyLevel": [
+     1,
+     2
     ]
    }
   },
@@ -578,6 +596,16 @@
    }
   },
   {
+   "id": "5c0d190cd09282029f5390d8",
+   "name": "Grenadier",
+   "fields": {
+    "loyaltyLevel": [
+     1,
+     2
+    ]
+   }
+  },
+  {
    "id": "675c3507a06634b5110e3c18",
    "name": "Belka and Strelka",
    "fields": {
@@ -598,6 +626,10 @@
     "minPlayerLevel": [
      20,
      1
+    ],
+    "loyaltyLevel": [
+     1,
+     4
     ],
     "taskRequirements": [
      "59ca2eb686f77445a80ed049",
@@ -626,6 +658,10 @@
     "minPlayerLevel": [
      25,
      1
+    ],
+    "loyaltyLevel": [
+     1,
+     4
     ],
     "taskRequirements": [
      "5979f8bb86f7743ec214c7a6",
@@ -713,6 +749,10 @@
      15400,
      65000
     ],
+    "loyaltyLevel": [
+     1,
+     4
+    ],
     "taskRequirements": [
      "59ca2eb686f77445a80ed049,639136f086e646067c176a8b",
      "59ca2eb686f77445a80ed049"
@@ -726,6 +766,10 @@
     "experience": [
      7700,
      10000
+    ],
+    "loyaltyLevel": [
+     1,
+     2
     ]
    }
   },
@@ -760,6 +804,10 @@
     "minPlayerLevel": [
      20,
      1
+    ],
+    "loyaltyLevel": [
+     1,
+     2
     ],
     "taskRequirements": [
      "64e7b9a4aac4cd0a726562cb",
@@ -878,6 +926,10 @@
     "minPlayerLevel": [
      0,
      1
+    ],
+    "storyChapter": [
+     "(none)",
+     "Boreas"
     ]
    }
   },
@@ -982,6 +1034,10 @@
     "minPlayerLevel": [
      35,
      1
+    ],
+    "loyaltyLevel": [
+     1,
+     4
     ],
     "taskRequirements": [
      "5a68669a86f774255929b4d4,5c0be5fc86f774467a116593",
@@ -1128,6 +1184,10 @@
     "minPlayerLevel": [
      12,
      1
+    ],
+    "taskRequirements": [
+     "669fa3a1c26f13bd04030f37",
+     "(none)"
     ]
    }
   },
@@ -1206,6 +1266,10 @@
     "minPlayerLevel": [
      0,
      1
+    ],
+    "storyChapter": [
+     "(none)",
+     "Boreas"
     ]
    }
   },
@@ -1428,24 +1492,10 @@
     "minPlayerLevel": [
      9,
      1
-    ]
-   }
-  },
-  {
-   "id": "5a27d2af86f7744e1115b323",
-   "name": "Friend From the West - Part 2",
-   "fields": {
-    "experience": [
-     10000,
-     6300
     ],
-    "minPlayerLevel": [
-     9,
-     1
-    ],
-    "taskRequirements": [
-     "5a27c99a86f7747d2c6bdd8e",
-     "(none)"
+    "loyaltyLevel": [
+     1,
+     2
     ]
    }
   },
@@ -1466,6 +1516,26 @@
     "minPlayerLevel": [
      24,
      1
+    ]
+   }
+  },
+  {
+   "id": "5c1234c286f77406fa13baeb",
+   "name": "Setup",
+   "fields": {
+    "taskRequirements": [
+     "5a27d2af86f7744e1115b323",
+     "(none)"
+    ]
+   }
+  },
+  {
+   "id": "5b4794cb86f774598100d5d4",
+   "name": "Metal Birds",
+   "fields": {
+    "taskRequirements": [
+     "5a27d2af86f7744e1115b323",
+     "(none)"
     ]
    }
   },
@@ -1501,6 +1571,10 @@
      50,
      1
     ],
+    "loyaltyLevel": [
+     1,
+     4
+    ],
     "taskRequirements": [
      "5edabd13218d181e29451442",
      "(none)"
@@ -1514,6 +1588,16 @@
     "minPlayerLevel": [
      24,
      1
+    ]
+   }
+  },
+  {
+   "id": "6193850f60b34236ee0483de",
+   "name": "Long Road",
+   "fields": {
+    "taskRequirements": [
+     "5a27d2af86f7744e1115b323",
+     "(none)"
     ]
    }
   },
@@ -1534,6 +1618,10 @@
     "minPlayerLevel": [
      31,
      1
+    ],
+    "loyaltyLevel": [
+     1,
+     2
     ],
     "taskRequirements": [
      "5b4795fb86f7745876267770",
@@ -1608,6 +1696,10 @@
     "minPlayerLevel": [
      35,
      1
+    ],
+    "taskRequirements": [
+     "5c0bdb5286f774166e38eed4",
+     "(none)"
     ]
    }
   },
@@ -1842,6 +1934,10 @@
     "minPlayerLevel": [
      10,
      1
+    ],
+    "taskRequirements": [
+     "5a27d2af86f7744e1115b323",
+     "(none)"
     ]
    }
   },
@@ -1893,6 +1989,10 @@
      12,
      1
     ],
+    "loyaltyLevel": [
+     1,
+     2
+    ],
     "taskRequirements": [
      "5a27b87686f77460de0252a8",
      "(none)"
@@ -1910,6 +2010,10 @@
     "minPlayerLevel": [
      18,
      1
+    ],
+    "loyaltyLevel": [
+     1,
+     2
     ],
     "taskRequirements": [
      "5a27b9de86f77464e5044585",
@@ -2040,6 +2144,10 @@
     "minPlayerLevel": [
      30,
      1
+    ],
+    "loyaltyLevel": [
+     1,
+     4
     ]
    }
   },
@@ -2064,6 +2172,10 @@
     "minPlayerLevel": [
      45,
      1
+    ],
+    "loyaltyLevel": [
+     1,
+     3
     ]
    }
   },
@@ -2330,6 +2442,10 @@
     "experience": [
      26700,
      65000
+    ],
+    "loyaltyLevel": [
+     1,
+     4
     ]
    }
   },
@@ -2344,6 +2460,10 @@
     "minPlayerLevel": [
      14,
      1
+    ],
+    "loyaltyLevel": [
+     1,
+     4
     ]
    }
   },
@@ -2514,6 +2634,10 @@
     "minPlayerLevel": [
      15,
      1
+    ],
+    "taskRequirements": [
+     "5ac346e886f7741d6118b99b",
+     "(none)"
     ]
    }
   },
@@ -2554,6 +2678,10 @@
     "minPlayerLevel": [
      12,
      1
+    ],
+    "taskRequirements": [
+     "669fa3a1c26f13bd04030f37",
+     "(none)"
     ]
    }
   },
@@ -2836,6 +2964,16 @@
    }
   },
   {
+   "id": "5c10f94386f774227172c572",
+   "name": "Small Things, Big Help",
+   "fields": {
+    "taskRequirements": [
+     "5b47876e86f7744d1c353205",
+     "(none)"
+    ]
+   }
+  },
+  {
    "id": "5ae4495c86f7744e87761355",
    "name": "Sew it Good - Part 2",
    "fields": {
@@ -2944,6 +3082,10 @@
     "experience": [
      107000,
      20000
+    ],
+    "loyaltyLevel": [
+     1,
+     3
     ],
     "taskRequirements": [
      "60e71dc0a94be721b065bbfc",
@@ -3146,6 +3288,10 @@
     "minPlayerLevel": [
      0,
      1
+    ],
+    "storyChapter": [
+     "(none)",
+     "Boreas"
     ]
    }
   },
@@ -3444,6 +3590,10 @@
     "minPlayerLevel": [
      2,
      1
+    ],
+    "taskRequirements": [
+     "5d25e2a986f77409dd5cdf2a",
+     "(none)"
     ]
    }
   },
@@ -3493,6 +3643,10 @@
      23,
      1
     ],
+    "loyaltyLevel": [
+     1,
+     2
+    ],
     "taskRequirements": [
      "639136df4b15ca31f76bc31f",
      "(none)"
@@ -3510,6 +3664,10 @@
     "minPlayerLevel": [
      2,
      1
+    ],
+    "loyaltyLevel": [
+     1,
+     3
     ]
    }
   },
@@ -3584,10 +3742,6 @@
     "minPlayerLevel": [
      13,
      1
-    ],
-    "taskRequirements": [
-     "596a0e1686f7741ddf17dbee,5d25e2b486f77409de05bba0",
-     "596a0e1686f7741ddf17dbee,596a101f86f7741ddb481582,5d25e2b486f77409de05bba0"
     ]
    }
   },
@@ -3755,6 +3909,10 @@
      55,
      1
     ],
+    "loyaltyLevel": [
+     1,
+     4
+    ],
     "taskRequirements": [
      "5d25e2c386f77443e7549029,5d25e2e286f77444001e2e48,5d25e2ee86f77443e35162ea,5d25e44f86f77443e625e385,5edab4b1218d181e29451435,60c0c018f7afb4354815096a",
      "5d25e2c386f77443e7549029,5d25e2e286f77444001e2e48,5d25e2ee86f77443e35162ea,5d25e44f86f77443e625e385,5edab4b1218d181e29451435,5edac34d0bb72a50635c2bfa,60c0c018f7afb4354815096a"
@@ -3872,6 +4030,10 @@
     "minPlayerLevel": [
      0,
      1
+    ],
+    "storyChapter": [
+     "(none)",
+     "Boreas"
     ]
    }
   },
@@ -4741,7 +4903,9 @@
   "Against the Conscience - Part 1: prerequisite \"Create a Distraction - Part 1\" matches 2 tasks, using first",
   "Between Two Fires: prerequisite \"Against the Conscience - Part 2\" matches 2 tasks, using first",
   "Between Two Fires: prerequisite \"Against the Conscience - Part 2\" matches 2 tasks, using first",
+  "Collector: loyalty line names \"Therapist\" but the quest belongs to Fence, ignored",
   "Collector: prerequisites are a section link, keeping API chain",
+  "Pyramid Scheme: loyalty line names \"Peacekeeper\" but the quest belongs to Skier, ignored",
   "Network Provider - Part 1: prerequisites are a section link, keeping API chain",
   "Textile - Part 2: prerequisite \"Textile - Part 1\" matches 2 tasks, using first",
   "Textile - Part 2: prerequisite \"Textile - Part 1\" matches 2 tasks, using first",
@@ -4817,6 +4981,14 @@
    {
     "id": "60e71dc0a94be721b065bbfc",
     "name": "Long Line"
+   },
+   {
+    "id": "5ae448e586f7744dcf0c2a67",
+    "name": "Big Sale"
+   },
+   {
+    "id": "675c085d59b0575973005f52",
+    "name": "Break the Deal"
    },
    {
     "id": "5ae448bf86f7744d733e55ee",
