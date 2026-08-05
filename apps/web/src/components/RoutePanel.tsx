@@ -2,6 +2,7 @@ import type { GamePosition, NeededItems, RpExtract } from '@raidplanner/data';
 import { snapshot } from '@raidplanner/data';
 import { distance2d } from '../lib/geometry';
 import type { PlannedRoute } from '../lib/route';
+import { ItemIcon } from './ItemIcon';
 
 /** The items an objective consumes, so you know what to bring or find. */
 function StopItems({ needed }: { needed: NeededItems }) {
@@ -15,14 +16,11 @@ function StopItems({ needed }: { needed: NeededItems }) {
       className="stop-items mt-0.5 flex flex-wrap items-center gap-1.5 text-xs"
       title={altNames.length > 0 ? `Alternatives: ${altNames.join(', ')}` : undefined}
     >
-      {first?.iconLink && (
-        <img
-          src={first.iconLink}
-          alt=""
-          loading="lazy"
-          className="size-5 shrink-0 rounded-sm border bg-black/40 object-contain"
-        />
-      )}
+      <ItemIcon
+        itemId={firstId}
+        iconLink={first?.iconLink}
+        className="size-5 shrink-0 rounded-sm border bg-black/40 object-contain"
+      />
       <span className="min-w-0 truncate text-foreground/90">
         {needed.count > 1 && <span className="tabular-nums">{needed.count}× </span>}
         {first?.name ?? 'Item'}

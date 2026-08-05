@@ -11,6 +11,7 @@ import type { AmmoRound } from '@raidplanner/data';
 import { snapshot } from '@raidplanner/data';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { ItemIcon } from '../components/ItemIcon';
 import type { AmmoSortKey, Effectiveness } from '../lib/ammoSort';
 import { classEffectiveness, classRating, filterAmmo, sortAmmo, totalDamage } from '../lib/ammoSort';
 
@@ -167,14 +168,11 @@ export function AmmoPage() {
                 <tr key={round.id} className="border-b last:border-0 hover:bg-secondary/40">
                   <td className="px-3 py-1.5">
                     <span className="flex min-w-0 items-center gap-1.5">
-                      {round.iconLink && (
-                        <img
-                          src={round.iconLink}
-                          alt=""
-                          loading="lazy"
-                          className="size-6 shrink-0 rounded-sm border bg-black/40 object-contain"
-                        />
-                      )}
+                      <ItemIcon
+                        itemId={round.id}
+                        iconLink={round.iconLink}
+                        className="size-6 shrink-0 rounded-sm border bg-black/40 object-contain"
+                      />
                       <span className="min-w-0 truncate font-medium" title={round.name}>
                         {round.shortName}
                       </span>

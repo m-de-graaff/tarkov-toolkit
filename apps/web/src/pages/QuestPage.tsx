@@ -7,6 +7,7 @@ import { snapshot } from '@raidplanner/data';
 import { ArrowLeft, Check, ExternalLink, MapPin } from 'lucide-react';
 import { useMemo } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { ItemIcon } from '../components/ItemIcon';
 import { isAvailable } from '../lib/availability';
 import { snapshotForMode } from '../lib/modeTasks';
 import { usePlanner } from '../store';
@@ -71,14 +72,11 @@ function ObjectiveRow({ objective, index }: { objective: RpObjective; index: num
                 className="flex items-center gap-1.5 rounded-md border px-1.5 py-0.5 text-xs"
                 title={item?.name}
               >
-                {item?.iconLink && (
-                  <img
-                    src={item.iconLink}
-                    alt=""
-                    loading="lazy"
-                    className="size-5 rounded-sm border bg-black/40 object-contain"
-                  />
-                )}
+                <ItemIcon
+                  itemId={itemId}
+                  iconLink={item?.iconLink}
+                  className="size-5 rounded-sm border bg-black/40 object-contain"
+                />
                 <span className="max-w-40 truncate">{item?.name ?? 'Unknown item'}</span>
               </span>
             );
