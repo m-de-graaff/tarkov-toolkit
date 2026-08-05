@@ -59,7 +59,7 @@ states + silent catches deferred to Slice 5 pass (user WIP in those files)
   Referrer-Policy, Permissions-Policy).
 - `installCommand` with `--frozen-lockfile`; `.dockerignore` `.env*`.
 
-## Slice 4 — Companion watcher security
+## Slice 4 — Companion watcher security  ✅ DONE
 - WebSocket server (`apps/watcher/src/index.ts:132-139`) accepts any origin:
   any website in the browser can read live in-raid position. Add Origin
   allow-list (+ optional token).
