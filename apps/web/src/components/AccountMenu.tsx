@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { CircleUser } from 'lucide-react';
-import { Popover as PopoverPrimitive } from 'radix-ui';
 import { useState } from 'react';
 import { AUTH_ENABLED, authClient } from '../lib/authClient';
 import type { SyncStatus } from '../lib/useProgressSync';
@@ -98,25 +97,28 @@ export function AccountMenu() {
   const user = session.data?.user;
 
   return (
-    <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
-      <PopoverPrimitive.Trigger asChild>
-        <Button
-          type="button"
-          variant={user ? 'ghost' : 'outline'}
-          size="sm"
-          className={cn('h-8 gap-1.5', user && 'text-muted-foreground')}
-          title={user ? `Signed in as ${user.email}` : 'Sign in to sync progress'}
-        >
-          <CircleUser aria-hidden="true" className="size-4" />
-          {user ? 'Account' : 'Sign in'}
-        </Button>
-      </PopoverPrimitive.Trigger>
-      <PopoverPrimitive.Portal>
-        <PopoverPrimitive.Content
-          align="end"
-          sideOffset={6}
-          className="z-50 w-72 rounded-md border bg-card p-3 shadow-md outline-none"
-        >
+    <div className="relative">
+      <Button
+        type="button"
+        variant={user ? 'ghost' : 'outline'}
+        size="sm"
+        aria-expanded={open}
+        className={cn('h-8 gap-1.5', user && 'text-muted-foreground')}
+        title={user ? `Signed in as ${user.email}` : 'Sign in to sync progress'}
+        onClick={() => setOpen((v) => !v)}
+      >
+        <CircleUser aria-hidden="true" className="size-4" />
+        {user ? 'Account' : 'Sign in'}
+      </Button>
+      {open && (
+        <>
+          <button
+            type="button"
+            aria-label="Close account menu"
+            className="fixed inset-0 z-40 cursor-default"
+            onClick={() => setOpen(false)}
+          />
+          <div className="absolute right-0 top-full z-50 mt-1.5 w-72 rounded-md border bg-card p-3 shadow-md">
           {user ? (
             <div className="flex flex-col gap-2">
               <p className="truncate text-sm font-medium" title={user.email}>
@@ -148,8 +150,9 @@ export function AccountMenu() {
           ) : (
             <AuthForm onDone={() => setOpen(false)} />
           )}
-        </PopoverPrimitive.Content>
-      </PopoverPrimitive.Portal>
-    </PopoverPrimitive.Root>
+          </div>
+        </>
+      )}
+    </div>
   );
 }
