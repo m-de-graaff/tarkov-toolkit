@@ -30,7 +30,7 @@ export function RoutePanel({
         </p>
       ) : !originPosition ? (
         <p className="empty-note rounded-md border border-dashed p-3 text-[13px] text-muted-foreground">
-          Choose a spawn point above the map — or connect live mode — to plan the route.
+          Choose a spawn point above the map - or connect live mode - to plan the route.
         </p>
       ) : !route || route.stops.length === 0 ? (
         <p className="empty-note rounded-md border border-dashed p-3 text-[13px] text-muted-foreground">
@@ -68,7 +68,7 @@ export function RoutePanel({
               </span>
               <span className="min-w-0 truncate font-medium">{extract.name}</span>
               {extract.conditional && (
-                <span className="text-xs text-muted-foreground" title="Not always open — check it's active this raid">
+                <span className="text-xs text-muted-foreground" title="Not always open - check it's active this raid">
                   conditional
                 </span>
               )}

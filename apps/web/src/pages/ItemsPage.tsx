@@ -130,7 +130,7 @@ export function ItemsPage() {
             <Link to="/hideout" className="text-primary underline-offset-2 hover:underline">
               hideout
             </Link>{' '}
-            upgrades consume. Count what you've collected — stations turn "ready to build" when
+            upgrades consume. Count what you have collected, and stations turn ready to build when
             you have everything.
           </p>
         </div>
@@ -146,7 +146,7 @@ export function ItemsPage() {
 
         {open.length === 0 && covered.length === 0 ? (
           <p className="rounded-md border border-dashed p-3 text-[13px] text-muted-foreground">
-            Nothing needed right now — set up your progress and hideout levels first.
+            Nothing needed right now - set up your progress and hideout levels first.
           </p>
         ) : (
           <>

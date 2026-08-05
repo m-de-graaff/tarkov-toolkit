@@ -88,7 +88,7 @@ export function AmmoPage() {
         <div>
           <h1 className="text-lg font-semibold">Ammo chart</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            The C1–C6 blocks rate each round against armor classes 1 through 6: 6 goes straight
+            The C1-C6 blocks rate each round against armor classes 1 through 6: 6 goes straight
             through, 0 bounces.
           </p>
         </div>

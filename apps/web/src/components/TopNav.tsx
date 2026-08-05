@@ -37,7 +37,7 @@ export function TopNav() {
   const [sheetOpen, setSheetOpen] = useState(false);
   const selectedMapId = usePlanner((s) => s.selectedMapId);
 
-  // Picking a map is the natural end of the "choose" flow — close the sheet.
+  // Picking a map is the natural end of the "choose" flow - close the sheet.
   useEffect(() => {
     setSheetOpen(false);
   }, [selectedMapId]);
@@ -83,7 +83,7 @@ function GameModeToggle() {
       role="group"
       aria-label="Game mode"
       className="ml-auto flex items-center rounded-md border p-0.5"
-      title="PvP and PvE have separate progress — switching swaps your whole profile"
+      title="PvP and PvE have separate progress - switching swaps your whole profile"
     >
       {(['pvp', 'pve'] as const).map((mode) => (
         <button

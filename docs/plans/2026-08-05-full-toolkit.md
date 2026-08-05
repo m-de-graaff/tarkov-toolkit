@@ -1,9 +1,9 @@
-# Full Toolkit Build Plan — log automation, ammo, hideout, needed items, market
+# Full Toolkit Build Plan - log automation, ammo, hideout, needed items, market
 
 > **To execute:** use the `executing-plans` skill. Steps use `- [ ]` for tracking.
-> Excluded: goon tracker (needs a community-sightings backend that doesn't exist yet — not buildable "properly").
+> Excluded: goon tracker (needs a community-sightings backend that doesn't exist yet - not buildable "properly").
 
-**Goal:** Ship the five recommended tools as complete features: (1) companion log-reading — auto map selection + auto quest completion; (2) ammo chart; (3) hideout tracker; (4) needed-items list; (5) barter/craft profit with live flea prices.
+**Goal:** Ship the five recommended tools as complete features: (1) companion log-reading - auto map selection + auto quest completion; (2) ammo chart; (3) hideout tracker; (4) needed-items list; (5) barter/craft profit with live flea prices.
 
 ## Verified data facts
 
@@ -14,7 +14,7 @@
 - Endpoint sizes: hideout 80KB, barters 258KB, crafts 97KB (bundle all three); items 16.5MB (snapshot-time extraction only: `ammo.json` ballistics + `items-lite.json` id→{name, shortName, iconLink} for every id referenced by quests/hideout/barters/crafts; live prices fetched at runtime and cached in IndexedDB).
 
 ### Feature 1: companion log-reading (auto map + auto quest completion)
-- [x] Snapshot: add `nameId`, `scenePath` to RpMap. Companion: `logsWatcher.ts` — resolve logs dir via `reg query` (both registry paths, `RAIDPLANNER_LOGS_DIR` override), tail newest folder's application+notifications logs (poll 1s, byte-offset resume, new-folder detection); parse events → WS broadcasts `{type:'map', nameId}` and `{type:'task', taskId, status: 'started'|'failed'|'finished'}`. Pure parser module `parseLogEvents(chunk)` in `@raidplanner/live` with unit tests (real-shaped log lines incl. JSON blocks split across chunks).
+- [x] Snapshot: add `nameId`, `scenePath` to RpMap. Companion: `logsWatcher.ts` - resolve logs dir via `reg query` (both registry paths, `RAIDPLANNER_LOGS_DIR` override), tail newest folder's application+notifications logs (poll 1s, byte-offset resume, new-folder detection); parse events → WS broadcasts `{type:'map', nameId}` and `{type:'task', taskId, status: 'started'|'failed'|'finished'}`. Pure parser module `parseLogEvents(chunk)` in `@raidplanner/live` with unit tests (real-shaped log lines incl. JSON blocks split across chunks).
 - [x] Web: on `map` message auto-`selectMap` (matching by nameId; only if different); on `task` finished → add to active profile completions (started → no-op v1); toolbar toast-line "Detected: Customs raid" / "Quest completed: Debut". Tests: WS stub drive → store updates.
 - [x] Suite + build green; commit + merge.
 
@@ -33,8 +33,8 @@
 - [x] `/items` page: aggregated over OPEN quests (active profile) + next hideout levels; columns: item, total count, FIR badge, sources (quest/station names on hover); search. Tests: aggregation math (pure lib) incl. FIR split.
 - [x] Suite green; commit + merge.
 
-### Feature 5: market — barters & crafts profit with live prices (/market)
-- [x] Snapshot: bundle `barters.json` + `crafts.json` (trader/level, required/reward items). Runtime `lib/prices.ts`: fetch `regular/items` once on demand → store `{id: {lastLowPrice, avg24hPrice, sellFor best}}` in IndexedDB with fetchedAt; "Refresh prices" button + age display; graceful "offline — prices unavailable" state.
+### Feature 5: market - barters & crafts profit with live prices (/market)
+- [x] Snapshot: bundle `barters.json` + `crafts.json` (trader/level, required/reward items). Runtime `lib/prices.ts`: fetch `regular/items` once on demand → store `{id: {lastLowPrice, avg24hPrice, sellFor best}}` in IndexedDB with fetchedAt; "Refresh prices" button + age display; graceful "offline - prices unavailable" state.
 - [x] `/market` page: barters + crafts tables, cost (Σ required × price) vs revenue (reward best-sell), profit + profit/hr for crafts; unpriceable rows marked. Tests: profit math pure lib with fixture prices.
 - [x] Suite green; commit + merge.
 

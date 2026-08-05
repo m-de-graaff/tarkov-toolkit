@@ -8,7 +8,7 @@ const prices: ItemPrices = {
     fleaAvg: 50_000,
     fleaLow: 45_000,
     basePrice: 20_000,
-    bestTraderSell: 60_000, // trader pays MORE than flea — revenue should use it
+    bestTraderSell: 60_000, // trader pays MORE than flea - revenue should use it
   },
   'item-unpriced': { fleaAvg: 0, fleaLow: 0, basePrice: 1_000, bestTraderSell: 0 },
   'item-flip': {

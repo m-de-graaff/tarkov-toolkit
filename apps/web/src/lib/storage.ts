@@ -1,7 +1,7 @@
 // Progress durability: localStorage stays the synchronous hot store (zustand
-// persist default — proven, no async render races), and IndexedDB mirrors it
+// persist default - proven, no async render races), and IndexedDB mirrors it
 // as the durable database copy. On boot, a missing localStorage key is
-// restored from the mirror — so clearing site data selectively, browser
+// restored from the mirror - so clearing site data selectively, browser
 // eviction of localStorage, or a future export/import path can't lose
 // progress. The mirrored value is also the sync unit for the hosted version
 // (docs/auth-design.md).
@@ -56,7 +56,7 @@ export async function restoreProgressFromMirror(): Promise<void> {
     const mirrored = await idbGet(PROGRESS_KEY);
     if (mirrored !== null) localStorage.setItem(PROGRESS_KEY, mirrored);
   } catch {
-    /* mirror unavailable — localStorage remains authoritative */
+    /* mirror unavailable - localStorage remains authoritative */
   }
 }
 

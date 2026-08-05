@@ -179,7 +179,7 @@ export const usePlanner = create<PlannerState>()(
           };
         }
         if (version < 3) {
-          // v2 added hideoutLevels, v3 added itemsHave — normalize both
+          // v2 added hideoutLevels, v3 added itemsHave - normalize both
           const normalize = (tracker: TrackerState | undefined): TrackerState => ({
             ...(tracker ?? freshTracker()),
             hideoutLevels: tracker?.hideoutLevels ?? {},

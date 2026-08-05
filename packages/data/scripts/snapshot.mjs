@@ -1,6 +1,6 @@
 // Dev-time snapshot: pulls quest/map/trader data from json.tarkov.dev plus map
 // calibration from the-hideout/tarkov-dev, and downloads per-map SVGs. The app
-// itself never touches the network — it imports generated/snapshot.json.
+// itself never touches the network - it imports generated/snapshot.json.
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -52,7 +52,7 @@ async function fetchTranslated(name, prefix = 'regular') {
 
 // Replace any string value that is a key in the translation dict. Keys whose
 // value is an identifier ('id', 'normalizedName', reference ids) are skipped so
-// cross-references stay intact — but ONLY when the value actually is an id
+// cross-references stay intact - but ONLY when the value actually is an id
 // (a string or an array of strings). Objects always recurse: the API's
 // top-level collections share names with reference keys (e.g. data.maps vs
 // objective.maps), and skipping the collection leaves its subtree untranslated.
@@ -158,7 +158,7 @@ function buildMaps(rawMaps, calibrationIndex) {
       }
     }
 
-    // Merged variants keep their own nameId/scenePath in the logs — collect
+    // Merged variants keep their own nameId/scenePath in the logs - collect
     // them all so log-based map detection resolves variants to the canonical map.
     const logSources = spawnSources;
     const extracts = (raw.extracts ?? [])

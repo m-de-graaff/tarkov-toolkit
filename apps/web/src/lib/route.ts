@@ -71,7 +71,7 @@ function twoOpt(start: GamePosition, ordered: RouteStop[], end?: GamePosition): 
 }
 
 /**
- * Open-path TSP heuristic with a fixed start (and optionally a fixed end —
+ * Open-path TSP heuristic with a fixed start (and optionally a fixed end -
  * the extract): multi-start nearest-neighbour followed by 2-opt; best wins.
  */
 export function optimizeRoute(

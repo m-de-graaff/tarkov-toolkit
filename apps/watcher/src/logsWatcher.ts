@@ -94,7 +94,7 @@ export function startLogsWatcher(
         }
       }
     } catch {
-      /* transient FS errors — next poll retries */
+      /* transient FS errors - next poll retries */
     }
   };
 

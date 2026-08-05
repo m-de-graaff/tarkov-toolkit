@@ -59,7 +59,7 @@ export function classEffectiveness(penetrationPower: number, armorClass: number)
   return 'none';
 }
 
-/** 0–6 effectiveness rating (the number shown in the class blocks) */
+/** 0-6 effectiveness rating (the number shown in the class blocks) */
 export function classRating(penetrationPower: number, armorClass: number): number {
   switch (classEffectiveness(penetrationPower, armorClass)) {
     case 'excellent':

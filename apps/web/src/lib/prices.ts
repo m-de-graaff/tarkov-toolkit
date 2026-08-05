@@ -1,4 +1,4 @@
-// Live prices per game mode — PvP and PvE have separate flea markets.
+// Live prices per game mode - PvP and PvE have separate flea markets.
 // One ~16MB fetch per mode from json.tarkov.dev, trimmed to price and
 // trader-offer fields and cached in IndexedDB (user-triggered, never on load).
 import type { GameMode } from '@raidplanner/data';
@@ -7,7 +7,7 @@ import type { ItemPrices } from './profit';
 const DB_NAME = 'raidplanner-prices';
 const STORE = 'prices';
 
-/** bump when ItemPriceEntry gains fields — old caches are discarded and refetched */
+/** bump when ItemPriceEntry gains fields - old caches are discarded and refetched */
 export const PRICES_FORMAT_VERSION = 2;
 
 export interface CachedPrices {
@@ -36,7 +36,7 @@ export async function loadCachedPrices(mode: GameMode): Promise<CachedPrices | n
     });
     db.close();
     // caches written before a format bump lack fields the UI needs (e.g. item
-    // names) — treat them as absent so the page fetches fresh data right away
+    // names) - treat them as absent so the page fetches fresh data right away
     if (cached && cached.formatVersion !== PRICES_FORMAT_VERSION) return null;
     return cached;
   } catch {
@@ -103,7 +103,7 @@ export async function fetchPrices(mode: GameMode): Promise<CachedPrices> {
   return cached;
 }
 
-/** pure extraction from the raw items payload — unit-testable */
+/** pure extraction from the raw items payload - unit-testable */
 export function buildPrices(
   itemsById: Record<string, RawItem>,
   enDict: Record<string, string>,

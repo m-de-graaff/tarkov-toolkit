@@ -1,4 +1,4 @@
-// Standalone screenshot watcher — live position in ANY browser, no folder
+// Standalone screenshot watcher - live position in ANY browser, no folder
 // picker needed. Watches the EFT Screenshots folder and broadcasts parsed
 // positions to the web app over a local-only WebSocket.
 //
@@ -66,7 +66,7 @@ async function detectScreenshotsDir(): Promise<string> {
   rl.close();
   try {
     writeFileSync(CONFIG_FILE, JSON.stringify({ screenshotsDir: answer }, null, 2));
-    console.log(`Saved — next time this is found automatically (${CONFIG_FILE}).`);
+    console.log(`Saved - next time this is found automatically (${CONFIG_FILE}).`);
   } catch {
     /* not persisted; still usable this run */
   }
@@ -104,7 +104,7 @@ async function scan(initial = false) {
   try {
     names = (await readdir(screenshotsDir)).filter((n) => n.endsWith('.png'));
   } catch {
-    return; // folder briefly unavailable (e.g. being recreated) — next scan retries
+    return; // folder briefly unavailable (e.g. being recreated) - next scan retries
   }
   const newest = pickNewestFix(names, seen);
   if (newest) {
@@ -131,7 +131,7 @@ async function main() {
 
   console.log(`Tarkov Toolkit companion watcher`);
   console.log(`Watching: ${screenshotsDir}`);
-  console.log(`Waiting for the web app on ws://127.0.0.1:${PORT} — keep this window open.`);
+  console.log(`Waiting for the web app on ws://127.0.0.1:${PORT} - keep this window open.`);
 
   await scan(true);
 
@@ -141,7 +141,7 @@ async function main() {
   try {
     watcher = watch(screenshotsDir, () => void scan());
   } catch {
-    console.log('Folder not found yet — will keep checking every 2s.');
+    console.log('Folder not found yet - will keep checking every 2s.');
   }
   const interval = setInterval(() => void scan(), 2000);
 
@@ -152,7 +152,7 @@ async function main() {
     stopLogs = startLogsWatcher(logsDir, broadcastLogEvent);
   } else {
     console.log(
-      'Game logs folder not found — auto map/quest detection off. ' +
+      'Game logs folder not found - auto map/quest detection off. ' +
         'Set RAIDPLANNER_LOGS_DIR to enable it.',
     );
   }

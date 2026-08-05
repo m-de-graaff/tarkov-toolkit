@@ -117,8 +117,8 @@ export interface ResellRow {
 
 /**
  * Trader cash offers (Fence included) whose flea 24h average exceeds the buy
- * price — "buy from trader, sell on flea" flips. Task-locked offers are
- * excluded; spreads are gross (flea fee not modelled — it depends on the
+ * price - "buy from trader, sell on flea" flips. Task-locked offers are
+ * excluded; spreads are gross (flea fee not modelled - it depends on the
  * user's Intelligence Center).
  */
 export interface FleaToTraderRow {
@@ -127,12 +127,12 @@ export interface FleaToTraderRow {
   buyFlea: number;
   sellTrader: number;
   sellTraderId?: string;
-  /** spread — fee-free, since selling to traders has no listing fee */
+  /** spread - fee-free, since selling to traders has no listing fee */
   spread: number;
 }
 
 /**
- * Buy on flea, sell to a trader — the fee-free direction: trader sells have
+ * Buy on flea, sell to a trader - the fee-free direction: trader sells have
  * no flea listing fee, so the spread is what you pocket.
  */
 export function fleaToTrader(prices: ItemPrices): FleaToTraderRow[] {

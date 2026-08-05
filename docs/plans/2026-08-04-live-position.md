@@ -4,7 +4,7 @@
 
 **Goal:** Take a screenshot in-game and your position (with facing direction) appears on the planner map within ~2s, and the quest route re-plans from where you actually are.
 
-**Architecture:** EFT writes screenshots named `YYYY-MM-DD[HH-MM]_x, y, z_qx, qy, qz, qw_fov (n).png` — position and rotation are in the filename, so no OCR and no server. A new workspace package `@raidplanner/live` holds the pure parsing engine (filename → position + yaw), ported from the-hideout/TarkovMonitor (MIT) — this replaces the tarkov-market.com round-trip that eftgps/TarkovPilot rely on. `apps/web` gains a Live Mode: the browser's File System Access API (`showDirectoryPicker`) watches the Screenshots folder by polling every 2s; the newest unseen screenshot updates a player marker (rotated arrow) and swaps the route origin from spawn to the live position.
+**Architecture:** EFT writes screenshots named `YYYY-MM-DD[HH-MM]_x, y, z_qx, qy, qz, qw_fov (n).png` - position and rotation are in the filename, so no OCR and no server. A new workspace package `@raidplanner/live` holds the pure parsing engine (filename → position + yaw), ported from the-hideout/TarkovMonitor (MIT) - this replaces the tarkov-market.com round-trip that eftgps/TarkovPilot rely on. `apps/web` gains a Live Mode: the browser's File System Access API (`showDirectoryPicker`) watches the Screenshots folder by polling every 2s; the newest unseen screenshot updates a player marker (rotated arrow) and swaps the route origin from spawn to the live position.
 
 **Tech stack:** existing stack; no new runtime deps. File System Access API (Chrome/Edge; graceful "not supported" note elsewhere). Minimal ambient TS declarations for the FSA API instead of a types package.
 
@@ -18,7 +18,7 @@
   - yaw (degrees): `atan2(2*(qw*qy + qx*qz), 1 - 2*(qy*qy + qz*qz)) * 180/π` (Unity Y-up)
 - Player marker heading on screen = yaw + map `coordinateRotation` (tarkov-dev convention).
 - Route origin precedence: live position (when live mode connected and a fix exists) > selected spawn.
-- If a live fix lies outside the selected map's calibration bounds, show a non-blocking warning ("position looks like another map") — do not auto-switch maps (filenames carry no map id).
+- If a live fix lies outside the selected map's calibration bounds, show a non-blocking warning ("position looks like another map") - do not auto-switch maps (filenames carry no map id).
 
 ---
 
@@ -26,7 +26,7 @@
 
 **Files:**
 - Create: `packages/live/package.json`, `packages/live/tsconfig.json`, `packages/live/src/index.ts`, `packages/live/src/parse.ts`, `packages/live/src/parse.test.ts`
-- Modify: root `turbo.json` (nothing — tasks already generic), `apps/web/package.json` (dep `@raidplanner/live: workspace:*`)
+- Modify: root `turbo.json` (nothing - tasks already generic), `apps/web/package.json` (dep `@raidplanner/live: workspace:*`)
 
 **Interfaces:**
 - Produces (from `@raidplanner/live`):
@@ -57,7 +57,7 @@
 - Modify: `apps/web/src/store.ts`
 
 **Interfaces:**
-- Store additions (not persisted — a directory handle cannot round-trip localStorage):
+- Store additions (not persisted - a directory handle cannot round-trip localStorage):
   ```ts
   liveFix: LiveFix | null;
   setLiveFix(f: LiveFix | null): void;
@@ -67,8 +67,8 @@
   - `connect()` calls `showDirectoryPicker({ mode: 'read' })`, seeds a `seen` set with all current `.png` names (so only *new* screenshots count), then polls every 2000ms via `setInterval`; each poll iterates `handle.values()`, and for any unseen file where `isScreenshotName(name)`, parses and `setLiveFix` for the lexicographically-latest new name; on `NotAllowedError`/`AbortError` sets `error`/stays disconnected. `disconnect()` clears the interval and `setLiveFix(null)`. Interval cleaned up on unmount (hook owns it via refs).
 
 - [x] **Step 1: Store test additions** (extend `store.test.ts`): `setLiveFix` round-trips; persisted payload contains neither `search` nor `liveFix`.
-- [x] **Step 2: Run store tests — fail; implement store changes; pass.**
-- [x] **Step 3: Implement `fsAccess.d.ts` + `useLiveWatcher`** (no direct unit test — jsdom has no FSA API; covered by the Task 3 component test via a stubbed hook seam: export the internal `pickNewestFix(names: string[], seen: Set<string>): string | null` helper and unit-test that in node).
+- [x] **Step 2: Run store tests - fail; implement store changes; pass.**
+- [x] **Step 3: Implement `fsAccess.d.ts` + `useLiveWatcher`** (no direct unit test - jsdom has no FSA API; covered by the Task 3 component test via a stubbed hook seam: export the internal `pickNewestFix(names: string[], seen: Set<string>): string | null` helper and unit-test that in node).
 - [x] **Step 4: `tsc --noEmit` green.**
 - [x] **Step 5: Commit** (`feat(web): live-mode store state and folder watcher hook`).
 
@@ -82,13 +82,13 @@
 
 **Interfaces:**
 - `MapMarker.kind` gains `'player'`; when kind is `player`, `MapCanvas` renders a `divIcon` `<div class="marker player" style="transform: rotate(<yaw + coordinateRotation>deg)">➤</div>`; new optional `MapMarker.yawDeg?: number`.
-- `LivePanel()` — placed in the map toolbar: unsupported browser → dim note "Live mode needs Chrome/Edge"; otherwise Connect/Disconnect button, status dot (connected/idle), last-fix age text ("fix 12s ago", `tabular-nums`), and the out-of-bounds warning slot.
+- `LivePanel()` - placed in the map toolbar: unsupported browser → dim note "Live mode needs Chrome/Edge"; otherwise Connect/Disconnect button, status dot (connected/idle), last-fix age text ("fix 12s ago", `tabular-nums`), and the out-of-bounds warning slot.
 - `App.tsx`: `routeOrigin: GamePosition | null = liveFix?.position ?? spawn?.position ?? null`; stops/route/markers derive from `routeOrigin` (nearest-candidate-point selection now keys on it); RoutePanel receives `originLabel: 'live position' | 'spawn'` and renders "From your live position" when live; player marker appended when `liveFix` and map selected; warning computed via calibration bounds containment.
 
 - [x] **Step 1: Failing integration test** (extend `App.test.tsx`): with customs selected, two located quests toggled, no spawn, `setLiveFix({position: knownCustomsPoint, yawDeg: 90, ...})` → route panel shows steps (live position acts as origin), `.marker.player` exists; then `setSpawn(custom)` → route still originates from live fix (precedence).
 - [x] **Step 2: Run, confirm fail.**
 - [x] **Step 3: Implement.**
-- [x] **Step 4: Run full web suite + `pnpm build` — green.**
+- [x] **Step 4: Run full web suite + `pnpm build` - green.**
 - [x] **Step 5: Commit** (`feat(web): live player marker and live-origin routing`).
 
 ---
@@ -98,12 +98,12 @@
 **Files:**
 - Modify: `README.md`, `docs/plans/2026-08-04-live-position.md` (ticks), `apps/web/src/styles.css` (player marker polish: accent ring, reduced-motion-safe pulse)
 
-- [x] **Step 1: README section "Live raid mode"** — how it works (filename parsing, credit TarkovMonitor MIT), browser support, privacy note (folder read-only, nothing leaves the machine), limitations (map not auto-detected; Firefox unsupported).
+- [x] **Step 1: README section "Live raid mode"** - how it works (filename parsing, credit TarkovMonitor MIT), browser support, privacy note (folder read-only, nothing leaves the machine), limitations (map not auto-detected; Firefox unsupported).
 - [x] **Step 2: Full suite + build green** (`pnpm test`, `pnpm build`).
 - [x] **Step 3: Commit** (`docs: live raid mode`), merge branch to main after suite passes (user pre-authorized landing this feature: "open pr, merge into main etc.").
 
 ## Self-review notes
 
-- Spec coverage: screenshot → position on our map (T1–T3), route auto-adjusts from position (T3), improved/stripped tarkov-market approach — local parsing, no selenium/website (T1), "new app" → standalone engine package + integrated UI (deviation, reported).
+- Spec coverage: screenshot → position on our map (T1-T3), route auto-adjusts from position (T3), improved/stripped tarkov-market approach - local parsing, no selenium/website (T1), "new app" → standalone engine package + integrated UI (deviation, reported).
 - Order: T2 depends only on T1 types; T3 on both; names cross-checked (`LiveFix`, `parseScreenshotName`, `isScreenshotName`, `liveFix`/`setLiveFix`, `pickNewestFix`, marker kind `'player'`).
 - Known risks: FSA API polling perf (2s over a folder of a few hundred files is fine); filename fov segment optional in regex (position regex tolerates both since rotation group is anchored by `_?`).

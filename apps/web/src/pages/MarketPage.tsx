@@ -46,7 +46,7 @@ function ItemCell({ stacks, bold }: { stacks: TradeItemStack[]; bold?: boolean }
                 <span className="text-muted-foreground tabular-nums"> ×{Math.round(stack.count * 10) / 10}</span>
               )}
               {stack.tool && (
-                <span className="ml-1 text-[10px] uppercase text-muted-foreground" title="Used but returned — not consumed">
+                <span className="ml-1 text-[10px] uppercase text-muted-foreground" title="Used but returned - not consumed">
                   tool
                 </span>
               )}
@@ -98,7 +98,7 @@ function Cols({ widths }: { widths: number[] }) {
 
 function Money({ value, signed }: { value: number | null; signed?: boolean }) {
   if (value === null) {
-    return <span className="text-xs text-muted-foreground">—</span>;
+    return <span className="text-xs text-muted-foreground">-</span>;
   }
   return (
     <span
@@ -153,7 +153,7 @@ export function MarketPage() {
           setError(null);
         }
       } catch {
-        if (!disposed) setError("Couldn't fetch prices — retrying in a few minutes.");
+        if (!disposed) setError("Couldn't fetch prices - retrying in a few minutes.");
       } finally {
         fetchingRef.current = false;
         if (!disposed) setLoading(false);
@@ -178,7 +178,7 @@ export function MarketPage() {
     try {
       setCached(await fetchPrices(gameMode));
     } catch {
-      setError("Couldn't fetch prices — are you online?");
+      setError("Couldn't fetch prices - are you online?");
     } finally {
       setLoading(false);
     }
@@ -460,7 +460,7 @@ export function MarketPage() {
         <p className="text-xs text-muted-foreground">
           * Trader → Flea spreads and barter/craft profits assume selling the best way (flea 24h
           average or best trader) and don't include the flea listing fee, which depends on your
-          Intelligence Center. Flea → Trader profits are fee-free — traders charge nothing.
+          Intelligence Center. Flea → Trader profits are fee-free - traders charge nothing.
           Costs use the cheaper of flea and trader cash offers.
         </p>
       </div>

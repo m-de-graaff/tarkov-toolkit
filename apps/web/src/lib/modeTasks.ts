@@ -2,7 +2,7 @@ import type { GameMode, RpTask, Snapshot } from '@raidplanner/data';
 
 const cache = new Map<GameMode, RpTask[]>();
 
-/** The quest set that exists in the given game mode (memoized — snapshot is static). */
+/** The quest set that exists in the given game mode (memoized - snapshot is static). */
 export function tasksForMode(snapshot: Snapshot, mode: GameMode): RpTask[] {
   let tasks = cache.get(mode);
   if (!tasks) {

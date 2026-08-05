@@ -19,7 +19,7 @@ export function Footer() {
         contributors (MIT)
       </p>
       <p className="mt-1">
-        Data snapshot: {date} — refresh with <code>pnpm snapshot</code>
+        Data snapshot: {date} - refresh with <code>pnpm snapshot</code>
       </p>
     </footer>
   );

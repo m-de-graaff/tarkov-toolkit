@@ -65,7 +65,7 @@ function StationCard({ station }: { station: HideoutStation }) {
             className="size-6"
             aria-label={`Set ${station.name} one level higher`}
             disabled={current >= max}
-            title="Set the level directly (e.g. already built in game) — uses up any matching materials you've collected, no requirements check"
+            title="Set the level directly (e.g. already built in game) - uses up any matching materials you've collected, no requirements check"
             onClick={() => {
               if (next) {
                 consumeItems(next.itemRequirements.map((r) => ({ itemId: r.itemId, count: r.count })));
@@ -124,7 +124,7 @@ function StationCard({ station }: { station: HideoutStation }) {
               const met = (levels[req.stationId] ?? 0) >= req.level;
               return (
                 <li key={req.stationId} className={cn('text-xs', met ? 'text-ok' : 'text-muted-foreground')}>
-                  requires {other?.name ?? 'station'} L{req.level} {met ? '✓' : ''}
+                  requires {other?.name ?? 'station'} L{req.level}{met ? ' (built)' : ''}
                 </li>
               );
             })}
@@ -180,7 +180,7 @@ export function HideoutPage() {
             {readyCount > 0 && (
               <span className="text-ok"> · {readyCount} ready to build</span>
             )}{' '}
-            — collect materials on the{' '}
+            - collect materials on the{' '}
             <Link to="/items" className="text-primary underline-offset-2 hover:underline">
               Items page
             </Link>

@@ -159,7 +159,7 @@ export function PlannerPage() {
       <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 border-b bg-card px-4 py-2">
         {routeOrigin === null ? (
           <span className="text-xs text-muted-foreground">
-            Click the map where you spawn — or take a screenshot in raid
+            Click the map where you spawn, or take a screenshot in raid
           </span>
         ) : spawn && !liveFix ? (
           <button
@@ -251,7 +251,7 @@ export function PlannerPage() {
           try {
             localStorage.setItem(LAYOUT_KEY, JSON.stringify(layout));
           } catch {
-            /* storage unavailable — layout just won't persist */
+            /* storage unavailable - layout just won't persist */
           }
         }}
         className="h-full"
