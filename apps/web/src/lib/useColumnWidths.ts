@@ -3,7 +3,8 @@ import { useCallback, useRef, useState } from 'react';
 const MIN_WIDTH = 60;
 
 function storageKey(tableKey: string) {
-  return `raidplanner-cols:${tableKey}`;
+  // v2: widths saved while dragging was visually broken were untrustworthy
+  return `raidplanner-cols-v2:${tableKey}`;
 }
 
 function load(tableKey: string, defaults: number[]): number[] {

@@ -21,7 +21,7 @@ import { usePlanner } from '../store';
 
 const FACTIONS: TrackerState['faction'][] = ['Any', 'USEC', 'BEAR'];
 
-function ProgressQuestRow({ task }: { task: RpTask }) {
+function ProgressQuestRow({ task, deadEnd }: { task: RpTask; deadEnd?: boolean }) {
   const tracker = usePlanner((s) => s.tracker);
   const toggleCompleted = usePlanner((s) => s.toggleCompleted);
   const completed = tracker.completedTaskIds.includes(task.id);
@@ -60,6 +60,14 @@ function ProgressQuestRow({ task }: { task: RpTask }) {
           title="Finish the quests before it (or level up) to unlock"
         >
           <Lock aria-hidden="true" className="size-3" /> locked
+        </span>
+      )}
+      {deadEnd && (
+        <span
+          className="shrink-0 text-[10px] uppercase text-muted-foreground/70"
+          title="No other quest requires this one"
+        >
+          dead end
         </span>
       )}
       {task.kappaRequired && (
@@ -114,8 +122,19 @@ export function ProgressPage() {
   const [showLocked, setShowLocked] = useState(true);
   const [showCompleted, setShowCompleted] = useState(true);
   const [kappaOnly, setKappaOnly] = useState(false);
+  const [unlocksOnly, setUnlocksOnly] = useState(false);
 
   const modeSnapshot = useMemo(() => snapshotForMode(snapshot, gameMode), [gameMode]);
+
+  // quests that are a prerequisite of at least one other quest in this mode —
+  // everything else is a dead end (nothing depends on it)
+  const unlocksSomething = useMemo(() => {
+    const ids = new Set<string>();
+    for (const task of modeSnapshot.tasks) {
+      for (const req of task.taskRequirements) ids.add(req.taskId);
+    }
+    return ids;
+  }, [modeSnapshot]);
   const openCount = useMemo(
     () => availableQuests(modeSnapshot, tracker).length,
     [tracker, modeSnapshot],
@@ -132,6 +151,7 @@ export function ProgressPage() {
 
       if (search && !task.name.toLowerCase().includes(search.toLowerCase())) continue;
       if (kappaOnly && !task.kappaRequired) continue;
+      if (unlocksOnly && !unlocksSomething.has(task.id)) continue;
       if (!showCompleted && completed) continue;
       if (!showLocked && !completed && !isAvailable(task, tracker)) continue;
       group.tasks.push(task);
@@ -140,7 +160,7 @@ export function ProgressPage() {
       group.tasks.sort((a, b) => a.minPlayerLevel - b.minPlayerLevel || a.name.localeCompare(b.name));
     }
     return groups;
-  }, [search, modeSnapshot, showLocked, showCompleted, kappaOnly, tracker]);
+  }, [search, modeSnapshot, showLocked, showCompleted, kappaOnly, unlocksOnly, unlocksSomething, tracker]);
 
   const totalCompleted = tracker.completedTaskIds.filter((id) =>
     modeSnapshot.tasks.some((t) => t.id === id),
@@ -227,6 +247,7 @@ export function ProgressPage() {
               { label: 'Locked', value: showLocked, set: setShowLocked },
               { label: 'Completed', value: showCompleted, set: setShowCompleted },
               { label: 'Kappa only', value: kappaOnly, set: setKappaOnly },
+              { label: 'Unlocks quests', value: unlocksOnly, set: setUnlocksOnly },
             ] as const
           ).map((chip) => (
             <button
@@ -259,7 +280,7 @@ export function ProgressPage() {
               <Separator className="mb-2" />
               <ul className="m-0 flex list-none flex-col p-0">
                 {group.tasks.map((task) => (
-                  <ProgressQuestRow key={task.id} task={task} />
+                  <ProgressQuestRow key={task.id} task={task} deadEnd={!unlocksSomething.has(task.id)} />
                 ))}
               </ul>
             </section>
