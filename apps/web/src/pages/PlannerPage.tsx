@@ -46,6 +46,7 @@ export function PlannerPage() {
   const spawn = usePlanner((s) => s.spawn);
   const setSpawn = usePlanner((s) => s.setSpawn);
   const liveFix = usePlanner((s) => s.liveFix);
+  const spawnOverridesLive = usePlanner((s) => s.spawnOverridesLive);
   const setTargetExtract = usePlanner((s) => s.setTargetExtract);
   const watcher = useLiveWatcher();
 
@@ -54,8 +55,10 @@ export function PlannerPage() {
   const navigator = useNavGrid(map);
 
   // The route starts from where you actually are (live fix) when live mode has
-  // one, otherwise from the chosen spawn.
-  const routeOrigin = liveFix?.position ?? spawn?.position ?? null;
+  // one, otherwise from the chosen spawn. A map click outranks the fix until
+  // the next screenshot so you can plan ahead of your current position.
+  const spawnWins = spawn !== null && (spawnOverridesLive || !liveFix);
+  const routeOrigin = (spawnWins ? spawn?.position : liveFix?.position ?? spawn?.position) ?? null;
 
   // One stop per selected objective, at its candidate point nearest the route
   // origin (first point when there is none yet).
@@ -134,7 +137,7 @@ export function PlannerPage() {
       orderIndex: orderByObjective.get(stop.objectiveId),
       taskName: stop.taskName,
     }));
-    if (spawn && !liveFix) {
+    if (spawn && spawnWins) {
       out.push({ id: 'spawn', position: spawn.position, label: 'Spawn', kind: 'spawn' });
     }
     if (liveFix) {
@@ -164,14 +167,18 @@ export function PlannerPage() {
           <span className="text-xs text-muted-foreground">
             Click the map where you spawn, or take a screenshot in raid
           </span>
-        ) : spawn && !liveFix ? (
+        ) : spawn && spawnWins ? (
           <button
             type="button"
             className="rounded-md border px-2 py-1 text-xs text-muted-foreground transition-colors hover:border-input hover:text-foreground"
-            title="Remove the spawn point you placed"
+            title={
+              liveFix
+                ? 'Return the route origin to your live position'
+                : 'Remove the spawn point you placed'
+            }
             onClick={() => setSpawn(null)}
           >
-            Spawn set · clear
+            {liveFix ? 'Manual origin · back to live' : 'Spawn set · clear'}
           </button>
         ) : null}
         {extracts.length > 0 && (
@@ -234,7 +241,7 @@ export function PlannerPage() {
               <RoutePanel
                 route={route}
                 originPosition={routeOrigin}
-                originLabel={liveFix ? 'live position' : 'spawn'}
+                originLabel={liveFix && !spawnWins ? 'live position' : 'spawn'}
                 hasSelection={selectedTaskIds.length > 0}
                 extract={chosenExtract}
               />
@@ -271,7 +278,7 @@ export function PlannerPage() {
                 <RoutePanel
                   route={route}
                   originPosition={routeOrigin}
-                  originLabel={liveFix ? 'live position' : 'spawn'}
+                  originLabel={liveFix && !spawnWins ? 'live position' : 'spawn'}
                   hasSelection={selectedTaskIds.length > 0}
                 extract={chosenExtract}
                 />

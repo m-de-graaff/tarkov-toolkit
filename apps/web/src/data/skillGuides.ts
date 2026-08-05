@@ -22,6 +22,8 @@ export interface PlanStep {
   when: StepWhen;
   /** one short line, glanceable */
   text: string;
+  /** items the step mentions, shown as icons; itemsLite ids (ammo ids also resolve) */
+  itemIds?: string[];
 }
 
 export interface SkillCheese {
@@ -29,7 +31,32 @@ export interface SkillCheese {
   title: string;
   /** the full safe instructions, shown under Details */
   detail: string;
+  /** items the cheese uses, shown as icons next to the title */
+  itemIds?: string[];
 }
+
+// icon ids referenced below, named for readability
+const GOLDEN_STAR = '5751a89d24597722aa0e8db0';
+const AQUAMARI = '5c0fa877d174af02a012e1cf';
+const DEVILDOG_MAYO = '5bc9b156d4351e00367fbce9';
+const CONDENSED_MILK = '5734773724597737fd047c14';
+const PROPITAL = '5c0e530286f7747fa1419862';
+const SJ6 = '5c0e531d86f7747fa23f4d42';
+const MAKAROV_PM = '5448bd6b4bdc2dfc2f8b4569';
+const AMMO_9X18_PBM = '573719df2459775a626ccbc2';
+const GRIZZLY = '590c657e86f77412b013051d';
+const CALOK_B = '5e8488fa988a8701445df1e4';
+const CMS = '5d02778e86f774203e7dedbe';
+const SURV12 = '5d02797c86f774203f38e30a';
+const ZARYA = '5a0c27731526d80618476ac4';
+const RDG_2B = '5a2a57cfc4a2826c6e06d44a';
+const M18 = '617aa4dd8166f034d57de9c5';
+const OBDOLBOS_2 = '637b60c3b7afa97bfc3d7001';
+const STIM_2A2 = '66507eabf5ddb0818b085b68';
+const MAX_ENERGY = '5751435d24597720a27126d1';
+const PACA = '5648a7494bdc2d9d488b4583';
+const WEAPON_REPAIR_KIT = '5910968f86f77425cf569c32';
+const ARMOR_REPAIR_KIT = '591094e086f7747caa7bb2ef';
 
 export interface SkillGuide {
   id: string;
@@ -60,10 +87,10 @@ export const skillGuides: SkillGuide[] = [
     gives: 'Longer energy and hydration, faster physical skill gains, no fractures at elite.',
     how: 'XP per point of energy and hydration you restore in raid. Eating in the stash gives nothing - the drain-then-refill loop is the whole game.',
     plan: [
-      { when: 'Start', text: 'Golden Star balm on, reapply all raid' },
-      { when: 'Mid raid', text: 'DevilDog mayo or condensed milk, then an Aquamari' },
+      { when: 'Start', text: 'Golden Star balm on, reapply all raid', itemIds: [GOLDEN_STAR] },
+      { when: 'Mid raid', text: 'DevilDog mayo or condensed milk, then an Aquamari', itemIds: [DEVILDOG_MAYO, CONDENSED_MILK, AQUAMARI] },
       { when: 'Extract', text: 'Eat and drink back to full, finish found food' },
-      { when: 'Hideout', text: 'Medstation 3 crafts Golden Star into Propital - sell it' },
+      { when: 'Hideout', text: 'Medstation 3 crafts Golden Star into Propital - sell it', itemIds: [GOLDEN_STAR, PROPITAL] },
     ],
     caps: 'Fatigue throttles after 2-3 points per raid. High Metabolism later shortens debuff durations and slows Immunity - level Immunity first if you want both. Why these items: DevilDog mayo (+100 energy, -99 hydration) and condensed milk (+75, -65) are the biggest hydration drains, Aquamari (+100) the biggest refill.',
     cost: 'cheap',
@@ -75,7 +102,7 @@ export const skillGuides: SkillGuide[] = [
     how: 'Distance sprinted or walked while NOT overweight (white weight number), credited when you stop.',
     plan: [
       { when: 'Every raid', text: 'Light kit, big map, sprint everywhere, weight white' },
-      { when: 'Start', text: 'Optional SJ6 stim for more sprint per minute' },
+      { when: 'Start', text: 'Optional SJ6 stim for more sprint per minute', itemIds: [SJ6] },
       { when: 'Daily', text: 'One Gym session, up to 15 reps' },
     ],
     cheese: {
@@ -93,7 +120,7 @@ export const skillGuides: SkillGuide[] = [
     how: 'Distance moved while overweight (yellow number), plus grenade throws and melee hits (3 points per raid each), plus the Gym.',
     plan: [
       { when: 'Every raid', text: 'Pad bag just past yellow: 12/70 shell stacks, 1 kg each' },
-      { when: 'Mid raid', text: 'Throw 3 cheap grenades: RDG-2B, M18 or Zarya' },
+      { when: 'Mid raid', text: 'Throw 3 cheap grenades: RDG-2B, M18 or Zarya', itemIds: [RDG_2B, M18, ZARYA] },
       { when: 'Daily', text: 'Gym session, shared with Endurance' },
     ],
     caps: 'Grenade throws and melee hits each cap at 3 points per raid; overweight-movement XP fatigues like everything else. Drop the filler as real loot fills the bag.',
@@ -105,11 +132,12 @@ export const skillGuides: SkillGuide[] = [
     gives: 'Lower bleed chance, and at elite bleeds stop on their own.',
     how: '0.01 points per 5 damage taken plus 0.3 points per bleed received, from any source - including a friend.',
     plan: [
-      { when: 'Duo', text: 'Friend shoots legs, Grizzly up, swap, 2-3 cycles' },
-      { when: 'Every raid', text: 'Bleeds pay most: Propital through a heavy bleed' },
+      { when: 'Duo', text: 'Friend shoots legs, Grizzly up, swap, 2-3 cycles', itemIds: [GRIZZLY] },
+      { when: 'Every raid', text: 'Bleeds pay most: Propital through a heavy bleed', itemIds: [PROPITAL, CALOK_B] },
     ],
     cheese: {
       title: 'Friend shoots legs: Makarov PM + 9x18 PBM',
+      itemIds: [MAKAROV_PM, AMMO_9X18_PBM],
       detail:
         'Friend shoots your LEGS with a Makarov PM loaded with 9x18mm PM PBM gzh (40 damage, the weakest 9x18) or the dirt-cheap P gzh (50). A fresh leg has 65 HP, so one round never blacks it. Never shoot an already blacked limb - that damage spreads body-wide and can kill. Alternate legs, heal with a Grizzly, bring CALOK-B for bleeds and a splint for fractures. Also levels Health (25 percent pass-through) and Stress Resistance. It does NOT level Immunity. Ammo pick is community-derived from the ballistics table.',
     },
@@ -133,8 +161,8 @@ export const skillGuides: SkillGuide[] = [
     gives: 'Less poison and toxin damage; at elite, immunity to most negative food effects.',
     how: 'About 0.0045 points per second of stim or food debuff, paid when the debuff ENDS in raid. Extracting early forfeits the points - dose early, never late.',
     plan: [
-      { when: 'Start', text: 'Max Energy, another every 5 minutes' },
-      { when: 'Start', text: 'Bigger: 2A2-(b-TG) or Obdolbos 2, first minutes only' },
+      { when: 'Start', text: 'Max Energy, another every 5 minutes', itemIds: [MAX_ENERGY] },
+      { when: 'Start', text: 'Bigger: 2A2-(b-TG) or Obdolbos 2, first minutes only', itemIds: [STIM_2A2, OBDOLBOS_2] },
       { when: 'Every raid', text: 'Pairs with the Metabolism loop' },
     ],
     caps: 'Friend-shooting does NOT level Immunity - only consumable debuffs count. Level it before Metabolism gets high, because high Metabolism shortens debuff durations. Bring water for 2A2, meds for Obdolbos 2.',
@@ -151,6 +179,7 @@ export const skillGuides: SkillGuide[] = [
     ],
     cheese: {
       title: 'Zarya in a crate: pain, no real damage',
+      itemIds: [ZARYA, RDG_2B],
       detail:
         'Drop a Zarya or RDG-2B into an enclosed open-top crate and stand next to it: concussion plus a pain effect at 0.33 points each, with no lethal damage. Conveniently spends the 3-grenade Strength budget too. Skip the Golden Star loop on these raids - the balm suppresses the pain you want.',
     },
@@ -194,8 +223,8 @@ export const skillGuides: SkillGuide[] = [
     gives: 'Faster surgery, less max-HP loss; elite restores limbs to full.',
     how: '1.1 points per CMS or Surv12 use on a blacked (0 HP) limb.',
     plan: [
-      { when: 'Every raid', text: 'Carry a CMS, surgery every limb that blacks' },
-      { when: 'Extract', text: 'Short fall, black both legs, CMS both, leave' },
+      { when: 'Every raid', text: 'Carry a CMS, surgery every limb that blacks', itemIds: [CMS, SURV12] },
+      { when: 'Extract', text: 'Short fall, black both legs, CMS both, leave', itemIds: [CMS] },
     ],
     cheese: {
       title: 'Duo: buddy blacks limbs, you CMS',
@@ -271,7 +300,7 @@ export const skillGuides: SkillGuide[] = [
     gives: 'Faster examining and weapon modding, better repair quality.',
     how: 'About 0.4 points per 10 durability restored with weapon or armor repair kits, plus hideout crafts. Examining items currently grants nothing despite the tooltip.',
     plan: [
-      { when: 'Hideout', text: 'Repair-kit Scav guns and armor before selling' },
+      { when: 'Hideout', text: 'Repair-kit Scav guns and armor before selling', itemIds: [WEAPON_REPAIR_KIT, ARMOR_REPAIR_KIT] },
       { when: 'Hideout', text: 'Keep crafts running' },
     ],
     cheese: {
@@ -303,8 +332,8 @@ export const skillGuides: SkillGuide[] = [
     gives: 'Less light-armor wear and movement penalty; elite gives bleed immunity on covered parts.',
     how: '0.4 points per 10 durability repaired with a Body armor repair kit on aramid, aluminium or UHMWPE armor, plus 0.02 per durability point of damage taken while wearing it.',
     plan: [
-      { when: 'Every raid', text: 'Wear cheap aramid: PACA, 6B23' },
-      { when: 'Hideout', text: 'Self-repair with a Body armor repair kit' },
+      { when: 'Every raid', text: 'Wear cheap aramid: PACA, 6B23', itemIds: [PACA] },
+      { when: 'Hideout', text: 'Self-repair with a Body armor repair kit', itemIds: [ARMOR_REPAIR_KIT] },
     ],
     cheese: {
       title: 'Repair blown flea armor from the stash',
@@ -320,7 +349,7 @@ export const skillGuides: SkillGuide[] = [
     gives: 'Less heavy-armor wear; elite can deflect bullets outright.',
     how: 'Same loop as Light Vests for steel, ceramic and Titan armor: 0.4 points per 10 durability repaired, 0.01 per durability of damage taken (half the light-armor rate).',
     plan: [
-      { when: 'Hideout', text: 'Self-repair steel and ceramic rigs with a kit' },
+      { when: 'Hideout', text: 'Self-repair steel and ceramic rigs with a kit', itemIds: [ARMOR_REPAIR_KIT] },
     ],
     cheese: {
       title: 'Repair blown flea armor from the stash',
