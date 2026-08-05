@@ -90,6 +90,23 @@ describe('planner store', () => {
     expect(usePlanner.getState().tracker.completedTaskIds).toHaveLength(1);
   });
 
+  it('records finished quests the snapshot does not know yet', () => {
+    // A game patch can ship quests before tarkov.dev has them; the completion
+    // must survive so it shows up once the data catches up.
+    const newQuestId = '69ffffffffffffffffffffff';
+    usePlanner.getState().applyLogEvent({ type: 'task', taskId: newQuestId, status: 'finished' });
+    expect(usePlanner.getState().tracker.completedTaskIds).toContain(newQuestId);
+    expect(usePlanner.getState().lastAutoEvent).toMatch(/quest completed/i);
+    // idempotent for unknown ids too
+    usePlanner.getState().applyLogEvent({ type: 'task', taskId: newQuestId, status: 'finished' });
+    expect(
+      usePlanner.getState().tracker.completedTaskIds.filter((id) => id === newQuestId),
+    ).toHaveLength(1);
+    // log-parse noise that doesn't look like a task id is still dropped
+    usePlanner.getState().applyLogEvent({ type: 'task', taskId: 'garbage line', status: 'finished' });
+    expect(usePlanner.getState().tracker.completedTaskIds).not.toContain('garbage line');
+  });
+
   it('migrates v1 persisted state to include hideoutLevels everywhere', () => {
     const migrate = usePlanner.persist.getOptions().migrate!;
     const migrated = migrate(

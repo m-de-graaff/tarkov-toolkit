@@ -98,13 +98,19 @@ export const usePlanner = create<PlannerState>()(
             };
           }
           if (event.status !== 'finished') return s;
+          if (s.tracker.completedTaskIds.includes(event.taskId)) return s;
           const task = snapshot.tasks.find((t) => t.id === event.taskId);
-          if (!task || s.tracker.completedTaskIds.includes(task.id)) return s;
+          // A game patch can ship quests before tarkov.dev knows them. Keep
+          // the completion (it surfaces once the data catches up), but only
+          // for values shaped like a task id - not arbitrary log noise.
+          if (!task && !/^[0-9a-f]{24}$/i.test(event.taskId)) return s;
           return {
-            lastAutoEvent: `Quest completed: ${task.name}`,
+            lastAutoEvent: task
+              ? `Quest completed: ${task.name}`
+              : 'Quest completed: saved, but this quest is newer than our game data',
             tracker: {
               ...s.tracker,
-              completedTaskIds: [...s.tracker.completedTaskIds, task.id],
+              completedTaskIds: [...s.tracker.completedTaskIds, event.taskId],
             },
           };
         }),
