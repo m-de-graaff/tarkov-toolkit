@@ -1,6 +1,6 @@
 import type { AmmoRound } from '@raidplanner/data';
 import { describe, expect, it } from 'vitest';
-import { filterAmmo, penTier, sortAmmo, totalDamage } from './ammoSort';
+import { classEffectiveness, filterAmmo, penTier, sortAmmo, totalDamage } from './ammoSort';
 
 const round = (name: string, over: Partial<AmmoRound>): AmmoRound => ({
   id: name,
@@ -43,6 +43,17 @@ describe('penTier', () => {
     expect(penTier(44)).toBe(4);
     expect(penTier(50)).toBe(5);
     expect(penTier(70)).toBe(6);
+  });
+});
+
+describe('classEffectiveness', () => {
+  it('grades a round against each armor class by pen margin', () => {
+    // M855A1-like: pen 44
+    expect(classEffectiveness(44, 2)).toBe('excellent'); // margin +24
+    expect(classEffectiveness(44, 3)).toBe('good'); // +14 → good (not excellent)
+    expect(classEffectiveness(44, 4)).toBe('fair'); // +4
+    expect(classEffectiveness(44, 5)).toBe('poor'); // -6
+    expect(classEffectiveness(44, 6)).toBe('none'); // -16
   });
 });
 

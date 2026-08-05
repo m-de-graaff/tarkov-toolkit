@@ -14,6 +14,7 @@ const freshTracker = (): TrackerState => ({
   faction: 'Any',
   completedTaskIds: [],
   hideoutLevels: {},
+  itemsHave: {},
 });
 
 interface PlannerState {
@@ -41,6 +42,9 @@ interface PlannerState {
   setFaction(f: TrackerState['faction']): void;
   toggleCompleted(taskId: string): void;
   setHideoutLevel(stationId: string, level: number): void;
+  setItemHave(itemId: string, count: number): void;
+  /** decrement haves by the given requirements (building a hideout level) */
+  consumeItems(requirements: { itemId: string; count: number }[]): void;
   resetProgress(): void;
   setSearch(s: string): void;
 }
@@ -123,13 +127,36 @@ export const usePlanner = create<PlannerState>()(
             hideoutLevels: { ...(s.tracker.hideoutLevels ?? {}), [stationId]: level },
           },
         })),
+      setItemHave: (itemId, count) =>
+        set((s) => ({
+          tracker: {
+            ...s.tracker,
+            itemsHave: { ...(s.tracker.itemsHave ?? {}), [itemId]: Math.max(0, count) },
+          },
+        })),
+      consumeItems: (requirements) =>
+        set((s) => {
+          const itemsHave = { ...(s.tracker.itemsHave ?? {}) };
+          for (const req of requirements) {
+            itemsHave[req.itemId] = Math.max(0, (itemsHave[req.itemId] ?? 0) - req.count);
+          }
+          return { tracker: { ...s.tracker, itemsHave } };
+        }),
       resetProgress: () =>
-        set({ tracker: { level: 1, faction: 'Any', completedTaskIds: [], hideoutLevels: {} } }),
+        set({
+          tracker: {
+            level: 1,
+            faction: 'Any',
+            completedTaskIds: [],
+            hideoutLevels: {},
+            itemsHave: {},
+          },
+        }),
       setSearch: (search) => set({ search }),
     }),
     {
       name: 'raidplanner-v1',
-      version: 2,
+      version: 3,
       migrate: (persisted, version) => {
         if (!persisted || typeof persisted !== 'object') return persisted;
         let state = persisted as {
@@ -145,19 +172,20 @@ export const usePlanner = create<PlannerState>()(
             tracker: state.tracker ?? freshTracker(),
           };
         }
-        if (version < 2) {
-          // hideoutLevels arrived after v1 states were in the wild
-          const withLevels = (tracker: TrackerState | undefined): TrackerState => ({
+        if (version < 3) {
+          // v2 added hideoutLevels, v3 added itemsHave — normalize both
+          const normalize = (tracker: TrackerState | undefined): TrackerState => ({
             ...(tracker ?? freshTracker()),
             hideoutLevels: tracker?.hideoutLevels ?? {},
+            itemsHave: tracker?.itemsHave ?? {},
           });
           state = {
             ...state,
-            tracker: withLevels(state.tracker),
+            tracker: normalize(state.tracker),
             profiles: Object.fromEntries(
               Object.entries(state.profiles ?? {}).map(([mode, tracker]) => [
                 mode,
-                withLevels(tracker),
+                normalize(tracker),
               ]),
             ),
           };

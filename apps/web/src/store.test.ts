@@ -42,6 +42,7 @@ describe('planner store', () => {
       faction: 'Any',
       completedTaskIds: [],
       hideoutLevels: {},
+      itemsHave: {},
     });
   });
 
@@ -115,6 +116,7 @@ describe('planner store', () => {
       faction: 'Any',
       completedTaskIds: [],
       hideoutLevels: {},
+      itemsHave: {},
     });
   });
 

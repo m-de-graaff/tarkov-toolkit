@@ -111,6 +111,9 @@ export function ProgressPage() {
   const setLevel = usePlanner((s) => s.setLevel);
   const setFaction = usePlanner((s) => s.setFaction);
   const [search, setSearch] = useState('');
+  const [showLocked, setShowLocked] = useState(true);
+  const [showCompleted, setShowCompleted] = useState(true);
+  const [kappaOnly, setKappaOnly] = useState(false);
 
   const modeSnapshot = useMemo(() => snapshotForMode(snapshot, gameMode), [gameMode]);
   const openCount = useMemo(
@@ -119,18 +122,30 @@ export function ProgressPage() {
   );
 
   const byTrader = useMemo(() => {
-    const groups = new Map<string, RpTask[]>();
+    const groups = new Map<string, { tasks: RpTask[]; total: number; completed: number }>();
     for (const task of modeSnapshot.tasks) {
+      const group = groups.get(task.trader.name) ?? { tasks: [], total: 0, completed: 0 };
+      group.total++;
+      const completed = tracker.completedTaskIds.includes(task.id);
+      if (completed) group.completed++;
+      groups.set(task.trader.name, group);
+
       if (search && !task.name.toLowerCase().includes(search.toLowerCase())) continue;
-      const list = groups.get(task.trader.name) ?? [];
-      list.push(task);
-      groups.set(task.trader.name, list);
+      if (kappaOnly && !task.kappaRequired) continue;
+      if (!showCompleted && completed) continue;
+      if (!showLocked && !completed && !isAvailable(task, tracker)) continue;
+      group.tasks.push(task);
     }
-    for (const list of groups.values()) {
-      list.sort((a, b) => a.minPlayerLevel - b.minPlayerLevel || a.name.localeCompare(b.name));
+    for (const group of groups.values()) {
+      group.tasks.sort((a, b) => a.minPlayerLevel - b.minPlayerLevel || a.name.localeCompare(b.name));
     }
     return groups;
-  }, [search, modeSnapshot]);
+  }, [search, modeSnapshot, showLocked, showCompleted, kappaOnly, tracker]);
+
+  const totalCompleted = tracker.completedTaskIds.filter((id) =>
+    modeSnapshot.tasks.some((t) => t.id === id),
+  ).length;
+  const progressPct = Math.round((totalCompleted / modeSnapshot.tasks.length) * 100);
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto">
@@ -178,38 +193,77 @@ export function ProgressPage() {
           </label>
           <div className="flex flex-col gap-0.5 text-sm">
             <span className="tabular-nums">
-              <strong className="text-primary">{tracker.completedTaskIds.length}</strong> of{' '}
+              <strong className="text-primary">{totalCompleted}</strong> of{' '}
               {modeSnapshot.tasks.length} quests finished
             </span>
             <span className="text-muted-foreground tabular-nums">{openCount} open right now</span>
+            <span
+              role="progressbar"
+              aria-valuenow={progressPct}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label="Overall quest completion"
+              className="mt-1 block h-1.5 w-40 overflow-hidden rounded-full bg-secondary"
+            >
+              <span className="block h-full bg-primary" style={{ width: `${progressPct}%` }} />
+            </span>
           </div>
           <div className="ml-auto">
             <ResetButton />
           </div>
         </section>
 
-        <Input
-          type="search"
-          placeholder="Search all quests…"
-          aria-label="Search all quests"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="h-9"
-        />
+        <div className="sticky top-0 z-10 -mx-1 flex flex-wrap items-center gap-2 rounded-md bg-background/95 px-1 py-2 backdrop-blur">
+          <Input
+            type="search"
+            placeholder="Search all quests…"
+            aria-label="Search all quests"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="h-8 max-w-64 flex-1"
+          />
+          {(
+            [
+              { label: 'Locked', value: showLocked, set: setShowLocked },
+              { label: 'Completed', value: showCompleted, set: setShowCompleted },
+              { label: 'Kappa only', value: kappaOnly, set: setKappaOnly },
+            ] as const
+          ).map((chip) => (
+            <button
+              key={chip.label}
+              type="button"
+              aria-pressed={chip.value}
+              onClick={() => chip.set(!chip.value)}
+              className={cn(
+                'rounded-full border px-2.5 py-1 text-xs transition-colors',
+                chip.value
+                  ? 'border-primary/60 bg-accent text-primary'
+                  : 'text-muted-foreground hover:text-foreground',
+              )}
+            >
+              {chip.label}
+            </button>
+          ))}
+        </div>
 
-        {[...byTrader.entries()].map(([trader, tasks]) => (
-          <section key={trader} aria-label={`${trader} quests`}>
-            <h2 className="mb-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              {trader}
-            </h2>
-            <Separator className="mb-2" />
-            <ul className="m-0 flex list-none flex-col p-0">
-              {tasks.map((task) => (
-                <ProgressQuestRow key={task.id} task={task} />
-              ))}
-            </ul>
-          </section>
-        ))}
+        {[...byTrader.entries()]
+          .filter(([, group]) => group.tasks.length > 0)
+          .map(([trader, group]) => (
+            <section key={trader} aria-label={`${trader} quests`}>
+              <h2 className="mb-1 flex items-baseline gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                {trader}
+                <span className="normal-case tabular-nums">
+                  {group.completed}/{group.total} done
+                </span>
+              </h2>
+              <Separator className="mb-2" />
+              <ul className="m-0 flex list-none flex-col p-0">
+                {group.tasks.map((task) => (
+                  <ProgressQuestRow key={task.id} task={task} />
+                ))}
+              </ul>
+            </section>
+          ))}
       </div>
     </div>
   );

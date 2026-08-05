@@ -12,8 +12,10 @@ import type { TradeItemStack } from '@raidplanner/data';
 import { snapshot } from '@raidplanner/data';
 import { RefreshCw } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { ResizableTH } from '../components/ResizableTH';
 import { fetchPrices, loadCachedPrices, type CachedPrices } from '../lib/prices';
 import { barterProfit, craftProfit, fleaToTrader, traderResells } from '../lib/profit';
+import { useColumnWidths } from '../lib/useColumnWidths';
 import { usePlanner } from '../store';
 
 const STALE_MS = 30 * 60 * 1000; // auto-refresh cadence
@@ -84,12 +86,11 @@ function SingleItemCell({
   );
 }
 
-/** column widths per tab — table-fixed keeps every table inside the viewport */
 function Cols({ widths }: { widths: number[] }) {
   return (
     <colgroup>
       {widths.map((w, i) => (
-        <col key={i} style={{ width: `${w}%` }} />
+        <col key={i} style={{ width: `${w}px` }} />
       ))}
     </colgroup>
   );
@@ -112,12 +113,6 @@ function Money({ value, signed }: { value: number | null; signed?: boolean }) {
   );
 }
 
-const TH = ({ children, right }: { children: React.ReactNode; right?: boolean }) => (
-  <th className={cn('px-3 py-2 text-xs font-medium text-muted-foreground', right ? 'text-right' : 'text-left')}>
-    {children}
-  </th>
-);
-
 type Tab = 'resells' | 'fleaToTrader' | 'barters' | 'crafts';
 
 export function MarketPage() {
@@ -129,6 +124,13 @@ export function MarketPage() {
   const [search, setSearch] = useState('');
   const [maxLevel, setMaxLevel] = useState<number>(4);
   const fetchingRef = useRef(false);
+  const tableRef = useRef<HTMLTableElement | null>(null);
+
+  // per-tab resizable column widths (drag the header edges; double-click fits)
+  const resellCols = useColumnWidths('profit:resells', [320, 220, 110, 110, 130]);
+  const fleaCols = useColumnWidths('profit:fleaToTrader', [340, 200, 120, 120, 120]);
+  const barterCols = useColumnWidths('profit:barters', [260, 240, 170, 110, 110, 110]);
+  const craftCols = useColumnWidths('profit:crafts', [230, 210, 180, 100, 100, 100, 100]);
 
   // Prices load themselves: cache first, auto-fetch when missing or stale,
   // then keep fresh on an interval while the page is open.
@@ -323,17 +325,17 @@ export function MarketPage() {
           </p>
         ) : (
           <div className="overflow-x-auto rounded-lg border">
-            <table className="w-full table-fixed border-collapse text-[13px]">
+            <table ref={tableRef} className="min-w-full table-fixed border-collapse text-[13px]">
               {tab === 'resells' && (
                 <>
-                  <Cols widths={[32, 22, 14, 14, 18]} />
+                  <Cols widths={resellCols.widths} />
                   <thead>
                     <tr className="border-b bg-card">
-                      <TH>Item</TH>
-                      <TH>Buy from</TH>
-                      <TH right>Buy</TH>
-                      <TH right>Flea</TH>
-                      <TH right>Spread*</TH>
+                      {['Item', 'Buy from', 'Buy', 'Flea', 'Spread*'].map((label, i) => (
+                        <ResizableTH key={label} index={i} columns={resellCols} tableRef={tableRef} right={i >= 2}>
+                          {label}
+                        </ResizableTH>
+                      ))}
                     </tr>
                   </thead>
                   <tbody>
@@ -356,14 +358,14 @@ export function MarketPage() {
               )}
               {tab === 'fleaToTrader' && (
                 <>
-                  <Cols widths={[36, 22, 14, 14, 14]} />
+                  <Cols widths={fleaCols.widths} />
                   <thead>
                     <tr className="border-b bg-card">
-                      <TH>Item</TH>
-                      <TH>Sell to</TH>
-                      <TH right>Buy (flea)</TH>
-                      <TH right>Sell</TH>
-                      <TH right>Profit</TH>
+                      {['Item', 'Sell to', 'Buy (flea)', 'Sell', 'Profit'].map((label, i) => (
+                        <ResizableTH key={label} index={i} columns={fleaCols} tableRef={tableRef} right={i >= 2}>
+                          {label}
+                        </ResizableTH>
+                      ))}
                     </tr>
                   </thead>
                   <tbody>
@@ -385,15 +387,14 @@ export function MarketPage() {
               )}
               {tab === 'barters' && (
                 <>
-                  <Cols widths={[24, 22, 18, 12, 12, 12]} />
+                  <Cols widths={barterCols.widths} />
                   <thead>
                     <tr className="border-b bg-card">
-                      <TH>Give</TH>
-                      <TH>Get</TH>
-                      <TH>Trader</TH>
-                      <TH right>Cost</TH>
-                      <TH right>Sell</TH>
-                      <TH right>Profit</TH>
+                      {['Give', 'Get', 'Trader', 'Cost', 'Sell', 'Profit'].map((label, i) => (
+                        <ResizableTH key={label} index={i} columns={barterCols} tableRef={tableRef} right={i >= 3}>
+                          {label}
+                        </ResizableTH>
+                      ))}
                     </tr>
                   </thead>
                   <tbody>
@@ -415,16 +416,14 @@ export function MarketPage() {
               )}
               {tab === 'crafts' && (
                 <>
-                  <Cols widths={[21, 19, 18, 10.5, 10.5, 10.5, 10.5]} />
+                  <Cols widths={craftCols.widths} />
                   <thead>
                     <tr className="border-b bg-card">
-                      <TH>Input</TH>
-                      <TH>Output</TH>
-                      <TH>Station</TH>
-                      <TH right>Cost</TH>
-                      <TH right>Sell</TH>
-                      <TH right>Profit</TH>
-                      <TH right>Per hour</TH>
+                      {['Input', 'Output', 'Station', 'Cost', 'Sell', 'Profit', 'Per hour'].map((label, i) => (
+                        <ResizableTH key={label} index={i} columns={craftCols} tableRef={tableRef} right={i >= 3}>
+                          {label}
+                        </ResizableTH>
+                      ))}
                     </tr>
                   </thead>
                   <tbody>
