@@ -6,6 +6,8 @@ export interface TrackerState {
   completedTaskIds: string[];
   /** built hideout station levels, stationId -> level (absent = 0) */
   hideoutLevels?: Record<string, number>;
+  /** items collected toward quests/hideout, itemId -> count on hand */
+  itemsHave?: Record<string, number>;
 }
 
 // v1 simplification: a requirement whose status does not include 'complete'
