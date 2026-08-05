@@ -115,10 +115,17 @@ const INDEX_FIXTURE = `
   const page = parseQuestPage(`{{Infobox quest
 |previous     =
 |reqkappa     =<font color="green">No</font>
-}}`);
+}}
+==Requirements==
+* Obtain level 2 loyalty with [[Ragman]]
+`);
   check(page.kappa === false, 'kappa no parsed');
   check(page.level === null, 'missing level line -> null');
   check(Array.isArray(page.previous) && page.previous.length === 0, 'empty previous -> []');
+  check(
+    page.loyalty?.level === 2 && page.loyalty?.trader === 'Ragman',
+    `loyalty line parsed, got ${JSON.stringify(page.loyalty)}`,
+  );
 }
 
 // --- applyWikiSync
@@ -162,10 +169,11 @@ const task = (id, name, extra = {}) => ({
     { trader: 'Prapor', name: 'Chained New', objectives: [], exp: null, order: 4 },
   ];
   const pages = new Map([
-    ['Debut', { kappa: true, level: null, previous: [] }],
-    ['Collector', { kappa: true, level: null, previous: ['Collector#Requirements'] }],
-    ['Brand New (quest)', { kappa: false, level: 12, previous: ['Debut'] }],
-    ['Chained New', { kappa: null, level: null, previous: ['Brand New (quest)'] }],
+    ['Debut', { kappa: true, level: null, previous: [], loyalty: null }],
+    ['Zone Quest', { kappa: null, level: null, previous: null, loyalty: { level: 3, trader: 'Prapor' } }],
+    ['Collector', { kappa: true, level: null, previous: ['Collector#Requirements'], loyalty: null }],
+    ['Brand New (quest)', { kappa: false, level: 12, previous: ['Debut'], loyalty: { level: 2, trader: 'Prapor' } }],
+    ['Chained New', { kappa: null, level: null, previous: ['Brand New (quest)'], loyalty: null }],
   ]);
   const { tasks: synced, drift } = applyWikiSync({
     tasks,
@@ -186,9 +194,14 @@ const task = (id, name, extra = {}) => ({
     byId.get('t6')?.taskRequirements.length === 1,
     'section-link prerequisites keep the API chain',
   );
+  check(
+    byId.get('t4')?.loyaltyLevel === 3 && byId.get('t5')?.loyaltyLevel === 3,
+    'loyalty requirement adopted on matched zone variants',
+  );
   const brandNew = byId.get('wiki-brand-new');
   check(brandNew?.wikiOnly === true, 'wiki-only quest synthesized');
   check(brandNew?.minPlayerLevel === 12, 'synthetic takes wiki level');
+  check(brandNew?.loyaltyLevel === 2, 'synthetic takes wiki loyalty level');
   check(
     brandNew?.taskRequirements[0]?.taskId === 't1',
     'synthetic prerequisite resolves to API task',

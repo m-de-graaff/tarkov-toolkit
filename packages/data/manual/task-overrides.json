@@ -164,6 +164,24 @@
       }
     },
     {
+      "id": "5ae448e586f7744dcf0c2a67",
+      "note": "'Big Sale': not offered on the in-game Ragman LL1 board (1.1.0.0 PvE, level 7, 2026-08-06) although the wiki documents no gate and the API prereq ('Only Business') was removed from the game. Best supported reading: LL2. Revisit when the wiki adds a requirements line.",
+      "source": "https://escapefromtarkov.fandom.com/wiki/Big_Sale",
+      "retireWhenApiMinPlayerLevelAtMost": 7,
+      "set": {
+        "loyaltyLevel": 2
+      }
+    },
+    {
+      "id": "675c085d59b0575973005f52",
+      "note": "'Break the Deal': same situation as Big Sale - absent from the in-game Ragman LL1 board with no wiki-documented gate. Best supported reading: LL2.",
+      "source": "https://escapefromtarkov.fandom.com/wiki/Break_the_Deal",
+      "retireWhenApiMinPlayerLevelAtMost": 7,
+      "set": {
+        "loyaltyLevel": 2
+      }
+    },
+    {
       "id": "5ae448bf86f7744d733e55ee",
       "note": "'Make ULTRA Great Again': 1.1 reworked it into a Ragman LL1 quest - eliminate 10 any targets on Interchange (was 25 Scavs at level 15, prereq 'Only Business'), XP 9800 -> 3000.",
       "source": "https://escapefromtarkov.fandom.com/wiki/Make_ULTRA_Great_Again",

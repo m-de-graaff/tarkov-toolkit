@@ -70,6 +70,9 @@ export function applyWikiSync({ tasks, maps, traderIdByName, index, pages, confi
       trader: { id: traderId, name: quest.trader },
       mapId: null,
       minPlayerLevel: page?.level ?? 1,
+      loyaltyLevel:
+        page?.loyalty && page.loyalty.trader === quest.trader ? page.loyalty.level : 1,
+      ...(page?.storyChapter ? { storyChapter: page.storyChapter } : {}),
       factionName: 'Any',
       kappaRequired: page?.kappa ?? false,
       wikiLink: `https://escapefromtarkov.fandom.com/wiki/${encodeURIComponent(quest.name.replace(/ /g, '_'))}`,
@@ -124,6 +127,20 @@ export function applyWikiSync({ tasks, maps, traderIdByName, index, pages, confi
         if (page.kappa != null && page.kappa !== task.kappaRequired) {
           fields.kappaRequired = [task.kappaRequired, page.kappa];
           task.kappaRequired = page.kappa;
+        }
+        if (page.loyalty != null && page.loyalty.level !== task.loyaltyLevel) {
+          if (page.loyalty.trader === task.trader.name) {
+            fields.loyaltyLevel = [task.loyaltyLevel, page.loyalty.level];
+            task.loyaltyLevel = page.loyalty.level;
+          } else {
+            drift.notes.push(
+              `${quest.name}: loyalty line names "${page.loyalty.trader}" but the quest belongs to ${task.trader.name}, ignored`,
+            );
+          }
+        }
+        if (page.storyChapter != null && page.storyChapter !== task.storyChapter) {
+          fields.storyChapter = [task.storyChapter ?? '(none)', page.storyChapter];
+          task.storyChapter = page.storyChapter;
         }
         if (page.previous != null) {
           // A "#section" link (Collector's kappa list) or a fully

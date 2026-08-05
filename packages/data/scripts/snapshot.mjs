@@ -246,6 +246,12 @@ function buildTasks(rawTasks, traderNames, idRemap) {
     trader: { id: raw.trader, name: traderNames.get(raw.trader) ?? 'Unknown' },
     mapId: raw.map ? remapId(raw.map) : null,
     minPlayerLevel: raw.minPlayerLevel ?? 1,
+    // required loyalty level with the quest's own trader (LL gating); the
+    // wiki sync overrides this from quest pages where the API lags
+    loyaltyLevel:
+      (raw.traderRequirements ?? []).find(
+        (req) => req.requirementType === 'level' && req.trader === raw.trader,
+      )?.value ?? 1,
     // normalize defensively: anything that isn't a real faction means "Any"
     factionName: ['USEC', 'BEAR'].includes(raw.factionName) ? raw.factionName : 'Any',
     kappaRequired: raw.kappaRequired ?? false,

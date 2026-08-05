@@ -98,12 +98,22 @@ export function parseQuestPage(wikitext) {
   const kappaMatch = wikitext.match(/\|\s*reqkappa\s*=[^\n]*\b(Yes|No)\b/i);
   const levelMatch = wikitext.match(/Must be level (\d+)/i);
   const prevMatch = wikitext.match(/\|\s*previous\s*=([^\n]*)/);
+  // 1.1-era gating: "Obtain level N loyalty with [[Trader]]"
+  const loyaltyMatch = wikitext.match(
+    /Obtain level (\d+) loyalty with \[\[([^\]|]+)/i,
+  );
+  // "... in the [[Boreas]] story chapter" - quest opens after a story chapter
+  const storyMatch = wikitext.match(/\[\[([^\]|]+)\]\] story chapter/i);
   return {
     kappa: kappaMatch ? /yes/i.test(kappaMatch[1]) : null,
     level: levelMatch ? Number(levelMatch[1]) : null,
     previous: prevMatch
       ? [...prevMatch[1].matchAll(/\[\[([^\]|]+)/g)].map((m) => m[1].trim())
       : null,
+    loyalty: loyaltyMatch
+      ? { level: Number(loyaltyMatch[1]), trader: loyaltyMatch[2].trim() }
+      : null,
+    storyChapter: storyMatch ? storyMatch[1].trim() : null,
   };
 }
 

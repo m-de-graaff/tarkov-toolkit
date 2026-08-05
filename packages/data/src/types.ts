@@ -120,6 +120,11 @@ export interface RpTask {
   /** task.map from the API: quest is locked to this map */
   mapId: string | null;
   minPlayerLevel: number;
+  /** required loyalty level with the quest's own trader (1 when ungated) */
+  loyaltyLevel?: number;
+  /** story chapter (by name, see apps/web storyline data) that must be
+   * finished before the trader offers this quest */
+  storyChapter?: string;
   factionName: string;
   kappaRequired: boolean;
   wikiLink?: string;
