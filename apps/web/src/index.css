@@ -131,7 +131,9 @@
   }
 
   .leaflet-container {
-    background: #111110;
+    /* leaflet.css is unlayered and would win over this @layer rule without
+       the important - the default is a light gray that clashes hard */
+    background: #111110 !important;
     font: inherit;
   }
 

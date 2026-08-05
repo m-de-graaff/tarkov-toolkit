@@ -103,19 +103,28 @@ export function MapCanvas({ map, markers, route, onMapClick }: MapCanvasProps) {
       }
     };
     if (cal.tiles) {
-      // Pretty baked-3D render from assets.tarkov.dev; if tiles fail to load
-      // (offline), swap once to the bundled SVG fallback.
+      // Pretty baked-3D render from assets.tarkov.dev. No bounds option: the
+      // pyramids serve transparent tiles outside the drawn area, and a bounds
+      // rect can wrongly exclude real tiles (Customs rendered nothing).
       const tileLayer = L.tileLayer(cal.tiles.url, {
         tileSize: cal.tiles.tileSize,
+        minZoom: -2,
         minNativeZoom: cal.tiles.minZoom,
         maxNativeZoom: cal.tiles.maxZoom,
-        bounds,
         className: 'map-tiles',
         keepBuffer: 2,
       });
+      // Only fall back to the bundled SVG when the tile source is genuinely
+      // unreachable (offline): several errors and not a single loaded tile.
+      let loaded = 0;
+      let errors = 0;
       let fellBack = false;
+      tileLayer.on('tileload', () => {
+        loaded++;
+      });
       tileLayer.on('tileerror', () => {
-        if (fellBack || !cal.svgFile) return;
+        errors++;
+        if (fellBack || !cal.svgFile || loaded > 0 || errors < 6) return;
         fellBack = true;
         lMap.removeLayer(tileLayer);
         addSvgOverlay();
