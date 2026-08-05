@@ -119,6 +119,8 @@ export interface RpTask {
   factionName: string;
   kappaRequired: boolean;
   wikiLink?: string;
+  /** pre-rename title (game patches rename quests; data sources lag) */
+  formerName?: string;
   experience: number;
   taskRequirements: RpTaskRequirement[];
   objectives: RpObjective[];
