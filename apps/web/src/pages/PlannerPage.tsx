@@ -54,6 +54,18 @@ export function PlannerPage() {
   const isDesktop = useMediaQuery('(min-width: 768px)');
   const navigator = useNavGrid(map);
 
+  // named PMC spawn zones: the keyboard/screen-reader path to what a map
+  // click does (WCAG 2.5.7 - a pointer gesture needs an alternative)
+  const spawnZones = useMemo(() => {
+    const byZone = new Map<string, (typeof snapshot.maps)[number]['spawns'][number]>();
+    for (const s of map?.spawns ?? []) {
+      if (!s.categories.includes('player')) continue;
+      if (!s.sides.includes('pmc') && !s.sides.includes('all')) continue;
+      if (s.zoneName && !byZone.has(s.zoneName)) byZone.set(s.zoneName, s);
+    }
+    return [...byZone.values()].sort((a, b) => a.zoneName.localeCompare(b.zoneName));
+  }, [map]);
+
   // The route starts from where you actually are (live fix) when live mode has
   // one, otherwise from the chosen spawn. A map click outranks the fix until
   // the next screenshot so you can plan ahead of your current position.
@@ -181,6 +193,31 @@ export function PlannerPage() {
             {liveFix ? 'Manual origin · back to live' : 'Spawn set · clear'}
           </button>
         ) : null}
+        {spawnZones.length > 0 && !liveFix && (
+          <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <span>Spawn</span>
+            <Select
+              value={spawn?.kind === 'zone' ? spawn.zoneName : ''}
+              onValueChange={(zoneName) => {
+                const zone = spawnZones.find((z) => z.zoneName === zoneName);
+                if (zone) setSpawn({ kind: 'zone', zoneName: zone.zoneName, position: zone.position });
+              }}
+            >
+              <SelectTrigger className="h-7 max-w-52 text-xs" aria-label="Spawn point">
+                <SelectValue
+                  placeholder={spawn?.kind === 'custom' ? 'Custom (map click)' : 'Choose...'}
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {spawnZones.map((z) => (
+                  <SelectItem key={z.zoneName} value={z.zoneName}>
+                    {z.zoneName}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </label>
+        )}
         {extracts.length > 0 && (
           <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <span>Extract</span>

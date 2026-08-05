@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { CircleUser } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AUTH_ENABLED, authClient } from '../lib/authClient';
 import type { SyncStatus } from '../lib/useProgressSync';
 import { useProgressSync } from '../lib/useProgressSync';
@@ -51,6 +51,7 @@ function AuthForm({ onDone }: { onDone: () => void }) {
       <Input
         type="email"
         required
+        aria-label="Email"
         placeholder="Email"
         autoComplete="email"
         value={email}
@@ -61,13 +62,18 @@ function AuthForm({ onDone }: { onDone: () => void }) {
         type="password"
         required
         minLength={8}
+        aria-label="Password"
         placeholder="Password (8+ characters)"
         autoComplete={mode === 'signIn' ? 'current-password' : 'new-password'}
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         className="h-8"
       />
-      {error && <p className="text-xs text-destructive">{error}</p>}
+      {error && (
+        <p role="alert" className="text-xs text-destructive">
+          {error}
+        </p>
+      )}
       <div className="flex items-center gap-2">
         <Button type="submit" size="sm" disabled={busy} className="h-8">
           {busy ? 'Working...' : mode === 'signIn' ? 'Sign in' : 'Create account'}
@@ -91,18 +97,59 @@ export function AccountMenu() {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<SyncStatus>('off');
   const session = authClient.useSession();
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   useProgressSync(setStatus);
+
+  // dialog behaviour: focus moves in on open, Escape closes, Tab cycles
+  // inside, and focus returns to the trigger on close
+  useEffect(() => {
+    if (!open) return;
+    const panel = panelRef.current;
+    if (!panel) return;
+    const focusables = () =>
+      [...panel.querySelectorAll<HTMLElement>('button, input, a[href]')].filter(
+        (el) => !el.hasAttribute('disabled'),
+      );
+    focusables()[0]?.focus();
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.stopPropagation();
+        setOpen(false);
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const items = focusables();
+      if (items.length === 0) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    panel.addEventListener('keydown', onKeyDown);
+    return () => {
+      panel.removeEventListener('keydown', onKeyDown);
+      // the trigger is the wrapper's first button (ui Button forwards no ref)
+      wrapRef.current?.querySelector('button')?.focus();
+    };
+  }, [open]);
 
   if (!AUTH_ENABLED) return null;
   const user = session.data?.user;
 
   return (
-    <div className="relative">
+    <div ref={wrapRef} className="relative">
       <Button
         type="button"
         variant={user ? 'ghost' : 'outline'}
         size="sm"
         aria-expanded={open}
+        aria-haspopup="dialog"
         className={cn('h-8 gap-1.5', user && 'text-muted-foreground')}
         title={user ? `Signed in as ${user.email}` : 'Sign in to sync progress'}
         onClick={() => setOpen((v) => !v)}
@@ -112,13 +159,15 @@ export function AccountMenu() {
       </Button>
       {open && (
         <>
-          <button
-            type="button"
-            aria-label="Close account menu"
-            className="fixed inset-0 z-40 cursor-default"
-            onClick={() => setOpen(false)}
-          />
-          <div className="absolute right-0 top-full z-50 mt-1.5 w-72 rounded-md border bg-card p-3 shadow-md">
+          {/* pointer-only click-away target; Escape is the keyboard path, so
+              this must not occupy a tab stop between trigger and dialog */}
+          <div aria-hidden="true" className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+          <div
+            ref={panelRef}
+            role="dialog"
+            aria-label={user ? 'Account' : 'Sign in'}
+            className="absolute right-0 top-full z-50 mt-1.5 w-72 rounded-md border bg-card p-3 shadow-md"
+          >
           {user ? (
             <div className="flex flex-col gap-2">
               <p className="truncate text-sm font-medium" title={user.email}>

@@ -66,6 +66,8 @@ export interface ColumnWidths {
   startDrag(index: number, event: React.PointerEvent): void;
   /** Excel-style double-click: fit the column to its widest cell */
   autoFit(index: number, table: HTMLTableElement | null): void;
+  /** keyboard resize: adjust a column by a pixel delta (persisted) */
+  nudge(index: number, deltaPx: number): void;
   /** fit every column to its content; used automatically until the user resizes */
   fitAll(table: HTMLTableElement | null): void;
   reset(): void;
@@ -136,6 +138,19 @@ export function useColumnWidths(tableKey: string, defaults: number[]): ColumnWid
     [persist],
   );
 
+  const nudge = useCallback(
+    (index: number, deltaPx: number) => {
+      setSaved((current) => {
+        const w = [...current.w];
+        w[index] = Math.max(MIN_WIDTH, (w[index] ?? MIN_WIDTH) + deltaPx);
+        const next = { w, manual: true };
+        persist(next);
+        return next;
+      });
+    },
+    [persist],
+  );
+
   const fitAll = useCallback((table: HTMLTableElement | null) => {
     if (!table) return;
     const natural = measureNatural(table);
@@ -162,5 +177,5 @@ export function useColumnWidths(tableKey: string, defaults: number[]): ColumnWid
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableKey]);
 
-  return { widths: saved.w, manual: saved.manual, startDrag, autoFit, fitAll, reset };
+  return { widths: saved.w, manual: saved.manual, startDrag, autoFit, nudge, fitAll, reset };
 }

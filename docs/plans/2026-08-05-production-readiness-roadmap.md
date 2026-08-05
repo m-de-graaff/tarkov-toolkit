@@ -84,7 +84,7 @@ states + silent catches deferred to Slice 5 pass (user WIP in those files)
 - Fix the five `react-hooks/exhaustive-deps` disables (stale-closure risks in
   `MarketPage.tsx`, `useColumnWidths.ts:162`).
 
-## Slice 6 — Accessibility pass
+## Slice 6 — Accessibility pass  ◑ done: AccountMenu dialog, resize grips keyboard, spawn-zone picker, ammo SR ratings. Remaining: MapCanvas marker labels for SR, custom map-point keyboard placement (zone picker covers the primary flow), Money profit-loss (WIP file)
 - AccountMenu dropdown: dialog semantics, focus trap/return, Escape
   (`AccountMenu.tsx:113-153`); scrim is a focusable button in tab order.
 - Keyboard path for spawn placement (`MapCanvas.tsx:137-139,234-239`) and for
