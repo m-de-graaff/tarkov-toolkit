@@ -43,7 +43,7 @@ second-per-user floor enforced in the upsert's WHERE clause.
 - Produces: `pnpm typecheck:api` → `tsc -p api/tsconfig.json`;
   `pnpm test:api` → `vitest run -c vitest.api.config.ts`.
 
-- [ ] Add config + scripts + CI steps; verify `pnpm typecheck:api` passes and
+- [x] Add config + scripts + CI steps; verify `pnpm typecheck:api` passes and
   `pnpm test:api` passes (with Task 7's tests; `--passWithNoTests` until then).
   Commit with Task 7.
 
@@ -57,7 +57,7 @@ second-per-user floor enforced in the upsert's WHERE clause.
   `statement_timeout: 10_000`. SSL stays in the connection string (Neon URLs
   carry `sslmode=require`; forcing `ssl` here would break local docker pg).
 
-- [ ] Implement; type-check. Commit with Task 3.
+- [x] Implement; type-check. Commit with Task 3.
 
 ### Task 3: progress.ts — validation, rate floor, error handling
 
@@ -81,7 +81,7 @@ second-per-user floor enforced in the upsert's WHERE clause.
 - Both GET and PUT query paths wrapped in try/catch → `console.error` +
   500 `{ error: 'database error' }`.
 
-- [ ] Tests first (validator cases + handler: 401 unauthenticated, 400 invalid
+- [x] Tests first (validator cases + handler: 401 unauthenticated, 400 invalid
   body, 400 invalid state, 200 valid PUT, 429 on second write inside 1s, 500 on
   query throw, 204/200 GET) with `vi.mock` of `../_lib/auth.js` and
   `../_lib/db.js`; then implement; green. Commit Tasks 2+3.
@@ -98,7 +98,7 @@ config parse helper if extracted — keep simple, no test (config-only).
   is created by better-auth migrations (setup endpoint re-run required, noted
   in PR).
 
-- [ ] Implement; type-check. Commit.
+- [x] Implement; type-check. Commit.
 
 ### Task 5: setup.ts — dedicated secret, constant-time compare
 
@@ -109,7 +109,7 @@ config parse helper if extracted — keep simple, no test (config-only).
   always 401.
 - Compare via `crypto.timingSafeEqual` on utf8 buffers (length check first).
 
-- [ ] Test: 401 when unset / wrong key / non-POST; migrations mocked. Implement;
+- [x] Test: 401 when unset / wrong key / non-POST; migrations mocked. Implement;
   green; commit.
 
 ### Task 6: deploy config
@@ -125,11 +125,11 @@ config parse helper if extracted — keep simple, no test (config-only).
   bricks the SPA; it needs a browser-verified pass of its own (roadmap note).
 - `.dockerignore`: add `.env*`.
 
-- [ ] Implement; commit.
+- [x] Implement; commit.
 
 ### Task 7: api tests wired into CI
 
 Covered by Tasks 1/3/5 test files; final step:
 
-- [ ] `pnpm typecheck:api && pnpm test:api` green locally; full web suite still
+- [x] `pnpm typecheck:api && pnpm test:api` green locally; full web suite still
   green; push; CI green on the PR.
