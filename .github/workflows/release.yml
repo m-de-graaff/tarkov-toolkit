@@ -1,0 +1,32 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  companion-exe:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Build companion executable
+        run: pnpm --filter @raidplanner/watcher build:exe
+      - name: Create release with the companion exe
+        uses: softprops/action-gh-release@v2
+        with:
+          files: apps/watcher/dist/RaidplannerCompanion.exe
+          generate_release_notes: true
+          body: |
+            **RaidplannerCompanion.exe** — download, double-click, leave the window open.
+            It finds your Escape from Tarkov screenshots and game logs automatically and
+            feeds live position, raid detection, and quest completion to the web app.
+            Unsigned binary: Windows SmartScreen may ask for "More info → Run anyway".

@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node --experimental-strip-types src/index.ts",
     "build": "tsc --noEmit",
-    "test": "node -e \"process.exit(0)\""
+    "test": "node -e \"process.exit(0)\"",
+    "build:exe": "node scripts/build-exe.mjs"
   },
   "dependencies": {
     "@raidplanner/live": "workspace:*",
@@ -14,6 +15,7 @@
   "devDependencies": {
     "@types/node": "^24.0.0",
     "@types/ws": "^8.5.0",
-    "typescript": "^5.5.0"
+    "typescript": "^5.5.0",
+    "esbuild": "^0.21.5"
   }
 }
