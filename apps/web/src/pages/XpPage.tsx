@@ -24,6 +24,34 @@ const COST_STYLE: Record<GuideCost, string> = {
   expensive: 'border-destructive/50 text-destructive',
 };
 
+/** name/icon for a guide item id; ammo lives outside itemsLite */
+function guideItem(id: string): { name?: string; iconLink?: string } {
+  return snapshot.itemsLite[id] ?? snapshot.ammo.find((a) => a.id === id) ?? {};
+}
+
+/** the items a step or cheese mentions, as a compact icon row */
+function ItemIcons({ itemIds }: { itemIds?: string[] }) {
+  if (!itemIds?.length) return null;
+  return (
+    <span className="ml-auto flex shrink-0 items-center gap-1 self-center pl-2">
+      {itemIds.map((id) => {
+        const item = guideItem(id);
+        if (!item.iconLink) return null;
+        return (
+          <img
+            key={id}
+            src={item.iconLink}
+            alt=""
+            loading="lazy"
+            title={item.name}
+            className="size-6 rounded-sm border bg-black/40 object-contain"
+          />
+        );
+      })}
+    </span>
+  );
+}
+
 function SkillCard({ guide }: { guide: SkillGuide }) {
   return (
     <section className="skill-card flex flex-col gap-2 rounded-lg border bg-card p-4">
@@ -39,7 +67,8 @@ function SkillCard({ guide }: { guide: SkillGuide }) {
             <span className="w-16 shrink-0 rounded border px-1 py-px text-center text-[10px] font-medium text-muted-foreground">
               {step.when}
             </span>
-            <span className="min-w-0">{step.text}</span>
+            <span className="min-w-0 text-pretty">{step.text}</span>
+            <ItemIcons itemIds={step.itemIds} />
           </li>
         ))}
         {guide.cheese && (
@@ -47,7 +76,8 @@ function SkillCard({ guide }: { guide: SkillGuide }) {
             <span className="w-16 shrink-0 rounded border border-primary/40 px-1 py-px text-center text-[10px] font-medium text-primary">
               Cheese
             </span>
-            <span className="min-w-0">{guide.cheese.title}</span>
+            <span className="min-w-0 text-pretty">{guide.cheese.title}</span>
+            <ItemIcons itemIds={guide.cheese.itemIds} />
           </li>
         )}
       </ol>
@@ -363,8 +393,8 @@ export function XpPage() {
     <div className="min-h-0 flex-1 overflow-y-auto">
       <div className="mx-auto flex max-w-4xl flex-col gap-4 px-4 py-8">
         <div>
-          <h1 className="text-lg font-semibold">Skill XP</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <h1 className="text-balance text-lg font-semibold">Skill XP</h1>
+          <p className="mt-1 text-pretty text-sm text-muted-foreground">
             An easy proven routine per skill, plus the crafts to keep your stations busy. Rebuilt
             from the wiki and current guides for EFT 1.0.
           </p>
@@ -376,7 +406,7 @@ export function XpPage() {
               <span aria-hidden="true" className="text-muted-foreground/60">
                 -
               </span>
-              <span>{note}</span>
+              <span className="text-pretty">{note}</span>
             </li>
           ))}
         </ul>
