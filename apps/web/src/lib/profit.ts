@@ -72,11 +72,36 @@ const stackRevenue = (prices: ItemPrices, stacks: TradeItemStack[]): number | nu
   return total;
 };
 
+/** reward revenue through one outlet only; null if any reward can't sell there */
+const stackChannelRevenue = (
+  prices: ItemPrices,
+  stacks: TradeItemStack[],
+  channel: 'fleaAvg' | 'bestTraderSell',
+): number | null => {
+  let total = 0;
+  for (const stack of stacks) {
+    const price = prices[stack.itemId]?.[channel] || 0;
+    if (price <= 0) return null;
+    total += price * stack.count;
+  }
+  return total;
+};
+
+/** who pays traderRevenue - only meaningful for a single reward item */
+const rewardTraderId = (prices: ItemPrices, stacks: TradeItemStack[]): string | undefined =>
+  stacks.length === 1 ? prices[stacks[0].itemId]?.bestTraderSellTraderId : undefined;
+
 export interface TradeProfit {
   cost: number | null;
   revenue: number | null;
   profit: number | null;
   profitPerHour?: number | null;
+  /** rewards sold on flea only (24h average); null if any reward is flea-banned */
+  fleaRevenue: number | null;
+  /** rewards sold to traders only; null if any reward has no trader buyer */
+  traderRevenue: number | null;
+  /** trader behind traderRevenue when there is a single reward item */
+  sellTraderId?: string;
 }
 
 export function barterProfit(barter: RpBarter, prices: ItemPrices): TradeProfit {
@@ -86,6 +111,9 @@ export function barterProfit(barter: RpBarter, prices: ItemPrices): TradeProfit 
     cost,
     revenue,
     profit: cost !== null && revenue !== null ? revenue - cost : null,
+    fleaRevenue: stackChannelRevenue(prices, barter.rewardItems, 'fleaAvg'),
+    traderRevenue: stackChannelRevenue(prices, barter.rewardItems, 'bestTraderSell'),
+    sellTraderId: rewardTraderId(prices, barter.rewardItems),
   };
 }
 
@@ -106,6 +134,9 @@ export function craftProfit(craft: RpCraft, prices: ItemPrices): TradeProfit {
       profit !== null && craft.durationSeconds > 0
         ? Math.round(profit / (craft.durationSeconds / 3600))
         : null,
+    fleaRevenue: stackChannelRevenue(prices, craft.rewardItems, 'fleaAvg'),
+    traderRevenue: stackChannelRevenue(prices, craft.rewardItems, 'bestTraderSell'),
+    sellTraderId: rewardTraderId(prices, craft.rewardItems),
   };
 }
 
