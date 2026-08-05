@@ -8,6 +8,7 @@ import { isAvailable } from '../lib/availability';
 import type { MapQuestEntry } from '../lib/questIndex';
 import { snapshotForMode } from '../lib/modeTasks';
 import { anywhereQuests, questsForMap } from '../lib/questIndex';
+import { chaptersOnMap } from '../data/storyline';
 import { usePlanner } from '../store';
 import { Footer } from './Footer';
 import { AnywhereQuestList, LockedQuestList, QuestList } from './QuestList';
@@ -16,6 +17,29 @@ const renderableMaps = snapshot.maps
   .filter((m) => m.calibration)
   .sort((a, b) => a.name.localeCompare(b.name));
 
+
+/** unfinished story chapters that start or continue on the selected map */
+function StorylineOnMap({ normalizedName }: { normalizedName: string }) {
+  const done = usePlanner((s) => s.tracker.storyChapterIds) ?? [];
+  const chapters = chaptersOnMap(normalizedName).filter((c) => !done.includes(c.id));
+  if (chapters.length === 0) return null;
+  return (
+    <div className="mb-2 flex flex-col gap-1 rounded-md border border-primary/30 bg-accent/40 px-2.5 py-2">
+      <span className="text-[11px] font-medium uppercase tracking-wider text-primary">
+        Storyline
+      </span>
+      {chapters.map((c) => (
+        <p key={c.id} className="text-pretty text-xs text-muted-foreground" title={c.start}>
+          <Link to="/progress" className="font-medium text-foreground hover:underline">
+            {c.name}
+          </Link>
+          {c.startMap === normalizedName ? ' starts here: ' : ' continues here. '}
+          {c.startMap === normalizedName && c.start}
+        </p>
+      ))}
+    </div>
+  );
+}
 
 function SectionLabel({ children }: { children: string }) {
   return (
@@ -120,6 +144,11 @@ export function Sidebar() {
 
       {selectedMapId ? (
         <>
+          <StorylineOnMap
+            normalizedName={
+              snapshot.maps.find((m) => m.id === selectedMapId)?.normalizedName ?? ''
+            }
+          />
           <QuestList entries={open} />
           <LockedQuestList entries={locked} />
         </>

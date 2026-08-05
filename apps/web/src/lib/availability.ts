@@ -8,6 +8,8 @@ export interface TrackerState {
   hideoutLevels?: Record<string, number>;
   /** items collected toward quests/hideout, itemId -> count on hand */
   itemsHave?: Record<string, number>;
+  /** finished story chapters (self-tracked; see data/storyline.ts) */
+  storyChapterIds?: string[];
 }
 
 // v1 simplification: a requirement whose status does not include 'complete'

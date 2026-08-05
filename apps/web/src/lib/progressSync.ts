@@ -32,6 +32,8 @@ function mergeTracker(
     // a level reached on either device stays reached
     level: Math.max(newer.level, older.level),
     completedTaskIds: unionIds(newer.completedTaskIds, older.completedTaskIds),
+    // a chapter finished on either device stays finished
+    storyChapterIds: unionIds(newer.storyChapterIds ?? [], older.storyChapterIds ?? []),
   };
 }
 
@@ -81,6 +83,7 @@ export function normalizeSynced(state: SyncedState): SyncedState {
     completedTaskIds: t.completedTaskIds ?? [],
     hideoutLevels: t.hideoutLevels ?? {},
     itemsHave: t.itemsHave ?? {},
+    storyChapterIds: t.storyChapterIds ?? [],
   });
   return {
     ...state,

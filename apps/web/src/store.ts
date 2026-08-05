@@ -16,6 +16,7 @@ const freshTracker = (): TrackerState => ({
   completedTaskIds: [],
   hideoutLevels: {},
   itemsHave: {},
+  storyChapterIds: [],
 });
 
 interface PlannerState {
@@ -50,6 +51,7 @@ interface PlannerState {
   setLevel(n: number): void;
   setFaction(f: TrackerState['faction']): void;
   toggleCompleted(taskId: string): void;
+  toggleStoryChapter(chapterId: string): void;
   setHideoutLevel(stationId: string, level: number): void;
   setItemHave(itemId: string, count: number): void;
   /** decrement haves by the given requirements (building a hideout level) */
@@ -136,6 +138,18 @@ export const usePlanner = create<PlannerState>()(
       setSpawn: (spawn) => set({ spawn, spawnOverridesLive: spawn !== null }),
       setLevel: (level) => set((s) => ({ tracker: { ...s.tracker, level } })),
       setFaction: (faction) => set((s) => ({ tracker: { ...s.tracker, faction } })),
+      toggleStoryChapter: (chapterId) =>
+        set((s) => {
+          const done = s.tracker.storyChapterIds ?? [];
+          return {
+            tracker: {
+              ...s.tracker,
+              storyChapterIds: done.includes(chapterId)
+                ? done.filter((id) => id !== chapterId)
+                : [...done, chapterId],
+            },
+          };
+        }),
       toggleCompleted: (taskId) =>
         set((s) => ({
           tracker: {
@@ -167,16 +181,7 @@ export const usePlanner = create<PlannerState>()(
           }
           return { tracker: { ...s.tracker, itemsHave } };
         }),
-      resetProgress: () =>
-        set({
-          tracker: {
-            level: 1,
-            faction: 'Any',
-            completedTaskIds: [],
-            hideoutLevels: {},
-            itemsHave: {},
-          },
-        }),
+      resetProgress: () => set({ tracker: freshTracker() }),
       setSearch: (search) => set({ search }),
       craftBlacklist: [],
       toggleCraftHidden: (craftId) =>
