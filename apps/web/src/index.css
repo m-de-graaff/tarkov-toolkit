@@ -135,6 +135,11 @@
        the important - the default is a light gray that clashes hard */
     background: #111110 !important;
     font: inherit;
+    /* trap leaflet's internal z-indexes (panes 400-800) inside the map's own
+       stacking context - without this they float above body-level portals
+       (Select/Popover render at z-50) and dropdowns fall behind the map */
+    isolation: isolate;
+    z-index: 0;
   }
 
   .marker.extract {

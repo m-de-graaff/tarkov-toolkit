@@ -31,7 +31,9 @@ export type SyncStatus = 'off' | 'syncing' | 'synced' | 'error';
 
 export function useProgressSync(onStatus?: (status: SyncStatus) => void) {
   const session = authClient.useSession();
-  const userId = session.data?.user.id;
+  // user may be absent even when data is set (e.g. dev/self-host where the
+  // auth endpoint doesn't exist and the client parses an unexpected response)
+  const userId = session.data?.user?.id;
   const signedIn = AUTH_ENABLED && Boolean(userId);
   const statusRef = useRef(onStatus);
   statusRef.current = onStatus;
