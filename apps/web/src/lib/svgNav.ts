@@ -16,7 +16,7 @@ import { makeProjector } from './navGrid';
 /** longest raster dimension; ~1.5-2.5 game meters per cell on big maps.
  * Small SVGs (Factory's viewBox is in whole meters) get upscaled so indoor
  * walls and doorways survive rasterization. */
-const MAX_RASTER = 900;
+const MAX_RASTER = 1400;
 const MAX_UPSCALE = 8;
 
 /**
@@ -52,7 +52,9 @@ const BLOCKED_STROKES = ['map_border', 'wall', 'fence'];
  *    always beats any ancestor's classification (a cement bridge drawn
  *    inside/after the river stays walkable),
  * 4. named exceptions last: swamps are water you can wade through, so any
- *    element (or group) whose id starts with "Swamp" is walkable.
+ *    element (or group) whose id starts with "Swamp" is walkable; Lighthouse's
+ *    impassable ridge is a rock-classed group named "mountains", so that id
+ *    is blocked (other maps' "Rocks" are scattered walkable boulders).
  */
 const navStyle = (blockedStrokeUnits: number) => `
   * {
@@ -73,6 +75,7 @@ const navStyle = (blockedStrokeUnits: number) => `
   ${BLOCKED_FILLS.map((c) => `.${c}.${c}`).join(', ')} { fill: #000 !important; }
   ${BLOCKED_STROKES.map((c) => `.${c}.${c}`).join(', ')} { stroke: #000 !important; stroke-width: ${blockedStrokeUnits} !important; }
   [id^="Swamp"][id], [id^="Swamp"][id] * { fill: #fff !important; stroke: none !important; }
+  [id^="mountains"][id], [id^="mountains"][id] * { fill: #000 !important; stroke: none !important; }
 `;
 
 /** Paints ONLY stairs, for extracting per-level stair masks. */

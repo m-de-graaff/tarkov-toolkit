@@ -4,7 +4,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { applyDarkStyle } from './svg-dark-style.mjs';
+import { generateTileNav } from './tile-nav.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const dataRoot = path.join(here, '..');
@@ -371,10 +371,10 @@ async function downloadSvgs(svgDownloads) {
     seen.add(file);
     const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
+    // ship tarkov.dev's own styling so SVG maps match the tile maps' look
     const raw = Buffer.from(await res.arrayBuffer()).toString('utf8');
-    const themed = applyDarkStyle(raw);
-    await writeFile(path.join(svgOutDir, file), themed);
-    console.log(`  svg ${file} (${(themed.length / 1024).toFixed(0)} KB)`);
+    await writeFile(path.join(svgOutDir, file), raw);
+    console.log(`  svg ${file} (${(raw.length / 1024).toFixed(0)} KB)`);
   }
 }
 
@@ -421,6 +421,9 @@ async function main() {
 
   console.log(`Downloading ${svgDownloads.length} map SVGs...`);
   await downloadSvgs(svgDownloads);
+
+  console.log('Generating walkability masks for tile-only maps...');
+  await generateTileNav(maps);
 
   const ammo = buildAmmo(itemsData);
   const hideout = buildHideout(hideoutData, traderNames);

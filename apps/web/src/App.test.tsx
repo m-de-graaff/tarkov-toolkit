@@ -42,6 +42,8 @@ describe('App', () => {
     act(() => root.render(<App />));
     expect(container.textContent).toContain('Select a map to begin planning.');
 
+    // fresh profiles start at level 1; badges below assume a mid-game roster
+    act(() => usePlanner.getState().setLevel(15));
     act(() => usePlanner.getState().selectMap(customs.id));
     const rows = container.querySelectorAll('.quest-row');
     expect(rows.length).toBeGreaterThan(10);
@@ -98,9 +100,21 @@ describe('App', () => {
     expect(container.textContent).toContain('live position');
     expect(container.querySelectorAll('.marker.player').length).toBe(1);
 
-    // spawn set afterwards must not steal the route origin
+    // a click while live overrides the origin (planning ahead of your position)
     act(() =>
       usePlanner.getState().setSpawn({ kind: 'custom', position: { x: -300, y: 0, z: -300 } }),
+    );
+    expect(container.textContent).not.toContain('live position');
+    expect(container.textContent).toContain('Manual origin · back to live');
+
+    // the next screenshot reclaims the origin for the live fix
+    act(() =>
+      usePlanner.getState().setLiveFix({
+        position: { x: 200, y: 0, z: 180 },
+        yawDeg: 45,
+        takenAt: '2026-08-04[21-41]',
+        raw: 'y (0).png',
+      }),
     );
     expect(container.textContent).toContain('live position');
   });
