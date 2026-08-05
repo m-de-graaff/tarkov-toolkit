@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { snapshot } from '@raidplanner/data';
-import { RefreshCw } from 'lucide-react';
+import { EyeOff, RefreshCw } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { GuideCost, SkillGuide } from '../data/skillGuides';
@@ -93,10 +93,12 @@ function CraftRow({
   row,
   rank,
   showCost,
+  onHide,
 }: {
   row: CraftingLevelingRow;
   rank: number;
   showCost: boolean;
+  onHide: (craftId: string) => void;
 }) {
   const { craft, materialCost, costPerPoint } = row;
   const reward = craft.rewardItems[0];
@@ -105,7 +107,7 @@ function CraftRow({
     .map((s) => snapshot.itemsLite[s.itemId]?.name ?? 'Item')
     .join(', ');
   return (
-    <li className="flex items-center gap-2 py-1.5 not-last:border-b">
+    <li className="group flex items-center gap-2 py-1.5 not-last:border-b">
       <span className="w-4 shrink-0 text-xs text-muted-foreground tabular-nums">{rank}.</span>
       {item?.iconLink && (
         <img
@@ -132,26 +134,51 @@ function CraftRow({
           {rub(materialCost)}
         </span>
       )}
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        className="size-6 shrink-0 text-muted-foreground opacity-0 transition-opacity focus-visible:opacity-100 group-hover:opacity-100"
+        aria-label={`Hide ${name} from recommendations`}
+        title="Hide this craft"
+        onClick={() => onHide(craft.id)}
+      >
+        <EyeOff aria-hidden="true" className="size-3.5" />
+      </Button>
     </li>
   );
 }
 
+type CraftMode = 'value' | 'shortest' | 'window';
+
+const MODE_LABEL: Record<CraftMode, string> = {
+  value: 'Price + time',
+  shortest: 'Shortest, any price',
+  window: 'Hours away',
+};
+
 function CraftingCard() {
   const prices = usePrices();
   const hideoutLevels = usePlanner((s) => s.tracker.hideoutLevels ?? NO_LEVELS);
+  const craftBlacklist = usePlanner((s) => s.craftBlacklist);
+  const toggleCraftHidden = usePlanner((s) => s.toggleCraftHidden);
+  const clearCraftBlacklist = usePlanner((s) => s.clearCraftBlacklist);
   const [onlyBuilt, setOnlyBuilt] = useState(true);
-  const [ignoreCost, setIgnoreCost] = useState(false);
+  const [mode, setMode] = useState<CraftMode>('value');
+  const [hoursAway, setHoursAway] = useState(8);
 
   const groups = useMemo(
     () =>
       bestCraftsPerStation(snapshot.crafts, prices.cached?.prices ?? null, hideoutLevels, {
         onlyBuilt,
-        ignoreCost,
+        ranking: mode === 'window' ? { mode, hours: hoursAway } : { mode },
+        blockedIds: new Set(craftBlacklist),
       }),
-    [prices.cached, hideoutLevels, onlyBuilt, ignoreCost],
+    [prices.cached, hideoutLevels, onlyBuilt, mode, hoursAway, craftBlacklist],
   );
 
-  const needsPrices = !ignoreCost && !prices.cached;
+  const showCost = mode !== 'shortest' && Boolean(prices.cached);
+  const needsPrices = mode === 'value' && !prices.cached;
 
   return (
     <section className="skill-card flex flex-col gap-3 rounded-lg border border-primary/40 bg-card p-4">
@@ -172,28 +199,41 @@ function CraftingCard() {
           aria-label="Ranking mode"
           className="flex items-center rounded-md border p-0.5"
         >
-          {(
-            [
-              { key: false, label: 'Price + time' },
-              { key: true, label: 'Shortest, any price' },
-            ] as const
-          ).map((mode) => (
+          {(['value', 'shortest', 'window'] as const).map((m) => (
             <button
-              key={mode.label}
+              key={m}
               type="button"
-              aria-pressed={ignoreCost === mode.key}
-              onClick={() => setIgnoreCost(mode.key)}
+              aria-pressed={mode === m}
+              onClick={() => setMode(m)}
               className={cn(
                 'rounded-[5px] px-2.5 py-0.5 text-xs font-medium transition-colors',
-                ignoreCost === mode.key
+                mode === m
                   ? 'bg-primary text-primary-foreground'
                   : 'text-muted-foreground hover:text-foreground',
               )}
             >
-              {mode.label}
+              {MODE_LABEL[m]}
             </button>
           ))}
         </div>
+        {mode === 'window' && (
+          <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <span>away for</span>
+            <Input
+              type="number"
+              min={1}
+              max={48}
+              value={hoursAway}
+              onChange={(e) => {
+                const n = Number(e.target.value);
+                if (Number.isFinite(n)) setHoursAway(Math.min(48, Math.max(1, n)));
+              }}
+              aria-label="Hours away"
+              className="h-7 w-16 text-xs"
+            />
+            <span>h</span>
+          </label>
+        )}
         <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
           <input
             type="checkbox"
@@ -209,32 +249,51 @@ function CraftingCard() {
             )
           </span>
         </label>
-        {!ignoreCost && (
-          <span className="ml-auto flex items-center gap-2 text-xs text-muted-foreground">
-            {prices.cached
-              ? 'live flea prices'
-              : prices.loading
-                ? 'loading prices'
-                : 'prices needed for costs'}
-            <Button
+        <span className="ml-auto flex items-center gap-2 text-xs text-muted-foreground">
+          {craftBlacklist.length > 0 && (
+            <button
               type="button"
-              variant="ghost"
-              size="icon"
-              className="size-6"
-              aria-label="Refresh prices"
-              disabled={prices.loading}
-              onClick={() => void prices.refresh()}
+              className="underline-offset-2 hover:text-foreground hover:underline"
+              title="Show the crafts you hid"
+              onClick={clearCraftBlacklist}
             >
-              <RefreshCw
-                aria-hidden="true"
-                className={cn('size-3.5', prices.loading && 'animate-spin')}
-              />
-            </Button>
-          </span>
-        )}
+              {craftBlacklist.length} hidden - reset
+            </button>
+          )}
+          {mode !== 'shortest' && (
+            <>
+              {prices.cached
+                ? 'live flea prices'
+                : prices.loading
+                  ? 'loading prices'
+                  : 'prices needed for costs'}
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="size-6"
+                aria-label="Refresh prices"
+                disabled={prices.loading}
+                onClick={() => void prices.refresh()}
+              >
+                <RefreshCw
+                  aria-hidden="true"
+                  className={cn('size-3.5', prices.loading && 'animate-spin')}
+                />
+              </Button>
+            </>
+          )}
+        </span>
       </div>
 
-      {prices.error && !ignoreCost && <p className="text-xs text-destructive">{prices.error}</p>}
+      {prices.error && mode === 'value' && <p className="text-xs text-destructive">{prices.error}</p>}
+
+      {mode === 'window' && (
+        <p className="text-xs text-muted-foreground">
+          One craft per station, chosen to fill as much of your {hoursAway}h window as possible -
+          queue it before you leave, collect and queue the alternate when you return.
+        </p>
+      )}
 
       {needsPrices ? (
         <p className="empty-note rounded-md border border-dashed p-3 text-[13px] text-muted-foreground">
@@ -265,10 +324,16 @@ function CraftingCard() {
               </div>
               <ul className="m-0 mt-1 list-none p-0">
                 {group.rows.map((row, i) => (
-                  <CraftRow key={row.craft.id} row={row} rank={i + 1} showCost={!ignoreCost} />
+                  <CraftRow
+                    key={row.craft.id}
+                    row={row}
+                    rank={i + 1}
+                    showCost={showCost}
+                    onHide={toggleCraftHidden}
+                  />
                 ))}
               </ul>
-              {group.rows.length < 2 && (
+              {mode !== 'window' && group.rows.length < 2 && (
                 <p className="mt-1 text-xs text-muted-foreground">
                   Only one recipe available - no alternation partner, so no craft bonus XP here.
                 </p>

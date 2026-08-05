@@ -50,6 +50,10 @@ interface PlannerState {
   consumeItems(requirements: { itemId: string; count: number }[]): void;
   resetProgress(): void;
   setSearch(s: string): void;
+  /** craft ids the user hid from the XP crafting recommendations */
+  craftBlacklist: string[];
+  toggleCraftHidden(craftId: string): void;
+  clearCraftBlacklist(): void;
 }
 
 export const usePlanner = create<PlannerState>()(
@@ -159,6 +163,14 @@ export const usePlanner = create<PlannerState>()(
           },
         }),
       setSearch: (search) => set({ search }),
+      craftBlacklist: [],
+      toggleCraftHidden: (craftId) =>
+        set((s) => ({
+          craftBlacklist: s.craftBlacklist.includes(craftId)
+            ? s.craftBlacklist.filter((id) => id !== craftId)
+            : [...s.craftBlacklist, craftId],
+        })),
+      clearCraftBlacklist: () => set({ craftBlacklist: [] }),
     }),
     {
       name: 'raidplanner-v1',
