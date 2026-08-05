@@ -37,6 +37,8 @@ function trackerError(v: unknown, path: string): string | null {
     return `${path}.hideoutLevels must map ids to non-negative numbers`;
   if (v.itemsHave !== undefined && !isNumberRecord(v.itemsHave))
     return `${path}.itemsHave must map ids to non-negative numbers`;
+  if (v.storyChapterIds !== undefined && !isStringArray(v.storyChapterIds, 50))
+    return `${path}.storyChapterIds must be an array of at most 50 ids`;
   return null;
 }
 
