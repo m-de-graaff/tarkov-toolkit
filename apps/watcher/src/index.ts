@@ -14,7 +14,7 @@ import { createInterface } from 'node:readline/promises';
 import { WebSocketServer, type WebSocket } from 'ws';
 import { parseScreenshotName, pickNewestFix, type LiveFix, type LogEvent } from '@raidplanner/live';
 import { isSeaBuild, setupLogging } from './log.ts';
-import { detectLogsDir, startLogsWatcher } from './logsWatcher.ts';
+import { collectQuestHistory, detectLogsDir, startLogsWatcher } from './logsWatcher.ts';
 import { isAllowedOrigin } from './origin.ts';
 import { startTray, type Tray } from './tray.ts';
 import { checkForUpdate, cleanupOldBinary, downloadAndInstall } from './updater.ts';
@@ -101,8 +101,25 @@ function broadcast(fix: LiveFix) {
   console.log(`Position sent: ${x}, ${y}, ${z} (${fix.raw})`);
 }
 
+/**
+ * Completions to replay to every connecting web app: quests finished while no
+ * browser tab was open would otherwise be lost forever. Seeded from the log
+ * history of the current game version, then kept current from live events.
+ * The web store is idempotent, so a client seeing an event twice is harmless.
+ */
+const questHistory: LogEvent[] = [];
+const finishedTaskIds = new Set<string>();
+
+function rememberFinished(event: LogEvent) {
+  if (event.type !== 'task' || event.status !== 'finished') return;
+  if (finishedTaskIds.has(event.taskId)) return;
+  finishedTaskIds.add(event.taskId);
+  questHistory.push(event);
+}
+
 function broadcastLogEvent(event: LogEvent) {
   send(event);
+  rememberFinished(event);
   if (event.type === 'map') console.log(`Raid detected on map: ${event.nameId}`);
   if (event.type === 'task') console.log(`Quest ${event.status}: ${event.taskId}`);
 }
@@ -143,6 +160,7 @@ async function main() {
     clients.add(socket);
     socket.send(JSON.stringify({ type: 'hello', app: 'raidplanner-watcher' }));
     if (latestFix) socket.send(JSON.stringify({ type: 'fix', fix: latestFix }));
+    for (const event of questHistory) socket.send(JSON.stringify(event));
     socket.on('close', () => clients.delete(socket));
     console.log('Web app connected.');
   });
@@ -167,6 +185,17 @@ async function main() {
   const logsDir = detectLogsDir();
   let stopLogs: (() => void) | null = null;
   if (logsDir) {
+    void collectQuestHistory(logsDir).then((history) => {
+      for (const event of history) rememberFinished(event);
+      if (questHistory.length > 0) {
+        // clients that connected before the scan finished get it broadcast;
+        // later ones get it replayed on connection
+        for (const event of questHistory) send(event);
+        console.log(
+          `Quest history: ${questHistory.length} completion(s) recovered from this game version's logs.`,
+        );
+      }
+    });
     stopLogs = startLogsWatcher(logsDir, broadcastLogEvent);
   } else {
     console.log(
