@@ -77,6 +77,7 @@ export function PlannerPage() {
           objectiveId: objective.id,
           description: objective.description,
           position: point.position,
+          neededItems: objective.neededItems,
         });
       }
     }

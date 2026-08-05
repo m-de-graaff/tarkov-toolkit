@@ -1,4 +1,4 @@
-import type { GamePosition } from '@raidplanner/data';
+import type { GamePosition, NeededItems } from '@raidplanner/data';
 import { distance2d } from './geometry';
 
 export interface RouteStop {
@@ -7,6 +7,8 @@ export interface RouteStop {
   objectiveId: string;
   description: string;
   position: GamePosition;
+  /** items this objective consumes - bring them into the raid */
+  neededItems?: NeededItems;
 }
 
 export interface PlannedRoute {
