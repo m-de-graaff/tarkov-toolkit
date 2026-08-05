@@ -15,9 +15,11 @@ mkdirSync(dist, { recursive: true });
 const run = (cmd) => execSync(cmd, { cwd: root, stdio: 'inherit' });
 
 // 1. bundle (esbuild resolves @raidplanner/live's TS source directly)
+const version = process.env.RELEASE_TAG ?? 'dev';
 run(
   `pnpm exec esbuild src/index.ts --bundle --platform=node --format=cjs ` +
-    `--outfile=dist/bundle.cjs --external:nothing --log-level=warning`,
+    `--outfile=dist/bundle.cjs --external:nothing --log-level=warning ` +
+    `--define:__COMPANION_VERSION__='"${version}"'`,
 );
 
 // 2. SEA blob
@@ -40,4 +42,21 @@ run(
     `--sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2`,
 );
 
-console.log(`\nBuilt ${exePath}`);
+// 4. drop the console window: flip the PE subsystem from console (3) to GUI (2)
+// so the packaged app runs tray-only. Offsets: e_lfanew at 0x3C points at the
+// PE signature; Subsystem is a uint16 at optional-header offset 68.
+if (process.platform === 'win32') {
+  const { readFileSync: read, writeFileSync: write } = await import('node:fs');
+  const exe = read(exePath);
+  const peOffset = exe.readUInt32LE(0x3c);
+  if (exe.readUInt32LE(peOffset) !== 0x00004550) throw new Error('not a PE file');
+  const optionalHeaderOffset = peOffset + 4 + 20;
+  const subsystemOffset = optionalHeaderOffset + 68;
+  const subsystem = exe.readUInt16LE(subsystemOffset);
+  if (subsystem !== 2 && subsystem !== 3) throw new Error(`unexpected subsystem ${subsystem}`);
+  exe.writeUInt16LE(2, subsystemOffset);
+  write(exePath, exe);
+  console.log('Patched to GUI subsystem (no console window).');
+}
+
+console.log(`\nBuilt ${exePath} (version ${version})`);
