@@ -1,3 +1,6 @@
 node_modules/
 dist/
 .turbo/
+
+# TypeScript incremental build state
+*.tsbuildinfo
