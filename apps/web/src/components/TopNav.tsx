@@ -65,7 +65,11 @@ export function TopNav() {
         <img src="/logo.svg" alt="" className="size-5 rounded-[5px]" />
         Tarkov Toolkit
       </span>
-      <nav aria-label="Tools" className="ml-2 flex min-w-0 items-center gap-1 overflow-x-auto">
+      <nav
+        aria-label="Tools"
+        // the edge fade tells mobile users the strip scrolls; desktop fits fully
+        className="ml-2 flex min-w-0 items-center gap-1 overflow-x-auto [mask-image:linear-gradient(to_right,transparent,black_16px,black_calc(100%-16px),transparent)] md:[mask-image:none]"
+      >
         <NavTab to="/">Home</NavTab>
         <NavTab to="/planner">Raid Planner</NavTab>
         <NavTab to="/progress">Progress</NavTab>
@@ -98,7 +102,8 @@ function GameModeToggle() {
           aria-pressed={gameMode === mode}
           onClick={() => setGameMode(mode)}
           className={cn(
-            'rounded-[5px] px-2.5 py-0.5 text-xs font-medium uppercase transition-colors',
+            // py-1 keeps the target at/above the 24px minimum on touch screens
+            'rounded-[5px] px-2.5 py-1 text-xs font-medium uppercase transition-colors',
             gameMode === mode
               ? 'bg-primary text-primary-foreground'
               : 'text-muted-foreground hover:text-foreground',
