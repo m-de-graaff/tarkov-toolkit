@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { usePlanner } from '../store';
+import { metric } from './monitoring';
 import { fetchPrices, loadCachedPrices, type CachedPrices } from './prices';
 
 export interface PricesState {
@@ -35,6 +36,7 @@ export function usePrices(): PricesState {
       setLoading(true);
       try {
         const fresh = await fetchPrices(gameMode);
+        metric.count('prices.refreshed', 1, { mode: gameMode });
         if (!disposed) {
           setCached(fresh);
           setError(null);

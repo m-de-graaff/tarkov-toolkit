@@ -2,6 +2,7 @@ import { parseScreenshotName, pickNewestFix } from '@raidplanner/live';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePlanner } from '../store';
 import { loadHandle, saveHandle } from './handleStore';
+import { metric } from './monitoring';
 
 const POLL_MS = 2000;
 const COMPANION_URL = 'ws://127.0.0.1:17520';
@@ -72,7 +73,10 @@ export function useLiveWatcher(): LiveWatcher {
         scheduleRetry();
         return;
       }
-      ws.onopen = () => setCompanion(true);
+      ws.onopen = () => {
+        setCompanion(true);
+        metric.count('companion.connected');
+      };
       ws.onmessage = (event) => {
         try {
           const message = JSON.parse(String(event.data));
