@@ -1,0 +1,189 @@
+{
+  "comment": "Hand-maintained corrections applied by snapshot.mjs on top of json.tarkov.dev, for quest data the API has not caught up on. EFT 1.1 moved these Ragman quests to loyalty-level gating and reworked several objectives; the wiki-rename pass (wikiRenames.mjs) already heals their titles, but the API still reports pre-1.1 player levels, prerequisites, objectives, and XP. Each entry patches the task with the matching id and self-retires once the API reports minPlayerLevel at or below retireWhenApiMinPlayerLevelAtMost - at that point delete the entry. Sources: escapefromtarkov.fandom.com pages listed per entry, cross-checked against in-game 1.1.0.0 PvE (2026-08-06).",
+  "overrides": [
+    {
+      "id": "5ae4493d86f7744b8e15aa8f",
+      "note": "'Database - Part 2', now 'A Big Loss': LL1 Ragman, no prerequisite (old prereq 'Database - Part 1' no longer applies - in-game it is active without it), XP 8500 -> 3000.",
+      "source": "https://escapefromtarkov.fandom.com/wiki/A_Big_Loss",
+      "retireWhenApiMinPlayerLevelAtMost": 7,
+      "set": {
+        "minPlayerLevel": 1,
+        "experience": 3000,
+        "taskRequirements": []
+      }
+    },
+    {
+      "id": "5ae448f286f77448d73c0131",
+      "note": "'The Blood of War - Part 1', now 'Fuel Crisis': LL1 Ragman, no prerequisites, objectives reworked from 4 fixed tanks to 2 area marks. Points kept from the old objectives as candidate tank locations (power station tank verified against the old guide; the two northern points are best guesses).",
+      "source": "https://escapefromtarkov.fandom.com/wiki/Fuel_Crisis",
+      "retireWhenApiMinPlayerLevelAtMost": 7,
+      "set": {
+        "minPlayerLevel": 1,
+        "taskRequirements": [],
+        "objectives": [
+          {
+            "id": "manual-fuel-crisis-1",
+            "type": "mark",
+            "description": "Locate and mark any fuel tank near the power station with an MS2000 Marker on Interchange",
+            "optional": false,
+            "maps": ["5714dbc024597771384a510d"],
+            "points": [
+              {
+                "id": "manual-fuel-crisis-1-0",
+                "map": "5714dbc024597771384a510d",
+                "position": { "x": -172.62, "y": 22.807, "z": -359.48 }
+              }
+            ]
+          },
+          {
+            "id": "manual-fuel-crisis-2",
+            "type": "mark",
+            "description": "Locate and mark any fuel tank in the northern territory with an MS2000 Marker on Interchange",
+            "optional": false,
+            "maps": ["5714dbc024597771384a510d"],
+            "points": [
+              {
+                "id": "manual-fuel-crisis-2-0",
+                "map": "5714dbc024597771384a510d",
+                "position": { "x": -208.36, "y": 22.84, "z": -74.42 }
+              },
+              {
+                "id": "manual-fuel-crisis-2-1",
+                "map": "5714dbc024597771384a510d",
+                "position": { "x": 274.29, "y": 22.85, "z": 14.53 }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "5ae449c386f7744bde357697",
+      "note": "'Sales Night', now 'Pathfinder': LL1 Ragman, no prerequisite (in-game it is completed while its wiki-listed prereq 'Gratitude' is still active). Objectives reworked from survive-and-extract to visiting three exits; points taken from the snapshot's Interchange extract positions.",
+      "source": "https://escapefromtarkov.fandom.com/wiki/Pathfinder",
+      "retireWhenApiMinPlayerLevelAtMost": 7,
+      "set": {
+        "minPlayerLevel": 1,
+        "taskRequirements": [],
+        "objectives": [
+          {
+            "id": "manual-pathfinder-1",
+            "type": "visit",
+            "description": "Visit the Railway Exfil exit on Interchange",
+            "optional": false,
+            "maps": ["5714dbc024597771384a510d"],
+            "points": [
+              {
+                "id": "manual-pathfinder-1-0",
+                "map": "5714dbc024597771384a510d",
+                "position": { "x": 472.32, "y": 20.92, "z": -429.74 }
+              }
+            ]
+          },
+          {
+            "id": "manual-pathfinder-2",
+            "type": "visit",
+            "description": "Visit the Emercom Checkpoint exit on Interchange",
+            "optional": false,
+            "maps": ["5714dbc024597771384a510d"],
+            "points": [
+              {
+                "id": "manual-pathfinder-2-0",
+                "map": "5714dbc024597771384a510d",
+                "position": { "x": -321.56, "y": 24.18, "z": 266.74 }
+              }
+            ]
+          },
+          {
+            "id": "manual-pathfinder-3",
+            "type": "visit",
+            "description": "Visit the Power Station V-Ex exit on Interchange",
+            "optional": false,
+            "maps": ["5714dbc024597771384a510d"],
+            "points": [
+              {
+                "id": "manual-pathfinder-3-0",
+                "map": "5714dbc024597771384a510d",
+                "position": { "x": -251.92, "y": 21.72, "z": -367.13 }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "5c10f94386f774227172c572",
+      "note": "'The Blood of War - Part 3', now 'Small Things, Big Help': LL1 Ragman, no prerequisite (in-game it is active while 'The Blood of War - Part 2' is not completed). Objectives unchanged.",
+      "source": "https://escapefromtarkov.fandom.com/wiki/Small_Things,_Big_Help",
+      "retireWhenApiMinPlayerLevelAtMost": 7,
+      "set": {
+        "minPlayerLevel": 1,
+        "taskRequirements": []
+      }
+    },
+    {
+      "id": "5ae449b386f77446d8741719",
+      "note": "'Gratitude': 1.1 moved it to Ragman LL1; in-game it is active at player level 7 alongside its old prereqs ('Dressed to Kill', 'Database - Part 2'), so both gates are stale.",
+      "source": "https://escapefromtarkov.fandom.com/wiki/Gratitude",
+      "retireWhenApiMinPlayerLevelAtMost": 7,
+      "set": {
+        "minPlayerLevel": 1,
+        "taskRequirements": []
+      }
+    },
+    {
+      "id": "5ae4490786f7744ca822adcc",
+      "note": "'Dressed to Kill': 1.1 moved it to Ragman LL1. Its prereq 'The Blood of War - Part 1' (now 'Fuel Crisis') is kept: the wiki still lists it and it is consistent with the in-game state.",
+      "source": "https://escapefromtarkov.fandom.com/wiki/Dressed_to_Kill",
+      "retireWhenApiMinPlayerLevelAtMost": 7,
+      "set": {
+        "minPlayerLevel": 1
+      }
+    },
+    {
+      "id": "60e71dc0a94be721b065bbfc",
+      "note": "'Long Line': 1.1 reworked it into a Ragman LL1 quest - eliminate 4 PMCs anywhere on Interchange (was 20 inside the mall at level 45, prereq 'Supervisor'), XP 84000 -> 3000, no longer Kappa-required. Old in-mall points dropped since the kills now count map-wide.",
+      "source": "https://escapefromtarkov.fandom.com/wiki/Long_Line",
+      "retireWhenApiMinPlayerLevelAtMost": 7,
+      "set": {
+        "minPlayerLevel": 1,
+        "experience": 3000,
+        "kappaRequired": false,
+        "taskRequirements": [],
+        "objectives": [
+          {
+            "id": "manual-long-line-1",
+            "type": "shoot",
+            "description": "Eliminate PMCs on Interchange",
+            "optional": false,
+            "maps": ["5714dbc024597771384a510d"],
+            "points": [],
+            "count": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "5ae448bf86f7744d733e55ee",
+      "note": "'Make ULTRA Great Again': 1.1 reworked it into a Ragman LL1 quest - eliminate 10 any targets on Interchange (was 25 Scavs at level 15, prereq 'Only Business'), XP 9800 -> 3000.",
+      "source": "https://escapefromtarkov.fandom.com/wiki/Make_ULTRA_Great_Again",
+      "retireWhenApiMinPlayerLevelAtMost": 7,
+      "set": {
+        "minPlayerLevel": 1,
+        "experience": 3000,
+        "taskRequirements": [],
+        "objectives": [
+          {
+            "id": "manual-make-ultra-great-again-1",
+            "type": "shoot",
+            "description": "Eliminate any targets on Interchange",
+            "optional": false,
+            "maps": ["5714dbc024597771384a510d"],
+            "points": [],
+            "count": 10
+          }
+        ]
+      }
+    }
+  ]
+}
