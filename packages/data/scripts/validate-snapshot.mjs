@@ -99,6 +99,18 @@ check(
 );
 
 const mapIds = new Set(snapshot.maps.map((m) => m.id));
+const mapsWithTransits = snapshot.maps.filter((m) => (m.transits ?? []).length > 0);
+check(
+  mapsWithTransits.length >= 5,
+  `expected >= 5 maps with transits, got ${mapsWithTransits.length}`,
+);
+for (const map of snapshot.maps) {
+  for (const transit of map.transits ?? []) {
+    if (!mapIds.has(transit.targetMapId)) {
+      failures.push(`transit ${transit.id} targets unknown map ${transit.targetMapId}`);
+    }
+  }
+}
 for (const task of snapshot.tasks) {
   for (const obj of task.objectives) {
     for (const point of obj.points) {

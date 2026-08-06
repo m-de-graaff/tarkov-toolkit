@@ -80,6 +80,27 @@ describe('App', () => {
     expect(usePlanner.getState().selectedTaskIds).toHaveLength(1);
   });
 
+  it('toggles the extracts and transits overlay on the planner map', () => {
+    const customs = snapshot.maps.find((m) => m.normalizedName === 'customs')!;
+    act(() => root.render(<App />));
+    act(() => usePlanner.getState().selectMap(customs.id));
+
+    // the overlay is on by default: every extract and transit is marked
+    expect(container.querySelectorAll('.marker.transit').length).toBe(
+      (customs.transits ?? []).length,
+    );
+    expect(container.querySelectorAll('.marker.extract').length).toBe(
+      customs.extracts.length,
+    );
+
+    const toggle = [...container.querySelectorAll('button')].find(
+      (b) => b.textContent === 'Extracts & transits',
+    )!;
+    act(() => toggle.click());
+    expect(container.querySelectorAll('.marker.transit').length).toBe(0);
+    expect(container.querySelectorAll('.marker.extract').length).toBe(0);
+  });
+
   it('routes selected objectives from a spawn point', () => {
     const customs = snapshot.maps.find((m) => m.normalizedName === 'customs')!;
     const located = snapshot.tasks

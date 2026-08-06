@@ -11,7 +11,7 @@ export interface MapMarker {
   id: string;
   position: GamePosition;
   label: string;
-  kind: 'objective' | 'spawn' | 'player' | 'extract';
+  kind: 'objective' | 'spawn' | 'player' | 'extract' | 'transit';
   orderIndex?: number;
   taskName?: string;
   /** heading in degrees for kind 'player' (map rotation added at render) */
@@ -46,9 +46,11 @@ function markerIcon(marker: MapMarker, mapRotation: number): L.DivIcon {
       ? 'S'
       : marker.kind === 'extract'
         ? 'EX'
-        : marker.orderIndex != null
-          ? String(marker.orderIndex + 1)
-          : '•';
+        : marker.kind === 'transit'
+          ? 'TR'
+          : marker.orderIndex != null
+            ? String(marker.orderIndex + 1)
+            : '•';
   return L.divIcon({
     className: '',
     html: `<div class="marker ${marker.kind}">${text}</div>`,

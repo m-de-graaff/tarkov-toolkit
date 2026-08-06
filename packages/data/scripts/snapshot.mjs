@@ -211,7 +211,21 @@ function buildMaps(rawMaps, calibrationIndex) {
       ...(calibration ? { calibration } : {}),
       spawns,
       extracts,
+      transits: (raw.transits ?? []).map((t) => ({
+        id: `${raw.id}-transit-${t.id}`,
+        description: t.description ?? '',
+        targetMapId: t.map,
+        position: t.position,
+      })),
     });
+  }
+  // remap transit targets (merged variants resolved after the loop) and drop
+  // ones pointing at maps we do not carry
+  const knownIds = new Set(maps.map((m) => m.id));
+  for (const m of maps) {
+    m.transits = m.transits
+      .map((t) => ({ ...t, targetMapId: idRemap.get(t.targetMapId) ?? t.targetMapId }))
+      .filter((t) => knownIds.has(t.targetMapId));
   }
   return { maps, svgDownloads, idRemap };
 }

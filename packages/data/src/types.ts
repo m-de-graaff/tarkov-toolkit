@@ -62,6 +62,15 @@ export interface RpExtract {
   conditional: boolean;
 }
 
+export interface RpTransit {
+  id: string;
+  /** in-game transit name; may be an untranslated key on stale dictionaries */
+  description: string;
+  /** map this transit leads to */
+  targetMapId: string;
+  position: GamePosition;
+}
+
 export interface RpMap {
   id: string;
   name: string;
@@ -77,6 +86,8 @@ export interface RpMap {
   calibration?: MapCalibration;
   spawns: RpSpawn[];
   extracts: RpExtract[];
+  /** map-to-map transit points (optional: absent on older snapshots) */
+  transits?: RpTransit[];
 }
 
 export interface RpZone {

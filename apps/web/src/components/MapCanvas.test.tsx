@@ -49,6 +49,31 @@ describe('MapCanvas', () => {
     expect(container.querySelectorAll('.marker.objective').length).toBe(markers.length);
   });
 
+  it('renders extract and transit markers', () => {
+    const customs = snapshot.maps.find((m) => m.normalizedName === 'customs')!;
+    const markers: MapMarker[] = [
+      ...customs.extracts.slice(0, 2).map((e) => ({
+        id: `exit-${e.id}`,
+        position: e.position,
+        label: `Extract: ${e.name}`,
+        kind: 'extract' as const,
+      })),
+      ...(customs.transits ?? []).map((t) => ({
+        id: t.id,
+        position: t.position,
+        label: t.description,
+        kind: 'transit' as const,
+      })),
+    ];
+    act(() => {
+      root.render(<MapCanvas map={customs} markers={markers} route={null} />);
+    });
+    expect(container.querySelectorAll('.marker.extract').length).toBe(2);
+    expect(container.querySelectorAll('.marker.transit').length).toBe(
+      (customs.transits ?? []).length,
+    );
+  });
+
   it('uses the bundled SVG overlay for svg-only maps', () => {
     const lighthouse = snapshot.maps.find((m) => m.normalizedName === 'lighthouse')!;
     act(() => {

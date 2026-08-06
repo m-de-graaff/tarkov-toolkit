@@ -42,6 +42,9 @@ interface PlannerState {
   spawnOverridesLive: boolean;
   /** last companion automation event, for the toolbar status line */
   lastAutoEvent: string | null;
+  /** show all extracts and map-to-map transits on the planner map */
+  showExits: boolean;
+  toggleShowExits(): void;
   setLiveFix(f: LiveFix | null): void;
   applyLogEvent(event: LogEvent): void;
   setGameMode(mode: GameMode): void;
@@ -81,6 +84,8 @@ export const usePlanner = create<PlannerState>()(
       search: '',
       liveFix: null,
       spawnOverridesLive: false,
+      showExits: true,
+      toggleShowExits: () => set((s) => ({ showExits: !s.showExits })),
       lastAutoEvent: null,
       // a fresh fix (new screenshot) reclaims the route origin from a manual click
       setLiveFix: (liveFix) =>
