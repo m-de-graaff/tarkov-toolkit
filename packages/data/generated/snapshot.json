@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-05T23:44:48.597Z",
+ "generatedAt": "2026-08-06T00:00:52.458Z",
  "gameMode": "regular",
  "maps": [
   {
@@ -1344,6 +1344,38 @@
       "z": -28.8580017
      },
      "conditional": false
+    }
+   ],
+   "transits": [
+    {
+     "id": "55f2d3fd4bdc2d5f408b4567-transit-12",
+     "description": "Transit to Woods",
+     "targetMapId": "5704e3c2d2720bac5b8b4567",
+     "position": {
+      "x": 23.7,
+      "y": 0.84,
+      "z": 61.61
+     }
+    },
+    {
+     "id": "55f2d3fd4bdc2d5f408b4567-transit-13",
+     "description": "Transit to Customs",
+     "targetMapId": "56f40101d2720b2a4d8b45d6",
+     "position": {
+      "x": 18.51,
+      "y": -0.423,
+      "z": -48.33
+     }
+    },
+    {
+     "id": "55f2d3fd4bdc2d5f408b4567-transit-14",
+     "description": "Transit to The Lab",
+     "targetMapId": "5b0fc42d86f7744a585f9105",
+     "position": {
+      "x": -26.539,
+      "y": -4.085,
+      "z": -42.013
+     }
     }
    ]
   },
@@ -3408,6 +3440,48 @@
       "z": -112.36
      },
      "conditional": false
+    }
+   ],
+   "transits": [
+    {
+     "id": "56f40101d2720b2a4d8b45d6-transit-9",
+     "description": "Transit to Reserve",
+     "targetMapId": "5704e5fad2720bc05b8b4567",
+     "position": {
+      "x": 651.7,
+      "y": 1.99,
+      "z": 124.6
+     }
+    },
+    {
+     "id": "56f40101d2720b2a4d8b45d6-transit-10",
+     "description": "Transit to Factory",
+     "targetMapId": "55f2d3fd4bdc2d5f408b4567",
+     "position": {
+      "x": 354.31,
+      "y": 2.31,
+      "z": -190.1
+     }
+    },
+    {
+     "id": "56f40101d2720b2a4d8b45d6-transit-11",
+     "description": "Transit to Interchange",
+     "targetMapId": "5714dbc024597771384a510d",
+     "position": {
+      "x": -335.24,
+      "y": 2.11,
+      "z": -205.68
+     }
+    },
+    {
+     "id": "56f40101d2720b2a4d8b45d6-transit-42",
+     "description": "Transit to Shoreline",
+     "targetMapId": "5704e554d2720bac5b8b456e",
+     "position": {
+      "x": 23.67,
+      "y": -1.3999995,
+      "z": 139.53
+     }
     }
    ]
   },
@@ -5684,6 +5758,48 @@
      },
      "conditional": false
     }
+   ],
+   "transits": [
+    {
+     "id": "5704e3c2d2720bac5b8b4567-transit-15",
+     "description": "Transit to Factory",
+     "targetMapId": "55f2d3fd4bdc2d5f408b4567",
+     "position": {
+      "x": -362.45,
+      "y": 0.821269155,
+      "z": 360.7704
+     }
+    },
+    {
+     "id": "5704e3c2d2720bac5b8b4567-transit-16",
+     "description": "Transit to Reserve",
+     "targetMapId": "5704e5fad2720bc05b8b4567",
+     "position": {
+      "x": 246.06,
+      "y": -10.22,
+      "z": 369.9
+     }
+    },
+    {
+     "id": "5704e3c2d2720bac5b8b4567-transit-17",
+     "description": "Transit to Lighthouse",
+     "targetMapId": "5704e4dad2720bb55b8b4567",
+     "position": {
+      "x": 494.34,
+      "y": -16.77,
+      "z": 345.37
+     }
+    },
+    {
+     "id": "5704e3c2d2720bac5b8b4567-transit-41",
+     "description": "Transit to Customs",
+     "targetMapId": "56f40101d2720b2a4d8b45d6",
+     "position": {
+      "x": -153.05,
+      "y": 1.07,
+      "z": 402.13
+     }
+    }
    ]
   },
   {
@@ -6903,6 +7019,38 @@
       "z": -564.87
      },
      "conditional": false
+    }
+   ],
+   "transits": [
+    {
+     "id": "5704e4dad2720bb55b8b4567-transit-21",
+     "description": "Transit to Shoreline",
+     "targetMapId": "5704e554d2720bac5b8b456e",
+     "position": {
+      "x": -338.6,
+      "y": 17.5,
+      "z": -168.9
+     }
+    },
+    {
+     "id": "5704e4dad2720bb55b8b4567-transit-22",
+     "description": "Transit to Reserve",
+     "targetMapId": "5704e5fad2720bc05b8b4567",
+     "position": {
+      "x": -294.6,
+      "y": 15.2591143,
+      "z": -780.1
+     }
+    },
+    {
+     "id": "5704e4dad2720bb55b8b4567-transit-23",
+     "description": "Transit to Woods",
+     "targetMapId": "5704e3c2d2720bac5b8b4567",
+     "position": {
+      "x": 106.3,
+      "y": 6.74,
+      "z": -958.1
+     }
     }
    ]
   },
@@ -9181,6 +9329,38 @@
      },
      "conditional": false
     }
+   ],
+   "transits": [
+    {
+     "id": "5704e554d2720bac5b8b456e-transit-24",
+     "description": "Transit to Lighthouse",
+     "targetMapId": "5704e4dad2720bb55b8b4567",
+     "position": {
+      "x": 417.2,
+      "y": -56.1,
+      "z": -217.5
+     }
+    },
+    {
+     "id": "5704e554d2720bac5b8b456e-transit-25",
+     "description": "Transit to Terminal",
+     "targetMapId": "65cc8f81a9aac3e77d0cfd3e",
+     "position": {
+      "x": -965.82,
+      "y": -57.52,
+      "z": 364.49
+     }
+    },
+    {
+     "id": "5704e554d2720bac5b8b456e-transit-43",
+     "description": "Transit to Labyrinth?",
+     "targetMapId": "6733700029c367a3d40b02af",
+     "position": {
+      "x": -197.958,
+      "y": -9.867,
+      "z": -81.085
+     }
+    }
    ]
   },
   {
@@ -10564,6 +10744,38 @@
       "z": -221.56
      },
      "conditional": false
+    }
+   ],
+   "transits": [
+    {
+     "id": "5704e5fad2720bc05b8b4567-transit-18",
+     "description": "Transit to Customs",
+     "targetMapId": "56f40101d2720b2a4d8b45d6",
+     "position": {
+      "x": -196.729477,
+      "y": -4.544204,
+      "z": -117.808853
+     }
+    },
+    {
+     "id": "5704e5fad2720bc05b8b4567-transit-19",
+     "description": "Transit to Woods",
+     "targetMapId": "5704e3c2d2720bac5b8b4567",
+     "position": {
+      "x": 216.860535,
+      "y": -6.344204,
+      "z": -201.048859
+     }
+    },
+    {
+     "id": "5704e5fad2720bc05b8b4567-transit-20",
+     "description": "Transit to Lighthouse",
+     "targetMapId": "5704e4dad2720bb55b8b4567",
+     "position": {
+      "x": 238.800537,
+      "y": -6.25420427,
+      "z": -128.048859
+     }
     }
    ]
   },
@@ -12673,6 +12885,28 @@
       "z": 44.055
      },
      "conditional": true
+    }
+   ],
+   "transits": [
+    {
+     "id": "5714dbc024597771384a510d-transit-6",
+     "description": "Transit to Customs",
+     "targetMapId": "56f40101d2720b2a4d8b45d6",
+     "position": {
+      "x": 274.3,
+      "y": 23.2799988,
+      "z": 395.93
+     }
+    },
+    {
+     "id": "5714dbc024597771384a510d-transit-7",
+     "description": "Transit to Streets of Tarkov",
+     "targetMapId": "5714dc692459777137212e12",
+     "position": {
+      "x": 263.1,
+      "y": 24.1,
+      "z": -444.4
+     }
     }
    ]
   },
@@ -15856,6 +16090,38 @@
      },
      "conditional": false
     }
+   ],
+   "transits": [
+    {
+     "id": "5714dc692459777137212e12-transit-3",
+     "description": "Transit to Ground Zero",
+     "targetMapId": "653e6760052c01c1c805532f",
+     "position": {
+      "x": -260.05,
+      "y": 2.18500137,
+      "z": 103.645729
+     }
+    },
+    {
+     "id": "5714dc692459777137212e12-transit-4",
+     "description": "Transit to Interchange",
+     "targetMapId": "5714dbc024597771384a510d",
+     "position": {
+      "x": 286.670776,
+      "y": 3.39350128,
+      "z": 505.539978
+     }
+    },
+    {
+     "id": "5714dc692459777137212e12-transit-5",
+     "description": "Transit to The Lab",
+     "targetMapId": "5b0fc42d86f7744a585f9105",
+     "position": {
+      "x": 206.955,
+      "y": -8.382,
+      "z": 82.194
+     }
+    }
    ]
   },
   {
@@ -17047,7 +17313,8 @@
      },
      "conditional": true
     }
-   ]
+   ],
+   "transits": []
   },
   {
    "id": "653e6760052c01c1c805532f",
@@ -18602,6 +18869,18 @@
      },
      "conditional": false
     }
+   ],
+   "transits": [
+    {
+     "id": "653e6760052c01c1c805532f-transit-1",
+     "description": "Transit to Streets of Tarkov",
+     "targetMapId": "5714dc692459777137212e12",
+     "position": {
+      "x": 222.829117,
+      "y": 15.993,
+      "z": 65.72
+     }
+    }
    ]
   },
   {
@@ -18703,7 +18982,8 @@
      "zoneName": "eb593d7d-ce9c-4a4a-abad-07e66f5204ee"
     }
    ],
-   "extracts": []
+   "extracts": [],
+   "transits": []
   },
   {
    "id": "6733700029c367a3d40b02af",
@@ -18832,7 +19112,8 @@
      },
      "conditional": false
     }
-   ]
+   ],
+   "transits": []
   },
   {
    "id": "68236e8153654e8c1200798a",
@@ -18856,7 +19137,8 @@
      "zoneName": "9a35e574-e119-45d6-a760-362d7336f6b0"
     }
    ],
-   "extracts": []
+   "extracts": [],
+   "transits": []
   },
   {
    "id": "69af492a4819ea4ba10a69c5",
@@ -19070,7 +19352,8 @@
      "zoneName": "deb43977-c795-4dc1-8f5a-d96a0adf133f"
     }
    ],
-   "extracts": []
+   "extracts": [],
+   "transits": []
   }
  ],
  "tasks": [
