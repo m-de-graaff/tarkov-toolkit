@@ -150,6 +150,14 @@
     width: 24px;
   }
 
+  .marker.transit {
+    background: #5b7fb0;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 10px;
+    width: 24px;
+  }
+
   .leaflet-tooltip {
     background: var(--card);
     border-color: var(--border);

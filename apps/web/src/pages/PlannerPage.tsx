@@ -49,6 +49,8 @@ export function PlannerPage() {
   const liveFix = usePlanner((s) => s.liveFix);
   const spawnOverridesLive = usePlanner((s) => s.spawnOverridesLive);
   const setTargetExtract = usePlanner((s) => s.setTargetExtract);
+  const showExits = usePlanner((s) => s.showExits);
+  const toggleShowExits = usePlanner((s) => s.toggleShowExits);
   const watcher = useLiveWatcher();
 
   const map = snapshot.maps.find((m) => m.id === selectedMapId);
@@ -171,8 +173,32 @@ export function PlannerPage() {
         kind: 'extract',
       });
     }
+    // the exits overlay: every extract plus map-to-map transits, mirroring
+    // what the in-raid map shows (the routed extract above already renders)
+    if (showExits && map) {
+      for (const e of map.extracts) {
+        if (chosenExtract && routeOrigin && e.id === chosenExtract.id) continue;
+        out.push({
+          id: `exit-${e.id}`,
+          position: e.position,
+          label: `Extract: ${e.name}${e.conditional ? ' (conditional)' : ''}${e.faction === 'shared' ? ' (co-op)' : ''}`,
+          kind: 'extract',
+        });
+      }
+      for (const t of map.transits ?? []) {
+        const target = snapshot.maps.find((m) => m.id === t.targetMapId)?.name;
+        // stale translation dictionaries can leave the raw key in description
+        const named = t.description && !/_DESC$/i.test(t.description) ? t.description : null;
+        out.push({
+          id: t.id,
+          position: t.position,
+          label: named ?? (target ? `Transit to ${target}` : 'Transit'),
+          kind: 'transit',
+        });
+      }
+    }
     return out;
-  }, [stops, route, spawn, liveFix, chosenExtract, routeOrigin]);
+  }, [stops, route, spawn, liveFix, chosenExtract, routeOrigin, showExits, map]);
 
   const mapArea = map?.calibration ? (
     <>
@@ -244,6 +270,19 @@ export function PlannerPage() {
             </Select>
           </label>
         )}
+        <button
+          type="button"
+          aria-pressed={showExits}
+          onClick={toggleShowExits}
+          title="Show every extract and map-to-map transit on the map"
+          className={
+            showExits
+              ? 'rounded-md border border-primary/60 bg-accent px-2 py-1 text-xs text-primary'
+              : 'rounded-md border px-2 py-1 text-xs text-muted-foreground transition-colors hover:border-input hover:text-foreground'
+          }
+        >
+          Extracts & transits
+        </button>
         <div className="h-5 w-px bg-border" aria-hidden="true" />
         <LivePanel watcher={watcher} outOfBounds={outOfBounds} />
         <div className="ml-auto">
