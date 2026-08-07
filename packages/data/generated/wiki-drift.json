@@ -1,6 +1,101 @@
 {
- "generatedAt": "2026-08-06T06:48:47.411Z",
+ "generatedAt": "2026-08-07T05:52:45.296Z",
  "synthesized": [
+  {
+   "id": "wiki-oil-run",
+   "name": "Oil Run",
+   "trader": "Prapor"
+  },
+  {
+   "id": "wiki-special-order",
+   "name": "Special Order",
+   "trader": "Prapor"
+  },
+  {
+   "id": "wiki-ironclad-proof",
+   "name": "Ironclad Proof",
+   "trader": "Prapor"
+  },
+  {
+   "id": "wiki-operation-aquarius",
+   "name": "Operation Aquarius",
+   "trader": "Therapist"
+  },
+  {
+   "id": "wiki-blood-in-the-water",
+   "name": "Blood in the Water",
+   "trader": "Therapist"
+  },
+  {
+   "id": "wiki-sanitary-standards",
+   "name": "Sanitary Standards",
+   "trader": "Therapist"
+  },
+  {
+   "id": "wiki-charity",
+   "name": "Charity",
+   "trader": "Therapist"
+  },
+  {
+   "id": "wiki-aid-stations",
+   "name": "Aid Stations",
+   "trader": "Therapist"
+  },
+  {
+   "id": "wiki-friend-from-the-west",
+   "name": "Friend From the West",
+   "trader": "Skier"
+  },
+  {
+   "id": "wiki-the-cult",
+   "name": "The Cult",
+   "trader": "Peacekeeper"
+  },
+  {
+   "id": "wiki-weapons-circulation",
+   "name": "Weapons Circulation",
+   "trader": "Peacekeeper"
+  },
+  {
+   "id": "wiki-one-way-ticket",
+   "name": "One-Way Ticket",
+   "trader": "Peacekeeper"
+  },
+  {
+   "id": "wiki-fuel-shortage",
+   "name": "Fuel Shortage",
+   "trader": "Peacekeeper"
+  },
+  {
+   "id": "wiki-i-need-more-power",
+   "name": "I Need More Power",
+   "trader": "Peacekeeper"
+  },
+  {
+   "id": "wiki-master-key",
+   "name": "Master Key",
+   "trader": "Peacekeeper"
+  },
+  {
+   "id": "wiki-chemical-experiments",
+   "name": "Chemical Experiments",
+   "trader": "Peacekeeper"
+  },
+  {
+   "id": "wiki-cargo-x",
+   "name": "Cargo X",
+   "trader": "Peacekeeper"
+  },
+  {
+   "id": "wiki-tracker",
+   "name": "Tracker",
+   "trader": "Peacekeeper"
+  },
+  {
+   "id": "wiki-gunsmith-master-part-12",
+   "name": "Gunsmith Master - Part 12",
+   "trader": "Mechanic"
+  },
   {
    "id": "wiki-first-introduction",
    "name": "First Introduction",
@@ -272,10 +367,46 @@
    "minPlayerLevel": 2
   },
   {
+   "id": "59689ee586f7740d1570bbd5",
+   "name": "Sanitary Standards - Part 1",
+   "trader": "Therapist",
+   "minPlayerLevel": 4
+  },
+  {
+   "id": "59c124d686f774189b3c843f",
+   "name": "BP Depot",
+   "trader": "Prapor",
+   "minPlayerLevel": 5
+  },
+  {
+   "id": "59689fbd86f7740d137ebfc4",
+   "name": "Operation Aquarius - Part 1",
+   "trader": "Therapist",
+   "minPlayerLevel": 6
+  },
+  {
+   "id": "5968eb3186f7741dde183a4d",
+   "name": "Operation Aquarius - Part 2",
+   "trader": "Therapist",
+   "minPlayerLevel": 6
+  },
+  {
    "id": "596a204686f774576d4c95de",
    "name": "Sanitary Standards - Part 2",
    "trader": "Therapist",
    "minPlayerLevel": 8
+  },
+  {
+   "id": "5969f90786f77420d2328015",
+   "name": "Painkiller",
+   "trader": "Therapist",
+   "minPlayerLevel": 8
+  },
+  {
+   "id": "5a27c99a86f7747d2c6bdd8e",
+   "name": "Friend From the West - Part 1",
+   "trader": "Skier",
+   "minPlayerLevel": 9
   },
   {
    "id": "5a27d2af86f7744e1115b323",
@@ -284,10 +415,34 @@
    "minPlayerLevel": 9
   },
   {
+   "id": "59c9392986f7742f6923add2",
+   "name": "Trust Regain",
+   "trader": "Therapist",
+   "minPlayerLevel": 11
+  },
+  {
    "id": "59c93e8e86f7742a406989c4",
    "name": "Loyalty Buyout",
    "trader": "Skier",
    "minPlayerLevel": 11
+  },
+  {
+   "id": "59ca1a6286f774509a270942",
+   "name": "No Offence",
+   "trader": "Prapor",
+   "minPlayerLevel": 11
+  },
+  {
+   "id": "5a03153686f77442d90e2171",
+   "name": "Spa Tour - Part 1",
+   "trader": "Peacekeeper",
+   "minPlayerLevel": 12
+  },
+  {
+   "id": "5a27b9de86f77464e5044585",
+   "name": "The Cult - Part 1",
+   "trader": "Peacekeeper",
+   "minPlayerLevel": 12
   },
   {
    "id": "5a03173786f77451cb427172",
@@ -296,8 +451,44 @@
    "minPlayerLevel": 12
   },
   {
+   "id": "5a0327ba86f77456b9154236",
+   "name": "Spa Tour - Part 3",
+   "trader": "Peacekeeper",
+   "minPlayerLevel": 12
+  },
+  {
+   "id": "5a03296886f774569778596a",
+   "name": "Spa Tour - Part 4",
+   "trader": "Peacekeeper",
+   "minPlayerLevel": 12
+  },
+  {
+   "id": "5a0449d586f77474e66227b7",
+   "name": "Spa Tour - Part 5",
+   "trader": "Peacekeeper",
+   "minPlayerLevel": 12
+  },
+  {
    "id": "5a27ba9586f7741b543d8e85",
    "name": "Spa Tour - Part 6",
+   "trader": "Peacekeeper",
+   "minPlayerLevel": 12
+  },
+  {
+   "id": "5a27bafb86f7741c73584017",
+   "name": "Spa Tour - Part 7",
+   "trader": "Peacekeeper",
+   "minPlayerLevel": 12
+  },
+  {
+   "id": "5a27bb1e86f7741f27621b7e",
+   "name": "Cargo X - Part 1",
+   "trader": "Peacekeeper",
+   "minPlayerLevel": 12
+  },
+  {
+   "id": "5a27bb3d86f77411ea361a21",
+   "name": "Cargo X - Part 2",
    "trader": "Peacekeeper",
    "minPlayerLevel": 12
   },
@@ -386,10 +577,22 @@
    "minPlayerLevel": 17
   },
   {
+   "id": "676529af9c90953d090882e7",
+   "name": "Gunsmith - Old Friend's Request",
+   "trader": "Mechanic",
+   "minPlayerLevel": 17
+  },
+  {
    "id": "675c04f4db8807b75d0f38e8",
    "name": "Closer to the People",
    "trader": "Therapist",
    "minPlayerLevel": 17
+  },
+  {
+   "id": "5a27ba1c86f77461ea5a3c56",
+   "name": "The Cult - Part 2",
+   "trader": "Peacekeeper",
+   "minPlayerLevel": 18
   },
   {
    "id": "6179acbdc760af5ad2053585",
@@ -407,6 +610,12 @@
    "id": "5d6fb2c086f77449da599c24",
    "name": "An Apple a Day Keeps the Doctor Away",
    "trader": "Therapist",
+   "minPlayerLevel": 20
+  },
+  {
+   "id": "68ee1c18b4e5bc9a68018cd7",
+   "name": "No Questions Asked",
+   "trader": "Prapor",
    "minPlayerLevel": 20
   },
   {
@@ -608,24 +817,6 @@
    }
   },
   {
-   "id": "68ee1c18b4e5bc9a68018cd7",
-   "name": "Special Order",
-   "fields": {
-    "experience": [
-     11200,
-     65000
-    ],
-    "minPlayerLevel": [
-     20,
-     1
-    ],
-    "loyaltyLevel": [
-     1,
-     4
-    ]
-   }
-  },
-  {
    "id": "5979f8bb86f7743ec214c7a6",
    "name": "Polikhim Hobo",
    "fields": {
@@ -660,24 +851,6 @@
     "minPlayerLevel": [
      11,
      1
-    ],
-    "taskRequirements": [
-     "597a0f5686f774273b74f676",
-     "597a0e5786f77426d66c0636"
-    ]
-   }
-  },
-  {
-   "id": "59ca1a6286f774509a270942",
-   "name": "Ironclad Proof",
-   "fields": {
-    "minPlayerLevel": [
-     11,
-     1
-    ],
-    "taskRequirements": [
-     "597a171586f77405ba6887d3",
-     "597a0f5686f774273b74f676,597a160786f77477531d39d2"
     ]
    }
   },
@@ -1048,24 +1221,6 @@
     "minPlayerLevel": [
      11,
      1
-    ],
-    "taskRequirements": [
-     "597a0f5686f774273b74f676",
-     "597a0e5786f77426d66c0636"
-    ]
-   }
-  },
-  {
-   "id": "59c9392986f7742f6923add2",
-   "name": "Aid Stations",
-   "fields": {
-    "minPlayerLevel": [
-     11,
-     1
-    ],
-    "taskRequirements": [
-     "597a160786f77477531d39d2",
-     "597a0f5686f774273b74f676,597a171586f77405ba6887d3"
     ]
    }
   },
@@ -1416,16 +1571,12 @@
    }
   },
   {
-   "id": "5a27c99a86f7747d2c6bdd8e",
-   "name": "Friend From the West",
+   "id": "597a0f5686f774273b74f676",
+   "name": "Chemical - Part 4",
    "fields": {
     "minPlayerLevel": [
-     9,
+     11,
      1
-    ],
-    "loyaltyLevel": [
-     1,
-     2
     ]
    }
   },
@@ -1445,6 +1596,20 @@
    "fields": {
     "minPlayerLevel": [
      24,
+     1
+    ]
+   }
+  },
+  {
+   "id": "5c1234c286f77406fa13baeb",
+   "name": "Setup",
+   "fields": {
+    "experience": [
+     21900,
+     10000
+    ],
+    "minPlayerLevel": [
+     18,
      1
     ]
    }
@@ -1861,98 +2026,6 @@
    "fields": {
     "minPlayerLevel": [
      11,
-     1
-    ]
-   }
-  },
-  {
-   "id": "5a27b9de86f77464e5044585",
-   "name": "The Cult",
-   "fields": {
-    "minPlayerLevel": [
-     12,
-     1
-    ],
-    "loyaltyLevel": [
-     1,
-     2
-    ]
-   }
-  },
-  {
-   "id": "5a27ba1c86f77461ea5a3c56",
-   "name": "Weapons Circulation",
-   "fields": {
-    "experience": [
-     7500,
-     10000
-    ],
-    "minPlayerLevel": [
-     18,
-     1
-    ],
-    "loyaltyLevel": [
-     1,
-     2
-    ]
-   }
-  },
-  {
-   "id": "5a03153686f77442d90e2171",
-   "name": "One-Way Ticket",
-   "fields": {
-    "minPlayerLevel": [
-     12,
-     1
-    ]
-   }
-  },
-  {
-   "id": "5a0327ba86f77456b9154236",
-   "name": "Fuel Shortage",
-   "fields": {
-    "minPlayerLevel": [
-     12,
-     1
-    ]
-   }
-  },
-  {
-   "id": "5a03296886f774569778596a",
-   "name": "I Need More Power",
-   "fields": {
-    "minPlayerLevel": [
-     12,
-     1
-    ]
-   }
-  },
-  {
-   "id": "5a0449d586f77474e66227b7",
-   "name": "Master Key",
-   "fields": {
-    "minPlayerLevel": [
-     12,
-     1
-    ]
-   }
-  },
-  {
-   "id": "5a27bafb86f7741c73584017",
-   "name": "Chemical Experiments",
-   "fields": {
-    "minPlayerLevel": [
-     12,
-     1
-    ]
-   }
-  },
-  {
-   "id": "5a27bb1e86f7741f27621b7e",
-   "name": "Cargo X",
-   "fields": {
-    "minPlayerLevel": [
-     12,
      1
     ]
    }
@@ -4713,14 +4786,6 @@
    {
     "id": "60e71dc0a94be721b065bbfc",
     "name": "Long Line"
-   },
-   {
-    "id": "5968eb3186f7741dde183a4d",
-    "name": "Blood in the Water"
-   },
-   {
-    "id": "59689fbd86f7740d137ebfc4",
-    "name": "Operation Aquarius"
    },
    {
     "id": "596a0e1686f7741ddf17dbee",
